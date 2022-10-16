@@ -2,9 +2,9 @@
   "name": "lager-manager",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Warczachowski WLodzimierz",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "PRIVAT",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
