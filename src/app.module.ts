@@ -10,6 +10,7 @@ import { VerkaufModule } from './verkauf/verkauf.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dispoEntity } from './entity/dispoEntity';
 import { artikelEntity } from './entity/artikelEntity';
+import { ArtikelModule } from './artikel/artikel.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { artikelEntity } from './entity/artikelEntity';
     WarenbuchungModule,
     DispositorsModule,
     VerkaufModule,
+    ArtikelModule,
   ],
   controllers: [AppController],
   providers: [AppService],
