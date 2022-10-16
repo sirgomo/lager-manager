@@ -12,6 +12,7 @@ import { dispoEntity } from './entity/dispoEntity';
 import { artikelEntity } from './entity/artikelEntity';
 import { ArtikelModule } from './artikel/artikel.module';
 import { AuthModule } from './auth/auth.module';
+import { userEntity } from './entity/userEntity';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { AuthModule } from './auth/auth.module';
       username: 'root',
       password: 'beta1243',
       database: 'lager',
-      entities: [dispoEntity, artikelEntity],
+      entities: [dispoEntity, artikelEntity, userEntity],
       synchronize: true,
     }),
     WareneingangModule,
