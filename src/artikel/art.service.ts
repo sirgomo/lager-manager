@@ -6,7 +6,7 @@ import { artikelEntity } from 'src/entity/artikelEntity';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class ArtserviceService {
+export class artService {
     constructor(@InjectRepository(artikelEntity) private repo : Repository<artikelEntity>){}
     
     

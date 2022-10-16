@@ -1,7 +1,7 @@
 import { ValidationPipe } from "@nestjs/common";
 import { Body, Controller, Get, Patch, Post } from "@nestjs/common/decorators";
 import { dispositorsDto } from "src/DTO/dispositorsDTO";
-import { DisServiceService } from "../dis-service/dis-service.service";
+import { DisServiceService } from "./disService";
 @Controller('dispo')
 export class DisControllerController{
     constructor(private disService : DisServiceService){}

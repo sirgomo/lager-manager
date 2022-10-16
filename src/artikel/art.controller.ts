@@ -2,11 +2,11 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, ValidationPipe } fro
 import { artikelDTO } from 'src/DTO/artikelDTO';
 import { artikelFlage } from 'src/entity/artikelEntity';
 import { artikelflagsPipers } from 'src/pipes/artikelFlagspipes';
-import { ArtserviceService } from '../artservice/artservice.service';
+import { artService } from './art.service';
 
 @Controller('artikel')
-export class ArtcontrollerController {
-    constructor(private artService : ArtserviceService){}
+export class artController {
+    constructor(private artService : artService){}
 
     @Get()
     getAllArtikels(){

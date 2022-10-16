@@ -11,6 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { dispoEntity } from './entity/dispoEntity';
 import { artikelEntity } from './entity/artikelEntity';
 import { ArtikelModule } from './artikel/artikel.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ArtikelModule } from './artikel/artikel.module';
     DispositorsModule,
     VerkaufModule,
     ArtikelModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
