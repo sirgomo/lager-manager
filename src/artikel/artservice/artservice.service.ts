@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { artLoader } from 'src/artLoader';
 import { artikelDTO } from 'src/DTO/artikelDTO';
@@ -23,15 +23,32 @@ export class ArtserviceService {
             return await this.repo.find();
         }
         catch (err) {
-            return err;
+            throw new InternalServerErrorException('Etwas is schief gegangen');
         }
     }
     async createArtikel(art : artikelDTO):Promise<artikelEntity>{
         this.repo.create(art);
         try{
-            await this.repo.save(art);
+           return await this.repo.save(art);
         }catch(err){
-            return err;
+            throw new InternalServerErrorException('Etwas is schief gegangen');
+        }
+    }
+    async updateArtikel(art: artikelDTO, id: number):Promise<artikelEntity>{
+        this.repo.create(art);
+        try{
+            await this.repo.update(id, art);
+            return this.repo.findOneBy({'id':id});
+        }catch(err){
+            throw new InternalServerErrorException('Etwas is schief gegangen');
+        }
+    }
+    async deleteArtikel(id: number){
+        try{
+            await this.repo.delete({'id':id});
+        }
+        catch(err){
+            throw new InternalServerErrorException('Etwas is schief gegangen');
         }
     }
 }
