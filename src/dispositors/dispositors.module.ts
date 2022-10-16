@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
-import { \dispositors\controllerController } from './controller/dispositors/controller.controller';
-import { ControllerController } from './controller/controller.controller';
-import { ServiceService } from './service/service.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { dispoEntity } from 'src/entity/dispoEntity';
+import { DisControllerController } from './dis-controller/dis-controller.controller';
+import { DisServiceService } from './dis-service/dis-service.service';
 
 @Module({
-  controllers: [\dispositors\controllerController, ControllerController],
-  providers: [ServiceService]
+  imports: [TypeOrmModule.forFeature([dispoEntity])],
+  controllers: [DisControllerController],
+  providers: [DisServiceService], 
 })
 export class DispositorsModule {}
