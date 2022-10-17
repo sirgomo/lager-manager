@@ -36,11 +36,12 @@ export class AuthService {
             throw new UnauthorizedException('Falsche Eingaben');
         }
         const role = user.role;
+        const id = user.id;
         const isPasswordMatch = await bcrypt.compare(password, user.userpassword);
         if(isPasswordMatch){
-            const jwtPayload : {username : string, role : string } = {username, role};
+            const jwtPayload : {username : string, role : string, id : number } = {username, role, id};
             const jwtToken = await this.jwt.signAsync(jwtPayload, {expiresIn: '1d', algorithm: 'HS512'});
-            console.log(jwtToken);
+           
             return {token : jwtToken};
         }else{
             throw new UnauthorizedException('Falsche Eingaben');

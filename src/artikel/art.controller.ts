@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { artikelDTO } from 'src/DTO/artikelDTO';
 import { artikelFlage } from 'src/entity/artikelEntity';
 import { artikelflagsPipers } from 'src/pipes/artikelFlagspipes';
 import { artService } from './art.service';
 
 @Controller('artikel')
+@UseGuards(AuthGuard())
 export class artController {
     constructor(private artService : artService){}
 
