@@ -13,6 +13,8 @@ import { artikelEntity } from './entity/artikelEntity';
 import { ArtikelModule } from './artikel/artikel.module';
 import { AuthModule } from './auth/auth.module';
 import { userEntity } from './entity/userEntity';
+import { RoleGuard } from './auth/RoleGuard';
+
 
 @Module({
   imports: [
@@ -36,6 +38,6 @@ import { userEntity } from './entity/userEntity';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, RoleGuard],
 })
 export class AppModule {}

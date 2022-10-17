@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, Validatio
 import { AuthGuard } from '@nestjs/passport';
 import { artikelDTO } from 'src/DTO/artikelDTO';
 import { artikelFlage } from 'src/entity/artikelEntity';
+import { userEntity } from 'src/entity/userEntity';
 import { artikelflagsPipers } from 'src/pipes/artikelFlagspipes';
 import { artService } from './art.service';
 
@@ -27,7 +28,7 @@ export class artController {
        return this.artService.updateArtikel(data, id);
     }
     @Delete(':id')
-    deleteArtikel(@Param('id') id: number){
+    deleteArtikel(@Param('id') id: number, ){
       return  this.artService.deleteArtikel(id);
      //   return this.artService.getAllArticel();
     }

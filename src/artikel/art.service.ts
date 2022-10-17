@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { artLoader } from 'src/artLoader';
 import { artikelDTO } from 'src/DTO/artikelDTO';
 import { artikelEntity } from 'src/entity/artikelEntity';
+import { userEntity } from 'src/entity/userEntity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -38,7 +39,7 @@ export class artService {
         this.repo.create(art);
         try{
             await this.repo.update(id, art);
-            return this.repo.findOneBy({'id':id});
+            return await this.repo.findOneBy({'id':id});
         }catch(err){
             throw new InternalServerErrorException('Etwas is schief gegangen');
         }

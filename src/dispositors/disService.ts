@@ -1,7 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { dispositorsDto } from "src/DTO/dispositorsDTO";
 import { dispoEntity } from "src/entity/dispoEntity";
+import { ROLE, userEntity } from "src/entity/userEntity";
 import { Repository } from "typeorm";
 @Injectable()
 export class DisServiceService {
@@ -17,28 +18,34 @@ export class DisServiceService {
    }
    async createDisponets(dispo : dispositorsDto)
    {
-      this.repo.create(dispo);
-      try {
-       return await this.repo.save(dispo);
-      }
-      catch(err) {
-        return err;
-      }
+   
+        this.repo.create(dispo);
+        try {
+        return await this.repo.save(dispo);
+        }
+        catch(err) {
+            return err;
+        }
+   
    }
    async updateDipositors(id : number, dispo : dispositorsDto)
    {
-    try {
-        return await this.repo.update(id, dispo);
-    } catch (err){
-        return err;
-    }
+   
+        try {
+            return await this.repo.update(id, dispo);
+        } catch (err){
+            return err;
+        }
+   
    }
    async deleteDiponent(id : number){
-    try{
-        return await this.repo.delete(id);
-    }
-    catch (err) {
-        return err;        
-    }
+   
+        try{
+            return await this.repo.delete(id);
+        }
+        catch (err) {
+            return err;        
+        }
+ 
    }
 }
