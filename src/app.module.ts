@@ -14,6 +14,15 @@ import { ArtikelModule } from './artikel/artikel.module';
 import { AuthModule } from './auth/auth.module';
 import { userEntity } from './entity/userEntity';
 import { RoleGuard } from './auth/RoleGuard';
+import { artikelReservationEntity } from './entity/artikelReservationEntity';
+import { fehlendArtikelEntity } from './entity/fehlendArtikelEntity';
+import { inKomissPalletenEntity } from './entity/inKomissPalletenEntity';
+import { komissionirunEntity } from './entity/komissionirungEntity';
+import { lagerPlatzEntity } from './entity/lagerPlatzEntity';
+import { palettenEnttity } from './entity/palettenEntity';
+import { speditionEntity } from './entity/speditionEntity';
+import { warenBestellungEntity } from './entity/warenBestellungEntity';
+import { warenEingangEntity } from './entity/warenEingangEntity';
 
 
 @Module({
@@ -25,7 +34,8 @@ import { RoleGuard } from './auth/RoleGuard';
       username: 'root',
       password: 'beta1243',
       database: 'lager',
-      entities: [dispoEntity, artikelEntity, userEntity],
+      entities: [dispoEntity, artikelEntity, userEntity, artikelReservationEntity, fehlendArtikelEntity, inKomissPalletenEntity, komissionirunEntity,
+      lagerPlatzEntity, palettenEnttity, speditionEntity, warenBestellungEntity, warenEingangEntity],
       synchronize: true,
     }),
     WareneingangModule,

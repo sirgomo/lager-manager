@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 
-@Entity()
+@Entity('dispositors')
 export class dispoEntity {
   @PrimaryGeneratedColumn()
   id: number;

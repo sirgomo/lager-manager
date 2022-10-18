@@ -11,20 +11,25 @@ import { DisServiceService } from "./disService";
 export class DisControllerController{
     constructor(private disService : DisServiceService){}
     @Get()
-    @ROLES(ROLE.WARENPFHLEGE)
     getAllDispositors(){
        return this.disService.getAllDisponets();
     }
     
     @Post()
+    @ROLES(ROLE.KAUF)
+    @ROLES(ROLE.VERKAUF)
     createNewDispositors(@Body(ValidationPipe) disDto : dispositorsDto){
       return  this.createNewDispositors(disDto);
     }
     @Patch(':id')
+    @ROLES(ROLE.KAUF)
+    @ROLES(ROLE.VERKAUF)
     updateDispositor(@Body(ValidationPipe) data: dispositorsDto, @Param('id') id:number){
       return this.disService.updateDipositors(id, data);
     }
     @Delete(':id')
+    @ROLES(ROLE.KAUF)
+    @ROLES(ROLE.VERKAUF)
     deleteDispositor(@Param('id') id: number){
       return this.disService.deleteDiponent(id);
     }

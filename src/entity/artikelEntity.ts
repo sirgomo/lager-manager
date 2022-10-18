@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('artikel')
 export class artikelEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -26,6 +26,8 @@ export class artikelEntity {
   durschnittlicherLagerbestand: number;
   @Column()
   artikelFlage: artikelFlage;
+  @Column()
+  bestand: number;
 }
 export enum artikelFlage {
   FASS = 'FASS',
