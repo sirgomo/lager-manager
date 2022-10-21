@@ -12,14 +12,17 @@ export class artService {
     
     
     async getAllArticel():Promise<artikelEntity[]>{
-      /*  console.log('art service');
+        const create : number = 2;
+        if(create === 1){
+        console.log('art service');
         try{
             var art: artikelEntity[] = new Array();
             art = this.repo.create(new artLoader().makeArtikels());
           await this.repo.save(art);
         }catch(err){
             console.log(err);
-        }*/
+        }
+    }
         try {
             return await this.repo.find();
         }
@@ -39,14 +42,14 @@ export class artService {
         this.repo.create(art);
         try{
             await this.repo.update(id, art);
-            return await this.repo.findOneBy({'id':id});
+            return await this.repo.findOneBy({'artikelId':id});
         }catch(err){
             throw new InternalServerErrorException('Etwas is schief gegangen');
         }
     }
     async deleteArtikel(id: number){
         try{
-            await this.repo.delete({'id':id});
+            await this.repo.delete({'artikelId':id});
         }
         catch(err){
             throw new InternalServerErrorException('Etwas is schief gegangen');

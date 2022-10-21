@@ -19,8 +19,9 @@ export class artLoader{
                 artike.minLosMenge = 6;
                 artike.uid = 'askdjalsdjkkalsd338742';
                 artike.artikelFlage = artikelFlage.SUSS;
-                artike.mhd = new Date(this.getRandomInt(2023,2024), this.getRandomInt(0,11) + 1, this.getRandomInt(0,28) + 1);
+                //artike.mhd = new Date(this.getRandomInt(2023,2024), this.getRandomInt(0,11) + 1, this.getRandomInt(0,28) + 1);
                 artike.umschlagshaufigkeit = 30;
+                artike.bestand = this.getRandomInt(2,1000);
                 arti[i] = artike;
             }else{
                 var artike : artikelEntity = new artikelEntity();
@@ -34,8 +35,9 @@ export class artLoader{
                 artike.minLosMenge = 6;
                 artike.uid = 'askdjalsdj' + Math.random() ;
                 artike.artikelFlage = artikelFlage.ALK;
-                artike.mhd = new Date(this.getRandomInt(2023,2026), this.getRandomInt(0,11) + 1, this.getRandomInt(0,28) + 1);
+              //  artike.mhd = new Date(this.getRandomInt(2023,2026), this.getRandomInt(0,11) + 1, this.getRandomInt(0,28) + 1);
                 artike.umschlagshaufigkeit = 30;
+                artike.bestand = this.getRandomInt(2,1000);
                 arti[i] = artike;
             }
            

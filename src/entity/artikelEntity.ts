@@ -1,12 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { kommisioDetailsEntity } from './kommisioDetailsEntity';
+
 
 @Entity('artikel')
 export class artikelEntity {
   @PrimaryGeneratedColumn()
-  id: number;
-  @Column()
+  artikelId: number;
+  @PrimaryColumn()
   name: string;
-  @Column()
+  @PrimaryColumn()
   uid: string;
   @Column()
   gewicht: number;
@@ -14,8 +16,7 @@ export class artikelEntity {
   grosse: string;
   @Column()
   basisEinheit: number;
-  @Column()
-  mhd: Date;
+ 
   @Column()
   minLosMenge: number;
   @Column()
@@ -28,6 +29,9 @@ export class artikelEntity {
   artikelFlage: artikelFlage;
   @Column()
   bestand: number;
+  @ManyToOne(()=> kommisioDetailsEntity, (kommisioDetail)=> kommisioDetail.artikelList )
+  kommisioDetail : kommisioDetailsEntity;
+  
 }
 export enum artikelFlage {
   FASS = 'FASS',

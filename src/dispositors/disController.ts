@@ -16,10 +16,9 @@ export class DisControllerController{
     }
     
     @Post()
-    @ROLES(ROLE.KAUF)
-    @ROLES(ROLE.VERKAUF)
+    @ROLES(ROLE.KAUF || ROLE.VERKAUF)
     createNewDispositors(@Body(ValidationPipe) disDto : dispositorsDto){
-      return  this.createNewDispositors(disDto);
+      return  this.disService.createDisponets(disDto);
     }
     @Patch(':id')
     @ROLES(ROLE.KAUF)

@@ -18,8 +18,8 @@ export class DisServiceService {
    }
    async createDisponets(dispo : dispositorsDto)
    {
-   
-        this.repo.create(dispo);
+    console.log('tutaj cvonstroller')
+       await this.repo.create(dispo);
         try {
         return await this.repo.save(dispo);
         }

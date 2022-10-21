@@ -17,12 +17,15 @@ import { RoleGuard } from './auth/RoleGuard';
 import { artikelReservationEntity } from './entity/artikelReservationEntity';
 import { fehlendArtikelEntity } from './entity/fehlendArtikelEntity';
 import { inKomissPalletenEntity } from './entity/inKomissPalletenEntity';
-import { komissionirunEntity } from './entity/komissionirungEntity';
+import { kommissionirungEntity } from './entity/kommissionirungEntity';
 import { lagerPlatzEntity } from './entity/lagerPlatzEntity';
 import { palettenEnttity } from './entity/palettenEntity';
 import { speditionEntity } from './entity/speditionEntity';
 import { warenBestellungEntity } from './entity/warenBestellungEntity';
 import { warenEingangEntity } from './entity/warenEingangEntity';
+import { kommisioDetailsEntity } from './entity/kommisioDetailsEntity';
+import { SpeditionModule } from './spedition/spedition.module';
+
 
 
 @Module({
@@ -34,9 +37,9 @@ import { warenEingangEntity } from './entity/warenEingangEntity';
       username: 'root',
       password: 'beta1243',
       database: 'lager',
-      entities: [dispoEntity, artikelEntity, userEntity, artikelReservationEntity, fehlendArtikelEntity, inKomissPalletenEntity, komissionirunEntity,
-      lagerPlatzEntity, palettenEnttity, speditionEntity, warenBestellungEntity, warenEingangEntity],
-      synchronize: true,
+      entities: [dispoEntity, artikelEntity, userEntity, artikelReservationEntity, fehlendArtikelEntity, inKomissPalletenEntity, kommissionirungEntity,
+      lagerPlatzEntity, palettenEnttity, speditionEntity, warenBestellungEntity, warenEingangEntity, kommisioDetailsEntity],
+      synchronize: false,
     }),
     WareneingangModule,
     KomissionierModule,
@@ -46,6 +49,7 @@ import { warenEingangEntity } from './entity/warenEingangEntity';
     VerkaufModule,
     ArtikelModule,
     AuthModule,
+    SpeditionModule,
   ],
   controllers: [AppController],
   providers: [AppService, RoleGuard],

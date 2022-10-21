@@ -1,4 +1,9 @@
 import { Module } from '@nestjs/common';
+import { WarenbuchungService } from './warenbuchung.service';
+import { WarenbuchungController } from './warenbuchung.controller';
 
-@Module({})
+@Module({
+  providers: [WarenbuchungService],
+  controllers: [WarenbuchungController]
+})
 export class WarenbuchungModule {}
