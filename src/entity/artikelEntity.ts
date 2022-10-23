@@ -1,15 +1,16 @@
-import { Column, Entity, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { kommisioDetailsEntity } from './kommisioDetailsEntity';
+import { uiidEntity } from './uiidEntity';
 
 
 @Entity('artikel')
 export class artikelEntity {
   @PrimaryGeneratedColumn()
   artikelId: number;
+  
   @PrimaryColumn()
   name: string;
-  @PrimaryColumn()
-  uid: string;
+ 
   @Column()
   gewicht: number;
   @Column()
@@ -32,6 +33,8 @@ export class artikelEntity {
   @ManyToOne(()=> kommisioDetailsEntity, (kommisioDetail)=> kommisioDetail.artikelList )
   kommisioDetail : kommisioDetailsEntity;
   
+  @OneToMany(()=> uiidEntity, (uid) => uid.arikels, {cascade:[ "insert", "update"] })
+  uids: uiidEntity[];
 }
 export enum artikelFlage {
   FASS = 'FASS',

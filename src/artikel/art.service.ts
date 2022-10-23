@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { artLoader } from 'src/artLoader';
 import { artikelDTO } from 'src/DTO/artikelDTO';
 import { artikelEntity } from 'src/entity/artikelEntity';
-import { userEntity } from 'src/entity/userEntity';
 import { Repository } from 'typeorm';
+
 
 @Injectable()
 export class artService {
@@ -12,12 +12,12 @@ export class artService {
     
     
     async getAllArticel():Promise<artikelEntity[]>{
-        const create : number = 2;
+        const create : number = 3;
         if(create === 1){
         console.log('art service');
         try{
             var art: artikelEntity[] = new Array();
-            art = this.repo.create(new artLoader().makeArtikels());
+            art = await this.repo.create(new artLoader().makeArtikels());
           await this.repo.save(art);
         }catch(err){
             console.log(err);
@@ -31,15 +31,19 @@ export class artService {
         }
     }
     async createArtikel(art : artikelDTO):Promise<artikelEntity>{
-        this.repo.create(art);
+        await this.repo.create(art);
+        
+
         try{
+          
            return await this.repo.save(art);
         }catch(err){
             throw new InternalServerErrorException('Etwas is schief gegangen');
         }
     }
     async updateArtikel(art: artikelDTO, id: number):Promise<artikelEntity>{
-        this.repo.create(art);
+        await this.repo.create(art);
+       
         try{
             await this.repo.update(id, art);
             return await this.repo.findOneBy({'artikelId':id});

@@ -25,6 +25,7 @@ import { warenBestellungEntity } from './entity/warenBestellungEntity';
 import { warenEingangEntity } from './entity/warenEingangEntity';
 import { kommisioDetailsEntity } from './entity/kommisioDetailsEntity';
 import { SpeditionModule } from './spedition/spedition.module';
+import { uiidEntity } from './entity/uiidEntity';
 
 
 
@@ -38,7 +39,7 @@ import { SpeditionModule } from './spedition/spedition.module';
       password: 'beta1243',
       database: 'lager',
       entities: [dispoEntity, artikelEntity, userEntity, artikelReservationEntity, fehlendArtikelEntity, inKomissPalletenEntity, kommissionirungEntity,
-      lagerPlatzEntity, palettenEnttity, speditionEntity, warenBestellungEntity, warenEingangEntity, kommisioDetailsEntity],
+      lagerPlatzEntity, palettenEnttity, speditionEntity, warenBestellungEntity, warenEingangEntity, kommisioDetailsEntity, uiidEntity],
       synchronize: false,
     }),
     WareneingangModule,

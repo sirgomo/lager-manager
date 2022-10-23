@@ -24,6 +24,7 @@ import { MatCardModule } from '@angular/material/card';
 import {ToastrModule} from 'ngx-toastr'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
+import { CreateKommisionierungComponent } from './create-kommisionierung/create-kommisionierung.component';
 
 
 
@@ -38,7 +39,8 @@ import { AuthInterceptor } from './auth.interceptor';
     VerkaufComponent,
     LagerComponent,
     WareneingangComponent,
-    WarenebuchungComponent
+    WarenebuchungComponent,
+    CreateKommisionierungComponent
   ],
   imports: [
     BrowserModule,
