@@ -3,17 +3,12 @@
         <span routerLink="/" style="cursor:pointer;"> Lager </span>
         <span class="spacer"> </span>
             <div class="d-flex justify-content-around icons" style="width:100px ;" *ngIf="!isLogged">
-            <div class="d-flex align-items-center mr-2 p px-3">
-                <span routerLink="/">Login</span>
-                <mat-icon routerLink="/">login</mat-icon>
-            </div>
              </div>
         <div class="d-flex justify-content-around icons" style="width:100px;" *ngIf="isLogged">
         <div class="d-flex align-items-center ml-2 p px-3">
-            <span routerLink="/">Logout</span>
-            <mat-icon routerLink="/">logout</mat-icon>
+            <span (click)="logout()">Logout</span>
+            <mat-icon  (click)="logout()">logout</mat-icon>
         </div>
-
     </div>
 
 </div>

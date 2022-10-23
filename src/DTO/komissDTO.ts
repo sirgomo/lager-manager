@@ -9,7 +9,7 @@ export class komissDTO{
     @IsNotEmpty()
     verkauferId: number;
     @IsNotEmpty({message: ' Max palaten höher in cm'})
-    maxPalettenHöher : number;
+    maxPalettenHoher : number;
     @IsNotEmpty({message: 'Gewustes lifer datum'})
     gewunschtesLieferDatum : Date;
     @IsNotEmpty()

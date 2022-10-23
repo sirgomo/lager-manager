@@ -1,1 +1,88 @@
-<p>verkauf works!</p>
+<div class="container">
+  <div class="row clearfix justify-content-center">
+      <div class="col-md-3 border text-center icons px-md-5" style="cursor: pointer;" (click)="createKommissionirung()">
+          Neue Kommissionirung
+      </div>
+      <div class="col-md-3 border text-center icons px-md-5" style="cursor: pointer;" (click)="meinKommissionierungen()">
+       Meine Kommissionierungen
+      </div>
+      <div class="col-md-3 border text-center icons px-md-5" style="cursor: pointer;" (click)="alleKommissionierungen()">
+      Alle Kommissionierungen
+      </div>
+  </div>
+  <div class="mt auto">
+  </div>
+  <div class="row clearfix">
+    <div class="col table-responsive">
+    <table class="table table-bordered table-hover table-sortable" id="tab_logic">
+      <thead>
+        <tr >
+          <th class="text-center">
+            Kommissionierung id
+          </th>
+          <th class="text-center">
+            Verkaufer id
+          </th>
+          <th class="text-center">
+           Max Paletten Hoher
+          </th>
+            <th class="text-center">
+           Liefer Datum
+          </th>
+          <th class="text-center">
+            Dispositor
+           </th>
+           <th class="text-center">
+            Spedition
+           </th>
+           <th class="text-center">
+            Versorgungs id
+           </th>
+           <th class="text-center">
+            Kommission Status
+           </th>
+           <th class="text-center">
+            Entfernen!
+           </th>
+
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr  *ngFor="let post of komiss" id='addr0' data-id="0" class="hidden">
+          <td data-name="name">
+            {{ post.id }}
+        </td>
+        <td data-name="mail">
+          {{ post.verkauferId }}
+        </td>
+        <td data-name="desc">
+          {{ post.maxPalettenHoher }}
+        </td>
+        <td data-name="desc">
+          {{ post.gewunschtesLieferDatum }}
+        </td>
+        <td data-name="desc">
+          {{ post.dispositorId }}
+        </td>
+        <td data-name="desc">
+          {{ post.spedition }}
+        </td>
+        <td data-name="desc">
+          {{ post.versorungId }}
+        </td>
+          <td data-name="sel">
+            <select name="kommStatus" [(ngModel)]="post.kommissStatus" (ngModelChange)="kommStatusChange(post.id)" >
+              <option *ngFor="let item of keyinenum()" [ngValue]="item"
+               [selected]="item === post.kommissStatus" > {{ item }}</option>
+            </select>
+        </td>
+                    <td data-name="del">
+                        <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove' ><span aria-hidden="true">×</span></button>
+                    </td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>

@@ -1,15 +1,15 @@
-<form>
-  <!-- Email input -->
+<form class="form-login" [formGroup]="formLogin" (ngSubmit)="loginUser()">
+  <!-- User input -->
   <div class="form-outline mb-4">
-    <input type="email" id="form2Example1" class="form-control" />
+    <input type="username" id="username" formControlName="username" name="username" class="form-control" />
     <label class="form-label" for="form2Example1">Benutzer</label>
   </div>
 
   <!-- Password input -->
   <div class="form-outline mb-4">
-    <input type="password" id="form2Example2" class="form-control" />
+    <input type="password" id="password" formControlName="password" name="password" class="form-control" />
     <label class="form-label" for="form2Example2">Password</label>
   </div>
   <!-- Submit button -->
-  <button type="button" class="btn btn-primary btn-block mb-4">Sign in</button>
+  <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
 </form>

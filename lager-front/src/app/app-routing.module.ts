@@ -8,15 +8,17 @@ import { KontrollerComponent } from './kontroller/kontroller.component';
 import { VerkaufComponent } from './verkauf/verkauf.component';
 import { WarenebuchungComponent } from './warenebuchung/warenebuchung.component';
 import { WareneingangComponent } from './wareneingang/wareneingang.component';
+import { AuthGuard } from './guard/auth.guard';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'auth',
     component: HomeComponent
   },
   {
     path: 'kontroller',
     component: KontrollerComponent
+
   },
   {
     path: 'artikel',
@@ -24,7 +26,8 @@ const routes: Routes = [
   },
   {
     path: 'kommisionier',
-    component: KommisionierComponent
+    component: KommisionierComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'lager',
@@ -32,11 +35,13 @@ const routes: Routes = [
   },
   {
     path: 'verkauf',
-    component: VerkaufComponent
+    component: VerkaufComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'warenbuch',
-    component: WarenebuchungComponent
+    component: WarenebuchungComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'warenein',
@@ -45,7 +50,7 @@ const routes: Routes = [
   {
     path: '**',
     pathMatch: 'full',
-    redirectTo: ''
+    redirectTo: 'auth'
   }
 ];
 
