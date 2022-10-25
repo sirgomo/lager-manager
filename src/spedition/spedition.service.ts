@@ -33,8 +33,8 @@ export class SpeditionService {
     }
     async deleteSpeditor(id : number){
         try {
-            await this.repo.delete(id);
-            return this.repo.find();
+           return await this.repo.delete(id);
+           
         }catch(err){
             return err;
         }

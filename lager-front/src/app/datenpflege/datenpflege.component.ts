@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { isNumberObject } from 'util/types';
 import { DispositorDTO } from '../dto/dispositor.dto';
 import { SpeditionDTO } from '../dto/spedition.dto';
 import { DatenpflegeService } from './datenpflege.service';
@@ -19,10 +20,12 @@ export class DatenpflegeComponent implements OnInit {
 
   constructor(private servi: DatenpflegeService, private fb: FormBuilder) {
     this.formDispositors = this.fb.group({
+      id: Number,
       name: [''],
       anschrift: ['']
     });
     this.formSpedition = this.fb.group({
+      id: Number,
       name: [''],
       maxLadeGewicht: [],
       maxPalettenMenge: []
@@ -42,23 +45,34 @@ getAllDispositors(){
   });
 }
 createNewDispo(d : DispositorDTO){
-  this.servi.createNewDispositor(d).subscribe(d =>{
+  if(!Number.isFinite(d.id)){
+  return this.servi.createNewDispositor(d).subscribe(d =>{
     this.dispositors.push(d);
+    this.formDispositors.reset();
+    this.getAllDispositors();
   });
-  this.getAllDispositors();
+
+}else{
+ return this.updateDispositor(d )
+}
 }
 updateDispositor(d: DispositorDTO){
-  this.servi.updateDispositor(d, d.id).subscribe(d =>{
+ return this.servi.updateDispositor(d, d.id).subscribe(d =>{
     this.dispositors.forEach(ds =>{
       if(d.id === ds.id){
         ds = d;
       }
     });
+    this.formDispositors.reset();
+    this.getAllDispositors();
   });
+
 }
 deleteDispositor(id : number){
-  this.servi.deleteDispositor(id);
-  this.getAllDispositors();
+  console.log('delete :' + id)
+  this.servi.deleteDispositor(id).subscribe( d=>{
+    return this.getAllDispositors();
+  });
 }
 getAllspeditiors(){
   this.show = 3;
@@ -70,23 +84,34 @@ getAllspeditiors(){
   });
 }
 createNewSpeditor(s: SpeditionDTO){
-  this.servi.createNewSpeditor(s).subscribe(d =>{
+  if(!Number.isFinite(s.id)){
+ return this.servi.createNewSpeditor(s).subscribe(d =>{
     this.speditors.push(d);
-  })
-  this.getAllspeditiors();
-}
-updateSpeditor(s:SpeditionDTO, id:number){
-  this.servi.updateSpeditor(s, id).subscribe(d =>{
-    this.speditors.forEach(sped =>{
-      if(sped.id === d.id){
-        sped = d;
-      }
-    });
+    this.formSpedition.reset();
+    this.getAllspeditiors();
   });
+
+}else{
+ return this.updateSpeditor(s);
+}
+}
+ updateSpeditor(s:SpeditionDTO){
+  this.servi.updateSpeditor(s, s.id).subscribe(d => {
+    this.speditors.forEach(sp => {
+      if(d.id === sp.id)
+        sp = d;
+    });
+    this.formSpedition.reset();
+    console.log('zrobione');
+     this.getAllspeditiors();
+  });
+
 }
 deleteSpeditor(id:number){
-  this.servi.deleteSpeditor(id);
-  this.getAllspeditiors();
+  return this.servi.deleteSpeditor(id).subscribe(d =>{
+    this.getAllspeditiors();
+  })
+
 }
 newSpedi(){
   this.show = 4;
@@ -94,5 +119,19 @@ newSpedi(){
 newDispo(){
   this.show = 2;
 }
+editSpedi(id: number){
+  this.speditors.forEach(d=>{
+    if(d.id === id)
+      this.formSpedition.setValue({id: id, name: d.name, maxLadeGewicht: d.maxLadeGewicht, maxPalettenMenge: d.maxPalettenMenge});
 
+  });
+  this.show = 4;
+}
+editDispo(id: number){
+this.dispositors.forEach( d =>{
+  if(d.id === id)
+    this.formDispositors.setValue({id: d.id, name: d.name, anschrift: d.anschrift});
+  });
+  this.show = 2;
+}
 }
