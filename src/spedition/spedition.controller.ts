@@ -2,8 +2,8 @@ import { Controller, UseGuards, Get, Post, Delete, Body, ValidationPipe, Param }
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
 import { RoleGuard } from 'src/auth/RoleGuard';
-import { speditionDTO } from 'src/DTO/speditionDTO';
-import { ROLE } from 'src/entity/userEntity';
+import { SpeditionDTO } from 'src/DTO/SpeditionDTO';
+import { ROLE } from 'src/entity/UserEntity';
 import { SpeditionService } from './spedition.service';
 
 @Controller('sped')
@@ -17,12 +17,12 @@ export class SpeditionController {
     }
     @Post()
     @ROLES(ROLE.KAUF,ROLE.VERKAUF,ROLE.WARENPFHLEGE)
-    createSpedition(@Body(ValidationPipe) spedition : speditionDTO){
+    createSpedition(@Body(ValidationPipe) spedition : SpeditionDTO){
         return this.service.createSpeditor(spedition);
     }
     @Post(':id')
     @ROLES(ROLE.KAUF,ROLE.VERKAUF,ROLE.WARENPFHLEGE)
-    updateSpedition(@Body(ValidationPipe) spedition : speditionDTO, @Param('id') id: number){
+    updateSpedition(@Body(ValidationPipe) spedition : SpeditionDTO, @Param('id') id: number){
         return this.service.updateSpeditor(spedition, id);
     }
     @Delete(':id')

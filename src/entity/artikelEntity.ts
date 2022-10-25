@@ -1,10 +1,10 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
-import { kommisioDetailsEntity } from './kommisioDetailsEntity';
-import { uiidEntity } from './uiidEntity';
+import { KommisioDetailsEntity } from './KommisioDetailsEntity';
+import { UiidEntity } from './UiidEntity';
 
 
 @Entity('artikel')
-export class artikelEntity {
+export class ArtikelEntity {
   @PrimaryGeneratedColumn()
   artikelId: number;
   
@@ -30,11 +30,11 @@ export class artikelEntity {
   artikelFlage: artikelFlage;
   @Column()
   bestand: number;
-  @ManyToOne(()=> kommisioDetailsEntity, (kommisioDetail)=> kommisioDetail.artikelList )
-  kommisioDetail : kommisioDetailsEntity;
+  @ManyToOne(()=> KommisioDetailsEntity, (kommisioDetail)=> kommisioDetail.artikelList )
+  kommisioDetail : KommisioDetailsEntity;
   
-  @OneToMany(()=> uiidEntity, (uid) => uid.arikels, {cascade:[ "insert", "update"] })
-  uids: uiidEntity[];
+  @OneToMany(()=> UiidEntity, (uid) => uid.arikels, {cascade:[ "insert", "update"] })
+  uids: UiidEntity[];
 }
 export enum artikelFlage {
   FASS = 'FASS',

@@ -2,8 +2,8 @@ import { Controller, Get, Req, UseGuards, Post, Delete, Body, ValidationPipe, Pa
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
 import { RoleGuard } from 'src/auth/RoleGuard';
-import { komissDTO } from 'src/DTO/komissDTO';
-import { ROLE } from 'src/entity/userEntity';
+import { KomissDTO } from 'src/DTO/KomissDTO';
+import { ROLE } from 'src/entity/UserEntity';
 import { KommissionierService } from './komissionier.service';
 
 @Controller('komi')
@@ -23,7 +23,7 @@ export class KomissionierController {
     }
     @Post()
     @ROLES(ROLE.VERKAUF)
-    createKommiss(@Body(ValidationPipe) komm : komissDTO, @Req() req : any){
+    createKommiss(@Body(ValidationPipe) komm : KomissDTO, @Req() req : any){
         return this.komSercive.createKommiss(komm, req.user.id);
     }
     @Delete(':id')

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { dispositorDTO } from '../dto/dispositor.dto';
-import { speditionDTO } from '../dto/spedition.dto';
+import { DispositorDTO } from '../dto/dispositor.dto';
+import { SpeditionDTO } from '../dto/spedition.dto';
 import { DatenpflegeService } from './datenpflege.service';
 
 @Component({
@@ -10,8 +10,8 @@ import { DatenpflegeService } from './datenpflege.service';
   styleUrls: ['./datenpflege.component.scss']
 })
 export class DatenpflegeComponent implements OnInit {
-  dispositors : dispositorDTO[] = new Array();
-  speditors : speditionDTO[] = new Array();
+  dispositors : DispositorDTO[] = new Array();
+  speditors : SpeditionDTO[] = new Array();
   show :number = 0;
 
   formSpedition : FormGroup;
@@ -41,13 +41,13 @@ getAllDispositors(){
     });
   });
 }
-createNewDispo(d : dispositorDTO){
+createNewDispo(d : DispositorDTO){
   this.servi.createNewDispositor(d).subscribe(d =>{
     this.dispositors.push(d);
   });
   this.getAllDispositors();
 }
-updateDispositor(d: dispositorDTO){
+updateDispositor(d: DispositorDTO){
   this.servi.updateDispositor(d, d.id).subscribe(d =>{
     this.dispositors.forEach(ds =>{
       if(d.id === ds.id){
@@ -69,13 +69,13 @@ getAllspeditiors(){
     });
   });
 }
-createNewSpeditor(s: speditionDTO){
+createNewSpeditor(s: SpeditionDTO){
   this.servi.createNewSpeditor(s).subscribe(d =>{
     this.speditors.push(d);
   })
   this.getAllspeditiors();
 }
-updateSpeditor(s:speditionDTO, id:number){
+updateSpeditor(s:SpeditionDTO, id:number){
   this.servi.updateSpeditor(s, id).subscribe(d =>{
     this.speditors.forEach(sped =>{
       if(sped.id === d.id){

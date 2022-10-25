@@ -3,13 +3,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { userEntity } from 'src/entity/userEntity';
+import { UserEntity } from 'src/entity/UserEntity';
 import {PassportModule} from '@nestjs/passport';
-import { jwtCustomStrategy } from './jwtCustomStrategy';
+import { JwtCustomStrategy } from './JwtCustomStrategy';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([userEntity]),
+  imports: [TypeOrmModule.forFeature([UserEntity]),
   JwtModule.register(
     {secret:  'asgd1208230AHJGksjd()/aslkdj',
     signOptions: 
@@ -22,8 +22,8 @@ import { jwtCustomStrategy } from './jwtCustomStrategy';
   PassportModule.register({
     defaultStrategy: 'jwt'
   })],
-  providers: [AuthService, jwtCustomStrategy],
+  providers: [AuthService, JwtCustomStrategy],
   controllers: [AuthController],
-  exports: [PassportModule, jwtCustomStrategy]
+  exports: [PassportModule, JwtCustomStrategy]
 })
 export class AuthModule {}

@@ -1,23 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { komissDTO } from 'src/DTO/komissDTO';
-import { ARTIKELSTATUS, kommisioDetailsEntity } from 'src/entity/kommisioDetailsEntity';
-import { kommissionirungEntity } from 'src/entity/kommissionirungEntity';
+import { KomissDTO } from 'src/DTO/KomissDTO';
+import { ARTIKELSTATUS, KommisioDetailsEntity } from 'src/entity/KommisioDetailsEntity';
+import { KommissionirungEntity } from 'src/entity/KommissionirungEntity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class KommissionierService {
-    constructor(@InjectRepository(kommissionirungEntity) private repo : Repository<kommissionirungEntity>,
-    @InjectRepository(kommisioDetailsEntity) private repoDetails : Repository<kommisioDetailsEntity>){}
+    constructor(@InjectRepository(KommissionirungEntity) private repo : Repository<KommissionirungEntity>,
+    @InjectRepository(KommisioDetailsEntity) private repoDetails : Repository<KommisioDetailsEntity>){}
 
-    async getAllKomisionirungen():Promise<kommissionirungEntity[]>{
+    async getAllKomisionirungen():Promise<KommissionirungEntity[]>{
         try{
             return await this.repo.find();
         }catch (err){
             return err ;
         }
     }
-    async getAllKomissionierungenByVerkaufer(id : number):Promise<kommissionirungEntity[]>{
+    async getAllKomissionierungenByVerkaufer(id : number):Promise<KommissionirungEntity[]>{
       
         try{
             return await this.repo.findBy({'verkauferId' : id});
@@ -25,12 +25,12 @@ export class KommissionierService {
             return err;
         }
     }
-    async createKommiss(komisDTO: komissDTO, verkauferId : number):Promise<komissDTO>{
+    async createKommiss(komisDTO: KomissDTO, verkauferId : number):Promise<KomissDTO>{
         komisDTO.verkauferId = verkauferId;
      
         await this.repo.create(komisDTO);
         await this.repo.save(komisDTO);
-        komisDTO.kommDetails = new kommisioDetailsEntity();
+        komisDTO.kommDetails = new KommisioDetailsEntity();
         komisDTO.kommDetails.gepackt = ARTIKELSTATUS.INPACKEN; 
       //  komisDTO.kommDetails.kommissId = komisDTO.id;
         await this.repoDetails.create (komisDTO.kommDetails);

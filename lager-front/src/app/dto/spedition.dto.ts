@@ -1,4 +1,4 @@
-export class speditionDTO{
+export class SpeditionDTO{
 id!:number;
 name!:string;
 maxLadeGewicht!:number;

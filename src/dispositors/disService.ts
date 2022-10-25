@@ -1,14 +1,14 @@
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { dispositorsDto } from "src/DTO/dispositorsDTO";
-import { dispoEntity } from "src/entity/dispoEntity";
-import { ROLE, userEntity } from "src/entity/userEntity";
+import { DispositorsDTO } from "src/DTO/DispositorsDTO";
+import { DispoEntity } from "src/entity/DispoEntity";
+import { ROLE, UserEntity } from "src/entity/UserEntity";
 import { Repository } from "typeorm";
 @Injectable()
 export class DisServiceService {
-    constructor(@InjectRepository(dispoEntity) private repo : Repository<dispoEntity> ) {}
+    constructor(@InjectRepository(DispoEntity) private repo : Repository<DispoEntity> ) {}
 
-   async getAllDisponets():Promise<dispoEntity[]>{
+   async getAllDisponets():Promise<DispoEntity[]>{
     try {
         return await this.repo.find();
     } catch (err){
@@ -16,7 +16,7 @@ export class DisServiceService {
     }
    
    }
-   async createDisponets(dispo : dispositorsDto)
+   async createDisponets(dispo : DispositorsDTO)
    {
     console.log('tutaj cvonstroller')
        await this.repo.create(dispo);
@@ -28,7 +28,7 @@ export class DisServiceService {
         }
    
    }
-   async updateDipositors(id : number, dispo : dispositorsDto)
+   async updateDipositors(id : number, dispo : DispositorsDTO)
    {
    
         try {

@@ -8,24 +8,24 @@ import { WarenbuchungModule } from './warenbuchung/warenbuchung.module';
 import { DispositorsModule } from './dispositors/dispositors.module';
 import { VerkaufModule } from './verkauf/verkauf.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { dispoEntity } from './entity/dispoEntity';
-import { artikelEntity } from './entity/artikelEntity';
+import { DispoEntity } from './entity/DispoEntity';
+import { ArtikelEntity } from './entity/ArtikelEntity';
 import { ArtikelModule } from './artikel/artikel.module';
 import { AuthModule } from './auth/auth.module';
-import { userEntity } from './entity/userEntity';
+import { UserEntity } from './entity/UserEntity';
 import { RoleGuard } from './auth/RoleGuard';
-import { artikelReservationEntity } from './entity/artikelReservationEntity';
-import { fehlendArtikelEntity } from './entity/fehlendArtikelEntity';
-import { inKomissPalletenEntity } from './entity/inKomissPalletenEntity';
-import { kommissionirungEntity } from './entity/kommissionirungEntity';
-import { lagerPlatzEntity } from './entity/lagerPlatzEntity';
-import { palettenEnttity } from './entity/palettenEntity';
-import { speditionEntity } from './entity/speditionEntity';
-import { warenBestellungEntity } from './entity/warenBestellungEntity';
-import { warenEingangEntity } from './entity/warenEingangEntity';
-import { kommisioDetailsEntity } from './entity/kommisioDetailsEntity';
+import { ArtikelReservationEntity } from './entity/ArtikelReservationEntity';
+import { FehlendArtikelEntity } from './entity/FehlendArtikelEntity';
+import { InKomissPalletenEntity } from './entity/InKomissPalletenEntity';
+import { KommissionirungEntity } from './entity/KommissionirungEntity';
+import { LagerPlatzEntity } from './entity/LagerPlatzEntity';
+import { PalettenEnttity } from './entity/palettenEntity';
+import { SpeditionEntity } from './entity/SpeditionEntity';
+import { WarenBestellungEntity } from './entity/WarenBestellungEntity';
+import { WarenEingangEntity } from './entity/WarenEingangEntity';
+import { KommisioDetailsEntity } from './entity/KommisioDetailsEntity';
 import { SpeditionModule } from './spedition/spedition.module';
-import { uiidEntity } from './entity/uiidEntity';
+import { UiidEntity } from './entity/UiidEntity';
 
 
 
@@ -38,8 +38,8 @@ import { uiidEntity } from './entity/uiidEntity';
       username: 'root',
       password: 'beta1243',
       database: 'lager',
-      entities: [dispoEntity, artikelEntity, userEntity, artikelReservationEntity, fehlendArtikelEntity, inKomissPalletenEntity, kommissionirungEntity,
-      lagerPlatzEntity, palettenEnttity, speditionEntity, warenBestellungEntity, warenEingangEntity, kommisioDetailsEntity, uiidEntity],
+      entities: [DispoEntity, ArtikelEntity, UserEntity, ArtikelReservationEntity, FehlendArtikelEntity, InKomissPalletenEntity, KommissionirungEntity,
+      LagerPlatzEntity, PalettenEnttity, SpeditionEntity, WarenBestellungEntity, WarenEingangEntity, KommisioDetailsEntity, UiidEntity],
       synchronize: false,
     }),
     WareneingangModule,

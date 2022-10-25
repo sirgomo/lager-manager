@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { PALETTENTYP } from "./lagerPlatzEntity";
+import { PALETTENTYP } from "./LagerPlatzEntity";
 
 @Entity('inKomissPal')
-export class inKomissPalletenEntity{
+export class InKomissPalletenEntity{
     @PrimaryGeneratedColumn()
     id : number;
     @Column()

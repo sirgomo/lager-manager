@@ -2,39 +2,39 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, Validatio
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
 import { RoleGuard } from 'src/auth/RoleGuard';
-import { artikelDTO } from 'src/DTO/artikelDTO';
-import { artikelFlage } from 'src/entity/artikelEntity';
-import { ROLE, userEntity } from 'src/entity/userEntity';
-import { artikelflagsPipers } from 'src/pipes/artikelFlagspipes';
-import { artService } from './art.service';
+import { ArtikelDTO } from 'src/DTO/ArtikelDTO';
+import { artikelFlage } from 'src/entity/ArtikelEntity';
+import { ROLE, UserEntity } from 'src/entity/UserEntity';
+import { ArtikelflagsPipers } from 'src/pipes/artikelFlagspipes';
+import { ArtService } from './art.service';
 
 @Controller('artikel')
 @UseGuards(AuthGuard(), RoleGuard)
-export class artController {
-    constructor(private artService : artService){}
+export class ArtController {
+    constructor(private ArtService : ArtService){}
 
     @Get()
     getAllArtikels(){
-        return this.artService.getAllArticel();
+        return this.ArtService.getAllArticel();
     }
     @Post()
     @ROLES(ROLE.WARENPFHLEGE)
-    createArtikel(@Body(ValidationPipe) data : artikelDTO){
-        return this.artService.createArtikel(data);
+    createArtikel(@Body(ValidationPipe) data : ArtikelDTO){
+        return this.ArtService.createArtikel(data);
     }
     //@Patch(':id')
-    //updateArtikel(@Body('artikelFlag', artikelflagsPipers) artikelFlag: artikelFlage, 
+    //updateArtikel(@Body('artikelFlag', ArtikelflagsPipers) artikelFlag: artikelFlage, 
     //@Param('id') id: number){
     @Patch(':id')
     @ROLES(ROLE.WARENPFHLEGE)
-    updateArtikel(@Body(ValidationPipe) data: artikelDTO, 
+    updateArtikel(@Body(ValidationPipe) data: ArtikelDTO, 
     @Param('id') id: number){
-       return this.artService.updateArtikel(data, id);
+       return this.ArtService.updateArtikel(data, id);
     }
     @Delete(':id')
     @ROLES(ROLE.WARENPFHLEGE)
     deleteArtikel(@Param('id') id: number, ){
-      return  this.artService.deleteArtikel(id);
-     //   return this.artService.getAllArticel();
+      return  this.ArtService.deleteArtikel(id);
+     //   return this.ArtService.getAllArticel();
     }
 }

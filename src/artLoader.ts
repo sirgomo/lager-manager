@@ -1,17 +1,17 @@
 
-import { artikelEntity, artikelFlage } from "./entity/artikelEntity";
-import { uiidEntity } from "./entity/uiidEntity";
+import { ArtikelEntity, artikelFlage } from "./entity/ArtikelEntity";
+import { UiidEntity } from "./entity/UiidEntity";
 
-export class artLoader{
+export class ArtLoader{
 
-    makeArtikels() : artikelEntity[]{
-        const arti : artikelEntity[] = new Array(1000);
+    makeArtikels() : ArtikelEntity[]{
+        const arti : ArtikelEntity[] = new Array(1000);
         console.log('generuje');
        
         for (let i = 0; i < 1000; i++){
             if(Math.random() < 0.3){
-                var artike : artikelEntity = new artikelEntity();
-                var uid = new uiidEntity();
+                var artike : ArtikelEntity = new ArtikelEntity();
+                var uid = new UiidEntity();
                 artike.name = 'suss' + Math.random();
                 artike.basisEinheit = 1;
                 artike.durchschnittlicheLagerdauer = 20;
@@ -28,8 +28,8 @@ export class artLoader{
                 artike.bestand = this.getRandomInt(2,1000);
                 arti[i] = artike;
             }else{
-                var artike : artikelEntity = new artikelEntity();
-                var uid = new uiidEntity();
+                var artike : ArtikelEntity = new ArtikelEntity();
+                var uid = new UiidEntity();
                 artike.name = 'alk' + Math.random();
                 artike.basisEinheit = 1;
                 artike.durchschnittlicheLagerdauer = 20;

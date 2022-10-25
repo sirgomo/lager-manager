@@ -1,8 +1,8 @@
 import { Column, DataSource, Double, Entity, JoinColumn, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { artikelEntity } from "./artikelEntity";
+import { ArtikelEntity } from "./ArtikelEntity";
 
 @Entity('lagerplatz')
-export class lagerPlatzEntity{
+export class LagerPlatzEntity{
     @PrimaryGeneratedColumn()
     id : number;
     @Column()
@@ -24,9 +24,9 @@ export class lagerPlatzEntity{
     @Column()
     static : boolean = false;
 
-    @ManyToMany(()=> artikelEntity)
+    @ManyToMany(()=> ArtikelEntity)
     @JoinColumn()
-    artikel: artikelEntity[];
+    artikel: ArtikelEntity[];
 
 }
 export enum PALETTENTYP{

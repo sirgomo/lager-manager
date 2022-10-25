@@ -3,8 +3,8 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@n
 import { AuthGuard } from "@nestjs/passport";
 import { ROLES } from "src/auth/roleDecorator";
 import { RoleGuard } from "src/auth/RoleGuard";
-import { dispositorsDto } from "src/DTO/dispositorsDTO";
-import { ROLE } from "src/entity/userEntity";
+import { DispositorsDTO } from "src/DTO/DispositorsDTO";
+import { ROLE } from "src/entity/UserEntity";
 import { DisServiceService } from "./disService";
 @Controller('dispo')
 @UseGuards(AuthGuard(), RoleGuard)
@@ -17,12 +17,12 @@ export class DisControllerController{
     
     @Post()
     @ROLES(ROLE.KAUF,ROLE.VERKAUF,ROLE.WARENPFHLEGE)
-    createNewDispositors(@Body(ValidationPipe) disDto : dispositorsDto){
+    createNewDispositors(@Body(ValidationPipe) disDto : DispositorsDTO){
       return  this.disService.createDisponets(disDto);
     }
     @Patch(':id')
     @ROLES(ROLE.KAUF,ROLE.VERKAUF,ROLE.WARENPFHLEGE)
-    updateDispositor(@Body(ValidationPipe) data: dispositorsDto, @Param('id') id:number){
+    updateDispositor(@Body(ValidationPipe) data: DispositorsDTO, @Param('id') id:number){
       return this.disService.updateDipositors(id, data);
     }
     @Delete(':id')

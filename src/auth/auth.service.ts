@@ -1,22 +1,22 @@
 import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { registerUserDTO } from 'src/DTO/registerUserDTO';
-import { ROLE, userEntity } from 'src/entity/userEntity';
+import { RegisterUserDTO } from 'src/DTO/RegisterUserDTO';
+import { ROLE, UserEntity } from 'src/entity/UserEntity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs'
 import {JwtService} from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-    constructor(@InjectRepository(userEntity) private repo: Repository<userEntity>, 
+    constructor(@InjectRepository(UserEntity) private repo: Repository<UserEntity>, 
     private jwt : JwtService){}
 
-    async registerUser(regDTO : registerUserDTO){
+    async registerUser(regDTO : RegisterUserDTO){
         const {username, password} = regDTO;
        
         const hashed = await bcrypt.hash(password, 12);
         const salt = await bcrypt.getSalt(hashed);
-        const user : userEntity = new userEntity();
+        const user : UserEntity = new UserEntity();
         user.username = username;
         user.userpassword = hashed;
         user.salt = salt;
@@ -29,7 +29,7 @@ export class AuthService {
         }
         
     }
-    async loginUser(logDTO : registerUserDTO){
+    async loginUser(logDTO : RegisterUserDTO){
         const {username, password} = logDTO;
         const user = await this.repo.findOneBy({username});
         if(!user){

@@ -1,9 +1,9 @@
-import { uidDTO } from "./uid.dto";
+import { UidDTO } from "./uid.dto";
 
- export class artikelDTO{
+ export class ArtikelDTO{
     artikelId!: number;
     name!: string;
-    uid!: uidDTO[];
+    uid!: UidDTO[];
     gewicht!: number;
     grosse!: string;
     basisEinheit!: number;

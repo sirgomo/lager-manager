@@ -1,7 +1,7 @@
 import { ArgumentMetadata, BadRequestException, PipeTransform } from "@nestjs/common";
-import { artikelFlage } from "src/entity/artikelEntity";
+import { artikelFlage } from "src/entity/ArtikelEntity";
 
-export class artikelflagsPipers implements PipeTransform{
+export class ArtikelflagsPipers implements PipeTransform{
     readonly erlaubtesFlags : artikelFlage[] = [artikelFlage.ALK, artikelFlage.FASS, artikelFlage.SUSS];
 
     transform(value : any, metadata : ArgumentMetadata) : any {

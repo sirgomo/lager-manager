@@ -1,10 +1,10 @@
 import { Column, Entity,  ManyToOne,  PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
-import { dispoEntity } from "./dispoEntity";
-import { kommisioDetailsEntity } from "./kommisioDetailsEntity";
-import { speditionEntity } from "./speditionEntity";
+import { DispoEntity } from "./DispoEntity";
+import { KommisioDetailsEntity } from "./KommisioDetailsEntity";
+import { SpeditionEntity } from "./SpeditionEntity";
 
 @Entity('kommissionirungen')
-export class kommissionirungEntity{
+export class KommissionirungEntity{
 @PrimaryGeneratedColumn()
 id : number;
 @PrimaryColumn()
@@ -25,8 +25,8 @@ spedition : number;
 versorungId : string;
 
 
-@ManyToOne(()=> kommisioDetailsEntity, (kommisioDetails) => kommisioDetails.kommlist)
-kommDetails : kommisioDetailsEntity;
+@ManyToOne(()=> KommisioDetailsEntity, (kommisioDetails) => kommisioDetails.kommlist)
+kommDetails : KommisioDetailsEntity;
 
 }
 export enum KOMMISIONSTATUS{

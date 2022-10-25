@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import {  ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { userDTO } from '../dto/user.dto';
+import { UserDTO } from '../dto/user.dto';
 import jwt_decode from 'jwt-decode';
 
 @Injectable({
@@ -35,7 +35,7 @@ export class ApiService {
       Authorization : `Bearer ${this.token}`
     }});
   }*/
-  login(user: userDTO){
+  login(user: UserDTO){
    this.http.post<any>(`${this.API_URL}auth`, user)
    .subscribe((res : {token :string }) => {
     this.token = res.token;

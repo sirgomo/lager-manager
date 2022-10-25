@@ -1,13 +1,13 @@
 import {  IsNotEmpty, Length, IsOptional, IsNumber, Min, IsDate } from 'class-validator';
-import { artikelFlage } from 'src/entity/artikelEntity';
-import { uiidEntity } from 'src/entity/uiidEntity';
-export class artikelDTO{
+import { artikelFlage } from 'src/entity/ArtikelEntity';
+import { UiidEntity } from 'src/entity/UiidEntity';
+export class ArtikelDTO{
     @IsOptional()
     @IsNumber()
     artikelId: number;
     @IsNotEmpty()
     name: string;
-    uid: uiidEntity[];
+    uid: UiidEntity[];
     @IsNotEmpty()
     @IsNumber()
     gewicht: number;

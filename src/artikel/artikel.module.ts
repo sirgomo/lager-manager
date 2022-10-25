@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
-import { artikelEntity } from 'src/entity/artikelEntity';
-import { uiidEntity } from 'src/entity/uiidEntity';
-import { artController } from './art.controller';
-import { artService } from './art.service';
+import { ArtikelEntity } from 'src/entity/ArtikelEntity';
+import { UiidEntity } from 'src/entity/UiidEntity';
+import { ArtController } from './art.controller';
+import { ArtService } from './art.service';
 import { UidService } from './uid/uid.service';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([artikelEntity, uiidEntity]), AuthModule],
-  controllers: [artController],
-  providers: [artService, UidService]
+  imports: [TypeOrmModule.forFeature([ArtikelEntity, UiidEntity]), AuthModule],
+  controllers: [ArtController],
+  providers: [ArtService, UidService]
 })
 export class ArtikelModule {}

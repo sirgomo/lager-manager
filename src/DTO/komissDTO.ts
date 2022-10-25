@@ -1,9 +1,9 @@
 import { isDate, IsNotEmpty, IsNumber, IsOptional } from "class-validator";
-import { kommisioDetailsEntity } from "src/entity/kommisioDetailsEntity";
-import { KOMMISIONSTATUS } from "src/entity/kommissionirungEntity";
+import { KommisioDetailsEntity } from "src/entity/KommisioDetailsEntity";
+import { KOMMISIONSTATUS } from "src/entity/KommissionirungEntity";
 
 
-export class komissDTO{
+export class KomissDTO{
     @IsOptional()
     id : number;
     @IsNotEmpty()
@@ -20,5 +20,5 @@ export class komissDTO{
     spedition : number;
     @IsNotEmpty({message: 'Versorung id'})
     versorungId : string;
-    kommDetails : kommisioDetailsEntity;
+    kommDetails : KommisioDetailsEntity;
 }

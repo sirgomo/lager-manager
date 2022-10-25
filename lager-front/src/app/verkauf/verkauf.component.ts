@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { komissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
+import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
 import { VerkaufService } from './verkauf.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { VerkaufService } from './verkauf.service';
   styleUrls: ['./verkauf.component.scss']
 })
 export class VerkaufComponent implements OnInit {
-  komiss : komissDTO[] = new Array();
+  komiss : KomissDTO[] = new Array();
   kommStatus: typeof KOMMISIONSTATUS;
   constructor(private serv : VerkaufService, private router : Router) {
     this.kommStatus = KOMMISIONSTATUS;
@@ -24,7 +24,7 @@ export class VerkaufComponent implements OnInit {
 }
 kommStatusChange(id: number){
   //mach etwas wenn kommisionirung status geendert wurde, nur check ob arbeitet
-  this.komiss.forEach((data: komissDTO)=> {
+  this.komiss.forEach((data: KomissDTO)=> {
     if(data.id == id){
       console.log('id ' + id + ' new status '+ data.kommissStatus + ' status in data ' + data.kommissStatus );
     }

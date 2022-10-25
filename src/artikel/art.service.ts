@@ -1,23 +1,23 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { artLoader } from 'src/artLoader';
-import { artikelDTO } from 'src/DTO/artikelDTO';
-import { artikelEntity } from 'src/entity/artikelEntity';
+import { ArtLoader } from 'src/ArtLoader';
+import { ArtikelDTO } from 'src/DTO/ArtikelDTO';
+import { ArtikelEntity } from 'src/entity/ArtikelEntity';
 import { Repository } from 'typeorm';
 
 
 @Injectable()
-export class artService {
-    constructor(@InjectRepository(artikelEntity) private repo : Repository<artikelEntity>){}
+export class ArtService {
+    constructor(@InjectRepository(ArtikelEntity) private repo : Repository<ArtikelEntity>){}
     
     
-    async getAllArticel():Promise<artikelEntity[]>{
+    async getAllArticel():Promise<ArtikelEntity[]>{
         const create : number = 3;
         if(create === 1){
         console.log('art service');
         try{
-            var art: artikelEntity[] = new Array();
-            art = await this.repo.create(new artLoader().makeArtikels());
+            var art: ArtikelEntity[] = new Array();
+            art = await this.repo.create(new ArtLoader().makeArtikels());
           await this.repo.save(art);
         }catch(err){
             console.log(err);
@@ -30,7 +30,7 @@ export class artService {
             throw new InternalServerErrorException('Etwas is schief gegangen');
         }
     }
-    async createArtikel(art : artikelDTO):Promise<artikelEntity>{
+    async createArtikel(art : ArtikelDTO):Promise<ArtikelEntity>{
         await this.repo.create(art);
         
 
@@ -41,7 +41,7 @@ export class artService {
             throw new InternalServerErrorException('Etwas is schief gegangen');
         }
     }
-    async updateArtikel(art: artikelDTO, id: number):Promise<artikelEntity>{
+    async updateArtikel(art: ArtikelDTO, id: number):Promise<ArtikelEntity>{
         await this.repo.create(art);
        
         try{

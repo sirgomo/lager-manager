@@ -1,6 +1,6 @@
 
 import {  IsNotEmpty, Length, IsOptional, IsNumber } from 'class-validator';
-export class dispositorsDto {
+export class DispositorsDTO {
     @IsOptional()
     @IsNumber()
     id : number;

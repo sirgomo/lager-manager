@@ -1,4 +1,4 @@
-export class userDTO{
+export class UserDTO{
   username! : string;
   password! : string;
 }

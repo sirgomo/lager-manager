@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { speditionDTO } from 'src/DTO/speditionDTO';
-import { speditionEntity } from 'src/entity/speditionEntity';
+import { SpeditionDTO } from 'src/DTO/SpeditionDTO';
+import { SpeditionEntity } from 'src/entity/SpeditionEntity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class SpeditionService {
-    constructor(@InjectRepository(speditionEntity) private repo : Repository<speditionEntity>){}
+    constructor(@InjectRepository(SpeditionEntity) private repo : Repository<SpeditionEntity>){}
 
-    async getAllSpditors():Promise<speditionEntity[]>{
+    async getAllSpditors():Promise<SpeditionEntity[]>{
         try{
             return await this.repo.find();
         }catch(err){
             return err;
         }
     }
-    async createSpeditor(speditor : speditionDTO):Promise<speditionEntity>{
+    async createSpeditor(speditor : SpeditionDTO):Promise<SpeditionEntity>{
         await this.repo.create(speditor);
         try{
             return await this.repo.save(speditor);
@@ -23,7 +23,7 @@ export class SpeditionService {
             return err;
         }
     }
-    async updateSpeditor(speditor : speditionDTO, id : number){
+    async updateSpeditor(speditor : SpeditionDTO, id : number){
         try{
              await this.repo.update(id, speditor);
              return await this.repo.findBy({'id' : speditor.id})

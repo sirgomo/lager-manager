@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { uiidEntity } from 'src/entity/uiidEntity';
+import { UiidEntity } from 'src/entity/UiidEntity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class UidService {
-    constructor(@InjectRepository(uiidEntity) private repo: Repository<uiidEntity>){}
-    async saveUid( uid : uiidEntity){
+    constructor(@InjectRepository(UiidEntity) private repo: Repository<UiidEntity>){}
+    async saveUid( uid : UiidEntity){
         await this.repo.create(uid);
         return await this.repo.save(uid);
     }
