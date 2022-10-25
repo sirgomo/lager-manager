@@ -16,19 +16,17 @@ export class DisControllerController{
     }
     
     @Post()
-    @ROLES(ROLE.KAUF || ROLE.VERKAUF)
+    @ROLES(ROLE.KAUF,ROLE.VERKAUF,ROLE.WARENPFHLEGE)
     createNewDispositors(@Body(ValidationPipe) disDto : dispositorsDto){
       return  this.disService.createDisponets(disDto);
     }
     @Patch(':id')
-    @ROLES(ROLE.KAUF)
-    @ROLES(ROLE.VERKAUF)
+    @ROLES(ROLE.KAUF,ROLE.VERKAUF,ROLE.WARENPFHLEGE)
     updateDispositor(@Body(ValidationPipe) data: dispositorsDto, @Param('id') id:number){
       return this.disService.updateDipositors(id, data);
     }
     @Delete(':id')
-    @ROLES(ROLE.KAUF)
-    @ROLES(ROLE.VERKAUF)
+    @ROLES(ROLE.KAUF,ROLE.VERKAUF,ROLE.WARENPFHLEGE)
     deleteDispositor(@Param('id') id: number){
       return this.disService.deleteDiponent(id);
     }

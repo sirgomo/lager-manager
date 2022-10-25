@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { komissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
 import { VerkaufService } from './verkauf.service';
 
@@ -10,7 +11,7 @@ import { VerkaufService } from './verkauf.service';
 export class VerkaufComponent implements OnInit {
   komiss : komissDTO[] = new Array();
   kommStatus: typeof KOMMISIONSTATUS;
-  constructor(private serv : VerkaufService) {
+  constructor(private serv : VerkaufService, private router : Router) {
     this.kommStatus = KOMMISIONSTATUS;
    }
 
@@ -41,7 +42,7 @@ alleKommissionierungen(){
 }
 
 createKommissionirung(){
-console.log('create komm')
+ this.router.navigateByUrl('verkauf/new').then();
 }
 meinKommissionierungen(){
   this.komiss.splice(0, this.komiss.length);

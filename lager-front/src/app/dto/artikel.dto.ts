@@ -1,11 +1,12 @@
+import { uidDTO } from "./uid.dto";
+
  export class artikelDTO{
-    id!: number;
+    artikelId!: number;
     name!: string;
-    uid!: string;
+    uid!: uidDTO[];
     gewicht!: number;
     grosse!: string;
     basisEinheit!: number;
-    mhd!: string;
     minLosMenge!: number;
     durchschnittlicheLagerdauer!: number;
     umschlagshaufigkeit!: number;

@@ -25,6 +25,7 @@ import {ToastrModule} from 'ngx-toastr'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
 import { CreateKommisionierungComponent } from './create-kommisionierung/create-kommisionierung.component';
+import { DatenpflegeComponent } from './datenpflege/datenpflege.component';
 
 
 
@@ -40,7 +41,8 @@ import { CreateKommisionierungComponent } from './create-kommisionierung/create-
     LagerComponent,
     WareneingangComponent,
     WarenebuchungComponent,
-    CreateKommisionierungComponent
+    CreateKommisionierungComponent,
+    DatenpflegeComponent
   ],
   imports: [
     BrowserModule,

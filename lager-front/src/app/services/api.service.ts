@@ -50,6 +50,9 @@ export class ApiService {
             case 'VERKAUF':
               this.router.navigateByUrl('verkauf').then();
               break;
+              case 'WARENPFHLEGE':
+              this.router.navigateByUrl('datenpflege').then();
+              break;
 
             default:
               this.router.navigateByUrl('auth').then();

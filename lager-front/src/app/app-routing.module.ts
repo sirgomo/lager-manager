@@ -9,6 +9,8 @@ import { VerkaufComponent } from './verkauf/verkauf.component';
 import { WarenebuchungComponent } from './warenebuchung/warenebuchung.component';
 import { WareneingangComponent } from './wareneingang/wareneingang.component';
 import { AuthGuard } from './guard/auth.guard';
+import { CreateKommisionierungComponent } from './create-kommisionierung/create-kommisionierung.component';
+import { DatenpflegeComponent } from './datenpflege/datenpflege.component';
 
 const routes: Routes = [
   {
@@ -17,12 +19,13 @@ const routes: Routes = [
   },
   {
     path: 'kontroller',
-    component: KontrollerComponent
-
+    component: KontrollerComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'artikel',
-    component: ArtikelComponent
+    component: ArtikelComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'kommisionier',
@@ -31,11 +34,17 @@ const routes: Routes = [
   },
   {
     path: 'lager',
-    component: LagerComponent
+    component: LagerComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'verkauf',
     component: VerkaufComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'verkauf/new',
+    component: CreateKommisionierungComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -44,8 +53,14 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'datenpflege',
+    component: DatenpflegeComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'warenein',
-    component: WareneingangComponent
+    component: WareneingangComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: '**',

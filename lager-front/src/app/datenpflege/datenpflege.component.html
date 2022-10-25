@@ -1,0 +1,141 @@
+<div class="container  !direction !spacing">
+ <div class="row justify-content-center align-items-center g-2 ">
+  <div class="col-md-auto border text-center icons" style="cursor: pointer;" (click)="newSpedi()">
+      Neue Spedition
+  </div>
+  <div class="col-md-auto border text-center icons" style="cursor: pointer;" (click)="newDispo()">
+      Neue Dispositor
+  </div>
+  <div class="col-md-auto border text-center icons"style="cursor: pointer;" (click)="getAllspeditiors()">
+   Speditors
+</div>
+<div class="col-md-auto border text-center icons" style="cursor: pointer;" (click)="getAllDispositors()">
+    Dispositors
+</div>
+</div>
+<div class="row justify-content-center align-items-center g-2">
+  <!--Form to create dispisitors-->
+  <form class="row g-3 needs-validation" novalidate *ngIf="show === 2"
+  [formGroup]="formDispositors" (ngSubmit)="createNewDispo(formDispositors.value)">
+    <div class="col-md-4">
+      <label for="validationCustom01" class="form-label">Dispositor Name</label>
+      <input formControlName="name" type="text" class="form-control" id="validationCustom01" value="name" required>
+      <div class="valid-feedback">
+        Schein gut zu sein
+      </div>
+    </div>
+    <div class="col-md-4">
+      <label for="validationCustom02" class="form-label">Dispositor Ahschrift: </label>
+      <input formControlName="anschrift" type="text" class="form-control" id="validationCustom02" value="anschrift" required>
+      <div class="valid-feedback">
+        Schein gut zu sein
+      </div>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit">Submit form</button>
+    </div>
+  </form>
+   <!--Form to create speditors-->
+  <form class="row g-3 needs-validation" novalidate *ngIf="show === 4"
+  [formGroup]="formSpedition" (ngSubmit)="createNewSpeditor(formSpedition.value)">
+    <div class="col-md-4">
+      <label for="validationCustom01" class="form-label">Spedition Name</label>
+      <input formControlName="name" type="text" class="form-control" id="validationCustom01" value="name" required>
+      <div class="valid-feedback">
+        Schein gut zu sein
+      </div>
+    </div>
+    <div class="col-md-4">
+      <label for="validationCustom02" class="form-label">Max Lade Gewicht : </label>
+      <input formControlName="maxLadeGewicht" type="number" class="form-control" id="validationCustom02" value="22000" required>
+      <div class="valid-feedback">
+        Schein gut zu sein
+      </div>
+    </div>
+    <div class="col-md-4">
+      <label for="validationCustomUsername" class="form-label">Max Paletten Menge</label>
+      <div class="input-group">
+        <input formControlName="maxPalettenMenge" type="number" class="form-control" id="validationCustomUsername" value="33" required>
+        <div class="invalid-feedback">
+          Schreib bitte wie viel Paletten kann ich laden.
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit">Submit form</button>
+    </div>
+  </form>
+  <!-- Show dispositors data-->
+  <table class="table table-bordered table-hover table-sortable" id="tab_logic" *ngIf="show === 1">
+    <thead>
+      <tr >
+        <th class="text-center">
+          Dispositor id
+        </th>
+        <th class="text-center">
+          Name
+        </th>
+        <th class="text-center">
+         anschrift
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr  *ngFor="let post of dispositors" id='addr0' data-id="0" class="hidden">
+        <td data-name="dispositor id">
+          {{ post.id }}
+      </td>
+      <td data-name="name">
+        {{ post.name }}
+      </td>
+      <td data-name="anschrift">
+        {{ post.anschrift }}
+      </td>
+                  <td data-name="del">
+                      <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove' ><span aria-hidden="true">×</span></button>
+                  </td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- Show speditors data-->
+  <table class="table table-bordered table-hover table-sortable" id="tab_logic" *ngIf="show === 3">
+    <thead>
+      <tr >
+        <th class="text-center">
+          Speditors id
+        </th>
+        <th class="text-center">
+         Speditors Name
+        </th>
+        <th class="text-center">
+         Speditors max lade gewicht
+        </th>
+        <th class="text-center">
+          Speditors max paletten menge
+         </th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr  *ngFor="let post of speditors" id='addr0' data-id="0" class="hidden">
+        <td data-name="dispositor id">
+          {{ post.id }}
+      </td>
+      <td data-name="name">
+        {{ post.name }}
+      </td>
+      <td data-name="maxladegewicht">
+        {{ post.maxLadeGewicht }}
+      </td>
+      <td data-name="maxpaletenmenge">
+        {{ post.maxPalettenMenge }}
+      </td>
+                  <td data-name="del">
+                      <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove' ><span aria-hidden="true">×</span></button>
+                  </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>
