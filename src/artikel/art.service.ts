@@ -13,18 +13,22 @@ export class ArtService {
     
     async getAllArticel():Promise<ArtikelEntity[]>{
         const create : number = 3;
-        if(create === 1){
-        console.log('art service');
-        try{
-            var art: ArtikelEntity[] = new Array();
-            art = await this.repo.create(new ArtLoader().makeArtikels());
-          await this.repo.save(art);
-        }catch(err){
-            console.log(err);
-        }
-    }
+                if(create === 1){
+                console.log('art service');
+                try{
+                    var art: ArtikelEntity[] = new Array();
+                    art = await this.repo.create(new ArtLoader().makeArtikels());
+                await this.repo.save(art);
+                }catch(err){
+                    console.log(err);
+                }
+            }
         try {
-            return await this.repo.find();
+            return await this.repo.find({
+                relations: {
+                    uids : true
+                },
+            });
         }
         catch (err) {
             throw new InternalServerErrorException('Etwas is schief gegangen');

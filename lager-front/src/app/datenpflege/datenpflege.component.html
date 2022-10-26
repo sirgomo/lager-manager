@@ -1,18 +1,23 @@
 <div class="container  !direction !spacing">
   <div class="mt-2 col-md-12"></div>
  <div class="row justify-content-center align-items-center g-2 ">
-  <div class="col-md-6 border text-center icons" style="cursor: pointer;" (click)="newSpedi()">
-      Neue Spedition
-  </div>
-  <div class="col-md-6 border text-center icons" style="cursor: pointer;" (click)="newDispo()">
-      Neue Dispositor
-  </div>
-  <div class="col-md-6 border text-center icons"style="cursor: pointer;" (click)="getAllspeditiors()">
-   Speditors
-</div>
-<div class="col-md-6 border text-center icons" style="cursor: pointer;" (click)="getAllDispositors()">
-    Dispositors
-</div>
+            <div class="col-md-6 border text-center icons" style="cursor: pointer;" (click)="newSpedi()">
+                Neue Spedition
+            </div>
+            <div class="col-md-6 border text-center icons" style="cursor: pointer;" (click)="newDispo()">
+                Neue Dispositor
+            </div>
+            <div class="mt-2 col-md-12"></div>
+            <div class="col-md-4 border text-center icons"style="cursor: pointer;" (click)="getAllspeditiors()">
+            Speditors
+          </div>
+          <div class="col-md-4 border text-center icons" style="cursor: pointer;" (click)="getAllDispositors()">
+              Dispositors
+          </div>
+          <div class="col-md-4 border text-center icons" style="cursor: pointer;" [routerLink]="['/artikel']" routerLinkActive="router-link-active" >
+            Artikel
+          </div>
+ </div>
 </div>
 <div class="mt-2 col-md-12"></div>
 <div class="row justify-content-center align-items-center g-2">
@@ -90,7 +95,7 @@
     </thead>
     <tbody>
 
-      <tr  *ngFor="let post of dispositors" class="hidden" (click)="editDispo(post.id)" style="cursor: pointer;">
+      <tr  *ngFor="let post of dispositors; let i = index" class="hidden" (click)="editDispo(post.id)" style="cursor: pointer;">
         <td data-name="dispositor id">
           {{ post.id }}
       </td>
@@ -101,7 +106,7 @@
         {{ post.anschrift }}
       </td>
                   <td data-name="del">
-                      <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove' (click)="deleteDispositor(post.id)" ><span aria-hidden="true">×</span></button>
+                      <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove' (click)="deleteDispositor(post.id, i)" ><span aria-hidden="true">×</span></button>
                   </td>
       </tr>
     </tbody>
@@ -129,7 +134,7 @@
     </thead>
     <tbody>
 
-      <tr  *ngFor="let post of speditors" class="hidden" (click)="editSpedi(post.id)" style="cursor: pointer;">
+      <tr  *ngFor="let post of speditors; let i = index;" class="hidden" (click)="editSpedi(post.id)" style="cursor: pointer;">
         <td data-name="dispositor id">
           {{ post.id }}
       </td>
@@ -143,10 +148,10 @@
         {{ post.maxPalettenMenge }}
       </td>
                   <td data-name="del">
-                      <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove' (click)="deleteSpeditor(post.id)"><span aria-hidden="true">×</span></button>
+                      <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove' (click)="deleteSpeditor(post.id, i)"><span aria-hidden="true">×</span></button>
                   </td>
       </tr>
     </tbody>
   </table>
 </div>
-</div>
+

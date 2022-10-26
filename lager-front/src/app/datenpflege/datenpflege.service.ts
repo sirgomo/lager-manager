@@ -19,11 +19,11 @@ export class DatenpflegeService {
   createNewDispositor(dispo : DispositorDTO):Observable<DispositorDTO>{
    return this.http.post<DispositorDTO>(this.API_URL, dispo);
   }
-  updateDispositor(dispo: DispositorDTO, id : number):Observable<DispositorDTO>{
-   return this.http.patch<DispositorDTO>(this.API_URL + '/'+id, dispo);
+  updateDispositor(dispo: DispositorDTO, id : number){
+    this.http.patch<DispositorDTO>(this.API_URL + '/'+id, dispo).subscribe();
   }
   deleteDispositor(id:number){
-   return this.http.delete(this.API_URL + '/' + id);
+    this.http.delete(this.API_URL + '/' + id).subscribe();
   }
 
   getAllSpeditions():Observable<SpeditionDTO[]>{
@@ -32,10 +32,10 @@ export class DatenpflegeService {
   createNewSpeditor(sped : SpeditionDTO):Observable<SpeditionDTO>{
     return this.http.post<SpeditionDTO>(this.API_URLS, sped);
   }
-   updateSpeditor(sped: SpeditionDTO, id:number):Observable<SpeditionDTO>{
-    return this.http.post<SpeditionDTO>(this.API_URLS + '/'+id, sped);
+   updateSpeditor(sped: SpeditionDTO, id:number){
+     this.http.post<SpeditionDTO>(this.API_URLS + '/'+id, sped).subscribe();
   }
   deleteSpeditor(id:number){
-  return  this.http.delete(this.API_URLS + '/'+id);
+    this.http.delete(this.API_URLS + '/'+id).subscribe();
   }
 }

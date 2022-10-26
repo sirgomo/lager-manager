@@ -20,7 +20,7 @@ export class AuthService {
         user.username = username;
         user.userpassword = hashed;
         user.salt = salt;
-        user.role = ROLE.KOMMISIONIER;
+        user.role = ROLE.WARENPFHLEGE;
         this.repo.create(user);
         try{
            return await this.repo.save(user);

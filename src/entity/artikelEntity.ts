@@ -8,7 +8,7 @@ export class ArtikelEntity {
   @PrimaryGeneratedColumn()
   artikelId: number;
   
-  @PrimaryColumn()
+  @Column()
   name: string;
  
   @Column()
