@@ -17,6 +17,10 @@ export class ArtController {
     getAllArtikels(){
         return this.ArtService.getAllArticel();
     }
+    @Get(':id')
+    getArtikel(@Param(':id') id:number){
+        return this.ArtService.getArtikel(id);
+    }
     @Post()
     @ROLES(ROLE.WARENPFHLEGE)
     createArtikel(@Body(ValidationPipe) data : ArtikelDTO){
@@ -33,7 +37,7 @@ export class ArtController {
     }
     @Delete(':id')
     @ROLES(ROLE.WARENPFHLEGE)
-    deleteArtikel(@Param('id') id: number, ){
+    deleteArtikel(@Param('id') id: number ){
       return  this.ArtService.deleteArtikel(id);
      //   return this.ArtService.getAllArticel();
     }

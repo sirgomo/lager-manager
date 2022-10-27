@@ -1,9 +1,7 @@
-import { UidDTO } from "./uid.dto";
-
  export class ArtikelDTO{
     artikelId!: number;
     name!: string;
-    uid!: UidDTO[];
+    uids!: UidDTO[];
     gewicht!: number;
     grosse!: string;
     basisEinheit!: number;
@@ -12,9 +10,15 @@ import { UidDTO } from "./uid.dto";
     umschlagshaufigkeit!: number;
     durschnittlicherLagerbestand!: number;
     artikelFlage!: artikelFlage;
+    artikelPrice!: number;
  }
  export enum artikelFlage{
   FASS = 'FASS',
   SUSS = 'SUSS',
   ALK = 'ALK',
  }
+ export class UidDTO{
+  id!:number;
+  uid!:string;
+  artikelId!: number;
+}

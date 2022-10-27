@@ -10,8 +10,8 @@ export class ArtLoader{
        
         for (let i = 0; i < 1000; i++){
             if(Math.random() < 0.3){
-                var artike : ArtikelEntity = new ArtikelEntity();
-                var uid = new UiidEntity();
+                let artike : ArtikelEntity = new ArtikelEntity();
+                let uid = new UiidEntity();
                 artike.name = 'suss' + Math.random();
                 artike.basisEinheit = 1;
                 artike.durchschnittlicheLagerdauer = 20;
@@ -26,10 +26,11 @@ export class ArtLoader{
                 //artike.mhd = new Date(this.getRandomInt(2023,2024), this.getRandomInt(0,11) + 1, this.getRandomInt(0,28) + 1);
                 artike.umschlagshaufigkeit = 30;
                 artike.bestand = this.getRandomInt(2,1000);
+                artike.artikelPrice = this.getRandomInt(1,100) + Math.random();
                 arti[i] = artike;
             }else{
-                var artike : ArtikelEntity = new ArtikelEntity();
-                var uid = new UiidEntity();
+                let artike : ArtikelEntity = new ArtikelEntity();
+                let uid = new UiidEntity();
                 artike.name = 'alk' + Math.random();
                 artike.basisEinheit = 1;
                 artike.durchschnittlicheLagerdauer = 20;
@@ -44,6 +45,7 @@ export class ArtLoader{
               //  artike.mhd = new Date(this.getRandomInt(2023,2026), this.getRandomInt(0,11) + 1, this.getRandomInt(0,28) + 1);
                 artike.umschlagshaufigkeit = 30;
                 artike.bestand = this.getRandomInt(2,1000);
+                artike.artikelPrice = this.getRandomInt(1,100) + Math.random();
                 arti[i] = artike;
             }
            

@@ -12,8 +12,8 @@ export class ArtService {
     
     
     async getAllArticel():Promise<ArtikelEntity[]>{
-        const create : number = 3;
-                if(create === 1){
+        const create : number = 1;
+                if(create === 3){
                 console.log('art service');
                 try{
                     var art: ArtikelEntity[] = new Array();
@@ -24,14 +24,25 @@ export class ArtService {
                 }
             }
         try {
-            return await this.repo.find({
+          /*  return await this.repo.find({
                 relations: {
                     uids : true
                 },
-            });
+            });*/
+            return await this.repo.find();
         }
         catch (err) {
             throw new InternalServerErrorException('Etwas is schief gegangen');
+        }
+    }
+    async getArtikel(id: number){
+        try{
+            return await this.repo.createQueryBuilder("artikel")
+            .leftJoinAndSelect("artikel.uids", "uids")
+            .where("artikelId = :artikelId", {artikelId: id})
+            .getOne();
+        }catch (err){
+            return err;
         }
     }
     async createArtikel(art : ArtikelDTO):Promise<ArtikelEntity>{

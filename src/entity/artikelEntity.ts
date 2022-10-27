@@ -30,6 +30,8 @@ export class ArtikelEntity {
   artikelFlage: artikelFlage;
   @Column()
   bestand: number;
+  @Column({type : 'double', nullable: false})
+  artikelPrice : number;
   @ManyToOne(()=> KommisioDetailsEntity, (kommisioDetail)=> kommisioDetail.artikelList )
   kommisioDetail : KommisioDetailsEntity;
   

@@ -31,4 +31,9 @@ export class ArtikelDTO{
     durschnittlicherLagerbestand: number;
     @IsNotEmpty()
     artikelFlage: artikelFlage;
+    @IsNotEmpty()
+    @IsNumber()
+    artikelPrice: number;
+    
+    
 }

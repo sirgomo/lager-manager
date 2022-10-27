@@ -22,7 +22,7 @@
           Name
         </th>
         <th class="text-center">
-         Uid
+         Min. Los Menge
         </th>
         <th class="text-center">
           Delete ?
@@ -39,11 +39,8 @@
         {{ post.name }}
       </td>
       <td data-name="uid">
-        <div class="col " *ngFor="let item of post.uid">
-        <div class="row" >
-        {{ item.uid}}
-        </div>
-      </div>
+
+      {{post.minLosMenge}}
 
       </td>
                   <td data-name="del">
