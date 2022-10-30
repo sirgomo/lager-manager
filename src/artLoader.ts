@@ -12,38 +12,33 @@ export class ArtLoader{
             if(Math.random() < 0.3){
                 let artike : ArtikelEntity = new ArtikelEntity();
                 let uid = new UiidEntity();
-                artike.name = 'suss' + Math.random();
+                artike.name = this.makeName(8);
                 artike.basisEinheit = 1;
-                artike.durchschnittlicheLagerdauer = 20;
-                artike.durschnittlicherLagerbestand = 300;
                 artike.gewicht = this.getRandomInt(2,15);
                 //hxbxl
                 artike.grosse = this.getRandomInt(5,20) + 'x' + this.getRandomInt(5,40) + 'x' + this.getRandomInt(5,60);
                 artike.minLosMenge = 6;
-                uid.uid = 'askdjalsdj' + Math.random();
+                uid.uid = Math.random().toString();
                 artike.uids = [uid];
                 artike.artikelFlage = artikelFlage.SUSS;
                 //artike.mhd = new Date(this.getRandomInt(2023,2024), this.getRandomInt(0,11) + 1, this.getRandomInt(0,28) + 1);
-                artike.umschlagshaufigkeit = 30;
+             
                 artike.bestand = this.getRandomInt(2,1000);
                 artike.artikelPrice = this.getRandomInt(1,100) + Math.random();
                 arti[i] = artike;
             }else{
                 let artike : ArtikelEntity = new ArtikelEntity();
                 let uid = new UiidEntity();
-                artike.name = 'alk' + Math.random();
+                artike.name = this.makeName(8);
                 artike.basisEinheit = 1;
-                artike.durchschnittlicheLagerdauer = 20;
-                artike.durschnittlicherLagerbestand = 300;
                 artike.gewicht = this.getRandomInt(2,25);
                 //hxbxl
                 artike.grosse = this.getRandomInt(5,40) + 'x' + this.getRandomInt(10,40) + 'x' + this.getRandomInt(10,40);
                 artike.minLosMenge = 6;
-                uid.uid = 'askdjalsdj' + Math.random();
+                uid.uid =  Math.random().toString();
                 artike.uids = [uid];
                 artike.artikelFlage = artikelFlage.ALK;
               //  artike.mhd = new Date(this.getRandomInt(2023,2026), this.getRandomInt(0,11) + 1, this.getRandomInt(0,28) + 1);
-                artike.umschlagshaufigkeit = 30;
                 artike.bestand = this.getRandomInt(2,1000);
                 artike.artikelPrice = this.getRandomInt(1,100) + Math.random();
                 arti[i] = artike;
@@ -57,4 +52,13 @@ export class ArtLoader{
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min) + min); 
       }
+      private makeName(length) {
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
 }

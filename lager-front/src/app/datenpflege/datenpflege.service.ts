@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DispositorDTO } from '../dto/dispositor.dto';
@@ -14,28 +14,62 @@ export class DatenpflegeService {
   constructor(private http: HttpClient) { }
 
   getAllDispositors():Observable<DispositorDTO[]>{
-    return this.http.get<DispositorDTO[]>(this.API_URL);
+      try{
+        return this.http.get<DispositorDTO[]>(this.API_URL);
+      }catch(error){
+        throw new HttpErrorResponse({error});
+      }
   }
   createNewDispositor(dispo : DispositorDTO):Observable<DispositorDTO>{
-   return this.http.post<DispositorDTO>(this.API_URL, dispo);
+      try{
+        return this.http.post<DispositorDTO>(this.API_URL, dispo);
+      }catch(error){
+        throw new HttpErrorResponse({error});
+      }
   }
   updateDispositor(dispo: DispositorDTO, id : number){
-    this.http.patch<DispositorDTO>(this.API_URL + '/'+id, dispo).subscribe();
+    try{
+      this.http.patch<DispositorDTO>(this.API_URL + '/'+id, dispo).subscribe();
+    }catch(error){
+      throw new HttpErrorResponse({error});
+    }
+
   }
   deleteDispositor(id:number){
-    this.http.delete(this.API_URL + '/' + id).subscribe();
+    try{
+      this.http.delete(this.API_URL + '/' + id).subscribe();
+    }catch(error){
+      throw new HttpErrorResponse({error});
+    }
   }
 
   getAllSpeditions():Observable<SpeditionDTO[]>{
-    return this.http.get<SpeditionDTO[]>(this.API_URLS);
+    try{
+      return this.http.get<SpeditionDTO[]>(this.API_URLS);
+    }catch(error){
+      throw new HttpErrorResponse({error});
+    }
   }
   createNewSpeditor(sped : SpeditionDTO):Observable<SpeditionDTO>{
-    return this.http.post<SpeditionDTO>(this.API_URLS, sped);
+    try{
+      return this.http.post<SpeditionDTO>(this.API_URLS, sped);
+    }catch(error){
+      throw new HttpErrorResponse({error});
+    }
+
   }
    updateSpeditor(sped: SpeditionDTO, id:number){
-     this.http.post<SpeditionDTO>(this.API_URLS + '/'+id, sped).subscribe();
+     try{
+      this.http.post<SpeditionDTO>(this.API_URLS + '/'+id, sped).subscribe();
+    }catch(error){
+      throw new HttpErrorResponse({error});
+    }
   }
   deleteSpeditor(id:number){
-    this.http.delete(this.API_URLS + '/'+id).subscribe();
+    try{
+      this.http.delete(this.API_URLS + '/'+id).subscribe();
+    }catch(error){
+      throw new HttpErrorResponse({error});
+    }
   }
 }

@@ -1,13 +1,13 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn  } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn  } from "typeorm";
 import { ArtikelEntity } from "./ArtikelEntity";
 
 @Entity('uiids')
 export class UiidEntity{
     @PrimaryGeneratedColumn()
     id : number;
-    @PrimaryColumn()
+    @Column()
     uid : string;
-    @PrimaryColumn()
+    @Column()
     artikelId : number;
     @ManyToOne(()=> ArtikelEntity, (artikel) => artikel.uids)
     @JoinColumn({name: 'artikelId'})

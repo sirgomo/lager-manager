@@ -6,9 +6,7 @@
     grosse!: string;
     basisEinheit!: number;
     minLosMenge!: number;
-    durchschnittlicheLagerdauer!: number;
-    umschlagshaufigkeit!: number;
-    durschnittlicherLagerbestand!: number;
+    bestand!: number;
     artikelFlage!: artikelFlage;
     artikelPrice!: number;
  }

@@ -3,9 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
 import { RoleGuard } from 'src/auth/RoleGuard';
 import { ArtikelDTO } from 'src/DTO/ArtikelDTO';
-import { artikelFlage } from 'src/entity/ArtikelEntity';
-import { ROLE, UserEntity } from 'src/entity/UserEntity';
-import { ArtikelflagsPipers } from 'src/pipes/artikelFlagspipes';
+import { ROLE } from 'src/entity/UserEntity';
 import { ArtService } from './art.service';
 
 @Controller('artikel')
@@ -18,7 +16,7 @@ export class ArtController {
         return this.ArtService.getAllArticel();
     }
     @Get(':id')
-    getArtikel(@Param(':id') id:number){
+    getArtikel(@Param('id') id:number){
         return this.ArtService.getArtikel(id);
     }
     @Post()

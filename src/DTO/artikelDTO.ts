@@ -7,7 +7,7 @@ export class ArtikelDTO{
     artikelId: number;
     @IsNotEmpty()
     name: string;
-    uid: UiidEntity[];
+    uids: UiidEntity[];
     @IsNotEmpty()
     @IsNumber()
     gewicht: number;
@@ -20,15 +20,9 @@ export class ArtikelDTO{
     @IsNotEmpty()
     @IsNumber()
     minLosMenge: number;
-    @IsNumber()
-    @IsNotEmpty()
-    durchschnittlicheLagerdauer: number;
     @IsNotEmpty()
     @IsNumber()
-    umschlagshaufigkeit: number;
-    @IsNotEmpty()
-    @IsNumber()
-    durschnittlicherLagerbestand: number;
+    bestand: number;
     @IsNotEmpty()
     artikelFlage: artikelFlage;
     @IsNotEmpty()

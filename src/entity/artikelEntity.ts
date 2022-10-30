@@ -17,15 +17,8 @@ export class ArtikelEntity {
   grosse: string;
   @Column()
   basisEinheit: number;
- 
   @Column()
   minLosMenge: number;
-  @Column()
-  durchschnittlicheLagerdauer: number;
-  @Column()
-  umschlagshaufigkeit: number;
-  @Column()
-  durschnittlicherLagerbestand: number;
   @Column()
   artikelFlage: artikelFlage;
   @Column()
@@ -35,7 +28,7 @@ export class ArtikelEntity {
   @ManyToOne(()=> KommisioDetailsEntity, (kommisioDetail)=> kommisioDetail.artikelList )
   kommisioDetail : KommisioDetailsEntity;
   
-  @OneToMany(()=> UiidEntity, (uid) => uid.arikels, {cascade:[ "insert", "update"] })
+  @OneToMany(()=> UiidEntity, (uid) => uid.arikels)
   uids: UiidEntity[];
 }
 export enum artikelFlage {
