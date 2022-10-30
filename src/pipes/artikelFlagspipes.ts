@@ -1,19 +1,19 @@
 import { ArgumentMetadata, BadRequestException, PipeTransform } from "@nestjs/common";
+import { ArtikelDTO } from "src/DTO/ArtikelDTO";
 import { artikelFlage } from "src/entity/ArtikelEntity";
 
 export class ArtikelflagsPipers implements PipeTransform{
-    readonly erlaubtesFlags : artikelFlage[] = [artikelFlage.ALK, artikelFlage.FASS, artikelFlage.SUSS];
+  
 
-    transform(value : any, metadata : ArgumentMetadata) : any {
-        value = value.toUpperCase();
-        if(!this.isStatusValid(value)){
+    transform(value : ArtikelDTO, metadata : ArgumentMetadata) : any {
+       
+        if(!this.isStatusValid(value.artikelFlage)){
             throw new BadRequestException (`$value ist falsch.`);
         }
         return value;
     }
     private isStatusValid(value: any) : boolean{
-       const index : number = this.erlaubtesFlags.indexOf(value);
-       return index === -1;
+        return  Object.values(artikelFlage).includes(value); 
     }
 
 }

@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
 import { RoleGuard } from 'src/auth/RoleGuard';
 import { ArtikelDTO } from 'src/DTO/ArtikelDTO';
 import { ROLE } from 'src/entity/UserEntity';
+import { ArtikelflagsPipers } from 'src/pipes/artikelFlagspipes';
 import { ArtService } from './art.service';
 
 @Controller('artikel')
@@ -21,6 +22,7 @@ export class ArtController {
     }
     @Post()
     @ROLES(ROLE.WARENPFHLEGE)
+    @UsePipes(ArtikelflagsPipers)
     createArtikel(@Body(ValidationPipe) data : ArtikelDTO){
         return this.ArtService.createArtikel(data);
     }

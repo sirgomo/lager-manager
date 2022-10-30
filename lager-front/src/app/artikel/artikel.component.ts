@@ -153,11 +153,17 @@ export class ArtikelComponent implements OnInit {
            }
          }
 
-         if (atmp == tmpArr.length && tmpArrNew[0] == undefined) {
+         if (atmp == tmpArr.length && tmpArrNew[0] == undefined ) {
 
-             tmpArrNew.push(this.artikels[o]);
-             this.artikels.splice(o, 1);
 
+            tmpArrNew.push(this.artikels[o]);
+            this.artikels.splice(o, 1);
+        }
+        if(isFinite(Number(text))){
+          if(isFinite(Number(text)) && this.artikels[o].artikelId === Number(text)){
+            tmpArrNew.push(this.artikels[o]);
+            this.artikels.splice(o, 1);
+          }
         }
 
        }
