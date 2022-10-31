@@ -1,1 +1,67 @@
-<p>lager works!</p>
+<div class="container  !direction !spacing">
+  <div class="mt-2 col-md-12"></div>
+        <div class="row justify-content-center align-items-center g-2 ">
+            <div class="col-md-3 well border text-center icons rounded" style="cursor: pointer;" >
+               Stellpletze
+            </div>
+            <div class="col-md-3 well border text-center icons rounded" style="cursor: pointer;" >
+               Neue Stellplatz
+            </div>
+            <div class="col-md-3 well border text-center icons rounded" style="cursor: pointer;" >
+            Edit Stellplatzt
+          </div>
+      </div>
+<div class="mt-2 col-md-12"></div>
+      <table class="table table-bordered table-hover table-sortable" id="tab_logic" *ngIf="show === 1">
+        <thead>
+          <tr >
+            <th class="text-center">
+              Lagerplatzt
+            </th>
+            <th class="text-center">
+              ArtikelId
+            </th>
+            <th class="text-center">
+            AtikelMenge
+            </th>
+            <th class="text-center">
+              Einheit
+             </th>
+            <th class="text-center">
+            Paleten Typ
+             </th>
+             <th class="text-center">
+              Mhd
+               </th>
+               <th class="text-center">
+                Static
+                 </th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr  *ngFor="let post of lagerPlatze; let i = index; trackBy : artikelTrackBy;" class="hidden">
+            <td data-name="lagerplatz">
+              {{ post?.lagerplatz }}
+          </td>
+          <td data-name="artid"   style="cursor: pointer;" >
+            {{ post?.artId }}
+          </td>
+          <td data-name="artikelMenge">
+          {{post?.artikelMenge}}
+          </td>
+          <td data-name="einheit">
+            {{post?.einheit}}
+            </td>
+            <td data-name="palettenTyp">
+              {{post?.palettenTyp}}
+              </td>
+              <td data-name="mhd">
+                {{post?.mhd}}
+                </td>
+                <td data-name="mhd">
+                  {{post?.static}}
+                </td>
+          </tr>
+        </tbody>
+      </table>
