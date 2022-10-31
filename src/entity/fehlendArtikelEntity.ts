@@ -8,6 +8,5 @@ id : number;
 artikelid : number;
 @Column()
 menge : number;
-@Column()
-name : string;
+
 }

@@ -1,4 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ArtikelService } from '../artikel/artikel.service';
+import { DatenpflegeService } from '../datenpflege/datenpflege.service';
+import { ArtikelDTO } from '../dto/artikel.dto';
+import { BestArtikelMengeDto } from '../dto/bestArtikelMenge.dto';
+import { DispositorDTO } from '../dto/dispositor.dto';
+import { WarenBuchungDto } from '../dto/warenBuchung.dto';
+import { HelperService } from '../helper.service';
+import { WarenBuchungService } from './warenbuchung.service';
 
 @Component({
   selector: 'app-warenebuchung',
@@ -6,10 +15,130 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./warenebuchung.component.scss']
 })
 export class WarenebuchungComponent implements OnInit {
+  buchngen : WarenBuchungDto[] = new Array();
+  buchung : WarenBuchungDto = new WarenBuchungDto();
+  formBuchung : FormGroup;
+  show: number = 1;
+  searchModel : string = '';
+  artikels :ArtikelDTO[] = new Array();
+  artikelMenge : number[] = new Array(this.artikels.length);
+  dispositors : DispositorDTO[] = new Array();
+  dispo : boolean = false;
 
-  constructor() { }
+  buchungArtikelMenge = new Array();
 
-  ngOnInit(): void {
+
+
+  constructor(private buchServi : WarenBuchungService, private fb: FormBuilder, private helper: HelperService,
+     private artService : ArtikelService, private dispServic : DatenpflegeService) {
+   this.formBuchung = this.fb.group({
+      id: Number,
+      artikelid: Number,
+      menge: Number,
+      tor: [''],
+      dispositorId: Number,
+      eingebucht: false,
+      bestellungId: Number
+    });
+
   }
 
+  ngOnInit(): void {
+    this.getBuchungen();
+    this.getArtikels();
+
+  }
+   getBuchungen(){
+    this.buchngen.splice(0, this.buchngen.length);
+       this.buchServi.getAllBuchungen().subscribe(data =>{
+       if(data.length === undefined) return;
+        data.forEach(buchung =>{
+          if(!buchung.eingebucht)
+          this.buchngen.push(buchung);
+        });
+      });
+      this.getDispositors();
+
+  }
+  async getArtikels(){
+    console.log('pobieram artikles')
+    await this.artService.getAllArtikel().subscribe(data => {
+      if(data.length === undefined) return;
+      data.forEach(art =>{
+        this.artikels.push(art);
+      });
+    });
+  }
+  async createBuchung(){
+    this.formBuchung.reset();
+    this.show = 2;
+  }
+  bearbeiteBuchung(id :number){
+    this.formBuchung.reset();
+    this.formBuchung.setValue(this.buchngen[id]);
+    this.show = 2;
+  }
+  addArtikel( artikelid:number, menge :number){
+    let bestelungId :number  = this.formBuchung.get('bestellungId')?.getRawValue();
+    this.artikelMenge.splice(0, this.artikelMenge.length);
+    console.log('wartosci b : '+ bestelungId + ' art id ' + artikelid + ' menge' + menge );
+    let bucharti : BestArtikelMengeDto = new BestArtikelMengeDto();
+    bucharti.artikelId = artikelid;
+    bucharti.bestellungId = bestelungId;
+    bucharti.menge = menge;
+    this.buchServi.addArtikel(bucharti).subscribe();
+  }
+  saveBuchung(buch : WarenBuchungDto){
+   return this.buchServi.createBestellung(buch).subscribe();
+  }
+  onSearch(text: string){
+    this.artikels = this.helper.onSearch(text, this.artikels);
+  }
+  artikelTrackBy(index : number, artikel: ArtikelDTO){
+    if(this.artikels === undefined) return;
+    return this.artikels[index].artikelId;
+  }
+  showBuchungenInBearbeitung(){
+    this.show = 1;
+    this.getBuchungen();
+  }
+  async getDispositors(){
+    await this.dispServic.getAllDispositors().subscribe(data => {
+      if(data.length === undefined) return;
+      data.forEach(dis => {
+        this.dispositors.push(dis);
+        this.dispo = true;
+        this.show = 1;
+      });
+    });
+  }
+  async getArtikelsInBuchung(){
+    let bestelungId :number  = this.formBuchung.get('bestellungId')?.getRawValue();
+    await this.buchServi.getAllArtiklesInBestellung(bestelungId)
+    .subscribe(data =>{
+      if(data === undefined || data.length === undefined) return;
+      this.buchungArtikelMenge.splice(0, this.buchungArtikelMenge.length);
+      data.forEach(arti => {
+        this.artikels.every( artikel =>{
+          if(arti.artikelId == artikel.artikelId){
+           let gebuchteArtikel = {'bestellungId'  : 0 ,'artikelid' : 0  ,'artikelName' : '', 'menge' : 0 };
+            gebuchteArtikel.bestellungId = arti.bestellungId;
+            gebuchteArtikel.artikelid = arti.artikelId;
+            gebuchteArtikel.artikelName = artikel.name;
+            gebuchteArtikel.menge = arti.menge;
+            this.buchungArtikelMenge.push(gebuchteArtikel);
+            return false;
+          }
+          return true;
+        });
+      });
+
+      this.show = 3;
+    });
+
+  }
+  goBack(){
+    let bestelungId :number  = this.formBuchung.get('bestellungId')?.getRawValue();
+    this.show = 2;
+  }
 }

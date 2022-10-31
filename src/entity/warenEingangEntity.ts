@@ -1,15 +1,19 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('warenEingang')
 export class WarenEingangEntity{
     @PrimaryGeneratedColumn()
     id : number
-    @Column()
+    @Column({nullable: true})
     artikelid : number;
-    @Column()
+    @Column({nullable: true})
     menge : number;
     @Column()
     tor : string;
     @Column()
-    eingelagert : boolean;
+    dispositorId: number;
+    @Column()
+    eingebucht : boolean;
+    @PrimaryColumn()
+    bestellungId : number;
 }

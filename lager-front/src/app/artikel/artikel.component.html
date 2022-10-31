@@ -1,21 +1,21 @@
 <div class="container">
   <div class="mt-2 col-md-12"></div>
   <div class="row ${1| ,row-cols-2,row-cols-3, auto,justify-content-md-center,|}">
-    <div class="col-md-4 well border text-center icons" style="cursor: pointer;" (click)="getArtikles()">
+    <div class="col-md-4 well border text-center icons rounded"  (click)="getArtikles()">
       Artikel List
   </div>
-    <div class="col-md-4 well border text-center icons" style="cursor: pointer;"  [routerLink]="['/datenpflege']" routerLinkActive="router-link-active" >
+    <div class="col-md-4 well border text-center icons rounded"   [routerLink]="['/datenpflege']" routerLinkActive="router-link-active" >
     Speditors / Dispositors
 </div>
-  <div class="col-md-4 well border text-center icons" style="cursor: pointer;" (click)="newArtikel()" >
+  <div class="col-md-4 well border text-center icons rounded"  (click)="newArtikel()" >
       Neue Artikel
   </div>
   </div>
   <div class="mt-2 col-md-12"></div>
 
-      <div class="row " >
+      <div class="row " *ngIf="show === 1">
         <div class="col-md-11">
-          <input type="search" class="form-control input-lg" [ngModel]="searchModel" name="searchModel" placeholder = "write artikel name or id" id="" (ngModelChange)="onSearch($event)">
+          <input type="search" class="form-control input-lg rounded" [ngModel]="searchModel" name="searchModel" placeholder = "write artikel name or id" id="" (ngModelChange)="onSearch($event)">
           {{searchModel}}
         </div>
         <div class="col">

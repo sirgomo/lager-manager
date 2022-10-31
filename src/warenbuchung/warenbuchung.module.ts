@@ -1,8 +1,12 @@
 import { Module } from '@nestjs/common';
 import { WarenbuchungService } from './warenbuchung.service';
 import { WarenbuchungController } from './warenbuchung.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { WarenEingangEntity } from 'src/entity/WarenEingangEntity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
+  imports: [TypeOrmModule.forFeature([WarenEingangEntity]), AuthModule],
   providers: [WarenbuchungService],
   controllers: [WarenbuchungController]
 })

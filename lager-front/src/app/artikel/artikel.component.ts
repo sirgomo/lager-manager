@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ArtikelDTO, artikelFlage } from '../dto/artikel.dto';
 import { UidDTO } from '../dto/artikel.dto';
+import { HelperService } from '../helper.service';
 import { ArtikelService } from './artikel.service';
 
 @Component({
@@ -20,7 +21,7 @@ export class ArtikelComponent implements OnInit {
 
 
   show : number = 1;
-  constructor(private servi : ArtikelService, private fb : FormBuilder) {
+  constructor(private servi : ArtikelService, private fb : FormBuilder, private helper: HelperService) {
      this.formArtikel = this.fb.group({
     artikelId : Number,
     name: [''],
@@ -40,9 +41,9 @@ export class ArtikelComponent implements OnInit {
   ngOnInit(): void {
    this.getArtikles();
   }
-  getArtikles(){
+  async getArtikles(){
     this.show  = 1;
-    return  this.servi.getAllArtikel().subscribe(d => {
+    return await this.servi.getAllArtikel().subscribe(d => {
    d.map(da =>{
     this.artikels.push(da);
     });
@@ -76,6 +77,7 @@ export class ArtikelComponent implements OnInit {
       });
   }
   createUpdateArtikel(art : ArtikelDTO){
+    this.searchModel = '';
     if( this.index === 0.1){
 
       let lUid : UidDTO[] = new Array();
@@ -92,6 +94,7 @@ export class ArtikelComponent implements OnInit {
       }else{
         art.uids = [];
       }
+      this.artikels.push(art);
       this.servi.createArtikel(art).subscribe();
     }else{
       let uids :string = this.formArtikel.get<string>('uids')?.value;
@@ -131,54 +134,8 @@ export class ArtikelComponent implements OnInit {
     this.index = 0.1;
     this.show = 2;
   }
-    onSearch(text : string){
-     let tmpArrNew : ArtikelDTO[] = new Array();
-     let y = 0;
-
-
-     try{
-
-    for (let o = 0; o < this.artikels.length; o++) {
-
-
-         let tmpArr = Array.from(text);
-         let tmpArr1 = Array.from(this.artikels[o].name);
-
-         let atmp: number = 0;
-
-         for (let i = 0; i < tmpArr.length; i++) {
-           if (tmpArr[i].toLocaleLowerCase().trim() == tmpArr1[i].toLocaleLowerCase().trim()) {
-             atmp += 1;
-
-           }
-         }
-
-         if (atmp == tmpArr.length && tmpArrNew[0] == undefined ) {
-
-
-            tmpArrNew.push(this.artikels[o]);
-            this.artikels.splice(o, 1);
-        }
-        if(isFinite(Number(text))){
-          if(isFinite(Number(text)) && this.artikels[o].artikelId === Number(text)){
-            tmpArrNew.push(this.artikels[o]);
-            this.artikels.splice(o, 1);
-          }
-        }
-
-       }
-
-
-
-
-    }catch(err){
-      console.log(err);
-    }
-
-      tmpArrNew.forEach(d => {
-        this.artikels.unshift(d);
-      })
-
+  onSearch(text:string){
+   this.artikels = this.helper.onSearch(text, this.artikels);
   }
   artikelTrackBy(index :number, artik: ArtikelDTO){
 
