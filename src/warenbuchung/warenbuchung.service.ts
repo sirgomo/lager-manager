@@ -7,7 +7,9 @@ import { IsNull, Not, Repository } from 'typeorm';
 
 @Injectable()
 export class WarenbuchungService {
-    constructor(@InjectRepository(WarenEingangEntity) private repo: Repository<WarenEingangEntity>){}
+   
+    constructor(@InjectRepository(WarenEingangEntity) private repo: Repository<WarenEingangEntity>){
+       }
 
   async  createBuchung(buch :WarenBuchungDto):Promise<WarenBuchungDto>{
         try{
@@ -77,7 +79,9 @@ export class WarenbuchungService {
         }
     }
     async getBuchungen(){
+       
         try{
+            
             let tmp = await this.repo.findBy({'artikelid': IsNull()});
             let buchArr : WarenBuchungDto[] = new Array();
             if(tmp.length > 0){

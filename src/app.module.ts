@@ -26,6 +26,8 @@ import { WarenEingangEntity } from './entity/WarenEingangEntity';
 import { KommisioDetailsEntity } from './entity/KommisioDetailsEntity';
 import { SpeditionModule } from './spedition/spedition.module';
 import { UiidEntity } from './entity/UiidEntity';
+import { ArtLoader } from './ArtLoader';
+import { LagerPlatzGenerator } from './lagerPlatzGen';
 
 
 
@@ -51,6 +53,7 @@ import { UiidEntity } from './entity/UiidEntity';
     ArtikelModule,
     AuthModule,
     SpeditionModule,
+   
   ],
   controllers: [AppController],
   providers: [AppService, RoleGuard],

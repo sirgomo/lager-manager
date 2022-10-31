@@ -53,6 +53,9 @@ export class ApiService {
               case 'WARENPFHLEGE':
               this.router.navigateByUrl('datenpflege').then();
               break;
+              case 'LAGERVERWALTUNG':
+                this.router.navigateByUrl('lager').then();
+                break;
 
             default:
               this.router.navigateByUrl('auth').then();

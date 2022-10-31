@@ -7,30 +7,27 @@ export class LagerPlatzEntity{
     id : number;
     @Column()
     lagerplatz : string;
-    @Column()
+    @Column({nullable: true})
     artId : number;
-    @Column()
+    @Column({nullable: true})
     artikelMenge : number;
-    @Column()
+    @Column({nullable: true})
     einheit : number;
-    @Column()
+    @Column({nullable: true})
     palettenTyp : PALETTENTYP;
-    @Column()
-    leer : boolean = false;
-    @Column()
+    @Column({nullable: true})
     mhd : Date; 
     @Column()
     lagerPlatzVolumen : number;
     @Column()
     static : boolean = false;
 
-    @ManyToMany(()=> ArtikelEntity)
-    @JoinColumn()
-    artikel: ArtikelEntity[];
+  
 
 }
 export enum PALETTENTYP{
     EU = 'EU',
     INDU = 'INDU',
-    EINWEG = 'EINWEG'
+    EINWEG = 'EINWEG',
+    KEINPALETTE = 'KEINPALETTE'
 }

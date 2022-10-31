@@ -10,25 +10,27 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class ArtService {
+
+    artLoader : ArtLoader = new ArtLoader();
     constructor(@InjectRepository(ArtikelEntity) private repo : Repository<ArtikelEntity>, @InjectRepository(UiidEntity) private uidRepo : Repository<UiidEntity>){}
     
+    private generateArtikles(){
+      
+        console.log('art service');
+        try{
+            var art: ArtikelEntity[] = new Array();
+           art = this.artLoader.makeArtikels();
+           art.forEach(data =>{
+            this.createArtikel(data);
+           })
+        }catch(err){
+            console.log(err);
+        }
     
+    }
     async getAllArticel():Promise<ArtikelEntity[]>{
-        const create : number = 3;
-                if(create === 1){
-                console.log('art service');
-                try{
-                    var art: ArtikelEntity[] = new Array();
-                   art = new ArtLoader().makeArtikels();
-                   art.forEach(data =>{
-                    this.createArtikel(data);
-                   })
-                }catch(err){
-                    console.log(err);
-                }
-            }
+     //  this.generateArtikles();
         try {
-         
             return await this.repo.find();
         }
         catch (err) {

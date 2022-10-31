@@ -1,10 +1,13 @@
 
+import { ArtService } from "./artikel/art.service";
 import { ArtikelEntity, artikelFlage } from "./entity/ArtikelEntity";
 import { UiidEntity } from "./entity/UiidEntity";
 
 export class ArtLoader{
 
-    makeArtikels() : ArtikelEntity[]{
+    //constructor(private servi : ArtService){}
+    servi : ArtService;
+   public makeArtikels() : ArtikelEntity[]{
         const arti : ArtikelEntity[] = new Array(1000);
         console.log('generuje');
        
@@ -61,4 +64,5 @@ export class ArtLoader{
         }
         return result;
     }
+   
 }
