@@ -9,8 +9,7 @@ export class HelperService {
   constructor() { }
 public  onSearch(text : string, artikels : ArtikelDTO[]){
     let tmpArrNew : ArtikelDTO[] = new Array();
-    let tmpArrNew2 : ArtikelDTO[] = new Array();
-      tmpArrNew2 = artikels;
+
 
 
 
@@ -19,21 +18,23 @@ public  onSearch(text : string, artikels : ArtikelDTO[]){
         let tmpArr1 = Array.from(artikels[o].name);
 
         let atmp: number = 0;
-
+      try{
         for (let i = 0; i < tmpArr.length; i++) {
           if (tmpArr[i].toLocaleLowerCase().trim() == tmpArr1[i].toLocaleLowerCase().trim()) {
             atmp += 1;
           }
         }
-
+      } catch(err){
+       // console.log(err);
+      }
         if (atmp == tmpArr.length && o > 5) {
            tmpArrNew.push(artikels[o]);
-           tmpArrNew2.splice(o, 1);
+           artikels.splice(o, 1);
        }
        if(isFinite(Number(text)) && o > 5){
          if(isFinite(Number(text)) && artikels[o].artikelId === Number(text)){
            tmpArrNew.push(artikels[o]);
-           tmpArrNew2.splice(o, 1);
+           artikels.splice(o, 1);
          }
        }
 
@@ -41,8 +42,8 @@ public  onSearch(text : string, artikels : ArtikelDTO[]){
 
 
       tmpArrNew.forEach(d => {
-        tmpArrNew2.unshift(d);
+        artikels.unshift(d);
      })
-return tmpArrNew2;
+return artikels;
  }
 }

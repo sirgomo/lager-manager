@@ -45,7 +45,7 @@
     </thead>
     <tbody>
 
-      <tr  *ngFor="let post of artikels; let i = index; trackBy : artikelTrackBy;" class="hidden">
+      <tr  *ngFor="let post of (artikels ? artikels.slice(0,200): []); let i = index; trackBy : artikelTrackBy; " class="hidden">
         <td data-name="artikel id">
           {{ post?.artikelId }}
       </td>

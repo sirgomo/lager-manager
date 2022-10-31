@@ -61,6 +61,7 @@ export class WarenebuchungComponent implements OnInit {
 
   }
   async getArtikels(){
+    this.artikels.splice(0, this.artikels.length);
     console.log('pobieram artikles')
     await this.artService.getAllArtikel().subscribe(data => {
       if(data.length === undefined) return;
@@ -103,6 +104,7 @@ export class WarenebuchungComponent implements OnInit {
     this.getBuchungen();
   }
   async getDispositors(){
+    this.dispositors.splice(0,this.dispositors.length);
     await this.dispServic.getAllDispositors().subscribe(data => {
       if(data.length === undefined) return;
       data.forEach(dis => {

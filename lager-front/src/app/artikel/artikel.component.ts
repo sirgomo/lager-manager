@@ -43,6 +43,7 @@ export class ArtikelComponent implements OnInit {
   }
   async getArtikles(){
     this.show  = 1;
+    this.artikels.splice(0,this.artikels.length);
     return await this.servi.getAllArtikel().subscribe(d => {
    d.map(da =>{
     this.artikels.push(da);
