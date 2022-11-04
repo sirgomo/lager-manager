@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { ArtikelMengeDto } from '../dto/artikelMenge.dto';
 import { LagerPlatztDto } from '../dto/lagerPlatz.dto';
 import { LagerService } from './lager.service';
 
@@ -28,6 +29,14 @@ export class LagerComponent implements OnInit {
   artikelTrackBy()
   {
 
+  }
+  getPlatz(){
+    let artMen : ArtikelMengeDto = new ArtikelMengeDto();
+    artMen.artikelId = 21;
+    artMen.menge = 887;
+    return this.lagerServ.getPlatztFurArtikel(artMen).subscribe(data=>{
+      console.log(data);
+    })
   }
 
 }
