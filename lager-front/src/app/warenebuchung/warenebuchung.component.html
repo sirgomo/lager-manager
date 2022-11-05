@@ -165,8 +165,7 @@
       {{ post?.tor }}
     </td>
     <td data-name="dispositor" style="cursor: pointer;" (click)="bearbeiteBuchung(i)">
-
-    {{dispositors[post.dispositorId].name}}
+    {{dispositors[post.dispositorId -1].name }}
 
     </td>
       <td data-name="bestellungid" style="cursor: pointer;" (click)="bearbeiteBuchung(i)">

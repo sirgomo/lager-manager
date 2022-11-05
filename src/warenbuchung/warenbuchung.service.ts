@@ -26,6 +26,9 @@ export class WarenbuchungService {
             let buch : WarenBuchungDto = new WarenBuchungDto(); 
         await     this.repo.findOneBy({'bestellungId': best.bestellungId}).then(
                 data => {
+                    if(buch.eingebucht === true){
+                        throw new Error("Diese buchung ist schon eingebucht! Du kannst kein artikel mehr zugeben!");
+                    }
                     buch = data;
                 },  err => {
                     return err;

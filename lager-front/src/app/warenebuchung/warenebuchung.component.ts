@@ -48,26 +48,25 @@ export class WarenebuchungComponent implements OnInit {
     this.getArtikels();
 
   }
-   getBuchungen(){
+   async getBuchungen(){
+   await this.getDispositors();
     this.buchngen.splice(0, this.buchngen.length);
-       this.buchServi.getAllBuchungen().subscribe(data =>{
-       if(data.length === undefined) return;
+     await  this.buchServi.getAllBuchungen().subscribe(data =>{
         data.forEach(buchung =>{
-          if(!buchung.eingebucht)
-          this.buchngen.push(buchung);
+          if(!buchung.eingebucht){
+            this.buchngen.push(buchung);
+          }
         });
       });
-      this.getDispositors();
-
   }
   async getArtikels(){
     this.artikels.splice(0, this.artikels.length);
     console.log('pobieram artikles')
     await this.artService.getAllArtikel().subscribe(data => {
-      if(data.length === undefined) return;
       data.forEach(art =>{
         this.artikels.push(art);
       });
+
     });
   }
   async createBuchung(){
@@ -90,6 +89,9 @@ export class WarenebuchungComponent implements OnInit {
     this.buchServi.addArtikel(bucharti).subscribe();
   }
   saveBuchung(buch : WarenBuchungDto){
+    if(buch.eingebucht === null){
+      buch.eingebucht = false;
+    }
    return this.buchServi.createBestellung(buch).subscribe();
   }
   onSearch(text: string){
@@ -100,19 +102,18 @@ export class WarenebuchungComponent implements OnInit {
     return this.artikels[index].artikelId;
   }
   showBuchungenInBearbeitung(){
-    this.show = 1;
     this.getBuchungen();
   }
   async getDispositors(){
     this.dispositors.splice(0,this.dispositors.length);
     await this.dispServic.getAllDispositors().subscribe(data => {
-      if(data.length === undefined) return;
       data.forEach(dis => {
         this.dispositors.push(dis);
-        this.dispo = true;
-        this.show = 1;
       });
+      this.dispo = true;
+      this.show = 1;
     });
+    console.log(this.dispositors);
   }
   async getArtikelsInBuchung(){
     let bestelungId :number  = this.formBuchung.get('bestellungId')?.getRawValue();
