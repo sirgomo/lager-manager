@@ -5,10 +5,11 @@ import { ArtService } from 'src/artikel/art.service';
 import { ArtikelDTO } from 'src/DTO/ArtikelDTO';
 import { ArtikelMengeDTO } from 'src/DTO/artikelMengeDTO';
 import { LagerPlatztDTO } from 'src/DTO/lagerPlatztDTO';
+import { ArtikelEntity } from 'src/entity/ArtikelEntity';
 import { LagerPlatzEntity, PALETTENTYP } from 'src/entity/LagerPlatzEntity';
 import { Helper } from 'src/helper';
 import { LagerPlatzGenerator } from 'src/lagerPlatzGen';
-import { IsNull, MoreThanOrEqual, Repository } from 'typeorm';
+import { IsNull, MoreThanOrEqual, Not, Repository } from 'typeorm';
 
 @Injectable()
 export class LagerService {
@@ -28,15 +29,28 @@ export class LagerService {
     async getStellpletze(){
         try{
         //  await  this.genereLagaPlatze();
-       
-            return await this.repo.find();
+            let lagerPlatz: LagerPlatztDTO[] = new Array();
+         
+        
+            await this.repo.query(`SELECT lagerplatz.*, artikel.name FROM lagerplatz LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId ORDER BY ISNULL(artId) ASC`)
+            .then(data => {
+                data.forEach(element => {
+                   let tmp : LagerPlatztDTO = new LagerPlatztDTO();
+                   Object.assign(tmp, element);
+                   lagerPlatz.push(tmp);
+                });
+              
+            })
+            
+         
+            return lagerPlatz;
         }catch( err){
             throw new Error("problem mit lager service, lagerservice kann nicht lagerplatz machen");
         }
     }
     async createLagerPlatz(lagerplatz : LagerPlatztDTO):Promise<LagerService>{
         try{
-           
+           console.log(lagerplatz);
             await this.repo.create(lagerplatz);
             return await this.repo.save(lagerplatz)
             .then(data=>{
@@ -50,6 +64,21 @@ export class LagerService {
             
         }
     }
+    async deleteLageplatzt(id : number){
+        try{
+       await  this.repo.findOneBy({'id': id}).then(data => {
+                if(data.artId !== null || data.artikelMenge !== null){
+                    throw new Error("Der Lagerplatz ist besetzt !!");
+                    
+                }
+            });
+         return  await this.repo.delete({'id': id}); 
+
+        }catch(err){
+            throw new Error("Etwas ist schief gegangen " + err);
+        }
+    }
+
     async getPlatzFurArtikel(artMen: ArtikelMengeDTO){
         try{
             let volMenge : number[][] = new Array();

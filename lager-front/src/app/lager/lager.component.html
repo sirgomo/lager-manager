@@ -1,20 +1,28 @@
 <div class="container  !direction !spacing">
   <div class="mt-2 col-md-12"></div>
         <div class="row justify-content-center align-items-center g-2 ">
-            <div class="col-md-3 well border text-center icons rounded" style="cursor: pointer;" >
+            <div class="col-md-3 well border text-center icons rounded" style="cursor: pointer;" (click)="showFront()">
                Stellpletze
             </div>
-            <div class="col-md-3 well border text-center icons rounded" style="cursor: pointer;" >
+            <div class="col-md-3 well border text-center icons rounded" style="cursor: pointer;" (click)="createUpdateLagerPlatz(-1)" >
                Neue Stellplatz
             </div>
-            <div class="col-md-3 well border text-center icons rounded" style="cursor: pointer;" >
-            Edit Stellplatzt
-          </div>
           <div class="col-md-3 well border text-center icons rounded" style="cursor: pointer;" (click)=" getPlatz()">
            test Get Platz für artikel
           </div>
       </div>
 <div class="mt-2 col-md-12"></div>
+<div class="row " *ngIf="show === 1">
+  <div class="col-md-11">
+    <input type="search" class="form-control input-lg rounded" [ngModel]="searchModel" name="searchModel" placeholder = "gibt artikel name, id, oder stellplatz " id="" (ngModelChange)="onSearch($event)">
+    {{searchModel}}
+  </div>
+  <div class="col">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+    </svg>
+  </div>
+  <div class="mt-2 col-md-12"></div>
       <table class="table table-bordered table-hover table-sortable" id="tab_logic" *ngIf="show === 1">
         <thead>
           <tr >
@@ -23,6 +31,9 @@
             </th>
             <th class="text-center">
               ArtikelId
+            </th>
+            <th class="text-center">
+              Artikel Name
             </th>
             <th class="text-center">
             AtikelMenge
@@ -50,6 +61,9 @@
           <td data-name="artid"   style="cursor: pointer;" >
             {{ post?.artId }}
           </td>
+          <td data-name="name"   style="cursor: pointer;" >
+            {{ post?.name }}
+          </td>
           <td data-name="artikelMenge">
           {{post?.artikelMenge}}
           </td>
@@ -62,9 +76,85 @@
               <td data-name="mhd">
                 {{post?.mhd}}
                 </td>
-                <td data-name="mhd">
-                  {{post?.static}}
+                <td data-name="mhd" *ngIf="post?.static ">
+                Ja
                 </td>
+                <td data-name="mhd" *ngIf="!post?.static ">
+                  Nein
+                  </td>
           </tr>
         </tbody>
       </table>
+</div>
+<div *ngIf="show === 2" class="row ">
+<form [formGroup]="lagerPlatztForm" class="row g-3 px-3" novalidate >
+ <div class="row">
+      <div class="col-md-6">
+        <label for="lagerplatz" class="form-label">Lager Platzt</label>
+        <input type="text"
+          class="form-control" formControlName="lagerplatz"  id="" aria-describedby="helpId" placeholder="1-50-1-3">
+        <small id="lagerplatz" class="form-text text-muted"></small>
+      </div>
+      <div class="col-md-6">
+        <label for="artId" class="form-label">Artikel Id</label>
+        <input type="number"
+          class="form-control" formControlName="artId"  id="" aria-describedby="helpId" placeholder="Artikel id">
+        <small id="artId" class="form-text text-muted"></small>
+      </div>
+</div>
+<div class="mt-2 col-md-12"></div>
+<div class="row">
+  <div class="col-md-6">
+    <label for="artikelMenge" class="form-label">Artikel Menge</label>
+    <input type="number"
+      class="form-control" formControlName="artikelMenge" name="lagerplatz" id="" aria-describedby="helpId" placeholder="Artikel Menge">
+    <small id="artikelMenge" class="form-text text-muted"></small>
+  </div>
+  <div class="col-md-6">
+    <label for="einheit" class="form-label">Artikel Einheit</label>
+    <input type="number"
+      class="form-control" formControlName="einheit" name="einheit" id="" aria-describedby="helpId" placeholder="Artikel einheit (haupteinheit)">
+    <small id="einheit" class="form-text text-muted"></small>
+  </div>
+</div>
+<div class="mt-2 col-md-12"></div>
+<div class="row">
+  <div class="col-md-6">
+    <label for="lagerPlatzVolumen" class="form-label">Welche Palette</label>
+    <select class="form-select" aria-label="Default select example" formControlName="palettenTyp">
+      <option *ngFor="let item of palettenTyp | keyvalue" [ngValue]="item.value" >{{item.value}}</option>
+      </select>
+    <small id="lagerPlatzVolumen" class="form-text text-muted">Select paletten Typ</small>
+  </div>
+  <div class="col-md-6">
+    <label for="mhd" class="form-label">Artikel Mhd</label>
+    <input type="number"
+      class="form-control" formControlName="mhd" name="mhd" id="" aria-describedby="helpId" placeholder="Mhd für artikel, Jahr/Monat/Tag">
+    <small id="mhd" class="form-text text-muted"></small>
+  </div>
+</div>
+<div class="mt-2 col-md-12"></div>
+<div class="row">
+  <div class="col-md-6">
+    <label for="lagerPlatzVolumen" class="form-label">Lagerplatz Größe</label>
+    <input type="text"
+      class="form-control" formControlName="lagerPlatzVolumen" name="lagerPlatzVolumen" id="" aria-describedby="lagerPlatzVolumen" placeholder="wie groß ist der stellpatz in cm HxBxL">
+    <small id="lagerPlatzVolumen" class="form-text text-muted">H x B x L</small>
+  </div>
+  <div class="col-md-6">
+    <div class="form-check mt-3 pt-3">
+    <input type="checkbox"
+      class="form-check-input" formControlName="static" name="static" id="" aria-describedby="static" >
+      <small id="static" class="form-text text-muted">Static für alles was am bode ist</small>
+  </div>
+  </div>
+</div>
+
+
+
+
+<button mat-stroked-button (click)="savePlatz(lagerPlatztForm.value)" color="primary">Spiecher lagerplatz</button>
+
+</form>
+</div>
+

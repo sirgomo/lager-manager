@@ -20,5 +20,7 @@ export class LagerPlatztDTO{
     lagerPlatzVolumen : number;
     @IsNotEmpty()
     static : boolean = false;
+    @IsOptional()
+    name: string
 
 }

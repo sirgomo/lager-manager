@@ -26,4 +26,11 @@ export class LagerService {
       throw new Error("Problem with Api Lagerverwaltung" + err);
     }
   }
+  createPlatz(platz: LagerPlatztDto){
+    try{
+      return this.http.post<LagerPlatztDto>(this.API_URL , platz);
+    }catch(err){
+      throw new Error("Problem with Api Lagerverwaltung" + err);
+    }
+  }
 }

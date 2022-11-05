@@ -25,7 +25,7 @@
 <div class="mt-2 col-md-12"></div>
 <div class="row justify-content-center align-items-center g-2">
   <!--Form to create dispisitors-->
-  <form class="row g-3 needs-validation" novalidate *ngIf="show === 2"
+  <form class="row g-3 needs-validation px-3" novalidate *ngIf="show === 2"
   [formGroup]="formDispositors" (ngSubmit)="createNewDispo(formDispositors.value)">
   <input type="hidden" formControlName="id" >
     <div class="col-md-4">
@@ -47,7 +47,7 @@
     </div>
   </form>
    <!--Form to create speditors-->
-  <form class="row g-3 needs-validation" novalidate *ngIf="show === 4"
+  <form class="row g-3 needs-validation px-3" novalidate *ngIf="show === 4"
   [formGroup]="formSpedition" (ngSubmit)="createNewSpeditor(formSpedition.value)">
   <input type="hidden" formControlName="id" >
     <div class="col-md-4">
@@ -80,7 +80,7 @@
   <div class="mt-2 col-md-12"></div>
   <div class="row justify-content-center align-items-center g-10">
   <!-- Show dispositors data-->
-  <table class="table table-bordered table-hover table-sortable" id="tab_logic" *ngIf="show === 1">
+  <table class="table table-bordered table-hover table-sortable px-3" id="tab_logic" *ngIf="show === 1">
     <thead>
       <tr >
         <th class="text-center">
@@ -116,7 +116,7 @@
     </tbody>
   </table>
   <!-- Show speditors data-->
-  <table class="table table-bordered table-hover table-sortable" id="tab_logic" *ngIf="show === 3">
+  <table class="table table-bordered table-hover table-sortable px-3" id="tab_logic" *ngIf="show === 3">
     <thead>
       <tr >
         <th class="text-center">

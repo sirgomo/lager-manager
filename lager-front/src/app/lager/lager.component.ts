@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ArtikelMengeDto } from '../dto/artikelMenge.dto';
-import { LagerPlatztDto } from '../dto/lagerPlatz.dto';
+import { LagerPlatztDto, PALETTENTYP } from '../dto/lagerPlatz.dto';
+import { HelperService } from '../helper.service';
 import { LagerService } from './lager.service';
 
 @Component({
@@ -11,13 +12,34 @@ import { LagerService } from './lager.service';
 })
 export class LagerComponent implements OnInit {
   show: number = 1;
-  lagerPlatze: LagerPlatztDto[] = new Array();
-  constructor(private lagerServ : LagerService, private fb : FormBuilder) { }
+  lagerPlatze: LagerPlatztDto[]  =  new Array();;
+  pltzGrosse : string = '';
+  searchModel: string = '';
+  public readonly palettenTyp : typeof PALETTENTYP = PALETTENTYP;
+
+
+  lagerPlatztForm: FormGroup;
+  constructor(private lagerServ : LagerService, private fb : FormBuilder, private helper: HelperService) {
+    this.lagerPlatztForm = this.fb.group({
+      id: Number,
+      lagerplatz: [''],
+      artId: Number,
+      artName: [''],
+      artikelMenge: Number,
+      einheit: Number,
+      palettenTyp: PALETTENTYP,
+      mhd: Date,
+      lagerPlatzVolumen:Number,
+      static: Boolean
+    });
+
+   }
 
   ngOnInit(): void {
     this.getStellpletze();
   }
   async getStellpletze(){
+
     this.lagerPlatze.splice(0, this.lagerPlatze.length);
     await this.lagerServ.getAllStellpletze().subscribe(data=> {
       data.forEach(platz => {
@@ -26,9 +48,13 @@ export class LagerComponent implements OnInit {
       this.show = 1;
     });
   }
-  artikelTrackBy()
+  artikelTrackBy(index:number, lager: LagerPlatztDto)
   {
-
+    try{
+      return lager.artId;
+    }catch(err){
+      return err;
+    }
   }
   getPlatz(){
     let artMen : ArtikelMengeDto = new ArtikelMengeDto();
@@ -38,5 +64,34 @@ export class LagerComponent implements OnInit {
       console.log(data);
     })
   }
+  createUpdateLagerPlatz(index : number){
+    if(index === -1) this.lagerPlatztForm.reset();
+    this.show = 2;
+  }
+  savePlatz(platz: LagerPlatztDto){
+    let großearra = new Array();
+    let rawVal :string =  this.lagerPlatztForm.get('lagerPlatzVolumen')?.getRawValue();
+    if(rawVal.length > 3){
+      großearra = rawVal.split('x');
+    }
+    platz.lagerPlatzVolumen = Number(großearra[0]) * Number(großearra[1]) * Number(großearra[2]);
+    console.log(platz.palettenTyp)
+  return this.lagerServ.createPlatz(platz).subscribe(data =>{
+    if(data){
+      this.showFront();
+    }else{
+      console.log(data);
+    }
+  });
 
+  }
+  showFront(){
+    this.lagerPlatztForm.reset();
+    this.show = 1;
+  }
+  onSearch(was: string){
+
+      this.lagerPlatze = this.helper.onSearchPlatz(was, this.lagerPlatze);
+
+  }
 }

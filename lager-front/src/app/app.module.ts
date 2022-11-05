@@ -30,6 +30,8 @@ import { DatenpflegeComponent } from './datenpflege/datenpflege.component';
 
 
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -57,6 +59,7 @@ import { DatenpflegeComponent } from './datenpflege/datenpflege.component';
     MatInputModule,
     FormsModule,
     MatCardModule,
+    MatInputModule,
     ToastrModule.forRoot({
       closeButton: true,
       progressBar: true,

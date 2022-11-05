@@ -7,6 +7,7 @@ export class LagerPlatztDto{
     artId! : number;
 
     artikelMenge! : number;
+    name!: string;
 
     einheit! : number;
 
