@@ -9,6 +9,9 @@ export class HelperService {
 
   constructor() { }
 public  onSearch(text : string, artikels : ArtikelDTO[]){
+  if(text === undefined || text.length === 0){
+    return artikels;
+  }
     let tmpArrNew : ArtikelDTO[] = new Array();
 
 
@@ -19,15 +22,13 @@ public  onSearch(text : string, artikels : ArtikelDTO[]){
         let tmpArr1 = Array.from(artikels[o].name);
 
         let atmp: number = 0;
-      try{
+
         for (let i = 0; i < tmpArr.length; i++) {
           if (tmpArr[i].toLocaleLowerCase().trim() == tmpArr1[i].toLocaleLowerCase().trim()) {
             atmp += 1;
           }
         }
-      } catch(err){
-       // console.log(err);
-      }
+
         if (atmp == tmpArr.length && o > 5) {
            tmpArrNew.push(artikels[o]);
            artikels.splice(o, 1);
@@ -50,39 +51,48 @@ return artikels;
 
  public onSearchPlatz(text : string, artikels: LagerPlatztDto[]){
   let tmpArrNew : LagerPlatztDto[] = new Array();
-
+  if(text === undefined || text.length === 0){
+    return artikels;
+  }
 
  for (let o = 0; o < artikels.length; o++) {
-      let tmpArr1 = new Array();
-      let tmpArr = Array.from(text);
-      if(artikels[o].name !== null){
+      let tmpArr1 :string[] = new Array();
+      let tmpArr :string[] = Array.from(text.toString());
+      if(artikels[o].name !== undefined && artikels[o].name !== null){
           tmpArr1 = Array.from(artikels[o].name);
       }
-      let tmpArr2 = Array.from(artikels[o].lagerplatz);
+      let tmpArr2: string[] = Array.from(artikels[o].lagerplatz);
 
       let atmp: number = 0;
+      let atmp2: number = 0;
 
       for (let i = 0; i < tmpArr.length; i++) {
-        if(artikels[o].name !== null){
-        if (tmpArr[i].toLocaleLowerCase().trim() == tmpArr1[i].toLocaleLowerCase().trim()) {
-          atmp += 1;
-        }
-      }
-       else if (tmpArr[i].toLocaleLowerCase().trim() == tmpArr2[i].toLocaleLowerCase().trim()) {
+        if(artikels[o].name !== undefined && artikels[o].name !== null && tmpArr1[i] !== undefined){
+        if (tmpArr[i].toLocaleLowerCase().trim() === tmpArr1[i].toLocaleLowerCase().trim()) {
           atmp += 1;
         }
       }
 
-      if (atmp == tmpArr.length && !isFinite(Number(text))) {
-         tmpArrNew.push(artikels[o]);
-         artikels.splice(o, 1);
-     }
-     if(isFinite(Number(text)) ){
-       if(isFinite(Number(text)) && artikels[o].artId === Number(text)){
-         tmpArrNew.push(artikels[o]);
-         artikels.splice(o, 1);
+      if(artikels[o].lagerplatz !== null && artikels[o].lagerplatz !== undefined && tmpArr2[i] !== undefined){
+        if (tmpArr[i].toLocaleLowerCase().trim() === tmpArr2[i].toLocaleLowerCase().trim()) {
+          atmp2 += 1;
+        }
        }
+      }
+
+      if (atmp == tmpArr.length  || atmp2 == tmpArr2.length ) {
+         tmpArrNew.push(artikels[o]);
+         artikels.splice(o, 1);
      }
+
+       if(artikels[o].artId !== undefined && artikels[o].artId !== null ){
+        if( artikels[o].artId == Number(text)){
+          tmpArrNew.push(artikels[o]);
+          artikels.splice(o, 1);
+        }
+
+       }
+
 
   }
     tmpArrNew.forEach(d => {

@@ -61,7 +61,6 @@ export class WarenebuchungComponent implements OnInit {
   }
   async getArtikels(){
     this.artikels.splice(0, this.artikels.length);
-    console.log('pobieram artikles')
     await this.artService.getAllArtikel().subscribe(data => {
       data.forEach(art =>{
         this.artikels.push(art);
@@ -81,7 +80,6 @@ export class WarenebuchungComponent implements OnInit {
   addArtikel( artikelid:number, menge :number){
     let bestelungId :number  = this.formBuchung.get('bestellungId')?.getRawValue();
     this.artikelMenge.splice(0, this.artikelMenge.length);
-    console.log('wartosci b : '+ bestelungId + ' art id ' + artikelid + ' menge' + menge );
     let bucharti : BestArtikelMengeDto = new BestArtikelMengeDto();
     bucharti.artikelId = artikelid;
     bucharti.bestellungId = bestelungId;
@@ -113,7 +111,7 @@ export class WarenebuchungComponent implements OnInit {
       this.dispo = true;
       this.show = 1;
     });
-    console.log(this.dispositors);
+
   }
   async getArtikelsInBuchung(){
     let bestelungId :number  = this.formBuchung.get('bestellungId')?.getRawValue();
