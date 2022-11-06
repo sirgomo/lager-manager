@@ -130,7 +130,7 @@
 
       </td>
                 <td data-name="del">
-                    <button name="del0" class='btn btn-dark glyphicon glyphicon-remove row-remove' (click)="addArtikel(post.artikelId,artikelMenge[i])"><span aria-hidden="true">V</span></button>
+                    <button name="del0" class='btn btn-dark glyphicon glyphicon-remove row-remove' (click)="addArtikel(post.artikelId,artikelMenge[i])"><span aria-hidden="true">add</span></button>
                 </td>
     </tr>
   </tbody>
@@ -164,7 +164,7 @@
     <td data-name="Tor">
       {{ post?.tor }}
     </td>
-    <td data-name="dispositor" style="cursor: pointer;" (click)="bearbeiteBuchung(i)">
+    <td data-name="dispositor" style="cursor: pointer;" (click)="bearbeiteBuchung(i)" *ngIf="dispositors.length > 0">
     {{dispositors[post.dispositorId -1].name }}
 
     </td>
@@ -174,7 +174,7 @@
 
         </td>
                 <td data-name="del">
-                    <button name="del0" class='btn btn-dark glyphicon glyphicon-remove row-remove' ><span aria-hidden="true">V</span></button>
+                    <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove' (click)="deleteBuchung(i)"><span aria-hidden="true">X</span></button>
                 </td>
     </tr>
   </tbody>
@@ -196,6 +196,9 @@
       <th class="text-center">
        Menge
        </th>
+       <th class="text-center">
+        Entfernen ?
+        </th>
 
     </tr>
   </thead>
@@ -217,7 +220,10 @@
         <td data-name="bestellungid">
 
           {{ post?.menge }}
-
+        </td>
+          <td data-name="del">
+            <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove' (click)="deleteArtikel(i)"><span aria-hidden="true">X</span></button>
+        </td>
 
     </tr>
   </tbody>

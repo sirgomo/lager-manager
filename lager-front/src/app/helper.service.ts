@@ -58,7 +58,7 @@ return artikels;
  for (let o = 0; o < artikels.length; o++) {
       let tmpArr1 :string[] = new Array();
       let tmpArr :string[] = Array.from(text.toString());
-      if(artikels[o].name !== undefined && artikels[o].name !== null){
+      if(artikels[o] !== undefined && artikels[o].name !== undefined && artikels[o].name !== null){
           tmpArr1 = Array.from(artikels[o].name);
       }
       let tmpArr2: string[] = Array.from(artikels[o].lagerplatz);
@@ -67,13 +67,13 @@ return artikels;
       let atmp2: number = 0;
 
       for (let i = 0; i < tmpArr.length; i++) {
-        if(artikels[o].name !== undefined && artikels[o].name !== null && tmpArr1[i] !== undefined){
+        if( tmpArr1[i] !== undefined && artikels[o].name !== undefined && artikels[o].name !== null ){
         if (tmpArr[i].toLocaleLowerCase().trim() === tmpArr1[i].toLocaleLowerCase().trim()) {
           atmp += 1;
         }
       }
 
-      if(artikels[o].lagerplatz !== null && artikels[o].lagerplatz !== undefined && tmpArr2[i] !== undefined){
+      if( tmpArr2[i] !== undefined && artikels[o].lagerplatz !== null && artikels[o].lagerplatz !== undefined ){
         if (tmpArr[i].toLocaleLowerCase().trim() === tmpArr2[i].toLocaleLowerCase().trim()) {
           atmp2 += 1;
         }
@@ -85,8 +85,8 @@ return artikels;
          artikels.splice(o, 1);
      }
 
-       if(artikels[o].artId !== undefined && artikels[o].artId !== null ){
-        if( artikels[o].artId == Number(text)){
+       if(artikels[o] !== undefined && artikels[o].artId !== undefined && artikels[o].artId !== null){
+        if(isFinite(artikels[o].artId) && artikels[o].artId == Number(text)){
           tmpArrNew.push(artikels[o]);
           artikels.splice(o, 1);
         }

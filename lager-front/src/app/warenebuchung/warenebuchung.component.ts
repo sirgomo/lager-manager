@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { ArtikelService } from '../artikel/artikel.service';
 import { DatenpflegeService } from '../datenpflege/datenpflege.service';
 import { ArtikelDTO } from '../dto/artikel.dto';
@@ -30,7 +31,7 @@ export class WarenebuchungComponent implements OnInit {
 
 
   constructor(private buchServi : WarenBuchungService, private fb: FormBuilder, private helper: HelperService,
-     private artService : ArtikelService, private dispServic : DatenpflegeService) {
+     private artService : ArtikelService, private dispServic : DatenpflegeService, private toastr: ToastrService) {
    this.formBuchung = this.fb.group({
       id: Number,
       artikelid: Number,
@@ -49,7 +50,7 @@ export class WarenebuchungComponent implements OnInit {
 
   }
    async getBuchungen(){
-   await this.getDispositors();
+    this.getDispositors();
     this.buchngen.splice(0, this.buchngen.length);
      await  this.buchServi.getAllBuchungen().subscribe(data =>{
         data.forEach(buchung =>{
@@ -57,6 +58,7 @@ export class WarenebuchungComponent implements OnInit {
             this.buchngen.push(buchung);
           }
         });
+        this.show = 1;
       });
   }
   async getArtikels(){
@@ -84,13 +86,17 @@ export class WarenebuchungComponent implements OnInit {
     bucharti.artikelId = artikelid;
     bucharti.bestellungId = bestelungId;
     bucharti.menge = menge;
-    this.buchServi.addArtikel(bucharti).subscribe();
+    this.buchServi.addArtikel(bucharti).subscribe(data=>{
+      if(data) this.toastr.success('Artikel zugefugt', 'Artikel', {timeOut: 400});
+    });
   }
   saveBuchung(buch : WarenBuchungDto){
     if(buch.eingebucht === null){
       buch.eingebucht = false;
     }
-   return this.buchServi.createBestellung(buch).subscribe();
+   return this.buchServi.createBestellung(buch).subscribe(data=>{
+    this.getBuchungen();
+   });
   }
   onSearch(text: string){
     this.artikels = this.helper.onSearch(text, this.artikels);
@@ -109,7 +115,6 @@ export class WarenebuchungComponent implements OnInit {
         this.dispositors.push(dis);
       });
       this.dispo = true;
-      this.show = 1;
     });
 
   }
@@ -141,5 +146,21 @@ export class WarenebuchungComponent implements OnInit {
   goBack(){
     let bestelungId :number  = this.formBuchung.get('bestellungId')?.getRawValue();
     this.show = 2;
+  }
+  deleteBuchung(id: number){
+    if(this.buchngen[id].eingebucht){
+      this.toastr.error('du kannst nicht löschen buchung was schön eingebucht ist!');
+      return;
+    }
+    if(window.confirm('Bist du sicher dass du das buchung entfernen wilsst?')){
+     this.buchServi.deleteBestellung(this.buchngen[id].bestellungId).subscribe();
+     this.buchngen.splice(id, 1);
+    }
+  }
+  deleteArtikel(id:number){
+    this.buchServi.deleteArtikel(this.buchungArtikelMenge[id].artikelid, this.buchungArtikelMenge[id].bestellungId).subscribe(data=>{
+      this.toastr.success('Artikel wurde entfernt', 'Entfernen', {timeOut : 300});
+      this.buchungArtikelMenge.splice(id, 1);
+    });
   }
 }

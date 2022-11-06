@@ -33,4 +33,11 @@ export class LagerService {
       throw new Error("Problem with Api Lagerverwaltung" + err);
     }
   }
+  deletePlatz(id: number){
+    try{
+      return this.http.delete(this.API_URL + '/' + id);
+    }catch(err){
+      throw new Error("Problem with Api Lagerverwaltung" + err);
+    }
+  }
 }

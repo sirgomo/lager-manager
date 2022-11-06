@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { ArtikelMengeDto } from '../dto/artikelMenge.dto';
 import { LagerPlatztDto, PALETTENTYP } from '../dto/lagerPlatz.dto';
 import { HelperService } from '../helper.service';
@@ -15,16 +16,17 @@ export class LagerComponent implements OnInit {
   lagerPlatze: LagerPlatztDto[]  =  new Array();;
   pltzGrosse : string = '';
   searchModel: string = '';
+  index :number = -1;
   public readonly palettenTyp : typeof PALETTENTYP = PALETTENTYP;
 
 
   lagerPlatztForm: FormGroup;
-  constructor(private lagerServ : LagerService, private fb : FormBuilder, private helper: HelperService) {
+  constructor(private lagerServ : LagerService, private fb : FormBuilder, private helper: HelperService, private toastr : ToastrService) {
     this.lagerPlatztForm = this.fb.group({
       id: Number,
       lagerplatz: [''],
       artId: Number,
-      artName: [''],
+      name: [''],
       artikelMenge: Number,
       einheit: Number,
       palettenTyp: PALETTENTYP,
@@ -66,18 +68,25 @@ export class LagerComponent implements OnInit {
   }
   createUpdateLagerPlatz(index : number){
     if(index === -1) this.lagerPlatztForm.reset();
+    if(index !== -1) this.lagerPlatztForm.setValue(this.lagerPlatze[index]);
+
     this.show = 2;
+    this.index = index;
   }
   savePlatz(platz: LagerPlatztDto){
-    let großearra = new Array();
-    let rawVal :string =  this.lagerPlatztForm.get('lagerPlatzVolumen')?.getRawValue();
-    if(rawVal.length > 3){
-      großearra = rawVal.split('x');
+    if(platz.id === undefined || platz.id === null){
+      let großearra = new Array();
+      let rawVal :string =  this.lagerPlatztForm.get('lagerPlatzVolumen')?.getRawValue();
+      if(rawVal.length > 3){
+        großearra = rawVal.split('x');
+      }
+      platz.lagerPlatzVolumen = Number(großearra[0]) * Number(großearra[1]) * Number(großearra[2]);
+      console.log(platz.palettenTyp)
     }
-    platz.lagerPlatzVolumen = Number(großearra[0]) * Number(großearra[1]) * Number(großearra[2]);
-    console.log(platz.palettenTyp)
+
   return this.lagerServ.createPlatz(platz).subscribe(data =>{
     if(data){
+      this.lagerPlatze[this.index] = data;
       this.showFront();
     }else{
       console.log(data);
@@ -88,10 +97,23 @@ export class LagerComponent implements OnInit {
   showFront(){
     this.lagerPlatztForm.reset();
     this.show = 1;
+    this.index = -1;
   }
   onSearch(was: string){
 
       this.lagerPlatze = this.helper.onSearchPlatz(was, this.lagerPlatze);
 
+  }
+  deletePlatz(platz : LagerPlatztDto){
+    if(this.lagerPlatze[this.index].artId !== null){
+      this.toastr.error('Der Platz kann nicht entfernt werden denn er nicht lehr ist', 'Error');
+      return;
+    }
+    this.lagerServ.deletePlatz(platz.id).subscribe(data=>{
+      if(data){
+        this.lagerPlatze.splice(this.index, 1);
+        this.showFront();
+      }
+    });
   }
 }

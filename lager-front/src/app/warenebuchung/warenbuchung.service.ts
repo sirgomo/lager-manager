@@ -45,8 +45,16 @@ export class WarenBuchungService {
     try{
       return this.http.get<WarenBuchungDto[]>(this.API_URL);
     }catch(err){
-      throw new Error("Es gibt problem im warenBuchung");
+      throw new Error("Es gibt problem im warenBuchung : getbuchungen");
     }
   }
+  deleteArtikel(id:number, bestid: number){
+    try{
+      return this.http.delete(this.API_URL + '/' + id + '/' + bestid);
+    }catch(err){
+      throw new Error("Es gibt problem im warenbuchung : deleteArtikel")
+    }
+  }
+
 
 }

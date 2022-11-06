@@ -58,22 +58,22 @@
             <td data-name="lagerplatz">
               {{ post?.lagerplatz }}
           </td>
-          <td data-name="artid"   style="cursor: pointer;" >
+          <td data-name="artid"   style="cursor: pointer;" (click)="createUpdateLagerPlatz(i)">
             {{ post?.artId }}
           </td>
-          <td data-name="name"   style="cursor: pointer;" >
+          <td data-name="name"   style="cursor: pointer;"  (click)="createUpdateLagerPlatz(i)" >
             {{ post?.name }}
           </td>
-          <td data-name="artikelMenge">
+          <td data-name="artikelMenge" style="cursor: pointer;"  (click)="createUpdateLagerPlatz(i)">
           {{post?.artikelMenge}}
           </td>
-          <td data-name="einheit">
+          <td data-name="einheit" style="cursor: pointer;"  (click)="createUpdateLagerPlatz(i)">
             {{post?.einheit}}
             </td>
-            <td data-name="palettenTyp">
+            <td data-name="palettenTyp" style="cursor: pointer;"  (click)="createUpdateLagerPlatz(i)">
               {{post?.palettenTyp}}
               </td>
-              <td data-name="mhd">
+              <td data-name="mhd" style="cursor: pointer;"  (click)="createUpdateLagerPlatz(i)">
                 {{post?.mhd}}
                 </td>
                 <td data-name="mhd" *ngIf="post?.static ">
@@ -149,7 +149,14 @@
   </div>
   </div>
 </div>
-<button mat-stroked-button (click)="savePlatz(lagerPlatztForm.value)" color="primary">Spiecher lagerplatz</button>
+<div class="row" *ngIf="index !== -1">
+    <div class="col"><button mat-stroked-button (click)="savePlatz(lagerPlatztForm.value)" color="primary">Spiecher lagerplatz</button></div>
+    <div class="col"><button mat-stroked-button (click)="deletePlatz(lagerPlatztForm.value)" color="primary">Delete lagerplatz</button></div>
+</div>
+
+  <button mat-stroked-button (click)="savePlatz(lagerPlatztForm.value)" color="primary" *ngIf="index === -1">Spiecher lagerplatz</button>
+
+
 
 </form>
 </div>

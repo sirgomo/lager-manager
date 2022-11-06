@@ -11,31 +11,35 @@ import { WarenbuchungService } from './warenbuchung.service';
 @UseGuards(AuthGuard(), RoleGuard)
 export class WarenbuchungController {
     constructor(private serv : WarenbuchungService){}
-@Post()
-@ROLES(ROLE.WARENPFHLEGE)
-newBestellung(@Body(ValidationPipe) dto: WarenBuchungDto){
-    console.log(dto);
-    return  this.serv.createBuchung(dto);   
-}
-@Post('/art')
-@ROLES(ROLE.WARENPFHLEGE)
-addArtikel(@Body(ValidationPipe) best: BestArtikelMengeDTO){
-    return this.serv.addArtikel(best);
-}
-@Get(':id')
-@ROLES(ROLE.WARENPFHLEGE)
-getAllArtikels(@Param('id') id:number){
-return this.serv.getAllArticles(id);
-}
+    @Post()
+    @ROLES(ROLE.WARENPFHLEGE)
+    async newBestellung(@Body(ValidationPipe) dto: WarenBuchungDto){
+        return  this.serv.createBuchung(dto);   
+    }
+    @Post('/art')
+    @ROLES(ROLE.WARENPFHLEGE)
+    async addArtikel(@Body(ValidationPipe) best: BestArtikelMengeDTO){
+        return this.serv.addArtikel(best);
+    }
+    @Get(':id')
+    @ROLES(ROLE.WARENPFHLEGE)
+    async getAllArtikels(@Param('id') id:number){
+    return this.serv.getAllArticles(id);
+    }
 
-@Delete(':id')
-@ROLES(ROLE.WARENPFHLEGE)
-deleteBestellung(@Param('id') id:number){
-    return this.serv.deletBuchung(id);
-} 
-@Get()
-@ROLES(ROLE.WARENPFHLEGE)
-getBuchungen(){
-    return this.serv.getBuchungen();
-}
+    @Delete(':id')
+    @ROLES(ROLE.WARENPFHLEGE)
+   async deleteBestellung(@Param('id') id:number){
+        return this.serv.deletBuchung(id);
+    } 
+    @Get()
+    @ROLES(ROLE.WARENPFHLEGE)
+    async getBuchungen(){
+        return this.serv.getBuchungen();
+    }
+    @Delete(':id/:bestid')
+    @ROLES(ROLE.WARENPFHLEGE)
+    async deleteArtikel(@Param('id') id:number, @Param('bestid') bestid: number){
+        return this.serv.deleteArtikel(id, bestid);
+    }
 }

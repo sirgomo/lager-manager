@@ -44,9 +44,10 @@ export class WarenbuchungService {
             return err;
         }
     }
-   async deleteArtikel(id: number){
+   async deleteArtikel(artid: number, bestid:number){
     try{
-      return  await   this.repo.delete({'id': id});
+    
+      return  await this.repo.delete({'artikelid': artid, 'bestellungId': bestid});
     }catch (err){
         return err;
     }
