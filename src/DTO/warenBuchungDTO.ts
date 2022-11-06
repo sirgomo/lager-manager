@@ -18,5 +18,7 @@ export class WarenBuchungDto{
     @IsNotEmpty()
     @IsNumber()
     bestellungId : number;
+    @IsOptional()
+    artikelsGebucht: boolean;
    
 }

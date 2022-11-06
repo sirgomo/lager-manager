@@ -16,4 +16,6 @@ export class WarenEingangEntity{
     eingebucht : boolean;
     @PrimaryColumn()
     bestellungId : number;
+    @Column()
+    artikelsGebucht: boolean = false;
 }

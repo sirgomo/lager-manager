@@ -39,7 +39,8 @@ export class WarenebuchungComponent implements OnInit {
       tor: [''],
       dispositorId: Number,
       eingebucht: false,
-      bestellungId: Number
+      bestellungId: Number,
+      artikelsGebucht: Boolean
     });
 
   }

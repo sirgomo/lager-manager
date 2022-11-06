@@ -33,7 +33,7 @@ export class WarenbuchungController {
         return this.serv.deletBuchung(id);
     } 
     @Get()
-    @ROLES(ROLE.WARENPFHLEGE)
+    @ROLES(ROLE.WARENPFHLEGE, ROLE.WARENEINGANG)
     async getBuchungen(){
         return this.serv.getBuchungen();
     }

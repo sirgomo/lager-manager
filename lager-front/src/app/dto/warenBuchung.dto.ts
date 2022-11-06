@@ -7,5 +7,6 @@ export class WarenBuchungDto{
   dispositorId!: number;
   eingebucht! : boolean;
   bestellungId! : number;
+  artikelsGebucht!: boolean;
 
 }

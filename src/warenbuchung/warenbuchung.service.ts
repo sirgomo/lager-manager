@@ -2,24 +2,51 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BestArtikelMengeDTO } from 'src/DTO/bestArtikelMengeDTO';
 import { WarenBuchungDto } from 'src/DTO/warenBuchungDTO';
+import { ArtikelEntity } from 'src/entity/ArtikelEntity';
 import { WarenEingangEntity } from 'src/entity/WarenEingangEntity';
 import { IsNull, Not, Repository } from 'typeorm';
 
 @Injectable()
 export class WarenbuchungService {
    
-    constructor(@InjectRepository(WarenEingangEntity) private repo: Repository<WarenEingangEntity>){
+    constructor(@InjectRepository(WarenEingangEntity) private repo: Repository<WarenEingangEntity>, @InjectRepository(ArtikelEntity) private artRepo: Repository<ArtikelEntity>){
        }
 
   async  createBuchung(buch :WarenBuchungDto):Promise<WarenBuchungDto>{
         try{
-           
           await  this.repo.create(buch);
+          if(buch.eingebucht && !buch.artikelsGebucht){
+         if( await this.updateArtikels(buch)){
+            buch.artikelsGebucht = true;
+         }
+        
+          }
         return  await  this.repo.save(buch);
         }catch(err){
             console.log(err);
             return err;
         }
+    }
+    async updateArtikels(buch: WarenEingangEntity):Promise<boolean>{
+        let ret :boolean = false;
+        if(buch.eingebucht && !buch.artikelsGebucht){
+            let buchungenFertig : WarenEingangEntity[] = new Array();
+          buchungenFertig =   await this.repo.find({where: { 'bestellungId': buch.bestellungId, 'artikelid': Not(IsNull())}});
+          if(buchungenFertig.length > 0){
+            for(let i = 0; i < buchungenFertig.length; i++){
+                await this.artRepo.findOneBy({'artikelId': buchungenFertig[i].artikelid}).then(data=>{
+                    console.log(data);
+                    data.bestand += buchungenFertig[i].menge;
+                    this.artRepo.save(data);
+                    ret = true;
+                }, err=>{
+                    return ret;
+                    //nicht dum save errors tu database, to vewrfolgung mögliche problemen!
+                });
+            }
+          }
+          }
+          return ret;
     }
   async  addArtikel(best: BestArtikelMengeDTO){
         try{
