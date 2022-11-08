@@ -46,6 +46,7 @@ export class ApiService {
       }).onHidden.subscribe(()=> {
           this.jwtToken$.next(this.token);
           localStorage.setItem('act', btoa(this.token));
+          localStorage.setItem('role', this.getRole().toString());
           switch (this.getRole()) {
             case 'VERKAUF':
               this.router.navigateByUrl('verkauf').then();
@@ -74,6 +75,7 @@ export class ApiService {
     this.token = '';
     this.jwtToken$.next(this.token);
     localStorage.removeItem('act');
+    localStorage.removeItem('role');
     this.toast.success('logout success', '', {
       timeOut: 600,
       positionClass: 'toast-top-center'

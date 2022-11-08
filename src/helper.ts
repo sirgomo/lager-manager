@@ -1,3 +1,6 @@
+import { ArtikelDTO } from "./DTO/ArtikelDTO";
+import { ArtikelMengeDTO } from "./DTO/artikelMengeDTO";
+
 export class Helper{
 
   public  getPaletenVolumen(artMenge: number, grosse: string, minLosMenge: number, palMaxHcm: number ){
@@ -80,5 +83,17 @@ export class Helper{
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min) + min); 
       }
+    public getVolumenNeueUndAlt(artikel :ArtikelDTO, artMen: ArtikelMengeDTO){
+      let artGross = artikel.grosse.split('x');
+      let kartonH : number = Number(artGross[0]);
+      let kartonB : number = Number(artGross[1]);
+      let kartonL : number = Number(artGross[2]);
+      let kartonMengecurrent:number = Math.floor(artikel.bestand / artikel.minLosMenge);
+      let kartonNew : number = Math.floor(artMen.menge / artikel.minLosMenge); 
+      let volOnStel : number = kartonH * kartonB * kartonL * kartonMengecurrent;
+      let volNeue : number = kartonH * kartonB * kartonL * kartonMengecurrent;
+
+      return volOnStel + volNeue;
+    }
 
 }

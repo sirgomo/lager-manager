@@ -93,7 +93,7 @@ export class WarenbuchungService {
                 be.push(a);
               });
         }, error =>{
-            console.log('niestety error ');
+            console.log('leider error als ich versuchte artikels zu holen ');
         });
       
         return be;

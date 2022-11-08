@@ -5,7 +5,6 @@ import { ArtService } from 'src/artikel/art.service';
 import { ArtikelDTO } from 'src/DTO/ArtikelDTO';
 import { ArtikelMengeDTO } from 'src/DTO/artikelMengeDTO';
 import { LagerPlatztDTO } from 'src/DTO/lagerPlatztDTO';
-import { ArtikelEntity } from 'src/entity/ArtikelEntity';
 import { LagerPlatzEntity, PALETTENTYP } from 'src/entity/LagerPlatzEntity';
 import { Helper } from 'src/helper';
 import { LagerPlatzGenerator } from 'src/lagerPlatzGen';
@@ -60,7 +59,7 @@ export class LagerService {
             });
         }catch( err){
             console.log(err);
-            throw new Error("problem mit lager service, lagerservice kann nicht lagerplatz machen");
+            throw new Error("problem mit lager service, lagerservice kann nicht lagerplatz erstellen");
             
         }
     }
@@ -85,14 +84,13 @@ export class LagerService {
             let artikel :ArtikelDTO = new ArtikelDTO();
             await this.artServ.getArtikel(artMen.artikelId).then(data => { artikel = data});
             volMenge =  this.helper.getPaletenVolumen(artikel.bestand, artikel.grosse, artikel.minLosMenge, 205);
-            let neue: boolean = false;
+            let neue: boolean = true;
             await  this.repo.findOneBy({'artId':artikel.artikelId}).then(data=>{
-              if(!data)
-              neue = true;  
-           }, err=>{ console.log(err)});
+              if(data && data.artId !== null)  neue = false;  
+             
+           }, err=>{ console.log( err)});
            if(neue){
-           
-            return await this.repo.findOne({select: {'id':true, 'lagerplatz': true,'artId': true, 'lagerPlatzVolumen': true, 'static':true}, where: {'artId': IsNull(), 
+            return await this.repo.findOne({select: {'id':true, 'lagerplatz': true,'artId': true, 'artikelMenge':true , 'lagerPlatzVolumen': true, 'static':true}, where: {'artId': IsNull(), 
               'lagerPlatzVolumen': MoreThanOrEqual(volMenge[0][0]), 'static': true}, order:{'lagerPlatzVolumen': 'ASC'}}).then(data=>{
              return data;
               }, err=>{
@@ -100,13 +98,32 @@ export class LagerService {
                   return err;
               });
            }else{
-             // return   await this.repo.findOne({select: {'lagerplatz': true,'artId': true, 'lagerPlatzVolumen': true, 'static':true}, where: {'artId': IsNull(), 
-           return  await this.repo.findOne({select: {'id':true, 'lagerplatz': true,'artId': true, 'lagerPlatzVolumen': true, 'static':true}, where: {'artId': IsNull(), 
+            if(artMen.palete !== PALETTENTYP.KEINPALETTE){
+           return  await this.repo.findOne({select: {'id':true, 'lagerplatz': true,'artId': true, 'artikelMenge':true ,'lagerPlatzVolumen': true, 'static':true}, where: {'artId': IsNull(), 
               'lagerPlatzVolumen': MoreThanOrEqual(volMenge[0][0]), 'static':false}, order:{'lagerPlatzVolumen': 'ASC'}}).then(data=>{
              return data;
               }, err=>{
                   return err;
               });
+            }else{
+                let tmp : LagerPlatzEntity = new LagerPlatzEntity();
+              
+                tmp = await this.repo.findOneBy({'artId': artMen.artikelId, 'static': true});
+                if(this.helper.getVolumenNeueUndAlt(artikel, artMen) < tmp.lagerPlatzVolumen &&
+                artMen.mhd === undefined || this.helper.getVolumenNeueUndAlt(artikel, artMen) < tmp.lagerPlatzVolumen &&
+                artMen.mhd === tmp.mhd ){
+                    return tmp;
+                }else{
+                    return  await this.repo.findOne({select: {'id':true, 'lagerplatz': true,'artId': true, 'artikelMenge':true ,'lagerPlatzVolumen': true, 'static':true}, where: {'artId': IsNull(), 
+                    'lagerPlatzVolumen': MoreThanOrEqual(volMenge[0][0]), 'static':true}, order:{'lagerPlatzVolumen': 'ASC'}}).then(data=>{
+                   return data;
+                    }, err=>{
+                        return err;
+                    });
+                }
+              
+
+            }
            }
         }catch( err){
             throw new Error(" Cant find lagerplatz fur artikel " + err);
