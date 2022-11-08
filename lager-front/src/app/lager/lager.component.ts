@@ -5,11 +5,14 @@ import { ArtikelMengeDto } from '../dto/artikelMenge.dto';
 import { LagerPlatztDto, PALETTENTYP } from '../dto/lagerPlatz.dto';
 import { HelperService } from '../helper.service';
 import { LagerService } from './lager.service';
-
+import { DatePipe } from '@angular/common';
+import { formatDate } from '@angular/common';
 @Component({
   selector: 'app-lager',
   templateUrl: './lager.component.html',
-  styleUrls: ['./lager.component.scss']
+  styleUrls: ['./lager.component.scss'],
+  providers: [DatePipe]
+
 })
 export class LagerComponent implements OnInit {
   show: number = 1;
@@ -21,7 +24,7 @@ export class LagerComponent implements OnInit {
 
 
   lagerPlatztForm: FormGroup;
-  constructor(private lagerServ : LagerService, private fb : FormBuilder, private helper: HelperService, private toastr : ToastrService) {
+  constructor(private lagerServ : LagerService, private fb : FormBuilder, private helper: HelperService, private toastr : ToastrService, private datePipe :DatePipe) {
     this.lagerPlatztForm = this.fb.group({
       id: Number,
       lagerplatz: [''],
@@ -58,17 +61,18 @@ export class LagerComponent implements OnInit {
       return err;
     }
   }
-  getPlatz(){
-    let artMen : ArtikelMengeDto = new ArtikelMengeDto();
-    artMen.artikelId = 21;
-    artMen.menge = 887;
-    return this.lagerServ.getPlatztFurArtikel(artMen).subscribe(data=>{
-      console.log(data);
-    })
-  }
+
   createUpdateLagerPlatz(index : number){
     if(index === -1) this.lagerPlatztForm.reset();
-    if(index !== -1) this.lagerPlatztForm.setValue(this.lagerPlatze[index]);
+    if(index !== -1){
+      this.lagerPlatztForm.setValue(this.lagerPlatze[index]);
+
+      //this.lagerPlatztForm.get('mhd')?.setValue(this.lagerPlatze[index].mhd.toISOString().split('T')[0]);
+    // this.lagerPlatztForm.get('mhd')?.setValue(formatDate(this.lagerPlatze[index].mhd, 'dd-MM-yyyy', 'en'));
+    this.lagerPlatztForm.get('mhd')?.setValue(new Date(this.lagerPlatze[index].mhd).toISOString().split('T')[0]);
+
+    //  console.log(this.lagerPlatztForm.get('mhd')?.getRawValue());
+    }
 
     this.show = 2;
     this.index = index;

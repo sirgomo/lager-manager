@@ -54,27 +54,27 @@
         </thead>
         <tbody>
 
-          <tr  *ngFor="let post of lagerPlatze; let i = index; trackBy : artikelTrackBy;" class="hidden">
+          <tr  *ngFor="let post of lagerPlatze; let i = index; trackBy : artikelTrackBy;" class="hidden" (click)="createUpdateLagerPlatz(i)">
             <td data-name="lagerplatz">
               {{ post?.lagerplatz }}
           </td>
-          <td data-name="artid"   style="cursor: pointer;" (click)="createUpdateLagerPlatz(i)">
+          <td data-name="artid"   style="cursor: pointer;" >
             {{ post?.artId }}
           </td>
-          <td data-name="name"   style="cursor: pointer;"  (click)="createUpdateLagerPlatz(i)" >
+          <td data-name="name"   style="cursor: pointer;"  >
             {{ post?.name }}
           </td>
-          <td data-name="artikelMenge" style="cursor: pointer;"  (click)="createUpdateLagerPlatz(i)">
+          <td data-name="artikelMenge" style="cursor: pointer;"  >
           {{post?.artikelMenge}}
           </td>
-          <td data-name="einheit" style="cursor: pointer;"  (click)="createUpdateLagerPlatz(i)">
+          <td data-name="einheit" style="cursor: pointer;"  >
             {{post?.einheit}}
             </td>
-            <td data-name="palettenTyp" style="cursor: pointer;"  (click)="createUpdateLagerPlatz(i)">
+            <td data-name="palettenTyp" style="cursor: pointer;">
               {{post?.palettenTyp}}
               </td>
-              <td data-name="mhd" style="cursor: pointer;"  (click)="createUpdateLagerPlatz(i)">
-                {{post?.mhd}}
+              <td data-name="mhd" style="cursor: pointer;" >
+                {{post?.mhd | date: 'dd-MM-yyyy'}}
                 </td>
                 <td data-name="mhd" *ngIf="post?.static ">
                 Ja
@@ -127,10 +127,10 @@
     <small id="lagerPlatzVolumen" class="form-text text-muted">Select paletten Typ</small>
   </div>
   <div class="col-md-6">
-    <label for="mhd" class="form-label">Artikel Mhd</label>
-    <input type="number"
-      class="form-control" formControlName="mhd" name="mhd" id="" aria-describedby="helpId" placeholder="Mhd für artikel, Jahr/Monat/Tag">
+    <label for="mhd" class="form-label">Artikel Mhd
+    <input type="date" formControlName="mhd" name="mhd" id="mhd" value="mhd" placeholder="Mhd für artikel, Jahr/Monat/Tag"  class="form-control">
     <small id="mhd" class="form-text text-muted"></small>
+  </label>
   </div>
 </div>
 <div class="mt-2 col-md-12"></div>
@@ -138,7 +138,7 @@
   <div class="col-md-6">
     <label for="lagerPlatzVolumen" class="form-label">Lagerplatz Größe</label>
     <input type="text"
-      class="form-control" formControlName="lagerPlatzVolumen" name="lagerPlatzVolumen" id="" aria-describedby="lagerPlatzVolumen" placeholder="wie groß ist der stellpatz in cm HxBxL">
+      class="form-control" formControlName="lagerPlatzVolumen" name="lagerPlatzVolumen"  id="" aria-describedby="lagerPlatzVolumen" placeholder="wie groß ist der stellpatz in cm HxBxL">
     <small id="lagerPlatzVolumen" class="form-text text-muted">H x B x L</small>
   </div>
   <div class="col-md-6">
