@@ -4,16 +4,22 @@ import { BestArtikelMengeDTO } from 'src/DTO/bestArtikelMengeDTO';
 import { WarenBuchungDto } from 'src/DTO/warenBuchungDTO';
 import { ArtikelEntity } from 'src/entity/ArtikelEntity';
 import { WarenEingangEntity } from 'src/entity/WarenEingangEntity';
+import { WarenEingStat } from 'src/entity/warenEingStat';
 import { IsNull, Not, Repository } from 'typeorm';
 
 @Injectable()
 export class WarenbuchungService {
    
-    constructor(@InjectRepository(WarenEingangEntity) private repo: Repository<WarenEingangEntity>, @InjectRepository(ArtikelEntity) private artRepo: Repository<ArtikelEntity>){
+    constructor(@InjectRepository(WarenEingangEntity) private repo: Repository<WarenEingangEntity>, 
+    @InjectRepository(ArtikelEntity) private artRepo: Repository<ArtikelEntity>,
+    @InjectRepository(WarenEingStat) private repoStat : Repository<WarenEingStat>){
        }
 
   async  createBuchung(buch :WarenBuchungDto):Promise<WarenBuchungDto>{
         try{
+            if(buch.artikelsGebucht === null){
+                buch.artikelsGebucht = false;
+            }
           await  this.repo.create(buch);
           if(buch.eingebucht && !buch.artikelsGebucht){
          if( await this.updateArtikels(buch)){
@@ -35,9 +41,16 @@ export class WarenbuchungService {
           if(buchungenFertig.length > 0){
             for(let i = 0; i < buchungenFertig.length; i++){
                 await this.artRepo.findOneBy({'artikelId': buchungenFertig[i].artikelid}).then(data=>{
-                    console.log(data);
+                    let eingStat : WarenEingStat = new WarenEingStat();
+                    eingStat.artikelId = data.artikelId;
+                    eingStat.eingangDatum = new Date(Date.now());
+                    eingStat.menge = buchungenFertig[i].menge;
+                    eingStat.price = data.artikelPrice;
+                    eingStat.verPrice = data.verPrice;
+                    this.repoStat.save(eingStat);
                     data.bestand += buchungenFertig[i].menge;
                     this.artRepo.save(data);
+                   
                     ret = true;
                 }, err=>{
                     return ret;

@@ -25,6 +25,8 @@ export class ArtikelEntity {
   bestand: number;
   @Column({type : 'double', nullable: false})
   artikelPrice : number;
+  @Column({type: 'double', nullable: false})
+  verPrice: number;
   @ManyToOne(()=> KommisioDetailsEntity, (kommisioDetail)=> kommisioDetail.artikelList )
   kommisioDetail : KommisioDetailsEntity;
   
@@ -34,5 +36,5 @@ export class ArtikelEntity {
 export enum artikelFlage {
   FASS = 'FASS',
   SUSS = 'SUSS',
-  ALK = 'ALK',
+  ALK = 'ALK'
 }

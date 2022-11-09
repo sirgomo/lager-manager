@@ -26,8 +26,8 @@ import { WarenEingangEntity } from './entity/WarenEingangEntity';
 import { KommisioDetailsEntity } from './entity/KommisioDetailsEntity';
 import { SpeditionModule } from './spedition/spedition.module';
 import { UiidEntity } from './entity/UiidEntity';
-import { ArtLoader } from './ArtLoader';
-import { LagerPlatzGenerator } from './lagerPlatzGen';
+import { WarenEingStat } from './entity/warenEingStat';
+import { WarenAusgStat } from './entity/warenAusgStat';
 
 
 
@@ -41,7 +41,7 @@ import { LagerPlatzGenerator } from './lagerPlatzGen';
       password: 'beta1243',
       database: 'lager',
       entities: [DispoEntity, ArtikelEntity, UserEntity, ArtikelReservationEntity, FehlendArtikelEntity, InKomissPalletenEntity, KommissionirungEntity,
-      LagerPlatzEntity, PalettenEnttity, SpeditionEntity, WarenBestellungEntity, WarenEingangEntity, KommisioDetailsEntity, UiidEntity],
+      LagerPlatzEntity, PalettenEnttity, SpeditionEntity, WarenBestellungEntity, WarenEingangEntity, KommisioDetailsEntity, UiidEntity, WarenEingStat, WarenAusgStat],
       synchronize: false,
     }),
     WareneingangModule,

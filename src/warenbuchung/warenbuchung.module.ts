@@ -9,10 +9,11 @@ import { ArtikelEntity } from 'src/entity/ArtikelEntity';
 import { ArtService } from 'src/artikel/art.service';
 import { UidService } from 'src/artikel/uid/uid.service';
 import { UiidEntity } from 'src/entity/UiidEntity';
+import { WarenEingStat } from 'src/entity/warenEingStat';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([WarenEingangEntity, ArtikelEntity, UiidEntity]), AuthModule], 
+  imports: [TypeOrmModule.forFeature([WarenEingangEntity, ArtikelEntity, UiidEntity, WarenEingStat]), AuthModule], 
   providers: [WarenbuchungService, ArtService, UidService],
   controllers: [WarenbuchungController]
 })

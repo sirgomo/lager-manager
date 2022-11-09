@@ -16,7 +16,7 @@ export class LagerPlatztDTO{
     palettenTyp : PALETTENTYP;
     @IsOptional()
     mhd : Date; 
-    @IsNotEmpty()
+    @IsOptional()
     lagerPlatzVolumen : number;
     @IsNotEmpty()
     static : boolean = false;

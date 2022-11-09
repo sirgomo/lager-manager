@@ -1,6 +1,5 @@
 
 import { LagerPlatztDTO } from "./DTO/lagerPlatztDTO";
-import { LagerService } from "./lager/lager.service";
 
 export class LagerPlatzGenerator{
      regalMenge : number = 21;
@@ -29,8 +28,14 @@ export class LagerPlatzGenerator{
                                 //lxhxb
                                 stellplazt.lagerPlatzVolumen = 120 * 120 * 40;
                                 stellplazt1.lagerPlatzVolumen = 120 * 120 * 40;
-                                stellplazt.lagerplatz = '' + i + '-' + y + '-' + '01-' + e5; 
-                                stellplazt1.lagerplatz = '' + i + '-' + y + '-'+ '02-' + e5;
+                                if(i < 10 ){
+                                    stellplazt.lagerplatz = '0' + i + '-' + y + '-' + '01-' + '0'+e5; 
+                                    stellplazt1.lagerplatz = '0' + i + '-' + y + '-'+ '02-' + '0'+e5;
+                                } else if(i > 10 ){
+                                    stellplazt.lagerplatz = '' + i + '-' + '' + y + '-' + '01-' +'0'+ e5; 
+                                    stellplazt1.lagerplatz = '' + i + '-' + '' + y + '-'+ '02-' +'0'+ e5;
+                                }
+                               
                                 stellplazt.static = true;
                                 stellplazt1.static = true;
                                 this.StellPlatze.push(stellplazt);
@@ -42,7 +47,12 @@ export class LagerPlatzGenerator{
                            
                             //lxhxb
                             stellplazt.lagerPlatzVolumen = 120 * 170 * 80;
-                            stellplazt.lagerplatz = '' + i + '-' + y + '-' + '01-' + e5; 
+                                if(i < 10 ){
+                                        stellplazt.lagerplatz = '0' + i + '-' + y + '-' + '01-' + '0'+e5; 
+                                    } else if(i > 10 ){
+                                        stellplazt.lagerplatz = '' + i + '-' + '' + y + '-' + '01-' +'0'+ e5; 
+                                    }
+                            
                             stellplazt.static = false; 
                             this.StellPlatze.push(stellplazt);
                             }else{
@@ -50,7 +60,12 @@ export class LagerPlatzGenerator{
                            
                             //lxhxb
                             stellplazt.lagerPlatzVolumen = 120 * 220 * 80;
-                            stellplazt.lagerplatz = '' + i + '-' + y + '-' + '01-' + e5; 
+                                if(i < 10 ){
+                                    stellplazt.lagerplatz = '0' + i + '-' + y + '-' + '01-' + '0'+e5; 
+                                } else if(i > 10 ){
+                                    stellplazt.lagerplatz = '' + i + '-' + '' + y + '-' + '01-' +'0'+ e5; 
+                                }
+                           
                             stellplazt.static = false; 
                             this.StellPlatze.push(stellplazt);
                             }
@@ -60,23 +75,39 @@ export class LagerPlatzGenerator{
                         }
                     }
                     for(let e4 = 0; e4 < 4; e4++){
-                        if(e4 == 0)
+                        if(e4 == 0 && y <= 56)
                         {
                             let stellplazt : LagerPlatztDTO = new LagerPlatztDTO;
                            
                             //lxhxb
                             stellplazt.lagerPlatzVolumen = 120 * 190 * 80;
-                            stellplazt.lagerplatz = '' + i + '-' + y + '-' + '01-' + e4; 
+                            if(i < 10 && y > 9){
+                                stellplazt.lagerplatz = '0' + i + '-' + y + '-' + '01-' + '0'+e4; 
+                            } else if(i > 10 && y < 9){
+                                stellplazt.lagerplatz = '' + i + '-' + '0' + y + '-' + '01-' +'0'+ e4; 
+                            }else if( i < 10 &&  y < 10){
+                                stellplazt.lagerplatz = '0' + i + '-' + '0' + y + '-' + '01-' +'0'+ e4; 
+                            }else{
+                                stellplazt.lagerplatz = '' + i + '-' + y + '-' + '01-' +'0'+ e4; 
+                            }
                             stellplazt.static = true; 
                             this.StellPlatze.push(stellplazt);
                         }
-                      else  if(e4 == 1 || e4 == 2  )
+                      else  if(e4 == 1 && y <= 56 || e4 == 2 && y <= 56 )
                         {
                             let stellplazt : LagerPlatztDTO = new LagerPlatztDTO;
                            
                             //lxhxb
                             stellplazt.lagerPlatzVolumen = 120 * 170 * 80;
-                            stellplazt.lagerplatz = '' + i + '-' + y + '-' + '01-' + e4; 
+                            if(i < 10 && y > 9){
+                                stellplazt.lagerplatz = '0' + i + '-' + y + '-' + '01-' + '0'+e4; 
+                            } else if(i > 10 && y < 9){
+                                stellplazt.lagerplatz = '' + i + '-' + '0' + y + '-' + '01-' +'0'+ e4; 
+                            }else if( i < 10 &&  y < 10){
+                                stellplazt.lagerplatz = '0' + i + '-' + '0' + y + '-' + '01-' +'0'+ e4; 
+                            }else{
+                                stellplazt.lagerplatz = '' + i + '-' + y + '-' + '01-' +'0'+ e4; 
+                            }
                             stellplazt.static = false; 
                             this.StellPlatze.push(stellplazt);
                         }else{
@@ -84,7 +115,15 @@ export class LagerPlatzGenerator{
                            
                             //lxhxb
                             stellplazt.lagerPlatzVolumen = 120 * 220 * 80;
-                            stellplazt.lagerplatz = '' + i + '-' + y + '-' + '01-' + e4; 
+                            if(i < 10 && y > 9){
+                                stellplazt.lagerplatz = '0' + i + '-' + y + '-' + '01-' + '0'+e4; 
+                            } else if(i > 10 && y < 9){
+                                stellplazt.lagerplatz = '' + i + '-' + '0' + y + '-' + '01-' +'0'+ e4; 
+                            }else if( i < 10 &&  y < 10){
+                                stellplazt.lagerplatz = '0' + i + '-' + '0' + y + '-' + '01-' +'0'+ e4; 
+                            }else{
+                                stellplazt.lagerplatz = '' + i + '-' + y + '-' + '01-' +'0'+ e4; 
+                            }
                             stellplazt.static = false; 
                             this.StellPlatze.push(stellplazt);
                         }

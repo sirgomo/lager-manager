@@ -27,7 +27,8 @@ export class ArtLoader{
                 //artike.mhd = new Date(this.getRandomInt(2023,2024), this.getRandomInt(0,11) + 1, this.getRandomInt(0,28) + 1);
              
                 artike.bestand = this.getRandomInt(2,1000);
-                artike.artikelPrice = this.getRandomInt(1,100) + Math.random();
+                artike.artikelPrice = Math.round(( (this.getRandomInt(1,100) + Math.random()) * 100) / 100);
+                artike.verPrice = artike.artikelPrice + artike.artikelPrice * 0.05;
                 arti[i] = artike;
             }else{
                 let artike : ArtikelEntity = new ArtikelEntity();
@@ -43,7 +44,8 @@ export class ArtLoader{
                 artike.artikelFlage = artikelFlage.ALK;
               //  artike.mhd = new Date(this.getRandomInt(2023,2026), this.getRandomInt(0,11) + 1, this.getRandomInt(0,28) + 1);
                 artike.bestand = this.getRandomInt(2,1000);
-                artike.artikelPrice = this.getRandomInt(1,100) + Math.random();
+                artike.artikelPrice = Math.round(( (this.getRandomInt(1,100) + Math.random()) * 100) / 100);
+                artike.verPrice = artike.artikelPrice + artike.artikelPrice * 0.05;
                 arti[i] = artike;
             }
            

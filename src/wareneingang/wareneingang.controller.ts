@@ -6,6 +6,7 @@ import { ArtikelMengeDTO } from 'src/DTO/artikelMengeDTO';
 import { LagerPlatztDTO } from 'src/DTO/lagerPlatztDTO';
 import { WarenBuchungDto } from 'src/DTO/warenBuchungDTO';
 import { WarenEingArticleDTO } from 'src/DTO/warenEingArticleDTO';
+import { LagerPlatzEntity } from 'src/entity/LagerPlatzEntity';
 import { ROLE } from 'src/entity/UserEntity';
 import { WareneingangService } from './wareneingang.service';
 
@@ -25,7 +26,7 @@ export class WareneingangController {
     }
     @Post('/platz')
     @ROLES(ROLE.WARENEINGANG, ROLE.LAGERVERWALTUNG)
-    getPlatzFurArtikel(@Body(ValidationPipe) art: ArtikelMengeDTO):Promise<ArtikelMengeDTO>{
+    getPlatzFurArtikel(@Body(ValidationPipe) art: ArtikelMengeDTO):Promise<LagerPlatzEntity>{
         return this.serv.getPlatz(art);
     }
     @Post()
@@ -36,7 +37,6 @@ export class WareneingangController {
     @Delete(':id/:bestid')
     @ROLES(ROLE.WARENEINGANG, ROLE.LAGERVERWALTUNG)
     deleteArtikel(@Param('id') artid: number, @Param('bestid') bestid:number){
-        console.log(artid + ' bestid ' + bestid);
        return this.serv.delArtikel(artid, bestid);
     }
     @Post('/art')

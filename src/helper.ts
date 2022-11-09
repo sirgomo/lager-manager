@@ -14,10 +14,13 @@ export class Helper{
         let mengeKarton: number = Math.floor(artMenge / minLosMenge);
         let rest :number = artMenge % minLosMenge;
         
-       
+        
         let volMenge : number[][] = new Array();
-        let artTotalVolumen :number = this.getTotalKartonValue( mengeKarton, kartonH, kartonB , kartonL );
-        let lageVolumen = kartonH * 120 * 80;
+      if( rest > 0 && mengeKarton === 0){
+        console.log('jak czesto');
+        volMenge.push([kartonB * kartonH * kartonL, 1]);
+        return volMenge;
+       }
         let maxMengeKartonsOnH : number = Math.floor( (palMaxHcm - 15) / kartonH);
         let paletteVolumen: number = 120 * 80 * 14.5;
         let maxKartonLangeOnL :number = Math.floor(120 / kartonL);
@@ -26,13 +29,16 @@ export class Helper{
         let maxKartonBreiteOnB :number = Math.floor(80 / kartonB);
         let maxKartonProLageLxB: number = maxKartonLangeOnL * maxKartonBreiteOnB;
         let maxKartonProLageBxL: number = maxKartonLangeOnB * maxKartonBreiteOnL;
-        if(120 - maxKartonLangeOnL * kartonL > kartonB){
-            maxKartonProLageLxB += Math.floor(80 / kartonB);
-        }
-        if(80 - maxKartonLangeOnB * kartonL > kartonB){
-            maxKartonProLageBxL += Math.floor(120 / kartonL);
-        }
+        if((120 - maxKartonLangeOnL * kartonL) > kartonB){
+          maxKartonProLageLxB += Math.floor(80 / kartonB);
+          }
+        if((80 - maxKartonBreiteOnL * kartonL) > kartonB){
+          maxKartonProLageBxL += Math.floor(120 / kartonL);
+         }
+
+       //  console.log('maxKartonProLageLxB ' + maxKartonProLageLxB +' i maxKartonProLageBxL '+ maxKartonProLageBxL);
         if(maxKartonProLageBxL > maxKartonProLageLxB){
+          
             while(mengeKarton > 0){
                 let kartons:number = maxKartonProLageBxL * maxMengeKartonsOnH;
                   mengeKarton > kartons ? kartons : kartons = mengeKarton;
@@ -45,7 +51,7 @@ export class Helper{
             }
           
 
-        }else{
+        }else {
             while(mengeKarton > 0){
                 let kartons:number = maxKartonProLageLxB * maxMengeKartonsOnH;
                   mengeKarton > kartons ? kartons : kartons = mengeKarton;
@@ -91,7 +97,7 @@ export class Helper{
       let kartonMengecurrent:number = Math.floor(artikel.bestand / artikel.minLosMenge);
       let kartonNew : number = Math.floor(artMen.menge / artikel.minLosMenge); 
       let volOnStel : number = kartonH * kartonB * kartonL * kartonMengecurrent;
-      let volNeue : number = kartonH * kartonB * kartonL * kartonMengecurrent;
+      let volNeue : number = kartonH * kartonB * kartonL * kartonNew;
 
       return volOnStel + volNeue;
     }

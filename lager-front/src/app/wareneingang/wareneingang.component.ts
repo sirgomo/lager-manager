@@ -64,7 +64,6 @@ export class WareneingangComponent implements OnInit {
     });
   }
   async getAritkles(nr: number){
-    console.log(nr);
      return await this.warenServi.getArtikles(nr).subscribe(data=>{
       this.artikles.splice(0, this.artikles.length);
       if(data != undefined){
@@ -109,14 +108,22 @@ export class WareneingangComponent implements OnInit {
 
 
    return await this.warenServi.getPlatz(tmp).subscribe(data=>{
+    console.log(data);
+      if(this.lagerPlatz !== undefined){
+        this.lagerPlatz.id = data.id;
+        this.lagerPlatz.lagerplatz = data.lagerplatz;
+        if(data.artikelMenge === null){
+          this.lagerPlatz.artikelMenge = 0;
+        }else if( data.artikelMenge > 0){
+          this.lagerPlatz.artikelMenge = data.artikelMenge;
+        }
+      }
 
-      this.lagerPlatz = data;
       console.log('lager przed '+ JSON.stringify(this.lagerPlatz));
       if(this.lagerPlatz !== undefined){
+
         this.lagerPlatz.artikelMenge += this.currentArtikelMenge;
-        if(this.lagerPlatz.artikelMenge === null){
-          this.lagerPlatz.artikelMenge = this.currentArtikelMenge;
-        }
+
         this.lagerPlatz.palettenTyp = this.paletteTyp;
         if(this.mhd !== undefined){
           this.lagerPlatz.mhd = this.mhd;

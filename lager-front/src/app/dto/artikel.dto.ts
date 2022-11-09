@@ -9,6 +9,7 @@
     bestand!: number;
     artikelFlage!: artikelFlage;
     artikelPrice!: number;
+    verPrice!: number;
  }
  export enum artikelFlage{
   FASS = 'FASS',

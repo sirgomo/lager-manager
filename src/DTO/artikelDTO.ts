@@ -28,6 +28,9 @@ export class ArtikelDTO{
     @IsNotEmpty()
     @IsNumber()
     artikelPrice: number;
+    @IsNotEmpty()
+    @IsNumber()
+    verPrice: number;
     
     
 }

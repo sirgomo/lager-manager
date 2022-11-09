@@ -29,7 +29,7 @@ export class ArtService {
     
     }
     async getAllArticel():Promise<ArtikelEntity[]>{
-     //  this.generateArtikles();
+      // this.generateArtikles();
         try {
             return await this.repo.find();
         }

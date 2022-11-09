@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ArtikelMengeDTO } from 'src/DTO/artikelMengeDTO';
 import { LagerPlatztDTO } from 'src/DTO/lagerPlatztDTO';
 import { WarenEingArticleDTO } from 'src/DTO/warenEingArticleDTO';
+import { LagerPlatzEntity } from 'src/entity/LagerPlatzEntity';
 import { WarenEingangEntity } from 'src/entity/WarenEingangEntity';
 import { LagerService } from 'src/lager/lager.service';
 import { Repository } from 'typeorm';
@@ -56,7 +57,7 @@ export class WareneingangService {
             throw new Error('Etwas ist schieff, kann nicht eingegeben artikel löschen');
         }
     }
-    async getPlatz(art: ArtikelMengeDTO){
+    async getPlatz(art: ArtikelMengeDTO):Promise<LagerPlatzEntity>{
         return await this.lagerSerr.getPlatzFurArtikel(art);
     }
     async lageEs(art: LagerPlatztDTO){
