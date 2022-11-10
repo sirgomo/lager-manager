@@ -14,7 +14,7 @@
 <div class="mt-2 col-md-12"></div>
 <div class="row " *ngIf="show === 1">
   <div class="col-md-11">
-    <input type="search" class="form-control input-lg rounded" [ngModel]="searchModel" name="searchModel" placeholder = "gibt artikel name, id, oder stellplatz " id="" (ngModelChange)="onSearch($event)">
+    <input type="search" class="form-control input-lg rounded" autocomplete="off" [ngModel]="searchModel" name="searchModel" placeholder = "gibt artikel name, id, oder stellplatz " id="" (ngModelChange)="onSearch($event)">
     {{searchModel}}
   </div>
   <div class="col">
@@ -54,7 +54,7 @@
         </thead>
         <tbody>
 
-          <tr  *ngFor="let post of lagerPlatze; let i = index; trackBy : artikelTrackBy;" class="hidden" (click)="createUpdateLagerPlatz(i)">
+          <tr  *ngFor="let post of (lagerPlatze ? lagerPlatze.slice(0, 200):[]); let i = index; trackBy : artikelTrackBy;" class="hidden" (click)="createUpdateLagerPlatz(i)">
             <td data-name="lagerplatz">
               {{ post?.lagerplatz }}
           </td>

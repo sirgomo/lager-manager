@@ -6,7 +6,7 @@ import { LagerPlatztDto, PALETTENTYP } from '../dto/lagerPlatz.dto';
 import { HelperService } from '../helper.service';
 import { LagerService } from './lager.service';
 import { DatePipe } from '@angular/common';
-import { formatDate } from '@angular/common';
+
 @Component({
   selector: 'app-lager',
   templateUrl: './lager.component.html',
@@ -20,6 +20,7 @@ export class LagerComponent implements OnInit {
   pltzGrosse : string = '';
   searchModel: string = '';
   index :number = -1;
+  downloadKomplet : boolean = false;
   public readonly palettenTyp : typeof PALETTENTYP = PALETTENTYP;
 
 
@@ -44,19 +45,23 @@ export class LagerComponent implements OnInit {
     this.getStellpletze();
   }
   async getStellpletze(){
-
+    let LagerPlatztDto: LagerPlatztDto[] = new Array();
+    this.downloadKomplet = false;
     this.lagerPlatze.splice(0, this.lagerPlatze.length);
-    await this.lagerServ.getAllStellpletze().subscribe(data=> {
-      data.forEach(platz => {
-        this.lagerPlatze.push(platz);
-      });
+    await this.lagerServ.getAllStellpletze().subscribe(data=>{
+      for(let i = 0; i !== data.length; i++){
+        this.lagerPlatze.push(data[i]);
+      }
       this.show = 1;
+      this.downloadKomplet = true;
     });
+
+
   }
   artikelTrackBy(index:number, lager: LagerPlatztDto)
   {
     try{
-      return lager.artId;
+      return this.lagerPlatze[index];
     }catch(err){
       return err;
     }
@@ -103,9 +108,10 @@ export class LagerComponent implements OnInit {
     this.show = 1;
     this.index = -1;
   }
-  onSearch(was: string){
-
-      this.lagerPlatze = this.helper.onSearchPlatz(was, this.lagerPlatze);
+  async onSearch(was: string){
+  if(this.downloadKomplet){
+    this.lagerPlatze = await this.helper.onSearchPlatz(was, this.lagerPlatze);
+  }
 
   }
   deletePlatz(platz : LagerPlatztDto){
