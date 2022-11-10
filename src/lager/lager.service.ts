@@ -38,29 +38,37 @@ export class LagerService {
                 artikels.push(a);
             });
         for(let i = 0; i< artikels.length; i++){
-            await this.getPlatzFurArtikel(artikels[i]);
+            await this.genPlatzFurArtikel(artikels[i]);
         }
       
         
     }
     async getStellpletze(){
         try{
-      //    await  this.genereLagaPlatze();
-     //  await this.lagerArtikels();
+            if(this.helper.generateLager){
+                await  this.genereLagaPlatze();
+            }
+            if(this.helper.fullLageraus){
+                await this.lagerArtikels();
+            }
             let lagerPlatz: LagerPlatztDTO[] = new Array();
+          
+        if(!this.helper.generateLager && !this.helper.fullLageraus){
+           
          
         
             await this.repo.query(`SELECT lagerplatz.*, artikel.name FROM lagerplatz LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId ORDER BY ISNULL(artId) ASC`)
             .then(data => {
                 data.forEach(element => {
-                   let tmp : LagerPlatztDTO = new LagerPlatztDTO();
+                    
+                    let tmp : LagerPlatztDTO = new LagerPlatztDTO();
                    Object.assign(tmp, element);
                    lagerPlatz.push(tmp);
                 });
               
             })
             
-         
+        }
             return lagerPlatz;
         }catch( err){
             throw new Error("problem mit lager service, lagerservice kann nicht lagerplatz machen");
@@ -68,7 +76,7 @@ export class LagerService {
     }
     async createLagerPlatz(lagerplatz : LagerPlatztDTO):Promise<LagerService>{
         try{
-          if(lagerplatz.artId !== null){
+          if(lagerplatz.artId !== null && isFinite(lagerplatz.artId)){
             let tmpArt : ArtikelDTO = new ArtikelDTO();
            tmpArt = await this.artServ.getArtikel(lagerplatz.artId);
            lagerplatz.einheit = tmpArt.basisEinheit;
@@ -161,8 +169,8 @@ export class LagerService {
         }
     }
     //generator  
-   /* async getPlatzFurArtikel(artMen: ArtikelMengeDTO){
-        try{
+    async genPlatzFurArtikel(artMen: ArtikelMengeDTO){
+       
            let lagerPlatze : LagerPlatzEntity[] = new Array();
             let volMenge : number[][] = new Array();
             let artikel :ArtikelDTO = new ArtikelDTO();
@@ -179,7 +187,7 @@ export class LagerService {
              
            //}, err=>{ console.log( err)});
            for(let i = 0; i < volMenge.length; i++){
-           
+           try{
             //if(neue){
              if(i === 0){
             let tmps =  await this.repo.findOne({select: {'id':true, 'lagerplatz': true,'artId': true, 'artikelMenge':true , 'lagerPlatzVolumen': true, 'static':true}, where: {'artId': IsNull(), 
@@ -191,7 +199,7 @@ export class LagerService {
                  tmps.palettenTyp = PALETTENTYP.EU;
                 await this.repo.save(tmps);
                  cont++;
-                   lagerPlatze.push(  tmps);
+                  
               
             }else{
              if(artMen.palete !== PALETTENTYP.KEINPALETTE){
@@ -203,43 +211,25 @@ export class LagerService {
                  tmps.einheit = artikel.basisEinheit;
                  tmps.palettenTyp = PALETTENTYP.EU;
                await  this.repo.save(tmps);
-                 lagerPlatze.push( tmps);
+               
                  cont++;
             
-             }else{
-                 let tmp : LagerPlatzEntity = new LagerPlatzEntity();
-               
-                 tmp = await this.repo.findOneBy({'artId': artMen.artikelId, 'static': true});
-                 if(this.helper.getVolumenNeueUndAlt(artikel, artMen) < tmp.lagerPlatzVolumen &&
-                 artMen.mhd === undefined || this.helper.getVolumenNeueUndAlt(artikel, artMen) < tmp.lagerPlatzVolumen &&
-                 artMen.mhd === tmp.mhd ){
-                   lagerPlatze.push( tmp);
-                 }else{
-                       await this.repo.findOne({select: {'id':true, 'lagerplatz': true,'artId': true, 'artikelMenge':true ,'lagerPlatzVolumen': true, 'static':true}, where: {'artId': IsNull(), 
-                     'lagerPlatzVolumen': MoreThanOrEqual(volMenge[i][0]), 'static':true}, order:{'lagerPlatzVolumen': 'ASC'}}).then(data=>{
-                        lagerPlatze.push( data);
-                     }, err=>{
-                         console.log(err);
-                       //  return err;
-                     });
-                 }
-               
- 
+             
              }
             }
          }
-     }
+        
+        catch(err){
+            console.log(err);
+        }
+     
      console.log('volmenge '+ JSON.stringify( volMenge) + ' artikel '+artikel.artikelId  + ' cont '+cont  );
     // await this.repo.create(lagerPlatze);
     // await this.repo.save(lagerPlatze);
     //await console.log(JSON.stringify(lagerPlatze));
-         return  new LagerPlatzEntity();
-         }catch( err){
-             throw new Error(" Cant find lagerplatz fur artikel " + err);
-             
-         }
-       
-    }*/
+    }   
+    }  
+    }
     //koniec generatora
   
 }

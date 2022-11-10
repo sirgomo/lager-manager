@@ -1,4 +1,4 @@
-import { Column, Entity,  ManyToOne,  PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity,  ManyToOne,  OneToMany,  PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { DispoEntity } from "./DispoEntity";
 import { KommisioDetailsEntity } from "./KommisioDetailsEntity";
 import { SpeditionEntity } from "./SpeditionEntity";
@@ -25,8 +25,8 @@ spedition : number;
 versorungId : string;
 
 
-@ManyToOne(()=> KommisioDetailsEntity, (kommisioDetails) => kommisioDetails.kommlist)
-kommDetails : KommisioDetailsEntity;
+@OneToMany(()=> KommisioDetailsEntity, (kommisioDetails) => kommisioDetails.kommlist)
+kommDetails : KommisioDetailsEntity[];
 
 }
 export enum KOMMISIONSTATUS{

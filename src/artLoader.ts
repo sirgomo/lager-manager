@@ -4,7 +4,7 @@ import { ArtikelEntity, artikelFlage } from "./entity/ArtikelEntity";
 import { UiidEntity } from "./entity/UiidEntity";
 
 export class ArtLoader{
-
+    public gener : boolean = false;
     //constructor(private servi : ArtService){}
     servi : ArtService;
    public makeArtikels() : ArtikelEntity[]{

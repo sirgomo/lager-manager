@@ -12,25 +12,16 @@ export class KomissionierController {
     constructor(private komSercive : KommissionierService){}
 
     @Get('getall')
-    @ROLES(ROLE.VERKAUF)
+    @ROLES(ROLE.KOMMISIONIER)
     getAllkommissionierungen(){
-        return this.komSercive.getAllKomisionirungen();
+      
     }
     @Get()
-    @ROLES(ROLE.VERKAUF)
+    @ROLES(ROLE.KOMMISIONIER)
     getAllkommissionierungenById(@Req() req : any){
-        return this.komSercive.getAllKomissionierungenByVerkaufer(req.user.id);
+       
     }
-    @Post()
-    @ROLES(ROLE.VERKAUF)
-    createKommiss(@Body(ValidationPipe) komm : KomissDTO, @Req() req : any){
-        return this.komSercive.createKommiss(komm, req.user.id);
-    }
-    @Delete(':id')
-    @ROLES(ROLE.VERKAUF)
-    deleteKommis(@Param('id') id:number, @Req() req: any){
-        return this.komSercive.deleteKomm(id, req.user.id);
-    }
+ 
     
 
 }

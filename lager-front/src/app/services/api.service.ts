@@ -37,7 +37,7 @@ export class ApiService {
   }*/
   login(user: UserDTO){
    this.http.post<any>(`${this.API_URL}auth`, user)
-   .subscribe((res : {token :string }) => {
+   .subscribe( (res : {token :string }) => {
     this.token = res.token;
     if(this.token){
       this.toast.success('login success', 'redirect now....', {
@@ -47,6 +47,7 @@ export class ApiService {
           this.jwtToken$.next(this.token);
           localStorage.setItem('act', btoa(this.token));
           localStorage.setItem('role', this.getRole().toString());
+
           switch (this.getRole()) {
             case 'VERKAUF':
               this.router.navigateByUrl('verkauf').then();
@@ -76,6 +77,7 @@ export class ApiService {
     this.jwtToken$.next(this.token);
     localStorage.removeItem('act');
     localStorage.removeItem('role');
+    localStorage.removeItem('myId');
     this.toast.success('logout success', '', {
       timeOut: 600,
       positionClass: 'toast-top-center'
@@ -86,6 +88,7 @@ export class ApiService {
   }
   public getRole(){
     const jwtPayload : {username : string, role : string, id : number }  = jwt_decode(this.token);
+    localStorage.setItem('myId', jwtPayload.id.toString());
    return jwtPayload.role;
   }
 }

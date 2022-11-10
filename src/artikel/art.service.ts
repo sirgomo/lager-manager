@@ -29,7 +29,10 @@ export class ArtService {
     
     }
     async getAllArticel():Promise<ArtikelEntity[]>{
-      // this.generateArtikles();
+        if(this.artLoader.gener){
+            this.generateArtikles();
+        }
+       
         try {
             return await this.repo.find();
         }

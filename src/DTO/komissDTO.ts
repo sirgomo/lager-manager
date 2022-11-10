@@ -20,5 +20,6 @@ export class KomissDTO{
     spedition : number;
     @IsNotEmpty({message: 'Versorung id'})
     versorungId : string;
-    kommDetails : KommisioDetailsEntity;
+    @IsOptional()
+    kommDetails : KommisioDetailsEntity[];
 }

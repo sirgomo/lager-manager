@@ -2,7 +2,10 @@ import { ArtikelDTO } from "./DTO/ArtikelDTO";
 import { ArtikelMengeDTO } from "./DTO/artikelMengeDTO";
 
 export class Helper{
-
+  //1
+  public generateLager : boolean = false;
+  //2
+  public fullLageraus: boolean = false;
   public  getPaletenVolumen(artMenge: number, grosse: string, minLosMenge: number, palMaxHcm: number ){
         let paleteMaxVolumen : number = 120 * 80 * palMaxHcm;
         let artGross : string[] = new Array();

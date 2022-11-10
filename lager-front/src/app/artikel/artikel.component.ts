@@ -32,7 +32,8 @@ export class ArtikelComponent implements OnInit {
     minLosMenge: Number,
     bestand: Number,
     artikelFlage: artikelFlage,
-    artikelPrice: Number
+    artikelPrice: Number,
+    verPrice: Number
    });
    //artikel index 0.1 if new or index
    this.index = 0.1;

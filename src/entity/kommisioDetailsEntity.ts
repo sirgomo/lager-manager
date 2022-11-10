@@ -21,9 +21,9 @@ palettennr : number;
  (ArtikelEntity)=> ArtikelEntity.kommisioDetail, {cascade : true })
 artikelList : ArtikelEntity[];
 
-@OneToMany(()=> KommissionirungEntity, 
+@ManyToOne(()=> KommissionirungEntity, 
 (KommissionirungEntity)=> KommissionirungEntity.kommDetails, {cascade: true})
-kommlist : KommissionirungEntity[];
+kommlist : KommissionirungEntity;
 
 }
 export enum ARTIKELSTATUS{

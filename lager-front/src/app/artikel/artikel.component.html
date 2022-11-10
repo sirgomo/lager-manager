@@ -1,13 +1,13 @@
 <div class="container">
   <div class="mt-2 col-md-12"></div>
-  <div class="row ${1| ,row-cols-2,row-cols-3, auto,justify-content-md-center,|}">
-    <div class="col-md-4 well border text-center icons rounded"  (click)="getArtikles()">
+  <div class="row clearfix justify-content-center">
+    <div class="col-md-3 well border text-center icons rounded px-md-5"  (click)="getArtikles()">
       Artikel List
   </div>
-    <div class="col-md-4 well border text-center icons rounded"   [routerLink]="['/datenpflege']" routerLinkActive="router-link-active" >
+    <div class="col-md-3 well border text-center icons rounded px-md-5"   [routerLink]="['/datenpflege']" routerLinkActive="router-link-active" >
     Speditors / Dispositors
 </div>
-  <div class="col-md-4 well border text-center icons rounded"  (click)="newArtikel()" >
+  <div class="col-md-3 well border text-center icons rounded px-md-5"  (click)="newArtikel()" >
       Neue Artikel
   </div>
   </div>
@@ -78,6 +78,9 @@
     <div class="mb-3">
       <label for="" class="form-label"> Artikel uid</label>
       <textarea formControlName="uids" class="form-control" value="uids" id="" rows="3" required></textarea>
+      <p class="form-text text-muted small">
+        Komma getrent!
+      </p>
     </div>
    </div>
 
@@ -118,15 +121,22 @@
     </div>
 
     <div class="col-md-4">
-      <label for="validationCustom02" class="form-label">Artikel Flage typ </label>
+      <label for="artikelFlage" class="form-label">Artikel Flage typ </label>
       <input formControlName="artikelFlage" type="text" class="form-control" id="validationCustom02" value="artikelFlage" required>
       <div class="valid-feedback">
         Schein gut zu sein
       </div>
     </div>
     <div class="col-md-4">
-      <label for="validationCustom02" class="form-label">Artikel Price </label>
+      <label for="artikelPrice" class="form-label">Artikel Price </label>
       <input formControlName="artikelPrice" type="number" class="form-control" id="validationCustom02" value="artikelPrice" required>
+      <div class="valid-feedback">
+        Schein gut zu sein
+      </div>
+    </div>
+    <div class="col-md-4">
+      <label for="verPrice" class="form-label">Artikel Verkauf price </label>
+      <input formControlName="verPrice" type="number" class="form-control" id="verPrice" value="verPrice" required>
       <div class="valid-feedback">
         Schein gut zu sein
       </div>

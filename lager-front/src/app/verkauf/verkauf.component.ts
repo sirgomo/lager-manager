@@ -32,9 +32,9 @@ kommStatusChange(id: number){
 
 }
 
-alleKommissionierungen(){
+async alleKommissionierungen(){
   this.komiss.splice(0, this.komiss.length);
-  this.serv.getAll().subscribe(res =>{
+  await this.serv.getAll().subscribe(res =>{
     res.forEach(kom =>{
       this.komiss.push(kom);
     });
@@ -44,13 +44,14 @@ alleKommissionierungen(){
 createKommissionirung(){
  this.router.navigateByUrl('verkauf/new').then();
 }
-meinKommissionierungen(){
+async meinKommissionierungen(){
   this.komiss.splice(0, this.komiss.length);
-this.serv.getMeine().subscribe(res => {
-  res.forEach(kom =>{
-    this.komiss.push(kom);
-  });
-});
+console.log('id '+Number(localStorage.getItem('myId')));
+   await this.serv.getAllByVerkufer(Number(localStorage.getItem('myId'))).subscribe(data=>{
+    data.forEach(komm =>{
+      this.komiss.push(komm);
+    });
+   });
 }
 
 
