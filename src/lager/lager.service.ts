@@ -68,7 +68,14 @@ export class LagerService {
     }
     async createLagerPlatz(lagerplatz : LagerPlatztDTO):Promise<LagerService>{
         try{
-           console.log(lagerplatz);
+          if(lagerplatz.artId !== null){
+            let tmpArt : ArtikelDTO = new ArtikelDTO();
+           tmpArt = await this.artServ.getArtikel(lagerplatz.artId);
+           lagerplatz.einheit = tmpArt.basisEinheit;
+           if(lagerplatz.palettenTyp === PALETTENTYP.KEINPALETTE){
+            lagerplatz.palettenTyp = PALETTENTYP.EU;
+           }
+          }
             await this.repo.create(lagerplatz);
             return await this.repo.save(lagerplatz)
             .then(data=>{

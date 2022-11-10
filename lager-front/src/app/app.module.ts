@@ -26,6 +26,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
 import { CreateKommisionierungComponent } from './create-kommisionierung/create-kommisionierung.component';
 import { DatenpflegeComponent } from './datenpflege/datenpflege.component';
+import { LoaderComponent } from './loader/loader.component';
+import { LaderInterceptorInterceptor } from './loader/lader-interceptor.interceptor';
 
 
 
@@ -45,7 +47,8 @@ import { DatenpflegeComponent } from './datenpflege/datenpflege.component';
     WareneingangComponent,
     WarenebuchungComponent,
     CreateKommisionierungComponent,
-    DatenpflegeComponent
+    DatenpflegeComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
@@ -73,6 +76,10 @@ import { DatenpflegeComponent } from './datenpflege/datenpflege.component';
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,
+    multi: true
+  }, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: LaderInterceptorInterceptor,
     multi: true
   }],
   bootstrap: [AppComponent]

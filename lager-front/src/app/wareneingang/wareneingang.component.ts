@@ -41,14 +41,14 @@ export class WareneingangComponent implements OnInit {
     this.getBuchungen();
   }
   async getBuchungen(){
-    this.getDispositors();
+   await this.getDispositors();
+     this.buchungen.splice(0, this.buchungen.length);
     await this.warenServi.getAllLiferungen().subscribe(data=>{
-      if(data) this.buchungen.splice(0, this.buchungen.length);
-      data.forEach(buch=>{
-        if(buch.eingebucht && buch.artikelsGebucht){
-          this.buchungen.push(buch);
+      for(let i = 0; i !== data.length; i++){
+        if(data[i].eingebucht && data[i].artikelsGebucht){
+          this.buchungen.push(data[i]);
         }
-      });
+      }
       this.currentLiferung = -1;
       this.show = 1;
     });
