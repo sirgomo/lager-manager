@@ -46,6 +46,12 @@ export class VerkaufService {
             throw new Error("Etwas ist schif gelaufen in Komiss Service on createKomm " + err);
         }
     }
+    async addArtikelToKommiss(){
+        //artikelid
+        //art menge
+        //kommid
+
+    }
    async getArtikels(){
     let art : ArtikelKommissDTO[] = new Array();
     await this.repoLager.getArtiklesForKommiss().then(data=>{
