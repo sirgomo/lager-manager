@@ -1,13 +1,13 @@
 <div class="container">
   <div class="mt-2 col-md-12"></div>
   <div class="row clearfix justify-content-center">
-      <div class="col-md-3 border text-center icons px-md-5 well rounded" style="cursor: pointer;" (click)="createKommissionirung(-1)">
+      <div class="col-md-3 border border-3 border-primary text-center icons well rounded px-md-5" style="cursor: pointer;" (click)="createKommissionirung(-1)">
           Neue Kommissionirung
       </div>
-      <div class="col-md-3 border text-center icons px-md-5 well rounded" style="cursor: pointer;" (click)="meinKommissionierungen()">
+      <div class="col-md-3 border border-3 border-primary text-center icons well rounded px-md-5" style="cursor: pointer;" (click)="meinKommissionierungen()">
        Meine Kommissionierungen
       </div>
-      <div class="col-md-3 border text-center icons px-md-5 well rounded" style="cursor: pointer;" (click)="alleKommissionierungen()">
+      <div class="col-md-3 border border-3 border-primary text-center icons well rounded px-md-5" style="cursor: pointer;" (click)="alleKommissionierungen()">
       Alle Kommissionierungen
       </div>
   </div>
@@ -49,26 +49,26 @@
       </thead>
       <tbody>
 
-        <tr  *ngFor="let post of komiss; let i= index" id='addr0' data-id="0" class="hidden" (click)="createKommissionirung(i)">
-          <td data-name="name">
+        <tr  *ngFor="let post of komiss; let i= index" id='addr0' data-id="0" class="hidden" >
+          <td data-name="komm id" (click)="createKommissionirung(i)" style="cursor: pointer;">
             {{ post.id }}
         </td>
-        <td data-name="mail">
+        <td data-name="verkauferid" (click)="createKommissionirung(i)" style="cursor: pointer;">
           {{ post.verkauferId }}
         </td>
-        <td data-name="desc">
+        <td data-name="maxPallhoher" (click)="createKommissionirung(i)" style="cursor: pointer;">
           {{ post.maxPalettenHoher }}
         </td>
-        <td data-name="desc">
+        <td data-name="LiferDatum" (click)="createKommissionirung(i)" style="cursor: pointer;">
           {{ post.gewunschtesLieferDatum | date : 'dd-MM-yyyy' }}
         </td>
-        <td data-name="desc">
+        <td data-name="Dispositor"  (click)="createKommissionirung(i)" style="cursor: pointer;">
           {{ post.dispositorId }}
         </td>
-        <td data-name="desc">
+        <td data-name="SPeditor"  (click)="createKommissionirung(i)" style="cursor: pointer;">
           {{ post.spedition }}
         </td>
-        <td data-name="desc">
+        <td data-name="Versorgungid"  (click)="createKommissionirung(i)" style="cursor: pointer;">
           {{ post.versorungId }}
         </td>
           <td data-name="sel">

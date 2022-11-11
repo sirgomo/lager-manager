@@ -43,11 +43,9 @@ export class CreateKommisionierungComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.kommissForm.get('verkauferId')?.setValue(this.verkaufer);
-    this.kommissForm.get('kommissStatus')?.setValue(KOMMISIONSTATUS.INBEARBEITUNG);
+
     this.getSpedi();
     this.getDispo();
-    this.kommissForm.get('spedition')?.valueChanges.subscribe(data=>{ this.spediSelected = data});
     this.getArtikle();
     this.getKommFromKommponent();
   }
@@ -116,11 +114,22 @@ export class CreateKommisionierungComponent implements OnInit {
   getKommFromKommponent(){
     let tmpKomm : KomissDTO = new KomissDTO();
     tmpKomm = this.dataDiel.getKomm();
-    if(tmpKomm.id !== 0){
+    if(tmpKomm.id !== undefined && tmpKomm.id !== 0){
       this.kommissForm.setValue(tmpKomm);
       this.kommissForm.get('gewunschtesLieferDatum')?.setValue(new Date(tmpKomm.gewunschtesLieferDatum).toISOString().split('T')[0]);
 
+    }else{
+      this.kommissForm.reset();
+      this.kommissForm.get('verkauferId')?.setValue(this.verkaufer);
+      this.kommissForm.get('kommissStatus')?.setValue(KOMMISIONSTATUS.INBEARBEITUNG);
+      this.kommissForm.get('spedition')?.valueChanges.subscribe(data=>{ this.spediSelected = data});
     }
+  }
+  newKomm(){
+    this.kommissForm.reset();
+      this.kommissForm.get('verkauferId')?.setValue(this.verkaufer);
+      this.kommissForm.get('kommissStatus')?.setValue(KOMMISIONSTATUS.INBEARBEITUNG);
+      this.kommissForm.get('spedition')?.valueChanges.subscribe(data=>{ this.spediSelected = data});
   }
 
 }

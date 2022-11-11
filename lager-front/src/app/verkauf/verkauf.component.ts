@@ -47,8 +47,12 @@ async alleKommissionierungen(){
 createKommissionirung(index:number){
   if(index !== -1){
     this.dataDie.setKomm(this.komiss[index]);
+    this.router.navigateByUrl('verkauf/new').then();
+  }else{
+    this.dataDie.restetKomm();
+    this.router.navigateByUrl('verkauf/new').then();
   }
- this.router.navigateByUrl('verkauf/new').then();
+
 }
 async meinKommissionierungen(){
   this.komiss.splice(0, this.komiss.length);

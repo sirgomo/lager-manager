@@ -16,5 +16,7 @@ public setKomm(komm:KomissDTO){
 getKomm():KomissDTO{
   return this.komm;
 }
-
+restetKomm(){
+  this.komm = new KomissDTO();
+}
 }
