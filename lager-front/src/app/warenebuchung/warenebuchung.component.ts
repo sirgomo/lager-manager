@@ -164,4 +164,6 @@ export class WarenebuchungComponent implements OnInit {
       this.buchungArtikelMenge.splice(id, 1);
     });
   }
+  //TODO
+  //controlle wenn zu viel oder zu wenig verbucht!
 }

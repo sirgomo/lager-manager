@@ -1,4 +1,5 @@
 import { ArtikelDTO } from "./artikel.dto";
+import { KommissDetailsDto } from "./kommissDetails.dto";
 
 export class KomissDTO{
 
@@ -18,7 +19,7 @@ export class KomissDTO{
 
   versorungId! : string;
   artikels!:ArtikelDTO[];
- // kommDetails! : KommisioDetailsEntity;
+  kommDetails! : KommissDetailsDto[];
 }
 export enum KOMMISIONSTATUS{
     INBEARBEITUNG = 'INBEARBEITUNG',

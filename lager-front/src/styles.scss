@@ -7,17 +7,20 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;  }
 
 
 .well:default{
-  background-color: cadetblue;
+  margin: 2px;
 
 }
 .well:hover{
-  background-color: bisque;
+  background-color: rgb(187, 94, 245);
 
 }
 .well{
+  background-color:rgb(221, 212, 228);
   margin: 2px;
   max-width: 350px;
   cursor: pointer;
+
+
 
 }
 

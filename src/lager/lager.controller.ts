@@ -16,10 +16,13 @@ export class LagerController {
     getAllStellplatze(){
         return this.lagerServ.getStellpletze();
     }
+   
    @Post('/art')
    getPlatzFurArtikel(@Body(ValidationPipe) artMen : ArtikelMengeDTO){
     return  this.lagerServ.getPlatzFurArtikel(artMen);
    }
+ 
+
   
    @Post()
    @ROLES(ROLE.LAGERVERWALTUNG)

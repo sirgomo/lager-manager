@@ -11,7 +11,7 @@ id : number;
 verkauferId : number;
 
 @Column()
-maxPalettenHöher : number;
+maxPalettenHoher : number;
 @Column()
 gewunschtesLieferDatum : Date;
 @Column()

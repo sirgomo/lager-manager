@@ -1,7 +1,7 @@
 <div class="container">
   <div class="mt-2 col-md-12"></div>
   <div class="row clearfix justify-content-center">
-      <div class="col-md-3 border text-center icons px-md-5 well rounded" style="cursor: pointer;" (click)="createKommissionirung()">
+      <div class="col-md-3 border text-center icons px-md-5 well rounded" style="cursor: pointer;" (click)="createKommissionirung(-1)">
           Neue Kommissionirung
       </div>
       <div class="col-md-3 border text-center icons px-md-5 well rounded" style="cursor: pointer;" (click)="meinKommissionierungen()">
@@ -49,7 +49,7 @@
       </thead>
       <tbody>
 
-        <tr  *ngFor="let post of komiss" id='addr0' data-id="0" class="hidden">
+        <tr  *ngFor="let post of komiss; let i= index" id='addr0' data-id="0" class="hidden" (click)="createKommissionirung(i)">
           <td data-name="name">
             {{ post.id }}
         </td>
@@ -60,7 +60,7 @@
           {{ post.maxPalettenHoher }}
         </td>
         <td data-name="desc">
-          {{ post.gewunschtesLieferDatum }}
+          {{ post.gewunschtesLieferDatum | date : 'dd-MM-yyyy' }}
         </td>
         <td data-name="desc">
           {{ post.dispositorId }}

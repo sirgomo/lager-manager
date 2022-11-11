@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ArtikelDTO } from './dto/artikel.dto';
+import { ArtikelKommissDto } from './dto/artikelKommiss.dto';
 import { LagerPlatztDto } from './dto/lagerPlatz.dto';
 
 @Injectable({
@@ -8,15 +9,12 @@ import { LagerPlatztDto } from './dto/lagerPlatz.dto';
 export class HelperService {
 
   constructor() { }
-public  onSearch(text : string, artikels : ArtikelDTO[]){
+public  onSearch(text : string, artikels : ArtikelDTO[] ){
+
   if(text === undefined || text.length === 0){
     return artikels;
   }
     let tmpArrNew : ArtikelDTO[] = new Array();
-
-
-
-
    for (let o = 0; o < artikels.length; o++) {
         let tmpArr = Array.from(text);
         let tmpArr1 = Array.from(artikels[o].name);
@@ -42,13 +40,48 @@ public  onSearch(text : string, artikels : ArtikelDTO[]){
 
     }
 
-
       tmpArrNew.forEach(d => {
         artikels.unshift(d);
      })
 return artikels;
  }
 
+ public  onSearchK(text : string, artikels : ArtikelKommissDto[] ){
+
+  if(text === undefined || text.length === 0){
+    return artikels;
+  }
+    let tmpArrNew : ArtikelKommissDto[] = new Array();
+   for (let o = 0; o < artikels.length; o++) {
+        let tmpArr = Array.from(text);
+        let tmpArr1 = Array.from(artikels[o].name);
+
+        let atmp: number = 0;
+
+        for (let i = 0; i < tmpArr.length; i++) {
+          if (tmpArr[i].toLocaleLowerCase().trim() == tmpArr1[i].toLocaleLowerCase().trim()) {
+            atmp += 1;
+          }
+        }
+
+        if (atmp == tmpArr.length && o > 5) {
+           tmpArrNew.push(artikels[o]);
+           artikels.splice(o, 1);
+       }
+       if(isFinite(Number(text)) && o > 5){
+         if(isFinite(Number(text)) && artikels[o].artId === Number(text)){
+           tmpArrNew.push(artikels[o]);
+           artikels.splice(o, 1);
+         }
+       }
+
+    }
+
+      tmpArrNew.forEach(d => {
+        artikels.unshift(d);
+     })
+return artikels;
+ }
  public onSearchPlatz(text : string, platze: LagerPlatztDto[]){
   let tmpArrNew : LagerPlatztDto[] = new Array();
   if(text === undefined || text.length === 0){

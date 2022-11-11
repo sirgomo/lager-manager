@@ -1,17 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DataDilerService } from '../data-diler.service';
 import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
 import { VerkaufService } from './verkauf.service';
 
 @Component({
   selector: 'app-verkauf',
   templateUrl: './verkauf.component.html',
-  styleUrls: ['./verkauf.component.scss']
+  styleUrls: ['./verkauf.component.scss'],
+
 })
 export class VerkaufComponent implements OnInit {
   komiss : KomissDTO[] = new Array();
   kommStatus: typeof KOMMISIONSTATUS;
-  constructor(private serv : VerkaufService, private router : Router) {
+
+  constructor(private serv : VerkaufService, private router : Router, private dataDie: DataDilerService) {
     this.kommStatus = KOMMISIONSTATUS;
    }
 
@@ -28,7 +31,7 @@ kommStatusChange(id: number){
     if(data.id == id){
       console.log('id ' + id + ' new status '+ data.kommissStatus + ' status in data ' + data.kommissStatus );
     }
-  })
+  });
 
 }
 
@@ -41,7 +44,10 @@ async alleKommissionierungen(){
   });
 }
 
-createKommissionirung(){
+createKommissionirung(index:number){
+  if(index !== -1){
+    this.dataDie.setKomm(this.komiss[index]);
+  }
  this.router.navigateByUrl('verkauf/new').then();
 }
 async meinKommissionierungen(){

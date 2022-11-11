@@ -231,5 +231,34 @@ export class LagerService {
     }  
     }
     //koniec generatora
+    async getArtiklesForKommiss(){
+        console.log('wykonuje');
+       return await this.repo.query(`SELECT artId, SUM(artikelMenge) AS total, 
+        artikel.name, artikel.artikelPrice, artikel.verPrice, artikel.minLosMenge, artikel.gewicht, artikel.basisEinheit,
+        artfehlend.artikelid AS fehlArtikelId, artfehlend.menge AS fehlArtikelMenge, SUM(artreservation.menge) AS resMenge
+        FROM lagerplatz LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId
+        LEFT JOIN artfehlend ON lagerplatz.artId = artfehlend.artikelid
+        LEFT JOIN artreservation ON lagerplatz.artId = artreservation.artikelId
+        WHERE lagerplatz.artId IS NOT NULL group by lagerplatz.artId `).then(data=>{
+           
+          return data;
+        }, err=>{
+            console.log(err);
+        });
+    }
+    async getCurrentArtiMenge(artid: number){
+        return await this.repo.query(`SELECT artId, SUM(artikelMenge) AS total, 
+        artikel.name, artikel.artikelPrice, artikel.verPrice, artikel.minLosMenge, artikel.gewicht, artikel.basisEinheit,
+        artfehlend.artikelid AS fehlArtikelId, artfehlend.menge AS fehlArtikelMenge, SUM(artreservation.menge) AS resMenge
+        FROM lagerplatz LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId
+        LEFT JOIN artfehlend ON lagerplatz.artId = artfehlend.artikelid
+        LEFT JOIN artreservation ON lagerplatz.artId = artreservation.artikelId
+        WHERE lagerplatz.artId = '${artid}' group by lagerplatz.artId `).then(data=>{
+          
+          return data[0];
+        }, err=>{
+            console.log(err);
+        });
+    }
   
 }

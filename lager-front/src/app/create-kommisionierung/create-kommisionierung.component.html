@@ -1,34 +1,149 @@
 <div class="container">
   <div class="mt-2 col-md-12"></div>
   <div class="row clearfix justify-content-center">
-      <div class="col-md-3 border text-center icons well rounded px-md-5" style="cursor: pointer;" >
+      <div class="col-md-3 border border-3 border-primary text-center icons well rounded px-md-5" style="cursor: pointer;" >
           Neue Kommissionirung
       </div>
-      <div class="col-md-3 border text-center icons well rounded px-md-5 " style="cursor: pointer;" [routerLink]="['/verkauf']" routerLinkActive="router-link-active" >
+      <div class="col-md-3 border border-3 border-primary text-center icons well rounded px-md-5" style="cursor: pointer;" [routerLink]="['/verkauf']" routerLinkActive="router-link-active" >
        Meine Kommissionierungen
       </div>
-      <div class="col-md-3 border text-center icons well rounded px-md-5" style="cursor: pointer;" [routerLink]="['/verkauf']" routerLinkActive="router-link-active">
+      <div class="col-md-3 border border-3 border-primary text-center icons well rounded px-md-5" style="cursor: pointer;" [routerLink]="['/verkauf']" routerLinkActive="router-link-active">
       Alle Kommissionierungen
       </div>
   </div>
   <div class="mt-2 col-md-12"></div>
-  <form>
-    <div class="form-row">
-      <div class="col">
-        <input type="text" class="form-control" placeholder="Kommissionier Name">
+  <form [formGroup]="kommissForm">
+    <input type="hidden" formControlName="id" name="id">
+    <div class="row">
+     <div class="col  ">
+      <div class="mb-3">
+        <label for="verkauferId" class="form-label">Verkaufer</label>
+        <input type="number"
+          class="form-control" formControlName="verkauferId" name="verkauferId" id="verkauferId" aria-describedby="helpId" placeholder="hier sollte benutzer nr sein" (ngValue)="verkaufer">
+        <small id="helpId" class="form-text text-muted">Verkaufer id</small>
+
       </div>
-      <div class="col">
-        <input type="text" class="form-control" placeholder="Gewunschtes Liefer Datum">
+     </div>
+     <div class="col  ">
+      <div class="mb-3">
+        <label for="maxPalettenHoher" class="form-label">Maximale Palettenhöhe </label>
+        <input type="number"
+          class="form-control" formControlName="maxPalettenHoher" name="maxPalettenHoher" id="maxPalettenHoher" aria-describedby="helpId" placeholder="">
+        <small id="helpId" class="form-text text-muted">Wie hoch darf die Palette sein in cm.</small>
       </div>
-      <div class="col">
-        <input type="text" class="form-control" placeholder="Dispositor">
+     </div>
+     <div class="col  ">
+      <div class="mb-3">
+        <label for="gewunschtesLieferDatum" class="form-label">Gewünschte Lieferdatum</label>
+        <input type="date"
+          class="form-control" formControlName="gewunschtesLieferDatum" name="gewunschtesLieferDatum" id="gewunschtesLieferDatum" aria-describedby="helpId" placeholder="">
+        <small id="helpId" class="form-text text-muted">Wann sollte es gelifert werden</small>
       </div>
-      <div class="col">
-        <input type="text" class="form-control" placeholder="Last name">
-      </div>
-      <div class="col">
-        <input type="text" class="form-control" placeholder="Last name">
-      </div>
+     </div>
     </div>
+    <div class="row">
+      <div class="col  ">
+          <div class="mb-3">
+            <label for="dispositorId" class="form-label">Dispositors</label>
+            <select formControlName="dispositorId" class="form-select form-select-lg" name="dispositorId" id="dispositorId">
+              <option *ngFor="let item of dispo; let i = index" [ngValue]="item.id">{{item.name}}</option>
+            </select>
+            <small id="helpId" class="form-text text-muted" >Select Dispositor</small>
+        </div>
+       </div>
+       <div class="col  ">
+        <div class="mb-3">
+            <label for="" class="form-label">Kommissionierung Status</label>
+            <select formControlName="kommissStatus" class="form-select form-select-lg" name="kommissStatus" id="">
+              <option *ngFor="let item of kommStatus | keyvalue" [ngValue]="item.value" >{{item.value}}</option>
+            </select>
+          <small id="helpId" class="form-text text-muted"> Inbearbeitung, bereit kann man kommissioniren</small>
+        </div>
+       </div>
+       <div class="col  ">
+        <div class="mb-3">
+            <label for="spedition" class="form-label">Spedition</label>
+            <select formControlName="spedition" class="form-select form-select-lg" name="spedition" id="spedition">
+              <option *ngFor="let item of spedi; let i = index" [ngValue]="item.id">{{item.name}}</option>
+            </select>
+            <small id="helpId" class="form-text text-muted" *ngIf="spedi[spediSelected -1] !== undefined"> {{'Max lade gewicht: '+ spedi[spediSelected-1].maxLadeGewicht + ' Max paletten: ' + spedi[spediSelected-1].maxPalettenMenge}}</small>
+        </div>
+       </div>
+    </div>
+     <div class="row">
+          <div class="col-md-6">
+
+            <label for="versorungId" class="form-label">Versorugungs Id</label>
+            <input type="text"
+              class="form-control" formControlName="versorungId" name="versorungId" id="versorungId" aria-describedby="helpId" placeholder="">
+            <small id="helpId" class="form-text text-muted">Gib versorgung id ein</small>
+
+          </div>
+          <div class="col-md-6 mt-2 mr-auto">
+            <div>
+              <label for="versorungId" class="form-label"></label>
+            </div>
+            <button type="submit" id="submitKom" class="btn btn-primary" (click)="saveKommissionierung(kommissForm.value)">Save Kommisionierung</button>
+            <div>
+              <small id="submitKom" class="form-text text-muted">Zuerst speicher kommissionierung </small>
+            </div>
+          </div>
+     </div>
   </form>
+  <div class="mt-2 col-md-12"></div>
+
+  <div class="row " >
+    <div class="col-md-11">
+      <input type="search" class="form-control input-lg rounded" [ngModel]="searchModel" name="searchModel" placeholder = "write artikel name or id" id="" (ngModelChange)="onSearch($event)">
+      {{searchModel}}
+    </div>
+    <div class="col">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+      </svg>
+    </div>
+
+</div>
+<div class="mt-2 col-md-12"></div>
+<div class="table-responsive">
+  <table class="table table-bordered table-hover table-sortable">
+    <thead>
+      <tr>
+        <th scope="col">Artikel id:</th>
+        <th scope="col">Verfugbare Menge</th>
+        <th scope="col">Name</th>
+        <th scope="col">Beschafung Price</th>
+        <th scope="col">Verkauf Price</th>
+        <th scope="col">Min Los Menge</th>
+        <th scope="col">Gewicht</th>
+        <th scope="col">Basis Einheit</th>
+        <th scope="col">Menge</th>
+        <th scope="col">Artikel zufugen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="" *ngFor="let item of (artikels ? artikels.slice(0,200):[]); let i=index; trackBy : artikelTrackBy;">
+        <td>{{item.artId}}</td>
+        <td>{{item.total}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.artikelPrice}}</td>
+        <td>{{item.verPrice}}</td>
+        <td>{{item.minLosMenge}}</td>
+        <td>{{item.gewicht}}</td>
+        <td>{{item.basisEinheit}}</td>
+        <td><div class="mb-3">
+          <label for="" class="form-label"> Artikel Menge</label>
+          <input type="number" [(ngModel)]="artikelMenge" (click)="checkVerfurbarkeit(i)"
+            class="form-control" value="artikelMenge" name="artikelMenge" id="artikelMenge" aria-describedby="helpId" placeholder="">
+          <small id="helpId" class="form-text text-muted">Gibt Menge Ein</small>
+        </div></td>
+        <td><div class="d-grid gap-2">
+          <button type="button" name="" id="" class="btn btn-primary">Add Artikel</button>
+        </div></td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
 </div>
