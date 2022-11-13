@@ -41,4 +41,7 @@ export class VerkaufService {
   addArtikelToKomm(art: AddArtikelKommissDto):Observable<AddArtikelKommissDto>{
     return this.http.post<AddArtikelKommissDto>(this.API_URL + '/addart', art);
   }
+  deletePosInKom(id:number){
+    return this.http.delete(this.API_URL + '/detaId/' + id);
+  }
 }

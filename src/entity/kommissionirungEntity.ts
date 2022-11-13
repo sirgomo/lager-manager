@@ -12,7 +12,7 @@ verkauferId : number;
 
 @Column()
 maxPalettenHoher : number;
-@Column()
+@Column({ type: 'date' })
 gewunschtesLieferDatum : Date;
 @Column()
 dispositorId : number;

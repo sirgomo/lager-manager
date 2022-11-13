@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataDilerService } from '../data-diler.service';
+import { DatenpflegeService } from '../datenpflege/datenpflege.service';
+import { DispositorDTO } from '../dto/dispositor.dto';
 import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
+import { SpeditionDTO } from '../dto/spedition.dto';
 import { VerkaufService } from './verkauf.service';
 
 @Component({
@@ -13,9 +16,13 @@ import { VerkaufService } from './verkauf.service';
 export class VerkaufComponent implements OnInit {
   komiss : KomissDTO[] = new Array();
   kommStatus: typeof KOMMISIONSTATUS;
+  spedi : SpeditionDTO[] = new Array();
+  dispo: DispositorDTO[] = new Array();
 
   constructor(private serv : VerkaufService, private router : Router, private dataDie: DataDilerService) {
     this.kommStatus = KOMMISIONSTATUS;
+    this.spedi = dataDie.getSpeditors();
+    this.dispo = dataDie.getDispositors();
    }
 
   ngOnInit(): void {
@@ -56,7 +63,6 @@ createKommissionirung(index:number){
 }
 async meinKommissionierungen(){
   this.komiss.splice(0, this.komiss.length);
-console.log('id '+Number(localStorage.getItem('myId')));
    await this.serv.getAllByVerkufer(Number(localStorage.getItem('myId'))).subscribe(data=>{
     data.forEach(komm =>{
       this.komiss.push(komm);

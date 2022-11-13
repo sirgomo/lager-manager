@@ -56,6 +56,11 @@ export class VerkaufController {
     deleteKomm(@Param('id') id:number){
        return this.verkService.deleteKomm(id);
     }
+    @Delete('/detaId/:id')
+    @ROLES(ROLE.VERKAUF)
+    deletePositionInKom(@Param('id') id: number){
+        return this.verkService.deleteArtikelFromKomm(id);
+    }
    
     
 }

@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { DataDilerService } from '../data-diler.service';
-import { DatenpflegeService } from '../datenpflege/datenpflege.service';
 import { AddArtikelKommissDto } from '../dto/addArtikelKommiss.dto';
 import { ArtikelKommissDto } from '../dto/artikelKommiss.dto';
 import { DispositorDTO } from '../dto/dispositor.dto';
 import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
-import { KommissDetailsDto } from '../dto/kommissDetails.dto';
+import { ARTIKELSTATUS, KommissDetailsDto } from '../dto/kommissDetails.dto';
 import { SpeditionDTO } from '../dto/spedition.dto';
 import { HelperService } from '../helper.service';
 import { VerkaufService } from '../verkauf/verkauf.service';
@@ -29,10 +29,11 @@ export class CreateKommisionierungComponent implements OnInit {
   artikelMenge: number[] = new Array();
   artikelMengeEdit: number[] = new Array();
   artikelsInKomm: ArtikelKommissDto[] = new Array();
+  artikelStatus: string[] = new Array();
   showArtikelsInKomm :number = 0;
   tmpKomm : KomissDTO = new KomissDTO();
-  constructor(private kommServ: VerkaufService, private fb : FormBuilder, private datenServ: DatenpflegeService
-    ,private helper: HelperService, private dataDiel : DataDilerService, private router: Router) {
+  constructor(private kommServ: VerkaufService, private fb : FormBuilder
+    ,private helper: HelperService, private dataDiel : DataDilerService, private router: Router, private toastr: ToastrService) {
     this.kommissForm = this.fb.group({
       id: Number,
       verkauferId: Number,
@@ -45,27 +46,15 @@ export class CreateKommisionierungComponent implements OnInit {
       kommDetails: KommissDetailsDto
     });
     this.kommStatus = KOMMISIONSTATUS;
+
    }
 
   ngOnInit(): void {
-    this.getSpedi();
-    this.getDispo();
+    this.spedi = this.dataDiel.getSpeditors();
+    this.dispo = this.dataDiel.getDispositors();
     this.getArtikle();
   }
-  async getSpedi(){
-     await this.datenServ.getAllSpeditions().subscribe(data=>{
-     for(let i = 0; i !== data.length; i++){
-      this.spedi.push(data[i]);
-     }
-    });
-  }
-  async getDispo(){
-     await this.datenServ.getAllDispositors().subscribe(data=>{
-      for(let i = 0; i !== data.length; i++){
-        this.dispo.push(data[i]);
-      }
-    });
-  }
+
   async getArtikle(){
     //how many artikels are aviable ?
     // total menge on lager - menge in reservation entity - das was fehlt
@@ -95,8 +84,8 @@ export class CreateKommisionierungComponent implements OnInit {
     return;
   }
   async checkVerfurbarkeit(index:number){
-    console.log('kilked ' + index + 'artikel menge '+ this.artikelMenge);
-    this.artikelMenge[index] = 0;
+
+
    await this.kommServ.getCurrentVerfugbareMenge(this.artikels[index].artId).subscribe(
     data =>{
      let tmp : ArtikelKommissDto = new ArtikelKommissDto();
@@ -126,9 +115,11 @@ export class CreateKommisionierungComponent implements OnInit {
     if(this.tmpKomm.id !== undefined && this.tmpKomm.id !== 0){
       this.kommissForm.reset();
       this.artikelsInKomm.splice(0, this.artikelsInKomm.length);
-      console.log(JSON.stringify(this.tmpKomm));
+
       this.kommissForm.setValue(this.tmpKomm);
       this.kommissForm.get('gewunschtesLieferDatum')?.setValue(new Date(this.tmpKomm.gewunschtesLieferDatum).toISOString().split('T')[0]);
+      this.spediSelected = this.kommissForm.get('spedition')?.getRawValue();
+      this.kommissForm.get('spedition')?.valueChanges.subscribe(data=>{ this.spediSelected = data});
       for(let y = 0; y !== this.tmpKomm.kommDetails.length; y++){
         for(let i = 0; i !== this.artikels.length; i++){
          if(this.tmpKomm.kommDetails[y].artikelId === this.artikels[i].artId){
@@ -136,6 +127,7 @@ export class CreateKommisionierungComponent implements OnInit {
           Object.assign(tmpArti, this.artikels[i]);
           tmpArti.total = this.tmpKomm.kommDetails[y].menge;
           this.artikelsInKomm.push(tmpArti);
+          this.artikelStatus[y] = this.tmpKomm.kommDetails[y].gepackt;
           break;
          }
         }
@@ -156,8 +148,15 @@ export class CreateKommisionierungComponent implements OnInit {
       this.kommissForm.get('spedition')?.valueChanges.subscribe(data=>{ this.spediSelected = data});
   }
 async addArtikelToKomm(index:number, edit:boolean){
+
   let art: AddArtikelKommissDto = new AddArtikelKommissDto();
   if(!edit){
+    if(this.artikelMenge[index] > this.artikels[index].total)
+    {
+      this.toastr.error('Du hast mehr eingegen als verfugba ist, die restliche menge wurde zum besttelung eingegeben!',
+      'Zu wenig', {'timeOut':1500})
+      return;
+    }
     art.artMenge = this.artikelMenge[index];
     art.artikelId = this.artikels[index].artId;
     art.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
@@ -175,7 +174,7 @@ async addArtikelToKomm(index:number, edit:boolean){
     art.artMenge = this.tmpKomm.kommDetails[index].menge;
 
     if(art.artMenge > this.artikelMengeEdit[index]){
-      art.artMenge = -this.artikelMengeEdit[index];
+      art.artMenge = -(art.artMenge - this.artikelMengeEdit[index]);
       this.artikelsInKomm[index].total += art.artMenge;
     }else{
       art.artMenge = this.artikelMengeEdit[index] - art.artMenge;
@@ -204,5 +203,15 @@ showArtikelsinKomm(){
   }else{
     this.showArtikelsInKomm = 0;
   }
+}
+deletePositionInKomm(index:number){
+  this.kommServ.deletePosInKom(this.tmpKomm.kommDetails[index].id).subscribe(
+    data=>{
+      console.log(data);
+      if(data == 1){
+        this.tmpKomm.kommDetails.splice(index,1);
+        this.reasignKomm();
+      }
+    });
 }
 }

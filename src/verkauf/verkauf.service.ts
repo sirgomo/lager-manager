@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { tmpdir } from 'os';
 import { AddArtikelKommissDTO } from 'src/DTO/addArtikelKommissDTO';
 import { ArtikelKommissDTO } from 'src/DTO/artikelKommissDTO';
 import { KomissDTO } from 'src/DTO/KomissDTO';
 import { ArtikelReservationEntity } from 'src/entity/ArtikelReservationEntity';
-import { KommisioDetailsEntity } from 'src/entity/KommisioDetailsEntity';
+import { ARTIKELSTATUS, KommisioDetailsEntity } from 'src/entity/KommisioDetailsEntity';
 import { KommissionirungEntity } from 'src/entity/KommissionirungEntity';
 import { LagerService } from 'src/lager/lager.service';
 import { Repository } from 'typeorm';
@@ -48,9 +49,7 @@ export class VerkaufService {
         }
     }
     async addArtikelToKommiss(art :AddArtikelKommissDTO){
-        //artikelid
-        //art menge
-        //kommid
+      
         let tmp : KommisioDetailsEntity = new KommisioDetailsEntity();
         try{
 
@@ -66,6 +65,7 @@ export class VerkaufService {
         tmp.artikelId = art.artikelId;
         tmp.menge = art.artMenge;
         tmp.kommissId = komm.id;
+        tmp.gepackt = ARTIKELSTATUS.INPACKEN;
         if(art.kommDeatailnr !== null && art.kommDeatailnr !== undefined){
           tmp.id = art.kommDeatailnr;
         }
@@ -154,12 +154,32 @@ export class VerkaufService {
     try{
     
          await this.repoReserv.delete({'kommId':id});
-        
-    
       
       return await (await this.repo.delete({'id':id})).affected;
     }catch(err){
       throw new Error("Etwas ist schieff gelaufen, ich konnte die komm nicht löschen " + err);
+      
+    }
+   }
+   async deleteArtikelFromKomm(id: number){
+    let tmp : KommisioDetailsEntity = new KommisioDetailsEntity();
+    try{
+      await this.repoDetails.findOne({'where':{'id':id}}).then(data=>{
+        if(data != null){
+          tmp = data;
+        }
+      });
+      
+      if(tmp.id == null){
+        return;
+      } 
+       return await this.repoDetails.delete({'id':id}).then(data=> {
+        this.updateResevation(tmp.kommissId, tmp.artikelId, -tmp.menge, tmp.id);
+         return data.affected;
+        }, err=>{console.log('blad '+err)});
+      
+    }catch(err){
+      throw new Error("Etwas ist schieff gegangen als ich wollete position in komm löschen " + err);
       
     }
    }

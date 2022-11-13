@@ -66,7 +66,7 @@
             <select formControlName="spedition" class="form-select form-select-lg" name="spedition" id="spedition">
               <option *ngFor="let item of spedi; let i = index" [ngValue]="item.id">{{item.name}}</option>
             </select>
-            <small id="helpId" class="form-text text-muted" *ngIf="spedi[spediSelected -1] !== undefined"> {{'Max lade gewicht: '+ spedi[spediSelected-1].maxLadeGewicht + ' Max paletten: ' + spedi[spediSelected-1].maxPalettenMenge}}</small>
+            <small id="helpId" class="form-text text-muted"  *ngIf="spedi[spediSelected -1] !== undefined"> {{'Max lade gewicht: '+ spedi[spediSelected-1].maxLadeGewicht + ' Max paletten: ' + spedi[spediSelected-1].maxPalettenMenge}}</small>
         </div>
        </div>
     </div>
@@ -107,13 +107,14 @@
           <th scope="col">Artikel id:</th>
           <th scope="col">Menge in Kommisionierung</th>
           <th scope="col">Name</th>
-          <th scope="col">Beschafung Price</th>
+          <th scope="col">Artikel Status</th>
           <th scope="col">Verkauf Price</th>
           <th scope="col">Min Los Menge</th>
           <th scope="col">Gewicht</th>
           <th scope="col">Basis Einheit</th>
-          <th scope="col">Menge</th>
-          <th scope="col">Neu Menge</th>
+          <th scope="col">Neue Menge</th>
+          <th scope="col">Menge Ändern</th>
+          <th scope="col">Remove Position</th>
         </tr>
       </thead>
       <tbody>
@@ -121,19 +122,21 @@
           <td>{{item.artId}}</td>
           <td>{{item.total}}</td>
           <td>{{item.name}}</td>
-          <td>{{item.artikelPrice}}</td>
+          <td>{{artikelStatus[i]}}</td>
           <td>{{item.verPrice}}</td>
           <td>{{item.minLosMenge}}</td>
           <td>{{item.gewicht}}</td>
           <td>{{item.basisEinheit}}</td>
           <td><div class="mb-3">
-            <label for="" class="form-label">Neue Artikel Menge</label>
             <input type="number"  value="artikelMenge" [(ngModel)]="artikelMengeEdit[i]"
               class="form-control" name="artikelMenge" id="artikelMenge" aria-describedby="helpId" placeholder="">
-            <small id="helpId" class="form-text text-muted">Gibt Menge Ein</small>
+            <small id="helpId" class="form-text text-muted">Total für diese Position!</small>
           </div></td>
           <td><div class="d-grid gap-2">
-            <button type="button" name="" id="" class="btn btn-primary" (click)="addArtikelToKomm(i, true) ">Chenge menge Artikel</button>
+            <button type="button" name="" id="" class="btn btn-primary" (click)="addArtikelToKomm(i, true) ">Bestätigen</button>
+          </div></td>
+          <td><div class="d-grid gap-2">
+            <button type="button" name="" id="" class="btn btn-danger" (click)="deletePositionInKomm(i)">Delete</button>
           </div></td>
         </tr>
 
@@ -181,10 +184,9 @@
         <td>{{item.gewicht}}</td>
         <td>{{item.basisEinheit}}</td>
         <td><div class="mb-3">
-          <label for="" class="form-label"> Artikel Menge</label>
           <input type="number" (click)="checkVerfurbarkeit(i)" [(ngModel)]="artikelMenge[i]"
             class="form-control"  name="artikelMenge" id="artikelMenge" aria-describedby="helpId" placeholder="">
-          <small id="helpId" class="form-text text-muted">Gibt Menge Ein</small>
+          <small id="helpId" class="form-text text-muted">Gibt Menge Ein, Einzeln!</small>
         </div></td>
         <td><div class="d-grid gap-2">
           <button type="button" name="" id="" class="btn btn-primary" (click)="addArtikelToKomm(i, false)" >Add Artikel</button>

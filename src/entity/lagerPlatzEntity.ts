@@ -15,7 +15,7 @@ export class LagerPlatzEntity{
     einheit : number;
     @Column({nullable: true})
     palettenTyp : PALETTENTYP;
-    @Column({nullable: true})
+    @Column({nullable: true,  type: 'date' })
     mhd : Date; 
     @Column()
     lagerPlatzVolumen : number;
