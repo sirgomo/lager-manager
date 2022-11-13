@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ErrorHandler, Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
+import { AddArtikelKommissDto } from '../dto/addArtikelKommiss.dto';
 import { ArtikelKommissDto } from '../dto/artikelKommiss.dto';
 import {KomissDTO} from '../dto/komiss.dto'
 
@@ -20,7 +21,7 @@ export class VerkaufService {
     return this.http.post<KomissDTO>(this.API_URL + '/new', KomissDTO);
   }
   deleteKommissionierung(id:number){
-    this.http.delete(this.API_URL + '/' +id);
+   return this.http.delete(this.API_URL + '/' +id);
   }
   getAllByVerkufer(verkuferid: number):Observable<KomissDTO[]>{
     return this.http.get<KomissDTO[]>(this.API_URL + '/'+verkuferid);
@@ -36,5 +37,8 @@ export class VerkaufService {
   }
   getCurrentVerfugbareMenge(artId: number):Observable<ArtikelKommissDto>{
     return this.http.get<ArtikelKommissDto>(this.API_URL + '/art/' + artId);
+  }
+  addArtikelToKomm(art: AddArtikelKommissDto):Observable<AddArtikelKommissDto>{
+    return this.http.post<AddArtikelKommissDto>(this.API_URL + '/addart', art);
   }
 }

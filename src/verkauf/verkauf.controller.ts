@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, ValidationP
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
 import { RoleGuard } from 'src/auth/RoleGuard';
+import { AddArtikelKommissDTO } from 'src/DTO/addArtikelKommissDTO';
 import { ArtikelKommissDTO } from 'src/DTO/artikelKommissDTO';
 import { KomissDTO } from 'src/DTO/KomissDTO';
 import { KommissionirungEntity } from 'src/entity/KommissionirungEntity';
@@ -32,8 +33,14 @@ export class VerkaufController {
     @Get('art/:id')
     @ROLES(ROLE.VERKAUF)
     async getCurrentVerfugArtikelMenge(@Param('id') artId:number){
-        return this.verkService.getCurrentArtikelMenge(artId);
+        return await this.verkService.getCurrentArtikelMenge(artId);
     }
+    @Post('addart')
+    @ROLES(ROLE.VERKAUF)
+    async addArtikelToKomm(@Body(ValidationPipe) art: AddArtikelKommissDTO){
+        return await this.verkService.addArtikelToKommiss(art);
+    }
+
     @Post('/new')
     @ROLES(ROLE.VERKAUF)
     createNewKommissionierung(@Body(ValidationPipe) kom: KomissDTO):Promise<KommissionirungEntity>{
@@ -47,7 +54,7 @@ export class VerkaufController {
     @Delete(':id')
     @ROLES(ROLE.VERKAUF)
     deleteKomm(@Param('id') id:number){
-        
+       return this.verkService.deleteKomm(id);
     }
    
     

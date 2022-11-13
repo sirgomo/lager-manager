@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { WareneingangModule } from './wareneingang/wareneingang.module';
 import { KomissionierModule } from './komissionier/komissionier.module';
 import { LagerModule } from './lager/lager.module';
@@ -56,6 +55,6 @@ import { WarenAusgStat } from './entity/warenAusgStat';
    
   ],
   controllers: [AppController],
-  providers: [AppService, RoleGuard],
+  providers: [ RoleGuard],
 })
 export class AppModule {}

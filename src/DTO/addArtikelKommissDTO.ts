@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional } from "class-validator";
 
 export class AddArtikelKommissDTO{
     @IsNotEmpty()
@@ -10,4 +10,6 @@ export class AddArtikelKommissDTO{
     @IsNotEmpty()
     @IsNumber()
     kommNr:number;
+    @IsOptional()
+    kommDeatailnr:number;
 }

@@ -25,7 +25,7 @@ spedition : number;
 versorungId : string;
 
 
-@OneToMany(()=> KommisioDetailsEntity, (kommisioDetails) => kommisioDetails.kommlist)
+@OneToMany(()=> KommisioDetailsEntity, (kommisioDetails) => kommisioDetails.kommlist, {cascade: true})
 kommDetails : KommisioDetailsEntity[];
 
 }

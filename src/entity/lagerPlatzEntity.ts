@@ -1,5 +1,5 @@
-import { Column, DataSource, Double, Entity, JoinColumn, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { ArtikelEntity } from "./ArtikelEntity";
+import { Column,  Entity, PrimaryGeneratedColumn } from "typeorm";
+
 
 @Entity('lagerplatz')
 export class LagerPlatzEntity{

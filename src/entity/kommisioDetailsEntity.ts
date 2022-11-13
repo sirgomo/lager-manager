@@ -17,12 +17,9 @@ gepackt : ARTIKELSTATUS;
 @Column({nullable: true})
 palettennr : number;
 
-@OneToMany(()=> ArtikelEntity,
- (ArtikelEntity)=> ArtikelEntity.kommisioDetail, {cascade : true })
-artikelList : ArtikelEntity[];
 
 @ManyToOne(()=> KommissionirungEntity, 
-(KommissionirungEntity)=> KommissionirungEntity.kommDetails, {cascade: true})
+(KommissionirungEntity)=> KommissionirungEntity.kommDetails, {onDelete: "CASCADE"})
 kommlist : KommissionirungEntity;
 
 }

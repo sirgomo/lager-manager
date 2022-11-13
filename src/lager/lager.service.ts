@@ -9,6 +9,7 @@ import { ArtikelEntity } from 'src/entity/ArtikelEntity';
 import { LagerPlatzEntity, PALETTENTYP } from 'src/entity/LagerPlatzEntity';
 import { Helper } from 'src/helper';
 import { LagerPlatzGenerator } from 'src/lagerPlatzGen';
+import { json } from 'stream/consumers';
 import { IsNull, MoreThanOrEqual, Not, Repository } from 'typeorm';
 
 @Injectable()
@@ -233,12 +234,11 @@ export class LagerService {
     //koniec generatora
     async getArtiklesForKommiss(){
         console.log('wykonuje');
-       return await this.repo.query(`SELECT artId, SUM(artikelMenge) AS total, 
-        artikel.name, artikel.artikelPrice, artikel.verPrice, artikel.minLosMenge, artikel.gewicht, artikel.basisEinheit,
-        artfehlend.artikelid AS fehlArtikelId, artfehlend.menge AS fehlArtikelMenge, SUM(artreservation.menge) AS resMenge
-        FROM lagerplatz LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId
-        LEFT JOIN artfehlend ON lagerplatz.artId = artfehlend.artikelid
-        LEFT JOIN artreservation ON lagerplatz.artId = artreservation.artikelId
+       return await this.repo.query(`SELECT artId, SUM(artikelMenge) AS total, fehlArtikelId,fehlArtikelMenge, resMenge, 
+       artikel.name, artikel.artikelPrice, artikel.verPrice, artikel.minLosMenge, artikel.gewicht, artikel.basisEinheit FROM lagerplatz
+       LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId
+       LEFT JOIN (SELECT artikelid AS fehlArtikelId, menge AS fehlArtikelMenge FROM artfehlend) artfehlend ON lagerplatz.artId = fehlArtikelId
+       LEFT JOIN (SELECT artikelId as a_id, SUM(menge) AS resMenge FROM artreservation group by a_id) artreservation ON lagerplatz.artId = a_id 
         WHERE lagerplatz.artId IS NOT NULL group by lagerplatz.artId `).then(data=>{
            
           return data;
@@ -247,18 +247,19 @@ export class LagerService {
         });
     }
     async getCurrentArtiMenge(artid: number){
-        return await this.repo.query(`SELECT artId, SUM(artikelMenge) AS total, 
-        artikel.name, artikel.artikelPrice, artikel.verPrice, artikel.minLosMenge, artikel.gewicht, artikel.basisEinheit,
-        artfehlend.artikelid AS fehlArtikelId, artfehlend.menge AS fehlArtikelMenge, SUM(artreservation.menge) AS resMenge
-        FROM lagerplatz LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId
-        LEFT JOIN artfehlend ON lagerplatz.artId = artfehlend.artikelid
-        LEFT JOIN artreservation ON lagerplatz.artId = artreservation.artikelId
-        WHERE lagerplatz.artId = '${artid}' group by lagerplatz.artId `).then(data=>{
-          
-          return data[0];
+      
+        return await this.repo.query(`SELECT artId, SUM(artikelMenge) AS total, fehlArtikelId, fehlArtikelMenge, resMenge, 
+        artikel.name, artikel.artikelPrice, artikel.verPrice, artikel.minLosMenge, artikel.gewicht, artikel.basisEinheit FROM lagerplatz
+        LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId
+        LEFT JOIN (SELECT artikelid AS fehlArtikelId, menge AS fehlArtikelMenge FROM artfehlend) artfehlend ON lagerplatz.artId = fehlArtikelId
+        LEFT JOIN (SELECT artikelId as a_id, SUM(menge) AS resMenge FROM artreservation group by a_id) artreservation ON lagerplatz.artId = a_id 
+        WHERE lagerplatz.artId = '${artid}' group by lagerplatz.artId 
+        `).then(data=>{
+           // console.log(JSON.stringify(data))
+            return data[0];
         }, err=>{
             console.log(err);
-        });
+        })
     }
-  
+    
 }

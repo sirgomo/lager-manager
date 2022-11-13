@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DataDilerService } from '../data-diler.service';
 import { DatenpflegeService } from '../datenpflege/datenpflege.service';
+import { AddArtikelKommissDto } from '../dto/addArtikelKommiss.dto';
 import { ArtikelKommissDto } from '../dto/artikelKommiss.dto';
 import { DispositorDTO } from '../dto/dispositor.dto';
 import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
@@ -24,10 +26,13 @@ export class CreateKommisionierungComponent implements OnInit {
   spediSelected: number = -1;
   searchModel: string = '';
   artikels : ArtikelKommissDto[] = new Array();
-  artikelMenge: number = 0;
-
+  artikelMenge: number[] = new Array();
+  artikelMengeEdit: number[] = new Array();
+  artikelsInKomm: ArtikelKommissDto[] = new Array();
+  showArtikelsInKomm :number = 0;
+  tmpKomm : KomissDTO = new KomissDTO();
   constructor(private kommServ: VerkaufService, private fb : FormBuilder, private datenServ: DatenpflegeService
-    ,private helper: HelperService, private dataDiel : DataDilerService) {
+    ,private helper: HelperService, private dataDiel : DataDilerService, private router: Router) {
     this.kommissForm = this.fb.group({
       id: Number,
       verkauferId: Number,
@@ -43,11 +48,9 @@ export class CreateKommisionierungComponent implements OnInit {
    }
 
   ngOnInit(): void {
-
     this.getSpedi();
     this.getDispo();
     this.getArtikle();
-    this.getKommFromKommponent();
   }
   async getSpedi(){
      await this.datenServ.getAllSpeditions().subscribe(data=>{
@@ -69,18 +72,21 @@ export class CreateKommisionierungComponent implements OnInit {
     this.artikels.splice(0, this.artikels.length);
     await this.kommServ.getArtikles().subscribe(data=>{
       for(let i = 0; i !== data.length; i++){
-        if(data[i].resMenge !== null){
-          data[i].total -= data[i].resMenge;
+        let tmp : ArtikelKommissDto = new ArtikelKommissDto();
+        Object.assign(tmp, data[i]);
+        if(tmp.resMenge !== null){
+          tmp.total -= data[i].resMenge;
         }
-        if(data[i].fehlArtikelMenge !== null){
-          data[i].total -= data[i].fehlArtikelMenge;
+        if(tmp.fehlArtikelMenge !== null){
+          tmp.total -= data[i].fehlArtikelMenge;
         }
-        this.artikels.push(data[i]);
+        this.artikels.push(tmp);
       }
+      this.getKommFromKommponent();
     });
   }
   onSearch(text:string){
-    this.helper.onSearchK(text, this.artikels);
+   this.artikels = this.helper.onSearchK(text, this.artikels);
   }
   artikelTrackBy(index:number){
     if(this.artikels !== undefined && this.artikels.length > 0){
@@ -90,7 +96,7 @@ export class CreateKommisionierungComponent implements OnInit {
   }
   async checkVerfurbarkeit(index:number){
     console.log('kilked ' + index + 'artikel menge '+ this.artikelMenge);
-    this.artikelMenge = 0;
+    this.artikelMenge[index] = 0;
    await this.kommServ.getCurrentVerfugbareMenge(this.artikels[index].artId).subscribe(
     data =>{
      let tmp : ArtikelKommissDto = new ArtikelKommissDto();
@@ -108,15 +114,33 @@ export class CreateKommisionierungComponent implements OnInit {
   }
   async saveKommissionierung(komm : KomissDTO){
    return this.kommServ.createKommissionierung(komm).subscribe(data=>{
-      this.kommissForm.setValue(data);
+    this.router.navigateByUrl('verkauf').then();
     });
   }
   getKommFromKommponent(){
-    let tmpKomm : KomissDTO = new KomissDTO();
-    tmpKomm = this.dataDiel.getKomm();
-    if(tmpKomm.id !== undefined && tmpKomm.id !== 0){
-      this.kommissForm.setValue(tmpKomm);
-      this.kommissForm.get('gewunschtesLieferDatum')?.setValue(new Date(tmpKomm.gewunschtesLieferDatum).toISOString().split('T')[0]);
+
+    this.tmpKomm = this.dataDiel.getKomm();
+    this.reasignKomm();
+  }
+  reasignKomm(){
+    if(this.tmpKomm.id !== undefined && this.tmpKomm.id !== 0){
+      this.kommissForm.reset();
+      this.artikelsInKomm.splice(0, this.artikelsInKomm.length);
+      console.log(JSON.stringify(this.tmpKomm));
+      this.kommissForm.setValue(this.tmpKomm);
+      this.kommissForm.get('gewunschtesLieferDatum')?.setValue(new Date(this.tmpKomm.gewunschtesLieferDatum).toISOString().split('T')[0]);
+      for(let y = 0; y !== this.tmpKomm.kommDetails.length; y++){
+        for(let i = 0; i !== this.artikels.length; i++){
+         if(this.tmpKomm.kommDetails[y].artikelId === this.artikels[i].artId){
+          let tmpArti : ArtikelKommissDto = new ArtikelKommissDto();
+          Object.assign(tmpArti, this.artikels[i]);
+          tmpArti.total = this.tmpKomm.kommDetails[y].menge;
+          this.artikelsInKomm.push(tmpArti);
+          break;
+         }
+        }
+      }
+
 
     }else{
       this.kommissForm.reset();
@@ -131,5 +155,54 @@ export class CreateKommisionierungComponent implements OnInit {
       this.kommissForm.get('kommissStatus')?.setValue(KOMMISIONSTATUS.INBEARBEITUNG);
       this.kommissForm.get('spedition')?.valueChanges.subscribe(data=>{ this.spediSelected = data});
   }
+async addArtikelToKomm(index:number, edit:boolean){
+  let art: AddArtikelKommissDto = new AddArtikelKommissDto();
+  if(!edit){
+    art.artMenge = this.artikelMenge[index];
+    art.artikelId = this.artikels[index].artId;
+    art.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
+    let tmpArt: ArtikelKommissDto = new ArtikelKommissDto();
+      Object.assign(tmpArt, this.artikels[index]);
+      tmpArt.total = this.artikelMenge[index];
+      this.artikels[index].total -= this.artikelMenge[index];
+      this.artikelsInKomm.push(tmpArt);
+      this.artikelMenge[index] = 0;
 
+  }else{
+    art.artikelId = this.artikelsInKomm[index].artId;
+    art.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
+    art.kommDeatailnr = this.tmpKomm.kommDetails[index].id;
+    art.artMenge = this.tmpKomm.kommDetails[index].menge;
+
+    if(art.artMenge > this.artikelMengeEdit[index]){
+      art.artMenge = -this.artikelMengeEdit[index];
+      this.artikelsInKomm[index].total += art.artMenge;
+    }else{
+      art.artMenge = this.artikelMengeEdit[index] - art.artMenge;
+      this.artikelsInKomm[index].total += art.artMenge;
+
+    }
+
+
+
+    this.artikelMengeEdit[index] = 0;
+    // TODO controlle ist der artikel schon gepackt ?, ist es genug davon ? delete wenn menge to 0
+    //TODO controlle ob artikel menge volle kartons sind
+  }
+
+  await this.kommServ.addArtikelToKomm(art).subscribe(data=>{
+    if(data !== null){
+      Object.assign(this.tmpKomm, data);
+      this.reasignKomm();
+    }
+
+  });
+}
+showArtikelsinKomm(){
+  if(this.showArtikelsInKomm === 0){
+    this.showArtikelsInKomm =1;
+  }else{
+    this.showArtikelsInKomm = 0;
+  }
+}
 }

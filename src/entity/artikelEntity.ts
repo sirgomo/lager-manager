@@ -27,8 +27,6 @@ export class ArtikelEntity {
   artikelPrice : number;
   @Column({type: 'double', nullable: false})
   verPrice: number;
-  @ManyToOne(()=> KommisioDetailsEntity, (kommisioDetail)=> kommisioDetail.artikelList )
-  kommisioDetail : KommisioDetailsEntity;
   
   @OneToMany(()=> UiidEntity, (uid) => uid.arikels)
   uids: UiidEntity[];

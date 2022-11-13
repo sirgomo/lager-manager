@@ -71,7 +71,7 @@
        </div>
     </div>
      <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-4">
 
             <label for="versorungId" class="form-label">Versorugungs Id</label>
             <input type="text"
@@ -79,19 +79,68 @@
             <small id="helpId" class="form-text text-muted">Gib versorgung id ein</small>
 
           </div>
-          <div class="col-md-6 mt-2 mr-auto">
+          <div class="col-md-4 mt-2 mr-auto">
             <div>
-              <label for="versorungId" class="form-label"></label>
+              <label for="submitKom" class="form-label"></label>
             </div>
             <button type="submit" id="submitKom" class="btn btn-primary" (click)="saveKommissionierung(kommissForm.value)">Save Kommisionierung</button>
             <div>
               <small id="submitKom" class="form-text text-muted">Zuerst speicher kommissionierung </small>
             </div>
           </div>
+          <div class="col-md-4 mt-2 mr-auto">
+            <div>
+              <label for="zeigArtikel" class="form-label"></label>
+            </div>
+            <button  id="zeigArtikel" class="btn btn-primary" (click)="showArtikelsinKomm()">Show Artikels</button>
+            <div>
+              <small id="zeigArtikel" class="form-text text-muted">Zeig artikels in Kommissionierung</small>
+            </div>
+          </div>
      </div>
   </form>
   <div class="mt-2 col-md-12"></div>
+  <div class="table-responsive" *ngIf="showArtikelsInKomm === 1">
+    <table class="table table-bordered table-hover table-sortable">
+      <thead>
+        <tr>
+          <th scope="col">Artikel id:</th>
+          <th scope="col">Menge in Kommisionierung</th>
+          <th scope="col">Name</th>
+          <th scope="col">Beschafung Price</th>
+          <th scope="col">Verkauf Price</th>
+          <th scope="col">Min Los Menge</th>
+          <th scope="col">Gewicht</th>
+          <th scope="col">Basis Einheit</th>
+          <th scope="col">Menge</th>
+          <th scope="col">Neu Menge</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="" *ngFor="let item of artikelsInKomm; let i=index; ">
+          <td>{{item.artId}}</td>
+          <td>{{item.total}}</td>
+          <td>{{item.name}}</td>
+          <td>{{item.artikelPrice}}</td>
+          <td>{{item.verPrice}}</td>
+          <td>{{item.minLosMenge}}</td>
+          <td>{{item.gewicht}}</td>
+          <td>{{item.basisEinheit}}</td>
+          <td><div class="mb-3">
+            <label for="" class="form-label">Neue Artikel Menge</label>
+            <input type="number"  value="artikelMenge" [(ngModel)]="artikelMengeEdit[i]"
+              class="form-control" name="artikelMenge" id="artikelMenge" aria-describedby="helpId" placeholder="">
+            <small id="helpId" class="form-text text-muted">Gibt Menge Ein</small>
+          </div></td>
+          <td><div class="d-grid gap-2">
+            <button type="button" name="" id="" class="btn btn-primary" (click)="addArtikelToKomm(i, true) ">Chenge menge Artikel</button>
+          </div></td>
+        </tr>
 
+      </tbody>
+    </table>
+    <div class="mt-2 col-md-12"></div>
+  </div>
   <div class="row " >
     <div class="col-md-11">
       <input type="search" class="form-control input-lg rounded" [ngModel]="searchModel" name="searchModel" placeholder = "write artikel name or id" id="" (ngModelChange)="onSearch($event)">
@@ -133,12 +182,12 @@
         <td>{{item.basisEinheit}}</td>
         <td><div class="mb-3">
           <label for="" class="form-label"> Artikel Menge</label>
-          <input type="number" [(ngModel)]="artikelMenge" (click)="checkVerfurbarkeit(i)"
-            class="form-control" value="artikelMenge" name="artikelMenge" id="artikelMenge" aria-describedby="helpId" placeholder="">
+          <input type="number" (click)="checkVerfurbarkeit(i)" [(ngModel)]="artikelMenge[i]"
+            class="form-control"  name="artikelMenge" id="artikelMenge" aria-describedby="helpId" placeholder="">
           <small id="helpId" class="form-text text-muted">Gibt Menge Ein</small>
         </div></td>
         <td><div class="d-grid gap-2">
-          <button type="button" name="" id="" class="btn btn-primary">Add Artikel</button>
+          <button type="button" name="" id="" class="btn btn-primary" (click)="addArtikelToKomm(i, false)" >Add Artikel</button>
         </div></td>
       </tr>
 

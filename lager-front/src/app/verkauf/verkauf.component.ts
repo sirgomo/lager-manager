@@ -63,6 +63,10 @@ console.log('id '+Number(localStorage.getItem('myId')));
     });
    });
 }
-
+async deleteKomm(index:number){
+ await this.serv.deleteKommissionierung(this.komiss[index].id).subscribe(data=>{
+  this.komiss.splice(index, 1);
+ });
+}
 
 }
