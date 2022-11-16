@@ -7,6 +7,7 @@ export class ArtikelKommissDto{
   minLosMenge!:number;
   gewicht!:number;
   basisEinheit!:number;
+  artikelFlage!:number;
   fehlArtikelId!:number;
   fehlArtikelMenge!: number;
   resMenge!:number;

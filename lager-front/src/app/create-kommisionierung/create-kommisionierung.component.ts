@@ -31,7 +31,7 @@ export class CreateKommisionierungComponent implements OnInit {
   artikelsInKomm: ArtikelKommissDto[] = new Array();
   artikelStatus: string[] = new Array();
   showArtikelsInKomm :number = 0;
-  tmpKomm : KomissDTO = new KomissDTO();
+  currentKomm : KomissDTO = new KomissDTO();
   constructor(private kommServ: VerkaufService, private fb : FormBuilder
     ,private helper: HelperService, private dataDiel : DataDilerService, private router: Router, private toastr: ToastrService) {
     this.kommissForm = this.fb.group({
@@ -108,26 +108,27 @@ export class CreateKommisionierungComponent implements OnInit {
   }
   getKommFromKommponent(){
 
-    this.tmpKomm = this.dataDiel.getKomm();
+    this.currentKomm = this.dataDiel.getKomm();
     this.reasignKomm();
   }
   reasignKomm(){
-    if(this.tmpKomm.id !== undefined && this.tmpKomm.id !== 0){
+    if(this.currentKomm.id !== undefined && this.currentKomm.id !== 0){
       this.kommissForm.reset();
       this.artikelsInKomm.splice(0, this.artikelsInKomm.length);
 
-      this.kommissForm.setValue(this.tmpKomm);
-      this.kommissForm.get('gewunschtesLieferDatum')?.setValue(new Date(this.tmpKomm.gewunschtesLieferDatum).toISOString().split('T')[0]);
+      this.kommissForm.setValue(this.currentKomm);
+      this.kommissForm.get('gewunschtesLieferDatum')?.setValue(new Date(this.currentKomm.gewunschtesLieferDatum).toISOString().split('T')[0]);
       this.spediSelected = this.kommissForm.get('spedition')?.getRawValue();
       this.kommissForm.get('spedition')?.valueChanges.subscribe(data=>{ this.spediSelected = data});
-      for(let y = 0; y !== this.tmpKomm.kommDetails.length; y++){
+      for(let y = 0; y !== this.currentKomm.kommDetails.length; y++){
         for(let i = 0; i !== this.artikels.length; i++){
-         if(this.tmpKomm.kommDetails[y].artikelId === this.artikels[i].artId){
+         if(this.currentKomm.kommDetails[y].artikelId === this.artikels[i].artId){
           let tmpArti : ArtikelKommissDto = new ArtikelKommissDto();
           Object.assign(tmpArti, this.artikels[i]);
-          tmpArti.total = this.tmpKomm.kommDetails[y].menge;
+          tmpArti.total = this.currentKomm.kommDetails[y].menge;
           this.artikelsInKomm.push(tmpArti);
-          this.artikelStatus[y] = this.tmpKomm.kommDetails[y].gepackt;
+          tmpArti = this.setDetailsOfArtikel(tmpArti);
+          this.artikelStatus[y] = this.currentKomm.kommDetails[y].gepackt;
           break;
          }
         }
@@ -147,6 +148,12 @@ export class CreateKommisionierungComponent implements OnInit {
       this.kommissForm.get('kommissStatus')?.setValue(KOMMISIONSTATUS.INBEARBEITUNG);
       this.kommissForm.get('spedition')?.valueChanges.subscribe(data=>{ this.spediSelected = data});
   }
+  setDetailsOfArtikel(tmpArti : ArtikelKommissDto){
+    let totalkartons : number = Math.floor( tmpArti.total / tmpArti.minLosMenge);
+    tmpArti.gewicht = totalkartons * tmpArti.gewicht;
+    return tmpArti;
+
+  }
 async addArtikelToKomm(index:number, edit:boolean){
 
   let art: AddArtikelKommissDto = new AddArtikelKommissDto();
@@ -157,21 +164,37 @@ async addArtikelToKomm(index:number, edit:boolean){
       'Zu wenig', {'timeOut':1500})
       return;
     }
-    art.artMenge = this.artikelMenge[index];
-    art.artikelId = this.artikels[index].artId;
-    art.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
-    let tmpArt: ArtikelKommissDto = new ArtikelKommissDto();
-      Object.assign(tmpArt, this.artikels[index]);
-      tmpArt.total = this.artikelMenge[index];
-      this.artikels[index].total -= this.artikelMenge[index];
-      this.artikelsInKomm.push(tmpArt);
-      this.artikelMenge[index] = 0;
+     if(this.artikelMenge[index] % this.artikels[index].minLosMenge !== 0){
+        if(!window.confirm('Willst du Anbruch schicken ?')){
+          this.artikelMenge[index] += this.artikels[index].minLosMenge -( this.artikelMenge[index] % this.artikels[index].minLosMenge);
+        return;
+        }
+      }
+
+
+      art.artMenge = this.artikelMenge[index];
+      art.artikelId = this.artikels[index].artId;
+      art.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
+      let tmpArt: ArtikelKommissDto = new ArtikelKommissDto();
+        Object.assign(tmpArt, this.artikels[index]);
+        tmpArt.total = this.artikelMenge[index];
+        this.artikels[index].total -= this.artikelMenge[index];
+        this.artikelsInKomm.push(tmpArt);
+        this.artikelMenge[index] = 0;
+
+
 
   }else{
+    if(this.artikelMengeEdit[index] % this.artikels[index].minLosMenge !== 0){
+      if(!window.confirm('Willst du Anbruch schicken ?')){
+        this.artikelMengeEdit[index] += this.artikels[index].minLosMenge -( this.artikelMengeEdit[index] % this.artikels[index].minLosMenge);
+        return;
+      }
+    }
     art.artikelId = this.artikelsInKomm[index].artId;
     art.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
-    art.kommDeatailnr = this.tmpKomm.kommDetails[index].id;
-    art.artMenge = this.tmpKomm.kommDetails[index].menge;
+    art.kommDeatailnr = this.currentKomm.kommDetails[index].id;
+    art.artMenge = this.currentKomm.kommDetails[index].menge;
 
     if(art.artMenge > this.artikelMengeEdit[index]){
       art.artMenge = -(art.artMenge - this.artikelMengeEdit[index]);
@@ -191,7 +214,7 @@ async addArtikelToKomm(index:number, edit:boolean){
 
   await this.kommServ.addArtikelToKomm(art).subscribe(data=>{
     if(data !== null){
-      Object.assign(this.tmpKomm, data);
+      Object.assign(this.currentKomm, data);
       this.reasignKomm();
     }
 
@@ -205,11 +228,11 @@ showArtikelsinKomm(){
   }
 }
 deletePositionInKomm(index:number){
-  this.kommServ.deletePosInKom(this.tmpKomm.kommDetails[index].id).subscribe(
+  this.kommServ.deletePosInKom(this.currentKomm.kommDetails[index].id).subscribe(
     data=>{
       console.log(data);
       if(data == 1){
-        this.tmpKomm.kommDetails.splice(index,1);
+        this.currentKomm.kommDetails.splice(index,1);
         this.reasignKomm();
       }
     });

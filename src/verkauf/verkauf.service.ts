@@ -7,11 +7,13 @@ import { KomissDTO } from 'src/DTO/KomissDTO';
 import { ArtikelReservationEntity } from 'src/entity/ArtikelReservationEntity';
 import { ARTIKELSTATUS, KommisioDetailsEntity } from 'src/entity/KommisioDetailsEntity';
 import { KommissionirungEntity } from 'src/entity/KommissionirungEntity';
+import { Helper } from 'src/helper';
 import { LagerService } from 'src/lager/lager.service';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class VerkaufService {
+  private helper: Helper;
     constructor(@InjectRepository(KommissionirungEntity) private repo: Repository<KommissionirungEntity>,
     @InjectRepository(KommisioDetailsEntity) private repoDetails: Repository<KommisioDetailsEntity>, private repoLager: LagerService,
     @InjectRepository(ArtikelReservationEntity) private repoReserv : Repository<ArtikelReservationEntity>){
@@ -52,7 +54,9 @@ export class VerkaufService {
       
         let tmp : KommisioDetailsEntity = new KommisioDetailsEntity();
         try{
-
+          if(art.artMenge === 0){
+            return art;
+          }
        
       let komm : KommissionirungEntity =   await this.repo.findOne({'where': {'id':art.kommNr}, 'relations': {'kommDetails': true}});
       //wollen wir das das zwiete mall das selber artikel als neue position oder einfach als beide sumiert ? hiere getrent positions

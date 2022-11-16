@@ -235,7 +235,7 @@ export class LagerService {
     async getArtiklesForKommiss(){
         console.log('wykonuje');
        return await this.repo.query(`SELECT artId, SUM(artikelMenge) AS total, fehlArtikelId,fehlArtikelMenge, resMenge, 
-       artikel.name, artikel.artikelPrice, artikel.verPrice, artikel.minLosMenge, artikel.gewicht, artikel.basisEinheit FROM lagerplatz
+       artikel.name, artikel.artikelPrice, artikel.verPrice, artikel.minLosMenge, artikel.gewicht, artikel.basisEinheit, artikel.artikelFlage FROM lagerplatz
        LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId
        LEFT JOIN (SELECT artikelid AS fehlArtikelId, menge AS fehlArtikelMenge FROM artfehlend) artfehlend ON lagerplatz.artId = fehlArtikelId
        LEFT JOIN (SELECT artikelId as a_id, SUM(menge) AS resMenge FROM artreservation group by a_id) artreservation ON lagerplatz.artId = a_id 
@@ -249,7 +249,7 @@ export class LagerService {
     async getCurrentArtiMenge(artid: number){
       
         return await this.repo.query(`SELECT artId, SUM(artikelMenge) AS total, fehlArtikelId, fehlArtikelMenge, resMenge, 
-        artikel.name, artikel.artikelPrice, artikel.verPrice, artikel.minLosMenge, artikel.gewicht, artikel.basisEinheit FROM lagerplatz
+        artikel.name, artikel.artikelPrice, artikel.verPrice, artikel.minLosMenge, artikel.gewicht, artikel.basisEinheit, artikel.artikelFlage FROM lagerplatz
         LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId
         LEFT JOIN (SELECT artikelid AS fehlArtikelId, menge AS fehlArtikelMenge FROM artfehlend) artfehlend ON lagerplatz.artId = fehlArtikelId
         LEFT JOIN (SELECT artikelId as a_id, SUM(menge) AS resMenge FROM artreservation group by a_id) artreservation ON lagerplatz.artId = a_id 

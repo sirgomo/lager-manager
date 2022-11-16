@@ -2,14 +2,14 @@
   <div class="mt-2 col-md-12"></div>
 
   <div class="row justify-content-center align-items-center g-2 ">
-      <div class="col-md-3 border border-3 border-primary text-center icons well rounded px-md-5" style="cursor: pointer;" (click)="getBuchungen()">
-          Liferungen
+      <div class="col-md-auto">
+         <button type="button" class="btn btn-primary" (click)="getBuchungen()">Liferungen</button>
       </div>
-      <div class="col-md-3 border border-3 border-primary text-center icons well rounded px-md-5" style="cursor: pointer;" (click)="getAritkles(currentLiferung)" *ngIf="show !==1">
-        Back to Artikel List
+      <div class="col-md-auto" *ngIf="show !==1">
+       <button type="button" class="btn btn-primary" (click)="getAritkles(currentLiferung)" > Artikel List</button>
     </div>
-    <div class="col-md-3 border border-3 border-primary text-center icons well rounded px-md-5" style="cursor: pointer;" [routerLink]="['/lager']" routerLinkActive="router-link-active"  *ngIf="role !== null && role === 'LAGERVERWALTUNG'">
-      Back to Lager verwaltung
+    <div class="col-md-auto" *ngIf="role !== null && role === 'LAGERVERWALTUNG'">
+     <button type="button" class="btn btn-primary" [routerLink]="['/lager']" routerLinkActive="router-link-active">Lager verwaltung</button>
   </div>
 
 </div>

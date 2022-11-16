@@ -1,15 +1,22 @@
 <div class="container">
   <div class="mt-2 col-md-12"></div>
   <div class="row clearfix justify-content-center">
-      <div class="col-md-3 border border-3 border-primary text-center icons well rounded px-md-5" style="cursor: pointer;" (click)="newKomm()">
-          Neue Kommissionirung
-      </div>
-      <div class="col-md-3 border border-3 border-primary text-center icons well rounded px-md-5" style="cursor: pointer;" [routerLink]="['/verkauf']" routerLinkActive="router-link-active" >
-       Meine Kommissionierungen
-      </div>
-      <div class="col-md-3 border border-3 border-primary text-center icons well rounded px-md-5" style="cursor: pointer;" [routerLink]="['/verkauf']" routerLinkActive="router-link-active">
-      Alle Kommissionierungen
-      </div>
+    <div class="col-md-auto">
+      <button class="btn btn-primary" type="button" (click)="newKomm()">
+        Neue Kommissionirung
+    </button>
+    </div>
+    <div class="col-md-auto">
+      <button class="btn btn-primary" type="button"  [routerLink]="['/verkauf']" routerLinkActive="router-link-active" >
+        Meine Kommissionierungen
+       </button>
+    </div>
+    <div class="col-md-auto">
+      <button class="btn btn-primary" type="button"  [routerLink]="['/verkauf']" routerLinkActive="router-link-active">
+        Alle Kommissionierungen
+        </button>
+    </div>
+
   </div>
   <div class="mt-2 col-md-12"></div>
   <form [formGroup]="kommissForm">
@@ -110,10 +117,10 @@
           <th scope="col">Artikel Status</th>
           <th scope="col">Verkauf Price</th>
           <th scope="col">Min Los Menge</th>
-          <th scope="col">Gewicht</th>
+          <th scope="col">Total Gewicht</th>
           <th scope="col">Basis Einheit</th>
           <th scope="col">Neue Menge</th>
-          <th scope="col">Menge Ändern</th>
+          <th scope="col">Menge Andern</th>
           <th scope="col">Remove Position</th>
         </tr>
       </thead>
@@ -139,9 +146,12 @@
             <button type="button" name="" id="" class="btn btn-danger" (click)="deletePositionInKomm(i)">Delete</button>
           </div></td>
         </tr>
-
       </tbody>
     </table>
+    <div class="mt-2 col-md-12"></div>
+    <div class="d-flex justify-content-center">
+      <button  id="zeigArtikel" class="btn btn-primary" (click)="showArtikelsinKomm()">Verstecke Artikeles</button>
+    </div>
     <div class="mt-2 col-md-12"></div>
   </div>
   <div class="row " >

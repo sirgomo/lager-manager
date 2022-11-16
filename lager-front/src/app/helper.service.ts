@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ArtikelDTO } from './dto/artikel.dto';
 import { ArtikelKommissDto } from './dto/artikelKommiss.dto';
+import { KomissDTO } from './dto/komiss.dto';
 import { LagerPlatztDto } from './dto/lagerPlatz.dto';
 
 @Injectable({
@@ -142,4 +143,5 @@ return artikels;
    });
 return platze;
 }
+
 }
