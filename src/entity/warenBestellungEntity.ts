@@ -12,4 +12,9 @@ voraussichtlicheLieferDatum : Date;
 artid : number;
 @Column()
 menge : number;
+@Column()
+liefarantId:number;
+@Column()
+verkauferId:number;   
+
 }

@@ -27,6 +27,9 @@ import { SpeditionModule } from './spedition/spedition.module';
 import { UiidEntity } from './entity/UiidEntity';
 import { WarenEingStat } from './entity/warenEingStat';
 import { WarenAusgStat } from './entity/warenAusgStat';
+import { Liferants } from './entity/liferants';
+import { EinkaufService } from './einkauf/einkauf.service';
+import { EinkaufModule } from './einkauf/einkauf.module';
 
 
 
@@ -40,7 +43,7 @@ import { WarenAusgStat } from './entity/warenAusgStat';
       password: 'beta1243',
       database: 'lager',
       entities: [DispoEntity, ArtikelEntity, UserEntity, ArtikelReservationEntity, FehlendArtikelEntity, InKomissPalletenEntity, KommissionirungEntity,
-      LagerPlatzEntity, PalettenEnttity, SpeditionEntity, WarenBestellungEntity, WarenEingangEntity, KommisioDetailsEntity, UiidEntity, WarenEingStat, WarenAusgStat],
+      LagerPlatzEntity, PalettenEnttity, SpeditionEntity, WarenBestellungEntity, WarenEingangEntity, KommisioDetailsEntity, UiidEntity, WarenEingStat, WarenAusgStat, Liferants],
       synchronize: false,
     }),
     WareneingangModule,
@@ -52,6 +55,7 @@ import { WarenAusgStat } from './entity/warenAusgStat';
     ArtikelModule,
     AuthModule,
     SpeditionModule,
+    EinkaufModule,
    
   ],
   controllers: [AppController],

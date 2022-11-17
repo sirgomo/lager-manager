@@ -107,6 +107,18 @@
      </div>
   </form>
   <div class="mt-2 col-md-12"></div>
+  <div class="row border border-2 rounded">
+   <div class="col-4">
+      Total Gewicht:
+   </div>
+   <div class="col-md-4">
+    Stellpaltze:
+</div>
+<div class="col-md-4">
+    Paleten Menge:
+</div>
+  </div>
+  <div class="mt-2 col-md-12"></div>
   <div class="table-responsive" *ngIf="showArtikelsInKomm === 1">
     <table class="table table-bordered table-hover table-sortable">
       <thead>
@@ -128,7 +140,8 @@
         <tr class="" *ngFor="let item of artikelsInKomm; let i=index; ">
           <td>{{item.artId}}</td>
           <td>{{item.total}}</td>
-          <td>{{item.name}}</td>
+          <td *ngIf="currentKomm.kommDetails[i]?.inBestellung" class="border border-danger">{{item.name }}</td>
+          <td *ngIf="!currentKomm.kommDetails[i]?.inBestellung">{{item.name }}</td>
           <td>{{artikelStatus[i]}}</td>
           <td>{{item.verPrice}}</td>
           <td>{{item.minLosMenge}}</td>

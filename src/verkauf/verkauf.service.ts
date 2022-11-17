@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { tmpdir } from 'os';
 import { AddArtikelKommissDTO } from 'src/DTO/addArtikelKommissDTO';
 import { ArtikelKommissDTO } from 'src/DTO/artikelKommissDTO';
 import { KomissDTO } from 'src/DTO/KomissDTO';
@@ -50,36 +49,51 @@ export class VerkaufService {
             throw new Error("Etwas ist schiff gelaufen in Kommiss Service on createKomm " + err);
         }
     }
-    async addArtikelToKommiss(art :AddArtikelKommissDTO){
-      
+    async addArtikelToKommiss(art :AddArtikelKommissDTO[]){
+      let kommArr: KommissionirungEntity[] = new Array();
+      for(let i = 0; i !== art.length; i++){
         let tmp : KommisioDetailsEntity = new KommisioDetailsEntity();
         try{
-          if(art.artMenge === 0){
-            return art;
+          if(art[i].artMenge === 0){
+          throw new Error("Artikel mange darf nicht 0 sein");
+          
           }
        
-      let komm : KommissionirungEntity =   await this.repo.findOne({'where': {'id':art.kommNr}, 'relations': {'kommDetails': true}});
+      let komm : KommissionirungEntity =   await this.repo.findOne({'where': {'id':art[i].kommNr}, 'relations': {'kommDetails': true}});
       //wollen wir das das zwiete mall das selber artikel als neue position oder einfach als beide sumiert ? hiere getrent positions
       /*await this.repoDetails.findOneBy({'artikelId':art.artikelId, 'kommissId':art.kommNr}).then(data=>{
         if(data !== null){
           Object.assign(tmp, data);
         }
       });*/
-      if(komm !== undefined && komm.id !== undefined){
-        tmp.artikelId = art.artikelId;
-        tmp.menge = art.artMenge;
-        tmp.kommissId = komm.id;
-        tmp.gepackt = ARTIKELSTATUS.INPACKEN;
-        if(art.kommDeatailnr !== null && art.kommDeatailnr !== undefined){
-          tmp.id = art.kommDeatailnr;
+
+      //haben wir genug davon ? 
+      let artToCheck :ArtikelKommissDTO = new ArtikelKommissDTO(); 
+      await this.repoLager.getCurrentArtiMenge(art[i].artikelId).then(data=>{
+        artToCheck = data;
+      });
+      if(artToCheck !== null){
+        if(artToCheck.total < art[i].artMenge && !art[i].inBestellung){
+         throw new Error("Nicht genug Artikel !!");
         }
       }
-      if(tmp.kommissId !== undefined && tmp.kommissId === art.kommNr){
+      tmp.inBestellung = art[i].inBestellung;
+      if(komm !== undefined && komm.id !== undefined){
+        tmp.artikelId = art[i].artikelId;
+        tmp.menge = art[i].artMenge;
+        tmp.kommissId = komm.id;
+        tmp.gepackt = ARTIKELSTATUS.INPACKEN;
+       
+        if(art[i].kommDeatailnr !== null && art[i].kommDeatailnr !== undefined){
+          tmp.id = art[i].kommDeatailnr;
+        }
+      }
+      if(tmp.kommissId !== undefined && tmp.kommissId === art[i].kommNr){
        await this.repoDetails.create(tmp);
       if(komm.kommDetails.length > 0){
         let found :boolean = false;
         komm.kommDetails.forEach(data=>{
-          if(data !== null && data.id === art.kommDeatailnr){
+          if(data !== null && data.id === art[i].kommDeatailnr){
             data.menge += tmp.menge;
             found = true;
           }
@@ -93,17 +107,23 @@ export class VerkaufService {
        
        
       
-      return await this.repo.save(komm).then(data=>{
-       
-       this.updateResevation(art.kommNr, art.artikelId, art.artMenge, art.kommDeatailnr);
+     kommArr[i] =  await this.repo.save(komm).then(data=>{
+      if(!data) return;
+       if(!tmp.inBestellung)
+       {
+        this.updateResevation(art[i].kommNr, art[i].artikelId, art[i].artMenge, art[i].kommDeatailnr);
+       }
         return data;
       });
-      }
+    }
     }catch(err){
         throw new Error("Etwas ist schiff gelaufen in Kommiss Service on add Artikel " + err);
         
-    } 
     }
+  }
+  console.log(JSON.stringify(kommArr));
+  return kommArr;
+}
     async updateResevation(komm:number, artid: number, menge:number, kommDeatilId:number){
       let tmpRes : ArtikelReservationEntity = new ArtikelReservationEntity();
       tmpRes.artikelId = artid;
@@ -178,7 +198,10 @@ export class VerkaufService {
         return;
       } 
        return await this.repoDetails.delete({'id':id}).then(data=> {
+        if(!tmp.inBestellung)
+        {
         this.updateResevation(tmp.kommissId, tmp.artikelId, -tmp.menge, tmp.id);
+        }
          return data.affected;
         }, err=>{console.log('blad '+err)});
       

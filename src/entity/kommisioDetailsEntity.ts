@@ -16,6 +16,8 @@ menge: number;
 gepackt : ARTIKELSTATUS;
 @Column({nullable: true})
 palettennr : number;
+@Column()
+inBestellung:boolean;
 
 
 @ManyToOne(()=> KommissionirungEntity, 

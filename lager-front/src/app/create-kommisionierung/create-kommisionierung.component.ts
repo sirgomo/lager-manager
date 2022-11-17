@@ -84,8 +84,6 @@ export class CreateKommisionierungComponent implements OnInit {
     return;
   }
   async checkVerfurbarkeit(index:number){
-
-
    await this.kommServ.getCurrentVerfugbareMenge(this.artikels[index].artId).subscribe(
     data =>{
      let tmp : ArtikelKommissDto = new ArtikelKommissDto();
@@ -155,69 +153,147 @@ export class CreateKommisionierungComponent implements OnInit {
 
   }
 async addArtikelToKomm(index:number, edit:boolean){
-
-  let art: AddArtikelKommissDto = new AddArtikelKommissDto();
-  if(!edit){
-    if(this.artikelMenge[index] > this.artikels[index].total)
+  let art: AddArtikelKommissDto[] = new Array();
+  if(!edit && this.artikelMenge[index] > this.artikels[index].total)
+  {
+    let tmp : number = this.artikelMenge[index] - this.artikels[index].total;
+    this.artikelMenge[index] = this.artikels[index].total;
+   if(window.confirm('Wir können nur ' + this.artikels[index].total + ' lifern, soll ' + tmp + ' bestellt werden ?'))
     {
-      this.toastr.error('Du hast mehr eingegen als verfugba ist, die restliche menge wurde zum besttelung eingegeben!',
-      'Zu wenig', {'timeOut':1500})
+      let tmpart: AddArtikelKommissDto = new AddArtikelKommissDto();
+      if(edit){
+        tmpart.artikelId = this.artikelsInKomm[index].artId;
+        tmpart.kommDeatailnr = this.currentKomm.kommDetails[index].id;
+      }else{
+        tmpart.artikelId = this.artikels[index].artId;
+      }
+
+      if(tmp % this.artikels[index].minLosMenge !== 0){
+        tmp += this.artikels[index].minLosMenge -( tmp % this.artikels[index].minLosMenge);
+      }
+      tmpart.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
+      tmpart.artMenge = tmp;
+      tmpart.inBestellung = true;
+      let artForLocal: ArtikelKommissDto = new ArtikelKommissDto();
+      for(let i = 0; i!== this.artikels.length; i++){
+        if(tmpart.artikelId === this.artikels[i].artId){
+          Object.assign(artForLocal, this.artikels[i]);
+          artForLocal.total = tmpart.artMenge;
+          this.artikelsInKomm.push(artForLocal);
+          break;
+        }
+      }
+     art.push(tmpart);
+
+    }else{
+      this.toastr.show(' ok, keine andreungen!', '', {timeOut: 800});
       return;
     }
-     if(this.artikelMenge[index] % this.artikels[index].minLosMenge !== 0){
+  }
+  if(edit && this.artikelMengeEdit[index] > 0 && this.artikelMengeEdit[index] > this.artikelsInKomm[index].total)
+  {
+    for(let i = 0; i !== this.artikels.length; i++){
+      if(this.artikelsInKomm[index].artId === this.artikels[i].artId){
+        if(this.artikelMengeEdit[index] > this.artikels[i].total + this.artikelsInKomm[index].total){
+          let tmp : number = this.artikelMengeEdit[index] - this.artikels[i].total;
+          this.artikelMengeEdit[index] = this.artikels[i].total;
+          if(window.confirm('Wir können nur ' + this.artikels[i].total + ' lifern, soll ' + tmp + ' bestellt werden ?'))
+          {
+            let tmpart: AddArtikelKommissDto = new AddArtikelKommissDto();
+              tmpart.artikelId = this.artikelsInKomm[index].artId;
+              this.currentKomm.kommDetails[index].id = -1;
+            if(tmp % this.artikels[i].minLosMenge !== 0){
+              tmp += this.artikels[i].minLosMenge -( tmp % this.artikels[i].minLosMenge);
+            }
+            tmpart.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
+            tmpart.artMenge = tmp;
+            tmpart.inBestellung = true;
+            let artForLocal: ArtikelKommissDto = new ArtikelKommissDto();
+             Object.assign(artForLocal, this.artikels[i]);
+             artForLocal.total = tmpart.artMenge;
+             this.artikelsInKomm.push(artForLocal);
+
+
+           art.push(tmpart);
+
+          }else{
+            this.toastr.show(' ok, keine andreungen!', '', {timeOut: 800});
+            return;
+          }
+        }
+        break;
+      }
+    }
+
+
+
+  }
+
+
+  if(!edit && this.artikelMenge[index] > 0 ){
+
+    if(this.artikelMenge[index] % this.artikels[index].minLosMenge !== 0 && this.artikelMenge[index] !== this.artikels[index].total){
         if(!window.confirm('Willst du Anbruch schicken ?')){
           this.artikelMenge[index] += this.artikels[index].minLosMenge -( this.artikelMenge[index] % this.artikels[index].minLosMenge);
         return;
         }
-      }
-
-
-      art.artMenge = this.artikelMenge[index];
-      art.artikelId = this.artikels[index].artId;
-      art.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
+    }
+      let artToAd : AddArtikelKommissDto = new AddArtikelKommissDto();
+        artToAd.artMenge = this.artikelMenge[index];
+        artToAd.artikelId = this.artikels[index].artId;
+        artToAd.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
       let tmpArt: ArtikelKommissDto = new ArtikelKommissDto();
         Object.assign(tmpArt, this.artikels[index]);
         tmpArt.total = this.artikelMenge[index];
         this.artikels[index].total -= this.artikelMenge[index];
         this.artikelsInKomm.push(tmpArt);
         this.artikelMenge[index] = 0;
-
+     art.push(artToAd);
 
 
   }else{
-    if(this.artikelMengeEdit[index] % this.artikels[index].minLosMenge !== 0){
-      if(!window.confirm('Willst du Anbruch schicken ?')){
-        this.artikelMengeEdit[index] += this.artikels[index].minLosMenge -( this.artikelMengeEdit[index] % this.artikels[index].minLosMenge);
-        return;
+      if(this.artikelMengeEdit[index] > 0){
+      if(this.artikelMengeEdit[index] % this.artikels[index].minLosMenge !== 0 && this.currentKomm.kommDetails[index].id !== -1){
+        if(!window.confirm('Willst du Anbruch schicken ?')){
+          this.artikelMengeEdit[index] += this.artikels[index].minLosMenge -( this.artikelMengeEdit[index] % this.artikels[index].minLosMenge);
+          return;
+        }
       }
+      let artToAd : AddArtikelKommissDto = new AddArtikelKommissDto();
+      artToAd.artikelId = this.artikelsInKomm[index].artId;
+      artToAd.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
+      artToAd.kommDeatailnr = this.currentKomm.kommDetails[index].id;
+      if(this.currentKomm.kommDetails[index].id !== -1){
+        artToAd.artMenge = this.currentKomm.kommDetails[index].menge;
+
+        if(artToAd.artMenge > this.artikelMengeEdit[index]){
+          artToAd.artMenge = -(artToAd.artMenge - this.artikelMengeEdit[index]);
+          this.artikelsInKomm[index].total += artToAd.artMenge;
+        }else{
+          artToAd.artMenge = this.artikelMengeEdit[index] - artToAd.artMenge;
+          this.artikelsInKomm[index].total += artToAd.artMenge;
+        }
+      }else{
+        artToAd.artMenge = this.artikelMengeEdit[index];
+      }
+
+
+      art.push(artToAd);
+      this.artikelMengeEdit[index] = 0;
     }
-    art.artikelId = this.artikelsInKomm[index].artId;
-    art.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
-    art.kommDeatailnr = this.currentKomm.kommDetails[index].id;
-    art.artMenge = this.currentKomm.kommDetails[index].menge;
-
-    if(art.artMenge > this.artikelMengeEdit[index]){
-      art.artMenge = -(art.artMenge - this.artikelMengeEdit[index]);
-      this.artikelsInKomm[index].total += art.artMenge;
-    }else{
-      art.artMenge = this.artikelMengeEdit[index] - art.artMenge;
-      this.artikelsInKomm[index].total += art.artMenge;
-
-    }
-
-
-
-    this.artikelMengeEdit[index] = 0;
-    // TODO controlle ist der artikel schon gepackt ?, ist es genug davon ? delete wenn menge to 0
-    //TODO controlle ob artikel menge volle kartons sind
   }
-
-  await this.kommServ.addArtikelToKomm(art).subscribe(data=>{
+  art.reverse();
+  console.log(JSON.stringify(art));
+  this.saveArtikel(art);
+}
+async saveArtikel(art:AddArtikelKommissDto[]){
+return  await this.kommServ.addArtikelToKomm(art).subscribe((data)=>{
     if(data !== null){
-      Object.assign(this.currentKomm, data);
+      Object.assign(this.currentKomm, data[data.length-1]);
       this.reasignKomm();
     }
-
+  }, (err)=>{
+    console.log(err.message);
   });
 }
 showArtikelsinKomm(){
@@ -232,6 +308,11 @@ deletePositionInKomm(index:number){
     data=>{
       console.log(data);
       if(data == 1){
+        for(let i = 0; i !== this.artikels.length; i++){
+          if(this.currentKomm.kommDetails[index].artikelId === this.artikels[i].artId){
+            this.artikels[i].total += this.currentKomm.kommDetails[index].menge;
+          }
+        }
         this.currentKomm.kommDetails.splice(index,1);
         this.reasignKomm();
       }

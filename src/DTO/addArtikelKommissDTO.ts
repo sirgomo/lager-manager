@@ -12,4 +12,6 @@ export class AddArtikelKommissDTO{
     kommNr:number;
     @IsOptional()
     kommDeatailnr:number;
+    @IsOptional()
+    inBestellung:boolean;
 }

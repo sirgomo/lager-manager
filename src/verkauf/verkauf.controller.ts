@@ -37,7 +37,7 @@ export class VerkaufController {
     }
     @Post('addart')
     @ROLES(ROLE.VERKAUF)
-    async addArtikelToKomm(@Body(ValidationPipe) art: AddArtikelKommissDTO){
+    async addArtikelToKomm(@Body(ValidationPipe) art: AddArtikelKommissDTO[]){
         return await this.verkService.addArtikelToKommiss(art);
     }
 

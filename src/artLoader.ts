@@ -29,6 +29,7 @@ export class ArtLoader{
                 artike.bestand = this.getRandomInt(2,1000);
                 artike.artikelPrice = Math.round(( (this.getRandomInt(1,100) + Math.random()) * 100) / 100);
                 artike.verPrice = artike.artikelPrice + artike.artikelPrice * 0.05;
+                artike.liferantId = this.getRandomInt(0,5);
                 arti[i] = artike;
             }else{
                 let artike : ArtikelEntity = new ArtikelEntity();
@@ -46,6 +47,7 @@ export class ArtLoader{
                 artike.bestand = this.getRandomInt(2,1000);
                 artike.artikelPrice = Math.round(( (this.getRandomInt(1,100) + Math.random()) * 100) / 100);
                 artike.verPrice = artike.artikelPrice + artike.artikelPrice * 0.05;
+                artike.liferantId = this.getRandomInt(0,5);
                 arti[i] = artike;
             }
            
