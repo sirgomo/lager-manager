@@ -7,7 +7,7 @@ import { AddArtikelKommissDto } from '../dto/addArtikelKommiss.dto';
 import { ArtikelKommissDto } from '../dto/artikelKommiss.dto';
 import { DispositorDTO } from '../dto/dispositor.dto';
 import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
-import { ARTIKELSTATUS, KommissDetailsDto } from '../dto/kommissDetails.dto';
+import { KommissDetailsDto } from '../dto/kommissDetails.dto';
 import { SpeditionDTO } from '../dto/spedition.dto';
 import { HelperService } from '../helper.service';
 import { VerkaufService } from '../verkauf/verkauf.service';
@@ -130,6 +130,11 @@ export class CreateKommisionierungComponent implements OnInit {
           break;
          }
         }
+      }
+      if( this.currentKomm.kommDetails.length > 0 ){
+        this.kommServ.getTotalGewichtAndPaleten(this.currentKomm.id).subscribe(data=>{
+          console.log(JSON.stringify(data));
+        });
       }
 
 

@@ -20,7 +20,7 @@ export class ArtikelEntity {
   @Column()
   minLosMenge: number;
   @Column()
-  artikelFlage: artikelFlage;
+  artikelFlage: ARTIKELFLAGE;
   @Column()
   bestand: number;
   @Column({type : 'double', nullable: false})
@@ -33,7 +33,7 @@ export class ArtikelEntity {
   @OneToMany(()=> UiidEntity, (uid) => uid.arikels)
   uids: UiidEntity[];
 }
-export enum artikelFlage {
+export enum ARTIKELFLAGE {
   FASS = 'FASS',
   SUSS = 'SUSS',
   ALK = 'ALK'

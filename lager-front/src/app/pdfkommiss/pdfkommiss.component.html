@@ -1,0 +1,24 @@
+<div class="container">
+ <div class="table-responsive">
+  <table class="table table-primary">
+    <thead>
+      <tr>
+        <th scope="col">Stellplatz</th>
+        <th scope="col">Menge</th>
+        <th scope="col">Artikel Nr</th>
+        <th scope="col">Kartons</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="" *ngFor="let item of kommToDruck; let i=index">
+        <td scope="row">{{item?.statlagerplatz}}</td>
+        <td>{{item.menge}}</td>
+        <td>{{item.artikelId}}</td>
+        <td *ngIf="item.menge % item.minLosMenge === 0 ">{{item.menge / item.minLosMenge}}</td>
+      </tr>
+
+    </tbody>
+  </table>
+ </div>
+
+</div>

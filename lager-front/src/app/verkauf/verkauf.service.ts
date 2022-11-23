@@ -44,4 +44,7 @@ export class VerkaufService {
   deletePosInKom(id:number){
     return this.http.delete(this.API_URL + '/detaId/' + id);
   }
+  getTotalGewichtAndPaleten(kommnr:number){
+    return this.http.get<any>(this.API_URL + '/total/' + kommnr);
+  }
 }

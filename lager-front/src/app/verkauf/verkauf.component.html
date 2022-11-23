@@ -14,7 +14,7 @@
   <div class="mt-2 col-md-12"></div>
   <div class="row clearfix">
     <div class="col table-responsive">
-    <table class="table table-bordered table-hover table-sortable" id="tab_logic">
+    <table class="table table-bordered table-hover table-sortable" id="tab_logic" *ngIf="!showDownload">
       <thead>
         <tr >
           <th class="text-center">
@@ -78,11 +78,19 @@
             </select>
         </td>
                     <td data-name="del">
-                        <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove' (click)="deleteKomm(i)"><span aria-hidden="true">×</span></button>
+                      <div class="row">
+                        <div class="col">
+                          <button class="btn btn-danger  row-remove" (click)="deleteKomm(i)"><span class="glyphicon  glyphicon-remove" aria-hidden="true"></span>X</button>
+                        </div>
+                        <div class="col px-2">
+                          <button class="btn btn-success" (click)="getKommToDruck(i)" ><span class="glyphicon  glyphicon-hdd" aria-hidden="true"></span>Gen</button>
+                        </div>
+                      </div>
                     </td>
         </tr>
       </tbody>
     </table>
     </div>
   </div>
+  <app-pdfkommiss *ngIf="showDownload" [kommToDruck]="kommissToDruck"></app-pdfkommiss>
 </div>

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AddArtikelKommissDTO } from 'src/DTO/addArtikelKommissDTO';
 import { ArtikelKommissDTO } from 'src/DTO/artikelKommissDTO';
 import { KomissDTO } from 'src/DTO/KomissDTO';
+import { PalettenMengeVorausDTO } from 'src/DTO/palettenMengeVorausDTO';
 import { ArtikelReservationEntity } from 'src/entity/ArtikelReservationEntity';
 import { ARTIKELSTATUS, KommisioDetailsEntity } from 'src/entity/KommisioDetailsEntity';
 import { KommissionirungEntity } from 'src/entity/KommissionirungEntity';
@@ -12,7 +13,7 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class VerkaufService {
-  private helper: Helper;
+  private helper: Helper = new Helper();
     constructor(@InjectRepository(KommissionirungEntity) private repo: Repository<KommissionirungEntity>,
     @InjectRepository(KommisioDetailsEntity) private repoDetails: Repository<KommisioDetailsEntity>, private repoLager: LagerService,
     @InjectRepository(ArtikelReservationEntity) private repoReserv : Repository<ArtikelReservationEntity>){
@@ -209,5 +210,28 @@ export class VerkaufService {
       throw new Error("Etwas ist schieff gegangen als ich wollete position in komm löschen " + err);
       
     }
-   }
+  }
+  async getVorausgesehenPaletenMenge(komissId: number){
+    let artikels : PalettenMengeVorausDTO[] = new Array();
+    let totalgewicht : number = 0;
+  
+    let komm: KommissionirungEntity = new KommissionirungEntity();
+    komm = await this.repo.findOneBy({'id': komissId});
+    return await this.repoDetails.query(`SELECT kommDetails.artikelId, menge, gepackt, statlagerplatz, paleteTyp,artikel.artikelId, artikel.name, artikel.minLosMenge,
+    artikel.grosse, artikel.gewicht, artikel.basisEinheit, artikel.artikelFlage FROM kommDetails 
+    LEFT JOIN artikel ON artikel.artikelId = kommDetails.artikelId
+    LEFT JOIN (SELECT artId, lagerplatz AS statlagerplatz, palettenTyp AS paleteTyp FROM lagerplatz WHERE static = true ) lagerplatz ON lagerplatz.artId = kommDetails.artikelId
+    WHERE kommissId = '${komissId}' AND inBestellung = false ORDER BY statlagerplatz ASC` ).then(data=>{
+     for(let i = 0; i !== data.length; i++){
+      let art :PalettenMengeVorausDTO = new PalettenMengeVorausDTO();
+      Object.assign(art,data[i]); 
+      artikels.push(art);
+      
+     }
+     this.helper.getTotalPalettenMenge(komm.maxPalettenHoher, artikels, komissId);
+     console.log('totalgewicht '+ totalgewicht);
+     return artikels;
+    });
+   
+  }
 }

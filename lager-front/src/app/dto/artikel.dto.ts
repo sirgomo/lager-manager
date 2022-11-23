@@ -7,11 +7,11 @@
     basisEinheit!: number;
     minLosMenge!: number;
     bestand!: number;
-    artikelFlage!: artikelFlage;
+    ARTIKELFLAGE!: ARTIKELFLAGE;
     artikelPrice!: number;
     verPrice!: number;
  }
- export enum artikelFlage{
+ export enum ARTIKELFLAGE{
   FASS = 'FASS',
   SUSS = 'SUSS',
   ALK = 'ALK',

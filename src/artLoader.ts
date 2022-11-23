@@ -1,6 +1,6 @@
 
 import { ArtService } from "./artikel/art.service";
-import { ArtikelEntity, artikelFlage } from "./entity/ArtikelEntity";
+import { ArtikelEntity, ARTIKELFLAGE } from "./entity/ArtikelEntity";
 import { UiidEntity } from "./entity/UiidEntity";
 
 export class ArtLoader{
@@ -23,7 +23,7 @@ export class ArtLoader{
                 artike.minLosMenge = 6;
                 uid.uid = Math.random().toString();
                 artike.uids = [uid];
-                artike.artikelFlage = artikelFlage.SUSS;
+                artike.artikelFlage = ARTIKELFLAGE.SUSS;
                 //artike.mhd = new Date(this.getRandomInt(2023,2024), this.getRandomInt(0,11) + 1, this.getRandomInt(0,28) + 1);
              
                 artike.bestand = this.getRandomInt(2,1000);
@@ -42,7 +42,7 @@ export class ArtLoader{
                 artike.minLosMenge = 6;
                 uid.uid =  Math.random().toString();
                 artike.uids = [uid];
-                artike.artikelFlage = artikelFlage.ALK;
+                artike.artikelFlage = ARTIKELFLAGE.ALK;
               //  artike.mhd = new Date(this.getRandomInt(2023,2026), this.getRandomInt(0,11) + 1, this.getRandomInt(0,28) + 1);
                 artike.bestand = this.getRandomInt(2,1000);
                 artike.artikelPrice = Math.round(( (this.getRandomInt(1,100) + Math.random()) * 100) / 100);

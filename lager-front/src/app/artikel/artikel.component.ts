@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ArtikelDTO, artikelFlage } from '../dto/artikel.dto';
+import { ArtikelDTO, ARTIKELFLAGE } from '../dto/artikel.dto';
 import { UidDTO } from '../dto/artikel.dto';
 import { HelperService } from '../helper.service';
 import { ArtikelService } from './artikel.service';
@@ -31,7 +31,7 @@ export class ArtikelComponent implements OnInit {
     basisEinheit: Number,
     minLosMenge: Number,
     bestand: Number,
-    artikelFlage: artikelFlage,
+    artikelFlage: ARTIKELFLAGE,
     artikelPrice: Number,
     verPrice: Number
    });

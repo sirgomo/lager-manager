@@ -1,5 +1,5 @@
 import {  IsNotEmpty, Length, IsOptional, IsNumber, Min, IsDate } from 'class-validator';
-import { artikelFlage } from 'src/entity/ArtikelEntity';
+import { ARTIKELFLAGE } from 'src/entity/ArtikelEntity';
 import { UiidEntity } from 'src/entity/UiidEntity';
 export class ArtikelDTO{
     @IsOptional()
@@ -24,7 +24,7 @@ export class ArtikelDTO{
     @IsNumber()
     bestand: number;
     @IsNotEmpty()
-    artikelFlage: artikelFlage;
+    artikelFlage: ARTIKELFLAGE;
     @IsNotEmpty()
     @IsNumber()
     artikelPrice: number;

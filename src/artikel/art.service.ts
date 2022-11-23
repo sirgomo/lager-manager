@@ -148,5 +148,11 @@ export class ArtService {
             throw new InternalServerErrorException('Etwas is schief gegangen');
         }
     }
-   
+
+    async getArtikelnachUid(uid:string){
+      return  await this.uidRepo.find({'where': {'uid': uid}, 'relations':{'artikelId': true} }).then(data=>{
+        console.log(data);
+        return data;
+      });
+    }
 }

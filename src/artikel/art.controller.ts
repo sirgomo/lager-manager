@@ -27,7 +27,7 @@ export class ArtController {
         return this.ArtService.createArtikel(data);
     }
     //@Patch(':id')
-    //updateArtikel(@Body('artikelFlag', ArtikelflagsPipers) artikelFlag: artikelFlage, 
+    //updateArtikel(@Body('artikelFlag', ArtikelflagsPipers) artikelFlag: ARTIKELFLAGE, 
     //@Param('id') id: number){
     @Patch(':id')
     @ROLES(ROLE.WARENPFHLEGE)

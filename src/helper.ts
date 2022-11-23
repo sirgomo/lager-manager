@@ -1,5 +1,10 @@
+import { arrayBuffer } from "stream/consumers";
+import { In } from "typeorm";
 import { ArtikelDTO } from "./DTO/ArtikelDTO";
 import { ArtikelMengeDTO } from "./DTO/artikelMengeDTO";
+import { PalettenMengeVorausDTO } from "./DTO/palettenMengeVorausDTO";
+import { ARTIKELFLAGE } from "./entity/ArtikelEntity";
+import { InKomissPalletenEntity } from "./entity/InKomissPalletenEntity";
 
 export class Helper{
   //1
@@ -104,5 +109,168 @@ export class Helper{
 
       return volOnStel + volNeue;
     }
+public getTotalPalettenMenge(palMaxHo: number, artikels: PalettenMengeVorausDTO[], komissId: number){
+    let whileStop:number = 0;
+    let sussKram: PalettenMengeVorausDTO[] = new Array();
+    let alkKram: PalettenMengeVorausDTO[] = new Array();
+    let fassKram: PalettenMengeVorausDTO[] = new Array();
+    let tmpArrayFurRestMengeArtikel: PalettenMengeVorausDTO[] = new Array();
+    let palettenMenge : InKomissPalletenEntity[] = new Array();
+    let totalGewichtAltWeise:number = 0;
+    let totalPaletenMengeAltWeise: number = 0;
+    totalGewichtAltWeise = this.artikelsAuftailen(artikels, totalGewichtAltWeise, alkKram, fassKram, sussKram);
+    console.log('sus ' + sussKram.length + ' alk ' + alkKram.length + ' fass ' + fassKram.length);
+    while(alkKram.length >= 1 ){
+      whileStop++;
+      if(whileStop === 5){ break;}
+      let pal: InKomissPalletenEntity = new InKomissPalletenEntity();
+      this.rekalkulatePaltte(palettenMenge, palMaxHo, pal, komissId);
+      let palete:string = '';
+      let mengeOnLage:number = 0;
+     
+    for( let i = 0; i < alkKram.length; i++){
+      let {kH, kB, kL }: {kH:number, kB: number; kL: number; } = this.getMassen(alkKram, i);
+       ({mengeOnLage, palete}  = this.getMengen(alkKram,i));
+      console.log(palete);
+    
+      
+    }
+   for(let end = 0; end < palettenMenge.length; end++){
+    console.log(JSON.stringify(palettenMenge[end]));
+   }
+    console.log(' Total alt gewicht ' + totalGewichtAltWeise + ' alt palet menge 750 : '+ totalGewichtAltWeise / 750);
+    console.log(' noch in alk ' + alkKram.length + ' noch in suss : '+ sussKram.length);
+  
+  }
+} 
 
+  
+
+  private rekalkulatePaltte(palettenMenge: InKomissPalletenEntity[], palMaxHo: number, pal: InKomissPalletenEntity, komissId: number) {
+    if (palettenMenge.length > 0 && palettenMenge[palettenMenge.length - 1] !== undefined) {
+      if (palettenMenge[palettenMenge.length - 1].palettenH < palMaxHo) {
+        pal.id = palettenMenge[palettenMenge.length - 1].id;
+        pal.kommId = komissId;
+        pal.erwartetPaletteGewicht = palettenMenge[palettenMenge.length - 1].erwartetPaletteGewicht;
+        pal.palettenH = palettenMenge[palettenMenge.length - 1].palettenH;
+      } else {
+        pal.id = this.makePalId(7);
+        pal.kommId = komissId;
+        pal.palettenH = 15;
+        pal.erwartetPaletteGewicht = 20;
+      }
+    }else{
+      pal.id = this.makePalId(7);
+      pal.kommId = komissId;
+      pal.palettenH = 15;
+      pal.erwartetPaletteGewicht = 20;
+    }
+  }
+
+
+
+
+  private getMengen(alkKram: PalettenMengeVorausDTO[], i: number) {
+    let {kH, kB, kL }: {kH:number, kB: number; kL: number; } = this.getMassen(alkKram, i);
+    let palete: string = '';
+    let mengeOn1: number = 0;
+    let mengeOn2: number = 0;
+    let breiteOnBreite: number = Math.floor(80 / kB);
+    let langeOnLange: number = Math.floor(120 / kL);
+    let plazOnLange: number = 120 - langeOnLange * kL;
+    let platzOnBrite: number = 80 - breiteOnBreite * kB;
+    mengeOn1 = breiteOnBreite * langeOnLange;
+    if (plazOnLange > kB) {
+      mengeOn1 += Math.floor(plazOnLange / kB) * Math.floor(80 / kL);
+    }
+    if (platzOnBrite > kL) {
+      mengeOn1 += Math.floor(platzOnBrite / kL) * Math.floor(120 / kB);
+    }
+
+
+    let langeOnBreite2: number = Math.floor(80 / kL);
+    let breiteOnLange2: number = Math.floor(120 / kB);
+    let plazOnLange2: number = 120 - breiteOnLange2 * kB;
+    let platzOnBrite2: number = 80 - langeOnBreite2 * kL;
+    mengeOn2 = langeOnBreite2 * breiteOnLange2;
+    if (plazOnLange2 > kL) {
+      mengeOn2 += Math.floor(plazOnLange2 / kL) * Math.floor(80 / kB);
+    }
+    if (platzOnBrite2 > kB) {
+      mengeOn2 += Math.floor(platzOnBrite2 / kB) * Math.floor(120 / kL);
+    }
+    for (let b = 0; b < 80; b++) {
+      for (let l = 0; l < 120; l++) {
+        if(b === 0 || b === 79 || l === 0 || l === 119){
+          palete += '#';
+        }
+        else if (mengeOn1 > mengeOn2) {
+          if (b % kB === 0 && b <  79 - platzOnBrite || l % kL === 0 && l < 119 - plazOnLange) {
+            palete += 'x';
+          } else if (b > 79 - platzOnBrite && b % kL === 0 || l > 119 - plazOnLange && l % kB === 0) {
+            palete += 'y';
+          } else {
+            palete += ' ';
+          }
+        } else {
+          if (b % kL === 0 && b < 79 - platzOnBrite2 || l % kB === 0 && l < 119 - plazOnLange2) {
+            palete += 'x';
+          } else if (b > 79 - platzOnBrite2 && b % kB === 0 || l > 119 - plazOnLange2 && l % kL === 0) {
+            palete += 'y';
+          } else {
+            palete += ' ';
+          }
+        }
+
+        if (l === 119) {
+          palete += '\n';
+        }
+      }
+    }
+    let mengeOnLage:number = 0;
+    if(mengeOn1 > mengeOn2){
+      mengeOnLage = mengeOn1;
+    }else{
+      mengeOnLage = mengeOn2;
+    }
+    return {mengeOnLage, palete};
+  }
+
+  private getMassen(alkKram: PalettenMengeVorausDTO[], i: number) {
+    let masse: string[] = new Array();
+    masse = alkKram[i].grosse.split('x');
+    //hxbxl 31 x16x28c
+    let kH: number = Number(masse[0]);
+    let kB: number = Number(masse[1]);
+    let kL: number = Number(masse[2]);
+    return {kH, kB, kL };
+  }
+
+  private artikelsAuftailen(artikels: PalettenMengeVorausDTO[], totalGewichtAltWeise: number, alkKram: PalettenMengeVorausDTO[], fassKram: PalettenMengeVorausDTO[], sussKram: PalettenMengeVorausDTO[]) {
+    for (let i = 0; i !== artikels.length; i++) {
+      totalGewichtAltWeise += Math.ceil(artikels[i].menge / artikels[i].minLosMenge) * artikels[i].gewicht;
+
+      if (artikels[i].artikelFlage === ARTIKELFLAGE.ALK) {
+        alkKram.push(artikels[i]);
+      } else if (artikels[i].artikelFlage === ARTIKELFLAGE.FASS) {
+        fassKram.push(artikels[i]);
+      } else {
+        sussKram.push(artikels[i]);
+      }
+    }
+    alkKram.sort((a,b)=>{
+     return a.menge > b.menge ? 1:0;
+    });
+    return totalGewichtAltWeise;
+  }
+
+  private makePalId(length) {
+    var result           = '';
+    var characters       = '1234567890';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return Number(result);
+  }
 }

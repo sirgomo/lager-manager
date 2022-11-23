@@ -61,6 +61,12 @@ export class VerkaufController {
     deletePositionInKom(@Param('id') id: number){
         return this.verkService.deleteArtikelFromKomm(id);
     }
+    @Get('/total/:id')
+    @ROLES(ROLE.VERKAUF)
+    getTotalGewichtAndMenge(@Param('id') kommId:number){
+        return this.verkService.getVorausgesehenPaletenMenge(kommId);
+    }
+
    
     
 }

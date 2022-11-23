@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { timeStamp } from 'console';
 import { DataDilerService } from '../data-diler.service';
 import { DatenpflegeService } from '../datenpflege/datenpflege.service';
 import { DispositorDTO } from '../dto/dispositor.dto';
 import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
+import { PalettenMengeVorausToDruckDto } from '../dto/paletenMengeVorausKom.dto';
 import { SpeditionDTO } from '../dto/spedition.dto';
 import { VerkaufService } from './verkauf.service';
 
@@ -18,6 +20,8 @@ export class VerkaufComponent implements OnInit {
   kommStatus: typeof KOMMISIONSTATUS;
   spedi : SpeditionDTO[] = new Array();
   dispo: DispositorDTO[] = new Array();
+  showDownload:boolean = false;
+  kommissToDruck: PalettenMengeVorausToDruckDto[] = new Array();
 
   constructor(private serv : VerkaufService, private router : Router, private dataDie: DataDilerService) {
     this.kommStatus = KOMMISIONSTATUS;
@@ -70,9 +74,23 @@ async meinKommissionierungen(){
    });
 }
 async deleteKomm(index:number){
- await this.serv.deleteKommissionierung(this.komiss[index].id).subscribe(data=>{
-  this.komiss.splice(index, 1);
- });
+  if(window.confirm('Bist du sicher, dass du die kommissionirung löchen wilsst?')){
+    await this.serv.deleteKommissionierung(this.komiss[index].id).subscribe(data=>{
+      this.komiss.splice(index, 1);
+     });
+    }
+  }
+async getKommToDruck(kommid:number){
+  if(this.showDownload === true) this.showDownload = false;
+  this.kommissToDruck.splice(0,this.kommissToDruck.length);
+    await this.serv.getTotalGewichtAndPaleten(kommid).subscribe(data=>{
+     for(let i =0; i !== data.length; i++){
+
+      this.kommissToDruck.push(data[i]);
+     }
+     this.showDownload = true;
+    });
+
 }
 
 }

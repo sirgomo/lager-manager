@@ -28,6 +28,7 @@ import { CreateKommisionierungComponent } from './create-kommisionierung/create-
 import { DatenpflegeComponent } from './datenpflege/datenpflege.component';
 import { LoaderComponent } from './loader/loader.component';
 import { LaderInterceptorInterceptor } from './loader/lader-interceptor.interceptor';
+import { PdfkommissComponent } from './pdfkommiss/pdfkommiss.component';
 
 
 
@@ -48,7 +49,8 @@ import { LaderInterceptorInterceptor } from './loader/lader-interceptor.intercep
     WarenebuchungComponent,
     CreateKommisionierungComponent,
     DatenpflegeComponent,
-    LoaderComponent
+    LoaderComponent,
+    PdfkommissComponent
   ],
   imports: [
     BrowserModule,
