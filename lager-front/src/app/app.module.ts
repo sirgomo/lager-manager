@@ -19,6 +19,8 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import {MatTableModule} from '@angular/material/table';
+import {MatTabsModule} from '@angular/material/tabs';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {  MatCardModule } from '@angular/material/card';
 import {ToastrModule} from 'ngx-toastr'
@@ -29,6 +31,7 @@ import { DatenpflegeComponent } from './datenpflege/datenpflege.component';
 import { LoaderComponent } from './loader/loader.component';
 import { LaderInterceptorInterceptor } from './loader/lader-interceptor.interceptor';
 import { PdfkommissComponent } from './pdfkommiss/pdfkommiss.component';
+
 
 
 
@@ -63,6 +66,8 @@ import { PdfkommissComponent } from './pdfkommiss/pdfkommiss.component';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTableModule,
+    MatTabsModule,
     FormsModule,
     MatCardModule,
     MatInputModule,

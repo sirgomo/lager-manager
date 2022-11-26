@@ -1,13 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { timeStamp } from 'console';
 import { DataDilerService } from '../data-diler.service';
-import { DatenpflegeService } from '../datenpflege/datenpflege.service';
 import { DispositorDTO } from '../dto/dispositor.dto';
 import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
 import { PalettenMengeVorausToDruckDto } from '../dto/paletenMengeVorausKom.dto';
 import { SpeditionDTO } from '../dto/spedition.dto';
 import { VerkaufService } from './verkauf.service';
+
 
 @Component({
   selector: 'app-verkauf',
@@ -22,6 +21,7 @@ export class VerkaufComponent implements OnInit {
   dispo: DispositorDTO[] = new Array();
   showDownload:boolean = false;
   kommissToDruck: PalettenMengeVorausToDruckDto[] = new Array();
+
 
   constructor(private serv : VerkaufService, private router : Router, private dataDie: DataDilerService) {
     this.kommStatus = KOMMISIONSTATUS;
@@ -48,6 +48,7 @@ kommStatusChange(id: number){
 
 async alleKommissionierungen(){
   this.komiss.splice(0, this.komiss.length);
+  this.showDownload = false;
   await this.serv.getAll().subscribe(res =>{
     res.forEach(kom =>{
       this.komiss.push(kom);
@@ -66,6 +67,7 @@ createKommissionirung(index:number){
 
 }
 async meinKommissionierungen(){
+  this.showDownload = false;
   this.komiss.splice(0, this.komiss.length);
    await this.serv.getAllByVerkufer(Number(localStorage.getItem('myId'))).subscribe(data=>{
     data.forEach(komm =>{
@@ -81,13 +83,13 @@ async deleteKomm(index:number){
     }
   }
 async getKommToDruck(kommid:number){
-  if(this.showDownload === true) this.showDownload = false;
-  this.kommissToDruck.splice(0,this.kommissToDruck.length);
-    await this.serv.getTotalGewichtAndPaleten(kommid).subscribe(data=>{
-     for(let i =0; i !== data.length; i++){
 
+  this.kommissToDruck.splice(0,this.kommissToDruck.length);
+    await this.serv.getTotalGewichtAndPaleten(this.komiss[kommid].id).subscribe(data=>{
+     for(let i =0; i !== data.length; i++){
       this.kommissToDruck.push(data[i]);
      }
+     this.dataDie.setKomm(this.komiss[kommid]);
      this.showDownload = true;
     });
 

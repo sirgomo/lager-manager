@@ -217,21 +217,28 @@ export class VerkaufService {
   
     let komm: KommissionirungEntity = new KommissionirungEntity();
     komm = await this.repo.findOneBy({'id': komissId});
-    return await this.repoDetails.query(`SELECT kommDetails.artikelId, menge, gepackt, statlagerplatz, paleteTyp,artikel.artikelId, artikel.name, artikel.minLosMenge,
-    artikel.grosse, artikel.gewicht, artikel.basisEinheit, artikel.artikelFlage FROM kommDetails 
-    LEFT JOIN artikel ON artikel.artikelId = kommDetails.artikelId
-    LEFT JOIN (SELECT artId, lagerplatz AS statlagerplatz, palettenTyp AS paleteTyp FROM lagerplatz WHERE static = true ) lagerplatz ON lagerplatz.artId = kommDetails.artikelId
-    WHERE kommissId = '${komissId}' AND inBestellung = false ORDER BY statlagerplatz ASC` ).then(data=>{
-     for(let i = 0; i !== data.length; i++){
-      let art :PalettenMengeVorausDTO = new PalettenMengeVorausDTO();
-      Object.assign(art,data[i]); 
-      artikels.push(art);
-      
-     }
-     this.helper.getTotalPalettenMenge(komm.maxPalettenHoher, artikels, komissId);
-     console.log('totalgewicht '+ totalgewicht);
-     return artikels;
-    });
-   
+  
+   return await this.repoDetails.query(`SELECT kommDetails.artikelId, menge, gepackt, statlagerplatz, paleteTyp,artikel.artikelId, artikel.name, artikel.minLosMenge,
+      artikel.grosse, artikel.gewicht, artikel.basisEinheit, artikel.artikelFlage FROM kommDetails 
+      LEFT JOIN artikel ON artikel.artikelId = kommDetails.artikelId
+      LEFT JOIN (SELECT artId, lagerplatz AS statlagerplatz, palettenTyp AS paleteTyp FROM lagerplatz WHERE static = true ) lagerplatz ON lagerplatz.artId = kommDetails.artikelId
+      WHERE kommissId = '${komissId}' AND inBestellung = false ORDER BY statlagerplatz ASC` ).then(data=>{
+       for(let i = 0; i !== data.length; i++){
+        let art :PalettenMengeVorausDTO = new PalettenMengeVorausDTO();
+        Object.assign(art,data[i]); 
+        artikels.push(art);
+        
+       }
+       if(komm.maxPalettenHoher !== null){
+        this.helper.getTotalPalettenMenge(komm.maxPalettenHoher, artikels, komissId);
+        console.log('totalgewicht '+ totalgewicht);
+        return artikels;
+       }
+     
+        
+      });
+     
+    
+ 
   }
 }
