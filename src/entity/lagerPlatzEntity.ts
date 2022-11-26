@@ -21,6 +21,8 @@ export class LagerPlatzEntity{
     lagerPlatzVolumen : number;
     @Column()
     static : boolean = false;
+    @Column({nullable: false})
+    liferant:number;
 
   
 

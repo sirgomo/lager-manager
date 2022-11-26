@@ -78,7 +78,7 @@ genpdf2(){
       }
 
       let spedi :SpeditionDTO[] = this.dataDiel.getSpeditors();
-      console.log(JSON.stringify(spedi));
+
       // Add the page to the PDF.
       if (page > 0) pdf.addPage();
      // debugger;

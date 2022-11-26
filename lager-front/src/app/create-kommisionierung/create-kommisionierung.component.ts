@@ -132,8 +132,9 @@ export class CreateKommisionierungComponent implements OnInit {
         }
       }
       if( this.currentKomm.kommDetails.length > 0 ){
+        //get total palet menge and gewicht ... it schould
         this.kommServ.getTotalGewichtAndPaleten(this.currentKomm.id).subscribe(data=>{
-          console.log(JSON.stringify(data));
+        //  console.log(JSON.stringify(data));
         });
       }
 
@@ -238,7 +239,7 @@ async addArtikelToKomm(index:number, edit:boolean){
   if(!edit && this.artikelMenge[index] > 0 ){
 
     if(this.artikelMenge[index] % this.artikels[index].minLosMenge !== 0 && this.artikelMenge[index] !== this.artikels[index].total){
-        if(!window.confirm('Willst du Anbruch schicken ?')){
+        if(!window.confirm('Willst du ein Anbruch schicken ?')){
           this.artikelMenge[index] += this.artikels[index].minLosMenge -( this.artikelMenge[index] % this.artikels[index].minLosMenge);
         return;
         }
@@ -259,7 +260,7 @@ async addArtikelToKomm(index:number, edit:boolean){
   }else{
       if(this.artikelMengeEdit[index] > 0){
       if(this.artikelMengeEdit[index] % this.artikels[index].minLosMenge !== 0 && this.currentKomm.kommDetails[index].id !== -1){
-        if(!window.confirm('Willst du Anbruch schicken ?')){
+        if(!window.confirm('Willst du ein Anbruch schicken ?')){
           this.artikelMengeEdit[index] += this.artikels[index].minLosMenge -( this.artikelMengeEdit[index] % this.artikels[index].minLosMenge);
           return;
         }

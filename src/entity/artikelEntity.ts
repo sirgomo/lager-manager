@@ -29,6 +29,8 @@ export class ArtikelEntity {
   verPrice: number;
   @Column()
   liferantId: number;
+  @Column({nullable: false})
+  mehrwertsteuer:number;
   
   @OneToMany(()=> UiidEntity, (uid) => uid.arikels)
   uids: UiidEntity[];
