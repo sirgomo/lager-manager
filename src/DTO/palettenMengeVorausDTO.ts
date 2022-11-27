@@ -13,5 +13,6 @@ export class PalettenMengeVorausDTO{
     grosse: string;
     gewicht:number;
     basisEinheit:number;
-    artikelFlage: ARTIKELFLAGE;  
+    artikelFlage: ARTIKELFLAGE;
+    proPalete : number;  
 }

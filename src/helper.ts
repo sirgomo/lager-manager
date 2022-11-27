@@ -120,20 +120,71 @@ public getTotalPalettenMenge(palMaxHo: number, artikels: PalettenMengeVorausDTO[
     let totalPaletenMengeAltWeise: number = 0;
     totalGewichtAltWeise = this.artikelsAuftailen(artikels, totalGewichtAltWeise, alkKram, fassKram, sussKram);
     console.log('sus ' + sussKram.length + ' alk ' + alkKram.length + ' fass ' + fassKram.length);
-    while(alkKram.length >= 1 ){
+    while(alkKram.length > 1 ){
       whileStop++;
       if(whileStop === 5){ break;}
       let pal: InKomissPalletenEntity = new InKomissPalletenEntity();
-      this.rekalkulatePaltte(palettenMenge, palMaxHo, pal, komissId);
+     
       let palete:string = '';
       let mengeOnLage:number = 0;
+      let totalVolumen:number = 0;
      
     for( let i = 0; i < alkKram.length; i++){
       let {kH, kB, kL }: {kH:number, kB: number; kL: number; } = this.getMassen(alkKram, i);
        ({mengeOnLage, palete}  = this.getMengen(alkKram,i));
-      console.log(palete);
-    
+       let totalKartons:number = Math.ceil(alkKram[i].menge / alkKram[i].minLosMenge)
+      totalVolumen += totalKartons * kH * kB * kL;
+      let totalLageMenge:number = Math.floor(totalKartons / mengeOnLage);
+      this.rekalkulatePaltte(palettenMenge, palMaxHo, pal, komissId);
+      if(totalLageMenge > 1 && totalLageMenge * kH + pal.palettenH < palMaxHo  ){
       
+        while(totalKartons >= mengeOnLage && pal.palettenH < palMaxHo){
+          pal.artikelId = alkKram[i].artikelId;
+          pal.artikelMenge += mengeOnLage * alkKram[i].minLosMenge;
+          alkKram[i].menge -= mengeOnLage * alkKram[i].minLosMenge;
+          pal.palettenH += kH;
+          totalKartons -= mengeOnLage;
+          pal.erwartetPaletteGewicht += mengeOnLage * alkKram[i].gewicht;
+          totalVolumen -= mengeOnLage * kH * kB * kL;
+          palettenMenge.push(pal);
+          if(alkKram[i].menge === 0 ){
+            alkKram.splice(i, 1);
+          }
+        }
+          if(totalKartons < mengeOnLage && pal.palettenH + kH >= palMaxHo - kH && pal.palettenH + kH < palMaxHo + (kH / 4))
+          {
+            if(totalKartons * kB * kL > 120 * 80) return;
+            this.rekalkulatePaltte(palettenMenge, palMaxHo, pal, komissId);
+            pal.artikelId = alkKram[i].artikelId;
+            pal.artikelMenge += alkKram[i].menge;
+            alkKram[i].menge -= alkKram[i].menge;
+            pal.palettenH += kH;
+          
+            pal.erwartetPaletteGewicht += totalKartons * alkKram[i].gewicht;
+            totalVolumen -= totalKartons * kH * kB * kL;
+            pal.palettenVolumen = totalKartons * kB * kL;
+            palettenMenge.push(pal);
+            totalKartons  = 0;
+            if(alkKram[i].menge === 0 ){
+              alkKram.splice(i, 1);
+            }
+          }else{
+            tmpArrayFurRestMengeArtikel.push(alkKram[i]);
+            for (let t = 0; t < tmpArrayFurRestMengeArtikel.length; t++){
+              for (let te = 0; te < alkKram.length; te++){
+                if(tmpArrayFurRestMengeArtikel[t].artikelId === alkKram[te].artikelId && tmpArrayFurRestMengeArtikel[t].menge === alkKram[te].menge){
+                  console.log('hab gefunden, jetzt losche ich !! ')
+                  alkKram.splice(te, 1);
+                }
+              }
+            }
+          }
+      }else if (totalLageMenge > 1 && totalLageMenge * kH + pal.palettenH > palMaxHo){
+        this.rekalkulatePaltte(palettenMenge, palMaxHo, pal, komissId);
+          if(alkKram[i].proPalete !== 0 && alkKram[i].menge > alkKram[i].proPalete){
+                
+          }
+      } 
     }
    for(let end = 0; end < palettenMenge.length; end++){
     console.log(JSON.stringify(palettenMenge[end]));

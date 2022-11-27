@@ -36,7 +36,8 @@ export class LagerComponent implements OnInit {
       palettenTyp: PALETTENTYP,
       mhd: Date,
       lagerPlatzVolumen:Number,
-      static: Boolean
+      static: Boolean,
+      liferant:Number
     });
 
    }

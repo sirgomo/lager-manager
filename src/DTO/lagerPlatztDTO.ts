@@ -22,5 +22,9 @@ export class LagerPlatztDTO{
     static : boolean = false;
     @IsOptional()
     name: string
+    @IsOptional()
+    liferant:number;
+    @IsOptional()
+    proPalete : number;
 
 }

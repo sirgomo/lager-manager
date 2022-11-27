@@ -18,6 +18,8 @@ export class LagerPlatztDto{
     lagerPlatzVolumen! : number;
 
     static : boolean = false;
+    liferant!:number;
+    proPalete! : number;
 }
 export enum PALETTENTYP{
   EU = 'EU',

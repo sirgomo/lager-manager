@@ -14,4 +14,5 @@ export class PalettenMengeVorausToDruckDto{
   gewicht!:number;
   basisEinheit!:number;
   artikelFlage!: ARTIKELFLAGE;
+  proPalete! : number;
 }

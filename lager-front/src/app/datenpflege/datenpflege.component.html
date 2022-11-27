@@ -43,7 +43,7 @@
       </div>
     </div>
     <div class="col-12">
-      <button class="btn btn-primary" type="submit">Save</button>
+      <button class="btn btn-success" type="submit">Save</button>
     </div>
   </form>
    <!--Form to create speditors-->
@@ -74,7 +74,7 @@
       </div>
     </div>
     <div class="col-12">
-      <button class="btn btn-primary" type="submit">Save</button>
+      <button class="btn btn-success" type="submit">Save</button>
     </div>
   </form>
   <div class="mt-2 col-md-12"></div>
@@ -109,8 +109,8 @@
       <td data-name="anschrift">
         {{ post.anschrift }}
       </td>
-                  <td data-name="del">
-                      <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove' (click)="deleteDispositor(post.id, i)" ><span aria-hidden="true">×</span></button>
+                  <td class="text-center">
+                      <button class="btn btn-danger" (click)="deleteDispositor(post.id, i)" >Löschen</button>
                   </td>
       </tr>
     </tbody>
@@ -151,8 +151,8 @@
       <td data-name="maxPalettenMenge">
         {{ post.maxPalettenMenge }}
       </td>
-                  <td data-name="del">
-                      <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove' (click)="deleteSpeditor(post.id, i)"><span aria-hidden="true">×</span></button>
+                  <td class="text-center">
+                      <button  class="btn btn-danger glyphicon glyphicon-remove row-remove" (click)="deleteSpeditor(post.id, i)"><span aria-hidden="true">Löschen</span></button>
                   </td>
       </tr>
     </tbody>

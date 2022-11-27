@@ -57,8 +57,8 @@
       {{post?.minLosMenge}}
 
       </td>
-                  <td data-name="del">
-                      <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove' (click)="deleteArtikel(post.artikelId, i)" ><span aria-hidden="true">×</span></button>
+                  <td class="text-center">
+                      <button class="btn btn-danger" (click)="deleteArtikel(post.artikelId, i)" >Artikel Löschen</button>
                   </td>
       </tr>
     </tbody>
@@ -143,9 +143,9 @@
     </div>
     <div class="mt-2 col-md-12"></div>
 <div class="row ">
-     <div class="col-md-12">
-      <button mat-stroked-button type="submit" color="primary">Spiecher Artikel</button>
-     </div>
+      <div class="d-grid gap-2">
+        <button type="submit" name="" id="" class="btn btn-success">Artikel Speicher</button>
+      </div>
     </div>
    </form>
 </div>

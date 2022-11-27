@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { ArtikelDTO, ARTIKELFLAGE } from '../dto/artikel.dto';
 import { UidDTO } from '../dto/artikel.dto';
 import { HelperService } from '../helper.service';
@@ -21,7 +22,7 @@ export class ArtikelComponent implements OnInit {
 
 
   show : number = 1;
-  constructor(private servi : ArtikelService, private fb : FormBuilder, private helper: HelperService) {
+  constructor(private servi : ArtikelService, private fb : FormBuilder, private helper: HelperService, private toaster: ToastrService) {
      this.formArtikel = this.fb.group({
     artikelId : Number,
     name: [''],
@@ -96,8 +97,13 @@ export class ArtikelComponent implements OnInit {
       }else{
         art.uids = [];
       }
-      this.artikels.push(art);
-      this.servi.createArtikel(art).subscribe();
+
+      this.servi.createArtikel(art).subscribe(data=>{
+        if(data !== null){
+          this.toaster.success('Artikel zugefukt on id : ' + data.artikelId, 'Artikel zufugen', {timeOut: 700});
+          this.artikels.push(art);
+        }
+      });
     }else{
       let uids :string = this.formArtikel.get<string>('uids')?.value;
       let uidss : string[] = uids.split(',');
@@ -126,8 +132,13 @@ export class ArtikelComponent implements OnInit {
         this.uids.splice(0, this.uids.length);
       }
       art.uids = this.uids;
-      this.artikels[this.index] = art;
-    this.servi.createArtikel(art).subscribe();
+
+    this.servi.createArtikel(art).subscribe(data=>{
+      if(data !== null){
+        this.toaster.success('Artikel wurde geändert : ' + data.artikelId, 'Artikel Ändern', {timeOut: 700});
+        this.artikels[this.index] = art;
+      }
+    });
     }
 
   }

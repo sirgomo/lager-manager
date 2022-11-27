@@ -19,6 +19,8 @@ export class LagerPlatzEntity{
     mhd : Date; 
     @Column()
     lagerPlatzVolumen : number;
+    @Column({nullable: true})
+    proPalete : number;
     @Column()
     static : boolean = false;
     @Column({nullable: false})
