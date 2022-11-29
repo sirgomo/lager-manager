@@ -1,8 +1,9 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UidDTO } from 'lager-front/src/app/dto/artikel.dto';
+
 import { ArtLoader } from 'src/ArtLoader';
 import { ArtikelDTO } from 'src/DTO/ArtikelDTO';
+import { UiidsDTO } from 'src/DTO/uiidsDTO';
 import { ArtikelEntity } from 'src/entity/ArtikelEntity';
 import { UiidEntity } from 'src/entity/UiidEntity';
 import { Repository } from 'typeorm';
@@ -55,7 +56,7 @@ export class ArtService {
        
        if(art.artikelId == null){
         try{
-            let tmpUids : UidDTO[] = new Array();
+            let tmpUids : UiidsDTO[] = new Array();
             tmpUids = art.uids;
             art.uids = [];
       

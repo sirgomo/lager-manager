@@ -11,6 +11,7 @@ import { WareneingangComponent } from './wareneingang/wareneingang.component';
 import { AuthGuard } from './guard/auth.guard';
 import { CreateKommisionierungComponent } from './create-kommisionierung/create-kommisionierung.component';
 import { DatenpflegeComponent } from './datenpflege/datenpflege.component';
+import { AdminComponent } from './admin/admin.component';
 
 const routes: Routes = [
   {
@@ -60,6 +61,11 @@ const routes: Routes = [
   {
     path: 'warenein',
     component: WareneingangComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'admin',
+    component: AdminComponent,
     canActivate: [AuthGuard]
   },
   {

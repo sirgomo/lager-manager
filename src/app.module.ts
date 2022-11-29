@@ -27,9 +27,9 @@ import { SpeditionModule } from './spedition/spedition.module';
 import { UiidEntity } from './entity/UiidEntity';
 import { WarenEingStat } from './entity/warenEingStat';
 import { WarenAusgStat } from './entity/warenAusgStat';
-import { Liferants } from './entity/liferants';
-import { EinkaufService } from './einkauf/einkauf.service';
 import { EinkaufModule } from './einkauf/einkauf.module';
+import { AdminModule } from './admin/admin.module';
+import { Liferants } from './entity/liferants';
 
 
 
@@ -56,6 +56,7 @@ import { EinkaufModule } from './einkauf/einkauf.module';
     AuthModule,
     SpeditionModule,
     EinkaufModule,
+    AdminModule,
    
   ],
   controllers: [AppController],

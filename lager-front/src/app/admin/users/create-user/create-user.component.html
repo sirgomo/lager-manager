@@ -1,0 +1,67 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row fxLayout="row">
+      <span class="title-center"> Add Neue Mitarbeiter</span>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <mat-dialog-content class="mat-typography">
+    <form action="" [formGroup]="userForm">
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field appearance="fill" fxFlex="30">
+            <mat-label>User Name</mat-label>
+            <input matInput type="text" formControlName="username" required>
+            <mat-error>
+              Das Username ist Falsch!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="fill" fxFlex="30">
+            <mat-label>Vorname</mat-label>
+            <input matInput type="text" formControlName="vorname" required>
+            <mat-error>
+              Das Vornamee ist Falsch!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="fill" fxFlex="30">
+            <mat-label>Nachname</mat-label>
+            <input matInput type="text" formControlName="nachname" required>
+            <mat-error>
+              Das Nachname ist Falsch!
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field appearance="fill" fxFlex="50">
+            <mat-label>Password</mat-label>
+            <input matInput type="text" formControlName="password" required placeholder=" a.asdasd">
+            <mat-error>
+             Das Password is falsch. Es mustt be so a.password mit punkt
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field appearance="fill" fxFlex="50">
+            <mat-label>Role</mat-label>
+            <mat-select formControlName="role"  required>
+                <mat-option  *ngFor="let item of userRole" [value]="item" >{{item}}</mat-option>
+            </mat-select>
+            <mat-error>
+              Du muss eine aussuchen
+             </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="center">
+    <button mat-raised-button color="primary" type="submit" (click)="createUser()"
+      [disabled]="(!userForm.valid && !userForm.dirty)">Add User</button>
+    <button mat-raised-button color="primary" mat-dialog-close>Abbrechen</button>
+  </mat-dialog-actions>
+</div>

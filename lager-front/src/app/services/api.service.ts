@@ -61,6 +61,9 @@ export class ApiService {
               case 'WARENEINGANG':
                 this.router.navigateByUrl('warenein').then();
                 break;
+              case 'ADMIN':
+                this.router.navigateByUrl('admin').then();
+                break;
 
             default:
               this.router.navigateByUrl('auth').then();

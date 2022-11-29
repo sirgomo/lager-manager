@@ -2,33 +2,37 @@
   <div class="mt-2 col-md-12"></div>
   <div class="row clearfix justify-content-center">
     <div class="col-md-auto">
-      <button type="button" class="btn btn-primary"  (click)="getArtikles()">Artikel List</button>
-  </div>
+      <button type="button" class="btn btn-primary" (click)="getArtikles()">Artikel List</button>
+    </div>
     <div class="col-md-auto">
-    <button type="button" class="btn btn-primary" [routerLink]="['/datenpflege']" routerLinkActive="router-link-active" >Speditors / Dispositors</button>
-</div>
-  <div class="col-md-auto"   >
-     <button type="button" class="btn btn-primary" (click)="newArtikel()">Neue Artikel</button>
-  </div>
+      <button type="button" class="btn btn-primary" [routerLink]="['/datenpflege']"
+        routerLinkActive="router-link-active">Speditors / Dispositors</button>
+    </div>
+    <div class="col-md-auto">
+      <button type="button" class="btn btn-primary" (click)="newArtikel()">Neue Artikel</button>
+    </div>
   </div>
   <div class="mt-2 col-md-12"></div>
 
-      <div class="row " *ngIf="show === 1">
-        <div class="col-md-11">
-          <input type="search" class="form-control input-lg rounded" [ngModel]="searchModel" name="searchModel" placeholder = "write artikel name or id" id="" (ngModelChange)="onSearch($event)">
-          {{searchModel}}
-        </div>
-        <div class="col">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-          </svg>
-        </div>
+  <div class="row " *ngIf="show === 1">
+    <div class="col-md-11">
+      <input type="search" class="form-control input-lg rounded" [ngModel]="searchModel" name="searchModel"
+        placeholder="write artikel name or id" id="" (ngModelChange)="onSearch($event)">
+      {{searchModel}}
+    </div>
+    <div class="col">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search"
+        viewBox="0 0 16 16">
+        <path
+          d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+      </svg>
+    </div>
 
   </div>
   <div class="mt-2 col-md-12"></div>
   <table class="table table-bordered table-hover table-sortable" id="tab_logic" *ngIf="show === 1">
     <thead>
-      <tr >
+      <tr>
         <th class="text-center">
           ArtikelId
         </th>
@@ -36,85 +40,91 @@
           Name
         </th>
         <th class="text-center">
-         Min. Los Menge
+          Min. Los Menge
         </th>
         <th class="text-center">
           Delete ?
-         </th>
+        </th>
       </tr>
     </thead>
     <tbody>
 
-      <tr  *ngFor="let post of (artikels ? artikels.slice(0,200): []); let i = index; trackBy : artikelTrackBy; " class="hidden">
+      <tr *ngFor="let post of (artikels ? artikels.slice(0,200): []); let i = index; trackBy : artikelTrackBy; "
+        class="hidden">
         <td data-name="artikel id">
           {{ post?.artikelId }}
-      </td>
-      <td data-name="name"   style="cursor: pointer;" (click)="getArtikelById(post.artikelId, i)">
-        {{ post?.name }}
-      </td>
-      <td data-name="uid">
+        </td>
+        <td data-name="name" style="cursor: pointer;" (click)="getArtikelById(post.artikelId, i)">
+          {{ post?.name }}
+        </td>
+        <td data-name="uid">
 
-      {{post?.minLosMenge}}
+          {{post?.minLosMenge}}
 
-      </td>
-                  <td class="text-center">
-                      <button class="btn btn-danger" (click)="deleteArtikel(post.artikelId, i)" >Artikel Löschen</button>
-                  </td>
+        </td>
+        <td class="text-center">
+          <button class="btn btn-danger" (click)="deleteArtikel(post.artikelId, i)">Artikel Löschen</button>
+        </td>
       </tr>
     </tbody>
   </table>
-   <!--Form to Edit, new Artikel-->
-   <form class="row g-3 needs-validation" novalidate *ngIf="show === 2"
-   [formGroup]="formArtikel" (ngSubmit)="createUpdateArtikel( formArtikel.value)">
-   <input type="hidden" formControlName="artikelId" >
-   <div class="row-cols-12 justify-content-center align-items-center g-2">
-    <div class="col-md-6">
-      <label for="validationCustom01" class="form-label">Artikel Name</label>
-      <input formControlName="name" type="text" class="form-control" id="validationCustom01" value="name" required>
+  <!--Form to Edit, new Artikel-->
+  <form class="row g-3 needs-validation" novalidate *ngIf="show === 2" [formGroup]="formArtikel"
+    (ngSubmit)="createUpdateArtikel( formArtikel.value)">
+    <input type="hidden" formControlName="artikelId">
+    <div class="row-cols-12 justify-content-center align-items-center g-2">
+      <div class="col-md-6">
+        <label for="validationCustom01" class="form-label">Artikel Name</label>
+        <input formControlName="name" type="text" class="form-control" id="validationCustom01" value="name" required>
+        <div class="valid-feedback">
+          Schein gut zu sein
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="" class="form-label"> Artikel uid</label>
+        <textarea formControlName="uids" class="form-control" value="uids" id="" rows="3" required></textarea>
+        <p class="form-text text-muted small">
+          Komma getrent!
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <label for="validationCustom02" class="form-label">Artikel gewicht </label>
+      <input formControlName="gewicht" type="number" class="form-control" id="validationCustom02" value="gewicht"
+        required>
       <div class="valid-feedback">
         Schein gut zu sein
       </div>
     </div>
-    <div class="mb-3">
-      <label for="" class="form-label"> Artikel uid</label>
-      <textarea formControlName="uids" class="form-control" value="uids" id="" rows="3" required></textarea>
-      <p class="form-text text-muted small">
-        Komma getrent!
-      </p>
-    </div>
-   </div>
-
-     <div class="col-md-4">
-       <label for="validationCustom02" class="form-label">Artikel gewicht </label>
-       <input formControlName="gewicht"  type="number" class="form-control" id="validationCustom02" value="gewicht" required>
-       <div class="valid-feedback">
-         Schein gut zu sein
-       </div>
-     </div>
-     <div class="col-md-4">
+    <div class="col-md-4">
       <label for="validationCustom02" class="form-label">Artikel Größe (H x B x L) </label>
-      <input formControlName="grosse" placeholder="H x B x L" type="text" class="form-control" id="validationCustom02" value="grosse" required>
+      <input formControlName="grosse" placeholder="H x B x L" type="text" class="form-control" id="validationCustom02"
+        value="grosse" required>
       <div class="valid-feedback">
         Schein gut zu sein
       </div>
     </div>
     <div class="col-md-4">
       <label for="validationCustom02" class="form-label">Artikel Basis Einheit </label>
-      <input formControlName="basisEinheit" type="number" class="form-control" id="validationCustom02" value="basisEinheit" required>
+      <input formControlName="basisEinheit" type="number" class="form-control" id="validationCustom02"
+        value="basisEinheit" required>
       <div class="valid-feedback">
         Schein gut zu sein
       </div>
     </div>
     <div class="col-md-4">
       <label for="validationCustom02" class="form-label">Min los Menge </label>
-      <input formControlName="minLosMenge" type="number" class="form-control" id="validationCustom02" value="minLosMenge" required>
+      <input formControlName="minLosMenge" type="number" class="form-control" id="validationCustom02"
+        value="minLosMenge" required>
       <div class="valid-feedback">
         Schein gut zu sein
       </div>
     </div>
     <div class="col-md-4">
-      <label for="validationCustom02" class="form-label">Bestand  </label>
-      <input formControlName="bestand" type="number" class="form-control" id="validationCustom02" value="durchschnittlicheLagerdauer" required>
+      <label for="validationCustom02" class="form-label">Bestand </label>
+      <input formControlName="bestand" type="number" class="form-control" id="validationCustom02"
+        value="durchschnittlicheLagerdauer" required>
       <div class="valid-feedback">
         Schein gut zu sein
       </div>
@@ -122,14 +132,16 @@
 
     <div class="col-md-4">
       <label for="artikelFlage" class="form-label">Artikel Flage typ </label>
-      <input formControlName="artikelFlage" type="text" class="form-control" id="validationCustom02" value="artikelFlage" required>
+      <input formControlName="artikelFlage" type="text" class="form-control" id="validationCustom02"
+        value="artikelFlage" required>
       <div class="valid-feedback">
         Schein gut zu sein
       </div>
     </div>
     <div class="col-md-4">
       <label for="artikelPrice" class="form-label">Artikel Price </label>
-      <input formControlName="artikelPrice" type="number" class="form-control" id="validationCustom02" value="artikelPrice" required>
+      <input formControlName="artikelPrice" type="number" class="form-control" id="validationCustom02"
+        value="artikelPrice" required>
       <div class="valid-feedback">
         Schein gut zu sein
       </div>
@@ -142,10 +154,10 @@
       </div>
     </div>
     <div class="mt-2 col-md-12"></div>
-<div class="row ">
+    <div class="row ">
       <div class="d-grid gap-2">
         <button type="submit" name="" id="" class="btn btn-success">Artikel Speicher</button>
       </div>
     </div>
-   </form>
+  </form>
 </div>

@@ -28,8 +28,7 @@ export class LaderInterceptorInterceptor implements HttpInterceptor {
           observer.next(data);
         }
       }, error: (err) => {
-        alert('error '+ err);
-        console.log(err);
+        alert(err.message);
         this.removeRequest(request);
         subscrition.unsubscribe();
       },

@@ -31,6 +31,9 @@ import { DatenpflegeComponent } from './datenpflege/datenpflege.component';
 import { LoaderComponent } from './loader/loader.component';
 import { LaderInterceptorInterceptor } from './loader/lader-interceptor.interceptor';
 import { PdfkommissComponent } from './pdfkommiss/pdfkommiss.component';
+import { AdminComponent } from './admin/admin.component';
+import { UsersComponent } from './admin/users/users.component';
+import { CreateUserComponent } from './admin/users/create-user/create-user.component';
 
 
 
@@ -53,7 +56,10 @@ import { PdfkommissComponent } from './pdfkommiss/pdfkommiss.component';
     CreateKommisionierungComponent,
     DatenpflegeComponent,
     LoaderComponent,
-    PdfkommissComponent
+    PdfkommissComponent,
+    AdminComponent,
+    UsersComponent,
+    CreateUserComponent
   ],
   imports: [
     BrowserModule,

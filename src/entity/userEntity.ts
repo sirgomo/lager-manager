@@ -1,20 +1,20 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users')
 export class UserEntity{
   @PrimaryGeneratedColumn()
   id: number;
-  @Column()
+  @Column({'nullable': false})
   vorname:string;
-  @Column()
+  @Column({'nullable': false})
   nachname:string;
-  @Column()
+  @PrimaryColumn({'nullable': false})
   username: string;
-  @Column()
+  @Column({'nullable': false})
   userpassword: string;
-  @Column()
+  @Column({'nullable': false})
   salt: string;
-  @Column()
+  @Column({'nullable': false})
   role: string;
 }
 export enum ROLE{
