@@ -6,7 +6,7 @@ import { RegiUserDTO } from 'src/DTO/regiUserDTO';
 import { ROLE } from 'src/entity/UserEntity';
 import { AdminService } from './admin.service';
 
-@Controller('admin')
+@Controller('/admin')
 @UseGuards(AuthGuard(), RoleGuard)
 export class AdminController {
    constructor(private serv: AdminService) { }
@@ -22,16 +22,17 @@ export class AdminController {
    newUser(@Body(ValidationPipe) user: RegiUserDTO) {
       return this.serv.addUser(user);
    }
+
    @Patch('/users/:id')
    @ROLES(ROLE.ADMIN)
    editUser(@Body(ValidationPipe) user: RegiUserDTO) {
       return this.serv.editUser(user);
    }
+
    @Delete('/users/:id')
    @ROLES(ROLE.ADMIN)
    deleteUser(@Param('id') id: number) {
       return this.serv.deleteUser(id);
    }
-
 
 }

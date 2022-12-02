@@ -8,6 +8,7 @@ import { LoaderService } from './loader.service';
 })
 export class LoaderComponent implements OnInit {
   loading!: boolean;
+
   constructor(private loaderServ: LoaderService ) {
     this.loaderServ.isLoading.subscribe( v=> {
       this.loading = v;
@@ -15,6 +16,7 @@ export class LoaderComponent implements OnInit {
    }
 
   ngOnInit(): void {
+
   }
 
 }

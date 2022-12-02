@@ -5,6 +5,7 @@ import { UserEntity } from 'src/entity/UserEntity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { use } from 'passport';
+import { tmpdir } from 'os';
 
 @Injectable()
 export class AdminService {
@@ -13,7 +14,7 @@ export class AdminService {
     }
     async getAllUsers():Promise<UserEntity[]>{
         try{
-            return await this.userRepo.find();
+            return await this.userRepo.find({'select':{ 'id' :true, 'nachname':true, 'role':true, 'username':true, 'vorname': true}});
         }catch(err){
             throw new Error("Etwas is schiff gelaufen user repo " + err);
             
@@ -29,18 +30,38 @@ export class AdminService {
     }
     async addUser(user: RegiUserDTO):Promise<RegiUserDTO>{
         try{
-            const hashed:string = await bcrypt.hash(user.password, 12);
-            const salt:string = await bcrypt.getSalt(hashed);
-           
+                const hashed:string = await bcrypt.hash(user.userpassword, 12);
+                const salt:string = await bcrypt.getSalt(hashed);
+        
             let newUser: UserEntity = new UserEntity();
+            if(user.id !== -1)  {
+                newUser.id = user.id
+            }
+           
             newUser.nachname = user.nachname;
             newUser.vorname = user.vorname;
             newUser.role = user.role;
             newUser.username = user.username;
+           
+         
             newUser.userpassword = hashed;
             newUser.salt = salt;
             console.log(newUser);
-           return user;
+           return await this.userRepo.save(newUser).then(data=>{
+           /* if(data.nachname === user.nachname){
+               let tmp:RegiUserDTO = new RegiUserDTO();
+               tmp.nachname = data.nachname;
+               tmp.role = data.role;
+               tmp.password = data.userpassword;
+               tmp.username = data.username;
+               tmp.vorname = data.vorname;
+                return tmp;
+            }*/
+            if(data.nachname === user.nachname){
+                data.userpassword = '';
+                return data;
+            }
+           })
         }catch(err){
             throw new Error("Etwas ist schiff gegangen bei user registration " + err);
             

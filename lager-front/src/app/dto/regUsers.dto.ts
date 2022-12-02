@@ -1,8 +1,9 @@
 export class RegisterUsersDto{
+  id!:number;
 
   username! : string;
 
-  password!: string;
+  userpassword!: string;
 
   vorname!:string;
 

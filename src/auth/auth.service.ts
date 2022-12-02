@@ -13,9 +13,9 @@ export class AuthService {
     private jwt : JwtService){}
 
     async registerUser(regDTO : RegiUserDTO){
-        const {username, password} = regDTO;
+        const {username, userpassword} = regDTO;
        
-        const hashed = await bcrypt.hash(password, 12);
+        const hashed = await bcrypt.hash(userpassword, 12);
         const salt = await bcrypt.getSalt(hashed);
         const user : UserEntity = new UserEntity();
         user.username = username;

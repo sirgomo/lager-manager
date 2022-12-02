@@ -1,3 +1,4 @@
+import { NumberFormatStyle } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RegisterUsersDto } from '../dto/regUsers.dto';
 import { AdminService } from './admin.service';
@@ -25,5 +26,9 @@ export class AdminComponent implements OnInit{
       }
       this.show = 1;
     });
+  }
+  changeShow(emit:number){
+    console.log('emit '+emit);
+    this.show = 0;
   }
 }

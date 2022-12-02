@@ -16,4 +16,7 @@ export class AdminService {
   createUser(user:RegisterUsersDto):Observable<RegisterUsersDto>{
     return this.http.post<RegisterUsersDto>(this.API_URL + '/newuser' , user);
   }
+  deleteUser(userid:number){
+    return this.http.delete(this.API_URL + '/users/' + userid);
+  }
 }

@@ -2,10 +2,10 @@
   <div class="mt-2 col-md-12"></div>
   <div class="row clearfix justify-content-center">
     <div class="col-md-auto">
-      <button type="button" class="btn btn-primary" >Admin Panel</button>
+      <button mat-raised-button color="primary" (click)="exit()">Admin Panel</button>
     </div>
     <div class="col-md-auto">
-      <button type="button" class="btn btn-primary" (click)="createUser()">Neue User</button>
+      <button mat-raised-button color="primary" (click)="createUser()">Neue Benutzer</button>
     </div>
   </div>
   <div class="mt-2 col-md-12"></div>
@@ -17,14 +17,16 @@
           <th scope="col">Name</th>
           <th scope="col">Vorname</th>
           <th scope="col">Role</th>
+          <th>Delete User</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="" *ngFor="let item of userss">
+        <tr class="" *ngFor="let item of userss; let i = index" >
           <td scope="row">{{item.username}}</td>
-          <td>{{item.nachname}}</td>
-          <td>{{item.vorname}}</td>
-          <td>{{item.role}}</td>
+          <td style="cursor: pointer;" (click)="editUser(i)">{{item.nachname}}</td>
+          <td style="cursor: pointer;" (click)="editUser(i)">{{item.vorname}}</td>
+          <td style="cursor: pointer;" (click)="editUser(i)">{{item.role}}</td>
+          <td align="center"><button mat-raised-button color="warn" (click)="delete(i)">Delete</button> </td>
         </tr>
 
       </tbody>

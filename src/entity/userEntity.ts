@@ -8,14 +8,14 @@ export class UserEntity{
   vorname:string;
   @Column({'nullable': false})
   nachname:string;
-  @PrimaryColumn({'nullable': false})
+  @Column({'nullable': false})
   username: string;
   @Column({'nullable': false})
   userpassword: string;
   @Column({'nullable': false})
   salt: string;
   @Column({'nullable': false})
-  role: string;
+  role: ROLE;
 }
 export enum ROLE{
     KOMMISIONIER = 'KOMMISIONIER',

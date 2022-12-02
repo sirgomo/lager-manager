@@ -2,14 +2,14 @@
   <div class="mt-2 col-md-12"></div>
   <div class="row clearfix justify-content-center"  *ngIf="show === 0">
     <div class="col-md-auto">
-      <button type="button" class="btn btn-primary" >Admin Panel</button>
+      <button mat-raised-button color="primary" [routerLink]="['/admin']" routerLinkActive="router-link-active" >Admin Panel</button>
     </div>
     <div class="col-md-auto">
-      <button type="button" class="btn btn-primary" (click)="getUsers()" >Users</button>
+      <button mat-raised-button color="primary" (click)="getUsers()">Users</button>
     </div>
   </div>
   <div *ngIf="show === 1">
-    <app-users [userss]="users"></app-users>
+    <app-users [userss]="users" (show)="changeShow($event)"></app-users>
   </div>
 </div>
 
