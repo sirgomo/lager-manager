@@ -1,8 +1,7 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, RequiredValidator, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { ToastrService } from 'ngx-toastr';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { FormBuilder,  FormGroup,  Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RegisterUsersDto, ROLE } from 'src/app/dto/regUsers.dto';
 import GlobalValidators from 'src/app/globalValidators';
 import { AdminService } from '../../admin.service';
@@ -13,32 +12,51 @@ import { AdminService } from '../../admin.service';
   templateUrl: './create-user.component.html',
   styleUrls: ['./create-user.component.scss']
 })
-export class CreateUserComponent {
+export class CreateUserComponent implements OnInit{
   userForm: FormGroup;
   user: RegisterUsersDto = new RegisterUsersDto();
   userRole = Object.values(ROLE).map(item => String(item));
+  edit:number = 0;
 
   constructor(private dialRef : MatDialogRef<CreateUserComponent>, private formBuil: FormBuilder,
     private admSer : AdminService,
-    private toastr: ToastrService){
+    @Optional() @Inject(MAT_DIALOG_DATA) private  userData: RegisterUsersDto){
     this.userForm = this.formBuil.group({
+      id:[''],
       username: ['',[Validators.required, Validators.pattern(GlobalValidators.nameReg)]],
-      password: ['', [Validators.required, Validators.pattern(GlobalValidators.passReq)]],
+      userpassword: ['', [Validators.required, Validators.pattern(GlobalValidators.passReq)]],
       vorname: ['',[Validators.required, Validators.pattern(GlobalValidators.nameReg)]],
       nachname: ['',[Validators.required, Validators.pattern(GlobalValidators.nameReg)]],
       role: ROLE
     });
 
   }
-  createUser(){
-    this.user = this.userForm.value;
-    console.log(this.user);
-    this.admSer.createUser(this.user).subscribe(data=>{
-      if(data.nachname === this.user.nachname){
-        this.dialRef.close();
-        this.toastr.success('Benutzer wurde hinzugefugt', 'Neue Benutzer', {timeOut : 800} );
-      }
-    })
+  ngOnInit(): void {
+    if(this.userData !== undefined && this.userData !== null){
+     this.userForm.patchValue(this.userData);
+     this.edit = 1;
+    }else{
+      this.userForm.get('role')?.setValue(ROLE.KOMMISIONIER);
+      this.edit = 0;
+    }
 
   }
+  async createUser(){
+
+    this.user = this.userForm.value;
+    if(this.edit === 0){
+      this.user.id = -1;
+    }
+  await  this.admSer.createUser(this.user).subscribe(data=>{
+
+      if(data.nachname !== undefined && data.nachname !== null && data.nachname !== ''){
+        this.dialRef.close(data);
+      }
+
+
+    });
+
+  }
+ // username(){ return this.userForm.get('username');}
+  //password() { return this.userForm.get('password');}
 }
