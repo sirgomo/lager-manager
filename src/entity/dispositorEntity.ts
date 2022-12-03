@@ -15,6 +15,6 @@ export class DispositorEntity {
   strasseUndNr:string;
   @Column('int', {'nullable': false})
   postleitzahl :number;
-  @Column('tinytext', {'nullable': false})
+  @Column('text', {'nullable': false})
   uStIdentifikationsnummer:string;
 }

@@ -4,8 +4,8 @@
             <div class="col-md-auto">
               <button type="button" class="btn btn-primary"  (click)="newSpedi()">Neu Spedition</button>
             </div>
-            <div class="col-md-auto">
-              <button type="button" class="btn btn-primary"  (click)="newDispo()"> Neu Dispositor</button>
+            <div class="col-md-auto" *ngIf="show === 1">
+              <button type="button" class="btn btn-primary"  (click)="newDispo()" > Neu Dispositor</button>
             </div>
             <div class="col-md-auto">
              <button type="button" class="btn btn-primary"  [routerLink]="['/warenbuch']" routerLinkActive="router-link-active"> Waren Buchung</button>
@@ -24,28 +24,9 @@
 </div>
 <div class="mt-2 col-md-12"></div>
 <div class="row justify-content-center align-items-center g-2">
-  <!--Form to create dispisitors-->
-  <form class="row g-3 needs-validation px-3" novalidate *ngIf="show === 2"
-  [formGroup]="formDispositors" (ngSubmit)="createNewDispo(formDispositors.value)">
-  <input type="hidden" formControlName="id" >
-    <div class="col-md-4">
-      <label for="validationCustom01" class="form-label">Dispositor Name</label>
-      <input formControlName="name" type="text" class="form-control" id="validationCustom01" value="name" required>
-      <div class="valid-feedback">
-        Schein gut zu sein
-      </div>
-    </div>
-    <div class="col-md-4">
-      <label for="validationCustom02" class="form-label">Dispositor Anschrift: </label>
-      <input formControlName="anschrift" type="text" class="form-control" id="validationCustom02" value="anschrift" required>
-      <div class="valid-feedback">
-        Schein gut zu sein
-      </div>
-    </div>
-    <div class="col-12">
-      <button class="btn btn-success" type="submit">Save</button>
-    </div>
-  </form>
+<div *ngIf="show === 1">
+  <app-debitors [dispositors]="dispositors"></app-debitors>
+</div>
    <!--Form to create speditors-->
   <form class="row g-3 needs-validation px-3" novalidate *ngIf="show === 4"
   [formGroup]="formSpedition" (ngSubmit)="createNewSpeditor(formSpedition.value)">
@@ -79,42 +60,7 @@
   </form>
   <div class="mt-2 col-md-12"></div>
   <div class="row justify-content-center align-items-center g-10">
-  <!-- Show dispositors data-->
-  <table class="table table-bordered table-hover table-sortable px-3" id="tab_logic" *ngIf="show === 1">
-    <thead>
-      <tr >
-        <th class="text-center">
-          Dispositor id
-        </th>
-        <th class="text-center">
-          Name
-        </th>
-        <th class="text-center">
-         Name 2
-        </th>
-        <th class="text-center">
-          Delete ?
-         </th>
-      </tr>
-    </thead>
-    <tbody>
 
-      <tr  *ngFor="let post of dispositors; let i = index" class="hidden" (click)="editDispo(post.id)" style="cursor: pointer;">
-        <td data-name="dispositor id">
-          {{ post.id }}
-      </td>
-      <td data-name="name">
-        {{ post.name }}
-      </td>
-      <td data-name="anschrift">
-        {{ post.name2 }}
-      </td>
-                  <td class="text-center">
-                      <button class="btn btn-danger" (click)="deleteDispositor(post.id, i)" >Löschen</button>
-                  </td>
-      </tr>
-    </tbody>
-  </table>
   <!-- Show speditors data-->
   <table class="table table-bordered table-hover table-sortable px-3" id="tab_logic" *ngIf="show === 3">
     <thead>

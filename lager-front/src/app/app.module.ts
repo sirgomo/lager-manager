@@ -34,6 +34,8 @@ import { PdfkommissComponent } from './pdfkommiss/pdfkommiss.component';
 import { AdminComponent } from './admin/admin.component';
 import { UsersComponent } from './admin/users/users.component';
 import { CreateUserComponent } from './admin/users/create-user/create-user.component';
+import { DebitorsComponent } from './datenpflege/debitors/debitors.component';
+import { AddDebitorComponent } from './datenpflege/debitors/add-debitor.component';
 
 
 
@@ -59,7 +61,9 @@ import { CreateUserComponent } from './admin/users/create-user/create-user.compo
     PdfkommissComponent,
     AdminComponent,
     UsersComponent,
-    CreateUserComponent
+    CreateUserComponent,
+    DebitorsComponent,
+    AddDebitorComponent
   ],
   imports: [
     BrowserModule,

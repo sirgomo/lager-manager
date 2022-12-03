@@ -1,0 +1,43 @@
+<div class="container">
+  <table class="table table-bordered table-hover table-sortable px-3" id="tab_logic" >
+    <thead>
+      <tr >
+        <th class="text-center">
+          Dispositor id
+        </th>
+        <th class="text-center">
+          Name
+        </th>
+        <th class="text-center">
+         Name 2
+        </th>
+        <th class="text-center">
+          Stadt
+         </th>
+        <th class="text-center">
+          Delete ?
+         </th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr  *ngFor="let post of dispositors; let i = index" class="hidden">
+        <td data-name="dispositor id">
+          {{ post.id }}
+      </td>
+      <td data-name="name"  (click)="editDispo(post.id)" style="cursor: pointer;">
+        {{ post.name }}
+      </td>
+      <td data-name="name2"  (click)="editDispo(post.id)" style="cursor: pointer;">
+        {{ post.name2 }}
+      </td>
+      <td data-name="stadt"  (click)="editDispo(post.id)" style="cursor: pointer;">
+        {{ post.stadt }}
+      </td>
+                  <td class="text-center">
+                      <button class="btn btn-danger" (click)="deleteDispositor(post.id, i)" >Löschen</button>
+                  </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { isNumberObject } from 'util/types';
 import { DispositorDTO } from '../dto/dispositor.dto';
 import { SpeditionDTO } from '../dto/spedition.dto';
 import { DatenpflegeService } from './datenpflege.service';
+import { DebitorsComponent } from './debitors/debitors.component';
 
 @Component({
   selector: 'app-datenpflege',
@@ -14,7 +15,7 @@ export class DatenpflegeComponent implements OnInit {
   dispositors : DispositorDTO[] = new Array();
   speditors : SpeditionDTO[] = new Array();
   show :number = 0;
-
+  @ViewChild(DebitorsComponent) dispo!: DebitorsComponent;
   formSpedition : FormGroup;
   formDispositors: FormGroup;
 
@@ -52,32 +53,8 @@ getAllDispositors(){
     console.log('dispositors '+ JSON.stringify(data));
   });
 }
-createNewDispo(d : DispositorDTO){
-  if(!Number.isFinite(d.id)){
-  return this.servi.createNewDispositor(d).subscribe(d =>{
-    this.dispositors.push(d);
-    this.formDispositors.reset();
-    this.getAllDispositors();
-  });
-
-}else{
- return this.updateDispositor(d);
-}
-}
-updateDispositor(d: DispositorDTO){
-  this.servi.updateDispositor(d, d.id);
-  let index = this.dispositors.findIndex((e) => e.id === d.id);
-  this.dispositors[index] = d;
-    this.formDispositors.reset();
-  this.show = 1;
 
 
-}
-deleteDispositor(id : number, i : number){
-  console.log('delete :' + id)
-  this.servi.deleteDispositor(id);
-
-}
 getAllspeditiors(){
   this.show = 3;
   this.speditors.splice(0, this.speditors.length);
@@ -117,7 +94,8 @@ newSpedi(){
   this.show = 4;
 }
 newDispo(){
-  this.show = 2;
+ this.dispo.addDispositor();
+
 }
 editSpedi(id: number){
   this.speditors.forEach(d=>{
@@ -127,11 +105,5 @@ editSpedi(id: number){
   });
   this.show = 4;
 }
-editDispo(id: number){
-this.dispositors.forEach( d =>{
-  if(d.id === id)
-    this.formDispositors.setValue(d);
-  });
-  this.show = 2;
-}
+
 }

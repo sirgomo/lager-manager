@@ -14,18 +14,10 @@ export class DatenpflegeService {
   constructor(private http: HttpClient) { }
 
   getAllDispositors():Observable<DispositorDTO[]>{
-      try{
         return this.http.get<DispositorDTO[]>(this.API_URL);
-      }catch(error){
-        throw new HttpErrorResponse({error});
-      }
   }
   createNewDispositor(dispo : DispositorDTO):Observable<DispositorDTO>{
-      try{
         return this.http.post<DispositorDTO>(this.API_URL, dispo);
-      }catch(error){
-        throw new HttpErrorResponse({error});
-      }
   }
   updateDispositor(dispo: DispositorDTO, id : number){
     try{
@@ -36,11 +28,7 @@ export class DatenpflegeService {
 
   }
   deleteDispositor(id:number){
-    try{
       this.http.delete(this.API_URL + '/' + id).subscribe();
-    }catch(error){
-      throw new HttpErrorResponse({error});
-    }
   }
 
   getAllSpeditions():Observable<SpeditionDTO[]>{
