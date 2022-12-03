@@ -21,7 +21,7 @@ export class LagerService {
     private genereLagaPlatze(){
         
         this.StellPlatze =   this.lagerGen.getRegals();
-        this.StellPlatze.forEach(
+      this.StellPlatze.forEach(
             data => {
             this.createLagerPlatz(data);
             });
@@ -74,23 +74,27 @@ export class LagerService {
             throw new Error("problem mit lager service, lagerservice kann nicht lagerplatz machen");
         }
     }
-    async createLagerPlatz(lagerplatz : LagerPlatztDTO):Promise<LagerService>{
+    async createLagerPlatz(lagerplatz : LagerPlatztDTO):Promise<LagerPlatzEntity>{
+       
         try{
           if(lagerplatz.artId !== null && isFinite(lagerplatz.artId)){
-            let tmpArt : ArtikelDTO = new ArtikelDTO();
-           tmpArt = await this.artServ.getArtikel(lagerplatz.artId);
-           lagerplatz.einheit = tmpArt.basisEinheit;
-           if(lagerplatz.palettenTyp === PALETTENTYP.KEINPALETTE){
-            lagerplatz.palettenTyp = PALETTENTYP.EU;
-           }
-          }
+                let tmpArt : ArtikelDTO = new ArtikelDTO();
+                tmpArt = await this.artServ.getArtikel(lagerplatz.artId);
+                lagerplatz.einheit = tmpArt.basisEinheit;
+                lagerplatz.liferant = tmpArt.liferantId;
+                if(lagerplatz.palettenTyp === PALETTENTYP.KEINPALETTE){
+                    lagerplatz.palettenTyp = PALETTENTYP.EU;
+                }
+            }
             await this.repo.create(lagerplatz);
             return await this.repo.save(lagerplatz)
             .then(data=>{
             return lagerplatz = data;  
             }, err => {
+                console.log(err)
                 return err;
             });
+            
         }catch( err){
             console.log(err);
             throw new Error("problem mit lager service, lagerservice kann nicht lagerplatz erstellen");
@@ -194,6 +198,8 @@ export class LagerService {
                'lagerPlatzVolumen': MoreThanOrEqual(volMenge[i][0]), 'static': true}, order:{'lagerPlatzVolumen': 'ASC'}});//.then(data=>{
                  tmps.artId = artikel.artikelId;
                  tmps.artikelMenge = volMenge[i][1];
+                 tmps.mengeProPalete = volMenge[i][1];
+                 tmps.liferant = artikel.liferantId;
                  tmps.mhd = this.helper.getRandomMhd();
                  tmps.einheit = artikel.basisEinheit;
                  tmps.palettenTyp = PALETTENTYP.EU;
@@ -207,6 +213,8 @@ export class LagerService {
                'lagerPlatzVolumen': MoreThanOrEqual(volMenge[i][0]), 'static':false}, order:{'lagerPlatzVolumen': 'ASC'}});//.then(data=>{
                  tmps.artId = artikel.artikelId;
                  tmps.artikelMenge = volMenge[i][1];
+                 tmps.mengeProPalete = volMenge[i][1];
+                 tmps.liferant = artikel.liferantId;
                  tmps.mhd = this.helper.getRandomMhd();
                  tmps.einheit = artikel.basisEinheit;
                  tmps.palettenTyp = PALETTENTYP.EU;

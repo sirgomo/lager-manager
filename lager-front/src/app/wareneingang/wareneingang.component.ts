@@ -55,7 +55,7 @@ export class WareneingangComponent implements OnInit {
   }
   async getDispositors(){
     await this.dispoService.getAllDispositors().subscribe(data=>{
-      if(data){
+      if(data !== undefined && data !== null){
         this.dispostors.splice(0, this.dispostors.length);
         data.forEach(dispo=>{
         this.dispostors.push(dispo);

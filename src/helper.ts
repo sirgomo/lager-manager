@@ -1,5 +1,3 @@
-import { arrayBuffer } from "stream/consumers";
-import { In } from "typeorm";
 import { ArtikelDTO } from "./DTO/ArtikelDTO";
 import { ArtikelMengeDTO } from "./DTO/artikelMengeDTO";
 import { PalettenMengeVorausDTO } from "./DTO/palettenMengeVorausDTO";

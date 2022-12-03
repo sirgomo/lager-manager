@@ -1,4 +1,4 @@
-import { Column,  Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column,  Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity('lagerplatz')
@@ -20,11 +20,13 @@ export class LagerPlatzEntity{
     @Column()
     lagerPlatzVolumen : number;
     @Column({nullable: true})
-    proPalete : number;
+    mengeProPalete : number;
     @Column()
     static : boolean = false;
-    @Column({nullable: false})
+    @Column({nullable: true})
     liferant:number;
+    @Column({nullable: true})
+    barcode: string;
 
   
 

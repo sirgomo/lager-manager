@@ -34,7 +34,9 @@ export class ArtikelComponent implements OnInit {
     bestand: Number,
     artikelFlage: ARTIKELFLAGE,
     artikelPrice: Number,
-    verPrice: Number
+    verPrice: Number,
+    mehrwertsteuer: Number,
+    liferantId:Number
    });
    //artikel index 0.1 if new or index
    this.index = 0.1;
@@ -132,11 +134,12 @@ export class ArtikelComponent implements OnInit {
         this.uids.splice(0, this.uids.length);
       }
       art.uids = this.uids;
-
+      //TODO still not working, needs refactoring!
     this.servi.createArtikel(art).subscribe(data=>{
       if(data !== null){
         this.toaster.success('Artikel wurde geändert : ' + data.artikelId, 'Artikel Ändern', {timeOut: 700});
         this.artikels[this.index] = art;
+        this.show =1;
       }
     });
     }

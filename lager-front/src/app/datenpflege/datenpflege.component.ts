@@ -22,7 +22,11 @@ export class DatenpflegeComponent implements OnInit {
     this.formDispositors = this.fb.group({
       id: Number,
       name: [''],
-      anschrift: ['']
+      name2: [''],
+      stadt: [''],
+      strasseUndNr: [''],
+      postleitzahl:Number,
+      uStIdentifikationsnummer: ['']
     });
     this.formSpedition = this.fb.group({
       id: Number,
@@ -36,12 +40,16 @@ export class DatenpflegeComponent implements OnInit {
    this.show = 0;
   }
 getAllDispositors(){
+
   this.show = 1;
   this.dispositors.splice(0, this.dispositors.length);
   return this.servi.getAllDispositors().subscribe(data =>{
-    data.forEach(dispo => {
-      this.dispositors.push(dispo);
-    });
+    if(data !== undefined && data !== null && data.length > 0){
+      data.forEach(dispo => {
+        this.dispositors.push(dispo);
+      });
+    }
+    console.log('dispositors '+ JSON.stringify(data));
   });
 }
 createNewDispo(d : DispositorDTO){
@@ -122,7 +130,7 @@ editSpedi(id: number){
 editDispo(id: number){
 this.dispositors.forEach( d =>{
   if(d.id === id)
-    this.formDispositors.setValue({id: d.id, name: d.name, anschrift: d.anschrift});
+    this.formDispositors.setValue(d);
   });
   this.show = 2;
 }

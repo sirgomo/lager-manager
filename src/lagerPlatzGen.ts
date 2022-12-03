@@ -107,6 +107,7 @@ export class LagerPlatzGenerator{
                     }
             }
         }
+        console.log('stellplatze ' + this.StellPlatze.length);
        return this.StellPlatze;
     }
     private genLagerPlatz(i: number, y: number, e:number):string{

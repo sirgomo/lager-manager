@@ -10,6 +10,8 @@
     ARTIKELFLAGE!: ARTIKELFLAGE;
     artikelPrice!: number;
     verPrice!: number;
+    mehrwertsteuer!: number;
+    liferantId!: number;
  }
  export enum ARTIKELFLAGE{
   FASS = 'FASS',

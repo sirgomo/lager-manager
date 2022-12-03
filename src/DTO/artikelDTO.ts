@@ -31,6 +31,13 @@ export class ArtikelDTO{
     @IsNotEmpty()
     @IsNumber()
     verPrice: number;
+    @IsNotEmpty()
+    @IsNumber()
+    mehrwertsteuer: number;
+    @IsNotEmpty()
+    @IsNumber()
+    liferantId: number;
+
     
     
 }

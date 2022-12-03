@@ -18,13 +18,13 @@ export class LagerPlatztDTO{
     mhd : Date; 
     @IsOptional()
     lagerPlatzVolumen : number;
+    @IsOptional()
+    mengeProPalete : number;
     @IsNotEmpty()
     static : boolean = false;
     @IsOptional()
-    name: string
-    @IsOptional()
     liferant:number;
     @IsOptional()
-    proPalete : number;
+    barcode:string;
 
 }

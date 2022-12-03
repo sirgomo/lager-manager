@@ -7,7 +7,7 @@ import { WarenbuchungModule } from './warenbuchung/warenbuchung.module';
 import { DispositorsModule } from './dispositors/dispositors.module';
 import { VerkaufModule } from './verkauf/verkauf.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DispoEntity } from './entity/DispoEntity';
+import { DispositorEntity } from './entity/dispositorEntity';
 import { ArtikelEntity } from './entity/ArtikelEntity';
 import { ArtikelModule } from './artikel/artikel.module';
 import { AuthModule } from './auth/auth.module';
@@ -29,7 +29,7 @@ import { WarenEingStat } from './entity/warenEingStat';
 import { WarenAusgStat } from './entity/warenAusgStat';
 import { EinkaufModule } from './einkauf/einkauf.module';
 import { AdminModule } from './admin/admin.module';
-import { Liferants } from './entity/liferants';
+import { KreditorsEntity } from './entity/kreditorsEntity';
 
 
 
@@ -42,8 +42,8 @@ import { Liferants } from './entity/liferants';
       username: 'root',
       password: 'beta1243',
       database: 'lager',
-      entities: [DispoEntity, ArtikelEntity, UserEntity, ArtikelReservationEntity, FehlendArtikelEntity, InKomissPalletenEntity, KommissionirungEntity,
-      LagerPlatzEntity, PalettenEnttity, SpeditionEntity, WarenBestellungEntity, WarenEingangEntity, KommisioDetailsEntity, UiidEntity, WarenEingStat, WarenAusgStat, Liferants],
+      entities: [DispositorEntity, ArtikelEntity, UserEntity, ArtikelReservationEntity, FehlendArtikelEntity, InKomissPalletenEntity, KommissionirungEntity,
+      LagerPlatzEntity, PalettenEnttity, SpeditionEntity, WarenBestellungEntity, WarenEingangEntity, KommisioDetailsEntity, UiidEntity, WarenEingStat, WarenAusgStat, KreditorsEntity],
       synchronize: false,
     }),
     WareneingangModule,

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ArtikelMengeDto } from '../dto/artikelMenge.dto';
 import { LagerPlatztDto, PALETTENTYP } from '../dto/lagerPlatz.dto';
 import { HelperService } from '../helper.service';
 import { LagerService } from './lager.service';
@@ -29,15 +28,17 @@ export class LagerComponent implements OnInit {
     this.lagerPlatztForm = this.fb.group({
       id: Number,
       lagerplatz: [''],
-      artId: Number,
+      artId: [Number],
       name: [''],
-      artikelMenge: Number,
-      einheit: Number,
+      artikelMenge: [Number],
+      einheit: [Number],
       palettenTyp: PALETTENTYP,
       mhd: Date,
-      lagerPlatzVolumen:Number,
+      lagerPlatzVolumen:[Number],
       static: Boolean,
-      liferant:Number
+      liferant: [Number],
+      mengeProPalete: [Number],
+      barcode: ['']
     });
 
    }
@@ -71,7 +72,10 @@ export class LagerComponent implements OnInit {
   createUpdateLagerPlatz(index : number){
     if(index === -1) this.lagerPlatztForm.reset();
     if(index !== -1){
-      this.lagerPlatztForm.setValue(this.lagerPlatze[index]);
+
+      this.lagerPlatztForm.patchValue(this.lagerPlatze[index]);
+
+      //this.lagerPlatztForm.get('mengeProPalete')?.setValue(this.lagerPlatze[index].mengeProPalete);
 
       //this.lagerPlatztForm.get('mhd')?.setValue(this.lagerPlatze[index].mhd.toISOString().split('T')[0]);
     // this.lagerPlatztForm.get('mhd')?.setValue(formatDate(this.lagerPlatze[index].mhd, 'dd-MM-yyyy', 'en'));

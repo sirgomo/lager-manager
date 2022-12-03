@@ -1,30 +1,30 @@
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DispositorsDTO } from "src/DTO/DispositorsDTO";
-import { DispoEntity } from "src/entity/DispoEntity";
+import { DispositorEntity } from "src/entity/dispositorEntity";
 import { ROLE, UserEntity } from "src/entity/UserEntity";
 import { Repository } from "typeorm";
 @Injectable()
 export class DisServiceService {
-    constructor(@InjectRepository(DispoEntity) private repo : Repository<DispoEntity> ) {}
+    constructor(@InjectRepository(DispositorEntity) private repo : Repository<DispositorEntity> ) {}
 
-   async getAllDisponets():Promise<DispoEntity[]>{
+   async getAllDisponets():Promise<DispositorEntity[]>{
     try {
         return await this.repo.find();
     } catch (err){
-        return err;
+        throw new Error("Etwas ist schiff gelaufen, ich konnte dispositoren nicht finden");
+        
     }
    
    }
    async createDisponets(dispo : DispositorsDTO)
    {
-    console.log('tutaj cvonstroller')
        await this.repo.create(dispo);
         try {
         return await this.repo.save(dispo);
         }
         catch(err) {
-            return err;
+            throw new Error("Etwas ist schiff gelaufen, ich kann dipositor nicht erstellen");
         }
    
    }
@@ -34,17 +34,17 @@ export class DisServiceService {
         try {
             return await this.repo.update(id, dispo);
         } catch (err){
-            return err;
+            throw new Error("Etwas ist schiff gelaufen, ich kann dipositor nicht aktualisiren");
         }
    
    }
    async deleteDiponent(id : number){
    
         try{
-            return await this.repo.delete(id);
+            return await (await this.repo.delete(id)).affected;
         }
         catch (err) {
-            return err;        
+            throw new Error("Etwas ist schiff gelaufen, ich kann dipositor nicht löschen");    
         }
  
    }

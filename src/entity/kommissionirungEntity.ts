@@ -1,5 +1,4 @@
 import { Column, Entity,  ManyToOne,  OneToMany,  PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
-import { DispoEntity } from "./DispoEntity";
 import { KommisioDetailsEntity } from "./KommisioDetailsEntity";
 import { SpeditionEntity } from "./SpeditionEntity";
 
