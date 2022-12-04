@@ -27,7 +27,6 @@ export class DebitorsComponent implements OnInit{
      data=>{
        if(data !== undefined && data.name.length > 2){
          this.serv.createNewDispositor(data).subscribe(dispo=>{
-           console.log(dispo);
            if(dispo !== null && dispo !== undefined && dispo.id !== null)
            this.dispositors.push(dispo);
          });
@@ -51,7 +50,6 @@ export class DebitorsComponent implements OnInit{
         if(data !== undefined && data.id !== null &&  this.dispositors[i].id === data.id){
          if(this.dispositors[i] !== data){
           this.serv.createNewDispositor(data).subscribe(dispo=>{
-            console.log(dispo);
             if(dispo !== null && dispo !== undefined && dispo.id !== null)
             this.dispositors[i] = dispo;
           });

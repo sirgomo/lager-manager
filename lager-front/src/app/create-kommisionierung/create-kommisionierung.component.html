@@ -25,8 +25,9 @@
      <div class="col  ">
       <div class="mb-3">
         <label for="verkauferId" class="form-label">Verkaufer</label>
-        <input type="number"
+        <input type="hidden"
           class="form-control" formControlName="verkauferId" name="verkauferId" id="verkauferId" aria-describedby="helpId" placeholder="hier sollte benutzer nr sein" (ngValue)="verkaufer">
+          <div class="form-control">{{verkauferData.username}}</div>
         <small id="helpId" class="form-text text-muted">Verkaufer id</small>
 
       </div>

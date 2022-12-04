@@ -4,6 +4,7 @@ import { catchError, Observable } from 'rxjs';
 import { AddArtikelKommissDto } from '../dto/addArtikelKommiss.dto';
 import { ArtikelKommissDto } from '../dto/artikelKommiss.dto';
 import {KomissDTO} from '../dto/komiss.dto'
+import { UserDataDto } from '../dto/userData.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -46,5 +47,8 @@ export class VerkaufService {
   }
   getTotalGewichtAndPaleten(kommnr:number){
     return this.http.get<any>(this.API_URL + '/total/' + kommnr);
+  }
+  getUserById(id:number){
+    return this.http.get<UserDataDto>('http://localhost:3000/user/' +id);
   }
 }

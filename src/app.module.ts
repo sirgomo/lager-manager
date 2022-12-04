@@ -30,6 +30,7 @@ import { WarenAusgStat } from './entity/warenAusgStat';
 import { EinkaufModule } from './einkauf/einkauf.module';
 import { AdminModule } from './admin/admin.module';
 import { KreditorsEntity } from './entity/kreditorsEntity';
+import { UserModule } from './user/user.module';
 
 
 
@@ -57,6 +58,7 @@ import { KreditorsEntity } from './entity/kreditorsEntity';
     SpeditionModule,
     EinkaufModule,
     AdminModule,
+    UserModule,
    
   ],
   controllers: [AppController],

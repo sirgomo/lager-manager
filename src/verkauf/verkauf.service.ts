@@ -59,7 +59,9 @@ export class VerkaufService {
           throw new Error("Artikel mange darf nicht 0 sein");
           
           }
-       
+       if(!art[i].inBestellung){
+        art[i].inBestellung = false;
+       }
       let komm : KommissionirungEntity =   await this.repo.findOne({'where': {'id':art[i].kommNr}, 'relations': {'kommDetails': true}});
       //wollen wir das das zwiete mall das selber artikel als neue position oder einfach als beide sumiert ? hiere getrent positions
       /*await this.repoDetails.findOneBy({'artikelId':art.artikelId, 'kommissId':art.kommNr}).then(data=>{
@@ -221,7 +223,7 @@ export class VerkaufService {
    return await this.repoDetails.query(`SELECT kommDetails.artikelId, menge, gepackt, statlagerplatz,stuckProPal, paleteTyp,artikel.artikelId, artikel.name, artikel.minLosMenge,
       artikel.grosse, artikel.gewicht, artikel.basisEinheit, artikel.artikelFlage FROM kommDetails 
       LEFT JOIN artikel ON artikel.artikelId = kommDetails.artikelId
-      LEFT JOIN (SELECT artId, lagerplatz AS statlagerplatz, proPalete AS stuckProPal, palettenTyp AS paleteTyp FROM lagerplatz WHERE static = true ) lagerplatz ON lagerplatz.artId = kommDetails.artikelId
+      LEFT JOIN (SELECT artId, lagerplatz AS statlagerplatz, mengeProPalete AS stuckProPal, palettenTyp AS paleteTyp FROM lagerplatz WHERE static = true ) lagerplatz ON lagerplatz.artId = kommDetails.artikelId
       WHERE kommissId = '${komissId}' AND inBestellung = false ORDER BY statlagerplatz ASC` ).then(data=>{
        for(let i = 0; i !== data.length; i++){
         let art :PalettenMengeVorausDTO = new PalettenMengeVorausDTO();

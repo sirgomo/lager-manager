@@ -17,18 +17,9 @@ export class DatenpflegeComponent implements OnInit {
   show :number = 0;
   @ViewChild(DebitorsComponent) dispo!: DebitorsComponent;
   formSpedition : FormGroup;
-  formDispositors: FormGroup;
+
 
   constructor(private servi: DatenpflegeService, private fb: FormBuilder) {
-    this.formDispositors = this.fb.group({
-      id: Number,
-      name: [''],
-      name2: [''],
-      stadt: [''],
-      strasseUndNr: [''],
-      postleitzahl:Number,
-      uStIdentifikationsnummer: ['']
-    });
     this.formSpedition = this.fb.group({
       id: Number,
       name: [''],
@@ -41,7 +32,6 @@ export class DatenpflegeComponent implements OnInit {
    this.show = 0;
   }
 getAllDispositors(){
-
   this.show = 1;
   this.dispositors.splice(0, this.dispositors.length);
   return this.servi.getAllDispositors().subscribe(data =>{

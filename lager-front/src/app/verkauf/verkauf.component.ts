@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { DataDilerService } from '../data-diler.service';
 import { DispositorDTO } from '../dto/dispositor.dto';
 import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
@@ -23,7 +24,7 @@ export class VerkaufComponent implements OnInit {
   kommissToDruck: PalettenMengeVorausToDruckDto[] = new Array();
 
 
-  constructor(private serv : VerkaufService, private router : Router, private dataDie: DataDilerService) {
+  constructor(private serv : VerkaufService, private router : Router, private dataDie: DataDilerService, private toaster: ToastrService) {
     this.kommStatus = KOMMISIONSTATUS;
     this.spedi = dataDie.getSpeditors();
     this.dispo = dataDie.getDispositors();
@@ -86,11 +87,16 @@ async getKommToDruck(kommid:number){
 
   this.kommissToDruck.splice(0,this.kommissToDruck.length);
     await this.serv.getTotalGewichtAndPaleten(this.komiss[kommid].id).subscribe(data=>{
-     for(let i =0; i !== data.length; i++){
-      this.kommissToDruck.push(data[i]);
-     }
-     this.dataDie.setKomm(this.komiss[kommid]);
-     this.showDownload = true;
+      if(data !== null && data.length > 0){
+        for(let i =0; i !== data.length; i++){
+          this.kommissToDruck.push(data[i]);
+         }
+         this.dataDie.setKomm(this.komiss[kommid]);
+         this.showDownload = true;
+      }else{
+        this.toaster.error('Kommissionierung ist leer, es mussen zuerst Artikels zugefügt werden!', 'Error', {'timeOut': 800});
+      }
+
     });
 
 }
