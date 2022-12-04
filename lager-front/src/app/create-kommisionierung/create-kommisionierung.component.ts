@@ -9,6 +9,7 @@ import { DispositorDTO } from '../dto/dispositor.dto';
 import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
 import { KommissDetailsDto } from '../dto/kommissDetails.dto';
 import { SpeditionDTO } from '../dto/spedition.dto';
+import { UserDataDto } from '../dto/userData.dto';
 import { HelperService } from '../helper.service';
 import { VerkaufService } from '../verkauf/verkauf.service';
 
@@ -20,6 +21,7 @@ import { VerkaufService } from '../verkauf/verkauf.service';
 export class CreateKommisionierungComponent implements OnInit {
   kommissForm: FormGroup;
   verkaufer: number = Number(localStorage.getItem('myId'));
+  verkauferData : UserDataDto = new UserDataDto();
   readonly kommStatus : typeof KOMMISIONSTATUS = KOMMISIONSTATUS ;
   dispo: DispositorDTO[] = new Array();
   spedi: SpeditionDTO[] = new Array();
@@ -53,8 +55,25 @@ export class CreateKommisionierungComponent implements OnInit {
     this.spedi = this.dataDiel.getSpeditors();
     this.dispo = this.dataDiel.getDispositors();
     this.getArtikle();
+    this.getUser()
   }
+  async getUser(){
 
+    if(isFinite(this.currentKomm.id)){
+      await this.kommServ.getUserById(this.currentKomm.verkauferId).subscribe(
+        data=>{
+          this.verkauferData = data;
+          return;
+        }
+      );
+    }
+    await this.kommServ.getUserById(this.verkaufer).subscribe(
+      data=>{
+        this.verkauferData = data;
+        return;
+      }
+    );
+  }
   async getArtikle(){
     //how many artikels are aviable ?
     // total menge on lager - menge in reservation entity - das was fehlt
@@ -159,6 +178,10 @@ export class CreateKommisionierungComponent implements OnInit {
 
   }
 async addArtikelToKomm(index:number, edit:boolean){
+  if( !isFinite(this.currentKomm.id)){
+    this.toastr.error('Du musst zuerst kommisionirung speichern!', 'Error', {'timeOut':700});
+    return;
+  }
   let art: AddArtikelKommissDto[] = new Array();
   if(!edit && this.artikelMenge[index] > this.artikels[index].total)
   {
@@ -298,8 +321,6 @@ return  await this.kommServ.addArtikelToKomm(art).subscribe((data)=>{
       Object.assign(this.currentKomm, data[data.length-1]);
       this.reasignKomm();
     }
-  }, (err)=>{
-    console.log(err.message);
   });
 }
 showArtikelsinKomm(){
