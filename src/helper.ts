@@ -10,7 +10,7 @@ export class Helper{
   //2
   public fullLageraus: boolean = false;
   public  getPaletenVolumen(artMenge: number, grosse: string, minLosMenge: number, palMaxHcm: number ){
-        let paleteMaxVolumen : number = 120 * 80 * palMaxHcm;
+        let paleteMaxVolumen : number = 120 * 80 * (palMaxHcm - 15);
         let artGross : string[] = new Array();
          //hxbxl 31 x16x28c
         artGross = grosse.split('x');
@@ -20,16 +20,16 @@ export class Helper{
         let mengeKarton: number = Math.floor(artMenge / minLosMenge);
         let rest :number = artMenge % minLosMenge;
         
-        
+        //TODO cos tu nie gra ! z volumenem jak wybiera i ustawia !        
         let volMenge : number[][] = new Array();
-      if( rest > 0 && mengeKarton === 0){
+      if( rest > 0 && artMenge < minLosMenge){
         console.log('jak czesto');
         volMenge.push([kartonB * kartonH * kartonL, 1]);
         return volMenge;
        }
         let maxMengeKartonsOnH : number = Math.floor( (palMaxHcm - 15) / kartonH);
         let paletteVolumen: number = 120 * 80 * 14.5;
-        let maxKartonLangeOnL :number = Math.floor(120 / kartonL);
+       /* let maxKartonLangeOnL :number = Math.floor(120 / kartonL);
         let maxKartonLangeOnB : number = Math.floor(120 / kartonB);
         let maxKartonBreiteOnL : number = Math.floor(80 / kartonL);
         let maxKartonBreiteOnB :number = Math.floor(80 / kartonB);
@@ -40,10 +40,36 @@ export class Helper{
           }
         if((80 - maxKartonBreiteOnL * kartonL) > kartonB){
           maxKartonProLageBxL += Math.floor(120 / kartonL);
+         }*/
+         let mengeOn1: number = 0;
+         let mengeOn2: number = 0;
+         let breiteOnBreite: number = Math.floor(80 / kartonB);
+         let langeOnLange: number = Math.floor(120 / kartonL);
+         let plazOnLange: number = 120 - langeOnLange * kartonL;
+         let platzOnBrite: number = 80 - breiteOnBreite * kartonB;
+         mengeOn1 = breiteOnBreite * langeOnLange;
+         if (plazOnLange > kartonB) {
+           mengeOn1 += Math.floor(plazOnLange / kartonB) * Math.floor(80 / kartonL);
          }
-
+         if (platzOnBrite > kartonL) {
+           mengeOn1 += Math.floor(platzOnBrite / kartonL) * Math.floor(120 / kartonL);
+         }
+     
+     
+         let langeOnBreite2: number = Math.floor(80 / kartonL);
+         let breiteOnLange2: number = Math.floor(120 / kartonB);
+         let plazOnLange2: number = 120 - breiteOnLange2 * kartonB;
+         let platzOnBrite2: number = 80 - langeOnBreite2 * kartonL;
+         mengeOn2 = langeOnBreite2 * breiteOnLange2;
+         if (plazOnLange2 > kartonL) {
+           mengeOn2 += Math.floor(plazOnLange2 / kartonL) * Math.floor(80 / kartonB);
+         }
+         if (platzOnBrite2 > kartonB) {
+           mengeOn2 += Math.floor(platzOnBrite2 / kartonB) * Math.floor(120 / kartonL);
+         }
+        
        //  console.log('maxKartonProLageLxB ' + maxKartonProLageLxB +' i maxKartonProLageBxL '+ maxKartonProLageBxL);
-        if(maxKartonProLageBxL > maxKartonProLageLxB){
+        /*if(maxKartonProLageBxL > maxKartonProLageLxB){
           
             while(mengeKarton > 0){
                 let kartons:number = maxKartonProLageBxL * maxMengeKartonsOnH;
@@ -68,7 +94,33 @@ export class Helper{
                 volMenge.push([kartonvol, itemMengeOnPalete]);
                 mengeKarton -= kartons;
             }
-        }
+        }*/
+        if(mengeOn1 > mengeOn2){
+          
+          while(mengeKarton > 0){
+              let kartons:number = mengeOn1 * maxMengeKartonsOnH;
+                mengeKarton > kartons ? kartons : kartons = mengeKarton;
+              let kartonvol : number = this.getTotalKartonValue(kartons, kartonH, kartonB, kartonL);
+              let itemMengeOnPalete: number = kartons * minLosMenge;
+                kartons === mengeKarton ? itemMengeOnPalete + rest : itemMengeOnPalete;
+              kartonvol += paletteVolumen;
+              volMenge.push([kartonvol, itemMengeOnPalete]);
+              mengeKarton -= kartons;
+          }
+        
+
+      }else {
+          while(mengeKarton > 0){
+              let kartons:number = mengeOn2 * maxMengeKartonsOnH;
+                mengeKarton > kartons ? kartons : kartons = mengeKarton;
+              let kartonvol : number = this.getTotalKartonValue(kartons, kartonH, kartonB, kartonL);
+              let itemMengeOnPalete: number = kartons * minLosMenge;
+                kartons === mengeKarton ? itemMengeOnPalete + rest : itemMengeOnPalete;
+              kartonvol += paletteVolumen;
+              volMenge.push([kartonvol, itemMengeOnPalete]);
+              mengeKarton -= kartons;
+          }
+      }
        /* console.log('max karton bxL : ' + maxKartonProLageBxL + ' max karton lxb : ' + maxKartonProLageLxB + ' Lagevolumen : ' + lageVolumen 
         +' bxL Volumen ' + this.getTotalKartonValue(maxKartonProLageBxL, kartonH, kartonB, kartonL) + 
         ' lxb volumen ' + this.getTotalKartonValue(maxKartonProLageLxB, kartonH, kartonB, kartonL) );*/
@@ -118,103 +170,10 @@ public getTotalPalettenMenge(palMaxHo: number, artikels: PalettenMengeVorausDTO[
     let totalPaletenMengeAltWeise: number = 0;
     totalGewichtAltWeise = this.artikelsAuftailen(artikels, totalGewichtAltWeise, alkKram, fassKram, sussKram);
     console.log('sus ' + sussKram.length + ' alk ' + alkKram.length + ' fass ' + fassKram.length);
-    while(alkKram.length > 1 ){
-      whileStop++;
-      if(whileStop === 5){ break;}
-      let pal: InKomissPalletenEntity = new InKomissPalletenEntity();
-     
-      let palete:string = '';
-      let mengeOnLage:number = 0;
-      let totalVolumen:number = 0;
-     
-    for( let i = 0; i < alkKram.length; i++){
-      let {kH, kB, kL }: {kH:number, kB: number; kL: number; } = this.getMassen(alkKram, i);
-       ({mengeOnLage, palete}  = this.getMengen(alkKram,i));
-       let totalKartons:number = Math.ceil(alkKram[i].menge / alkKram[i].minLosMenge)
-      totalVolumen += totalKartons * kH * kB * kL;
-      let totalLageMenge:number = Math.floor(totalKartons / mengeOnLage);
-      this.rekalkulatePaltte(palettenMenge, palMaxHo, pal, komissId);
-      if(totalLageMenge > 1 && totalLageMenge * kH + pal.palettenH < palMaxHo  ){
-      
-        while(totalKartons >= mengeOnLage && pal.palettenH < palMaxHo){
-          pal.artikelId = alkKram[i].artikelId;
-          pal.artikelMenge += mengeOnLage * alkKram[i].minLosMenge;
-          alkKram[i].menge -= mengeOnLage * alkKram[i].minLosMenge;
-          pal.palettenH += kH;
-          totalKartons -= mengeOnLage;
-          pal.erwartetPaletteGewicht += mengeOnLage * alkKram[i].gewicht;
-          totalVolumen -= mengeOnLage * kH * kB * kL;
-          palettenMenge.push(pal);
-          if(alkKram[i].menge === 0 ){
-            alkKram.splice(i, 1);
-          }
-        }
-          if(totalKartons < mengeOnLage && pal.palettenH + kH >= palMaxHo - kH && pal.palettenH + kH < palMaxHo + (kH / 4))
-          {
-            if(totalKartons * kB * kL > 120 * 80) return;
-            this.rekalkulatePaltte(palettenMenge, palMaxHo, pal, komissId);
-            pal.artikelId = alkKram[i].artikelId;
-            pal.artikelMenge += alkKram[i].menge;
-            alkKram[i].menge -= alkKram[i].menge;
-            pal.palettenH += kH;
-          
-            pal.erwartetPaletteGewicht += totalKartons * alkKram[i].gewicht;
-            totalVolumen -= totalKartons * kH * kB * kL;
-            pal.palettenVolumen = totalKartons * kB * kL;
-            palettenMenge.push(pal);
-            totalKartons  = 0;
-            if(alkKram[i].menge === 0 ){
-              alkKram.splice(i, 1);
-            }
-          }else{
-            tmpArrayFurRestMengeArtikel.push(alkKram[i]);
-            for (let t = 0; t < tmpArrayFurRestMengeArtikel.length; t++){
-              for (let te = 0; te < alkKram.length; te++){
-                if(tmpArrayFurRestMengeArtikel[t].artikelId === alkKram[te].artikelId && tmpArrayFurRestMengeArtikel[t].menge === alkKram[te].menge){
-                  console.log('hab gefunden, jetzt losche ich !! ')
-                  alkKram.splice(te, 1);
-                }
-              }
-            }
-          }
-      }else if (totalLageMenge > 1 && totalLageMenge * kH + pal.palettenH > palMaxHo){
-        this.rekalkulatePaltte(palettenMenge, palMaxHo, pal, komissId);
-          if(alkKram[i].proPalete !== 0 && alkKram[i].menge > alkKram[i].proPalete){
-                
-          }
-      } 
-    }
-   for(let end = 0; end < palettenMenge.length; end++){
-    console.log(JSON.stringify(palettenMenge[end]));
-   }
-    console.log(' Total alt gewicht ' + totalGewichtAltWeise + ' alt palet menge 750 : '+ totalGewichtAltWeise / 750);
-    console.log(' noch in alk ' + alkKram.length + ' noch in suss : '+ sussKram.length);
   
-  }
 } 
 
-  
 
-  private rekalkulatePaltte(palettenMenge: InKomissPalletenEntity[], palMaxHo: number, pal: InKomissPalletenEntity, komissId: number) {
-    if (palettenMenge.length > 0 && palettenMenge[palettenMenge.length - 1] !== undefined) {
-      if (palettenMenge[palettenMenge.length - 1].palettenH < palMaxHo) {
-        pal.id = palettenMenge[palettenMenge.length - 1].id;
-        pal.kommId = komissId;
-        pal.erwartetPaletteGewicht = palettenMenge[palettenMenge.length - 1].erwartetPaletteGewicht;
-        pal.palettenH = palettenMenge[palettenMenge.length - 1].palettenH;
-      } else {
-        pal.id = this.makePalId(7);
-        pal.kommId = komissId;
-        pal.palettenH = 15;
-        pal.erwartetPaletteGewicht = 20;
-      }
-    }else{
-      pal.id = this.makePalId(7);
-      pal.kommId = komissId;
-      pal.palettenH = 15;
-      pal.erwartetPaletteGewicht = 20;
-    }
-  }
 
 
 
@@ -297,7 +256,7 @@ public getTotalPalettenMenge(palMaxHo: number, artikels: PalettenMengeVorausDTO[
 
   private artikelsAuftailen(artikels: PalettenMengeVorausDTO[], totalGewichtAltWeise: number, alkKram: PalettenMengeVorausDTO[], fassKram: PalettenMengeVorausDTO[], sussKram: PalettenMengeVorausDTO[]) {
     for (let i = 0; i !== artikels.length; i++) {
-      totalGewichtAltWeise += Math.ceil(artikels[i].menge / artikels[i].minLosMenge) * artikels[i].gewicht;
+      totalGewichtAltWeise +=  artikels[i].gewicht;
 
       if (artikels[i].artikelFlage === ARTIKELFLAGE.ALK) {
         alkKram.push(artikels[i]);
@@ -307,9 +266,7 @@ public getTotalPalettenMenge(palMaxHo: number, artikels: PalettenMengeVorausDTO[
         sussKram.push(artikels[i]);
       }
     }
-    alkKram.sort((a,b)=>{
-     return a.menge > b.menge ? 1:0;
-    });
+   
     return totalGewichtAltWeise;
   }
 

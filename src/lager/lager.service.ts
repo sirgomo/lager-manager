@@ -198,7 +198,7 @@ export class LagerService {
                'lagerPlatzVolumen': MoreThanOrEqual(volMenge[i][0]), 'static': true}, order:{'lagerPlatzVolumen': 'ASC'}});//.then(data=>{
                  tmps.artId = artikel.artikelId;
                  tmps.artikelMenge = volMenge[i][1];
-                 tmps.mengeProPalete = volMenge[i][1];
+                 tmps.mengeProPalete = volMenge[volMenge.length-1][1];
                  tmps.liferant = artikel.liferantId;
                  tmps.mhd = this.helper.getRandomMhd();
                  tmps.einheit = artikel.basisEinheit;
@@ -213,7 +213,7 @@ export class LagerService {
                'lagerPlatzVolumen': MoreThanOrEqual(volMenge[i][0]), 'static':false}, order:{'lagerPlatzVolumen': 'ASC'}});//.then(data=>{
                  tmps.artId = artikel.artikelId;
                  tmps.artikelMenge = volMenge[i][1];
-                 tmps.mengeProPalete = volMenge[i][1];
+                 tmps.mengeProPalete = volMenge[volMenge.length-1][1];
                  tmps.liferant = artikel.liferantId;
                  tmps.mhd = this.helper.getRandomMhd();
                  tmps.einheit = artikel.basisEinheit;

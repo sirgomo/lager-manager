@@ -34,6 +34,8 @@ export class CreateKommisionierungComponent implements OnInit {
   artikelStatus: string[] = new Array();
   showArtikelsInKomm :number = 0;
   currentKomm : KomissDTO = new KomissDTO();
+  stellplattzeB:number = 0;
+  totalGewichtB:number = 0;
   constructor(private kommServ: VerkaufService, private fb : FormBuilder
     ,private helper: HelperService, private dataDiel : DataDilerService, private router: Router, private toastr: ToastrService) {
     this.kommissForm = this.fb.group({
@@ -50,7 +52,7 @@ export class CreateKommisionierungComponent implements OnInit {
     this.kommStatus = KOMMISIONSTATUS;
 
    }
-
+//TODO show artikels powinno pokazywac w innym oknie a nie tak samo bo sie zlewa
   ngOnInit(): void {
     this.spedi = this.dataDiel.getSpeditors();
     this.dispo = this.dataDiel.getDispositors();
@@ -144,7 +146,7 @@ export class CreateKommisionierungComponent implements OnInit {
           Object.assign(tmpArti, this.artikels[i]);
           tmpArti.total = this.currentKomm.kommDetails[y].menge;
           this.artikelsInKomm.push(tmpArti);
-          tmpArti = this.setDetailsOfArtikel(tmpArti);
+          tmpArti = this.setGewichtFurArtikel(tmpArti);
           this.artikelStatus[y] = this.currentKomm.kommDetails[y].gepackt;
           break;
          }
@@ -164,6 +166,14 @@ export class CreateKommisionierungComponent implements OnInit {
       this.kommissForm.get('kommissStatus')?.setValue(KOMMISIONSTATUS.INBEARBEITUNG);
       this.kommissForm.get('spedition')?.valueChanges.subscribe(data=>{ this.spediSelected = data});
     }
+    if(this.artikelsInKomm !== undefined && this.artikelsInKomm.length > 0){
+      let stellplattze: number;
+      let totalGewicht: number ;
+     ({stellplattze, totalGewicht} = this.helper.getPaletsDeatails(this.artikelsInKomm));
+     this.stellplattzeB = stellplattze;
+     this.totalGewichtB = totalGewicht;
+    }
+
   }
   newKomm(){
     this.kommissForm.reset();
@@ -171,7 +181,7 @@ export class CreateKommisionierungComponent implements OnInit {
       this.kommissForm.get('kommissStatus')?.setValue(KOMMISIONSTATUS.INBEARBEITUNG);
       this.kommissForm.get('spedition')?.valueChanges.subscribe(data=>{ this.spediSelected = data});
   }
-  setDetailsOfArtikel(tmpArti : ArtikelKommissDto){
+  setGewichtFurArtikel(tmpArti : ArtikelKommissDto){
     let totalkartons : number = Math.floor( tmpArti.total / tmpArti.minLosMenge);
     tmpArti.gewicht = totalkartons * tmpArti.gewicht;
     return tmpArti;

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ArtikelDTO } from './dto/artikel.dto';
+import { type } from 'os';
+import { ArtikelDTO, ARTIKELFLAGE } from './dto/artikel.dto';
 import { ArtikelKommissDto } from './dto/artikelKommiss.dto';
 import { KomissDTO } from './dto/komiss.dto';
 import { LagerPlatztDto } from './dto/lagerPlatz.dto';
@@ -142,6 +143,31 @@ return artikels;
       platze.unshift(d);
    });
 return platze;
+}
+
+getPaletsDeatails(artikels : ArtikelKommissDto[]){
+  let totalGewicht:number = 0;
+  let stellplattze:number = 0;
+  let sussgewicht:number = 0;
+  for(let i = 0; i !== artikels.length; i++){
+    console.log(typeof artikels[i].total + '  ' + typeof  artikels[i].minLosMenge + ' ' + typeof artikels[i].gewicht + ' '+ typeof totalGewicht + ' '+ typeof Math.ceil(artikels[i].total / artikels[i].minLosMenge))
+    if(artikels[i].ARTIKELFLAGE == ARTIKELFLAGE.FASS){
+       totalGewicht += artikels[i].gewicht;
+    }
+    if(artikels[i].ARTIKELFLAGE == ARTIKELFLAGE.ALK){
+      totalGewicht += artikels[i].gewicht;
+    }
+    if(artikels[i].ARTIKELFLAGE == ARTIKELFLAGE.SUSS){
+      sussgewicht += artikels[i].gewicht;
+    }
+  }
+
+  stellplattze = Number(  Math.ceil( totalGewicht / 750));
+  stellplattze += Number(  Math.ceil(  sussgewicht / 250));
+  console.log(totalGewicht + ' ' + sussgewicht)
+  totalGewicht = totalGewicht + sussgewicht;
+
+ return {stellplattze, totalGewicht};
 }
 
 }

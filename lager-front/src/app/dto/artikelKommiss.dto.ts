@@ -1,3 +1,5 @@
+import { ARTIKELFLAGE } from "./artikel.dto";
+
 export class ArtikelKommissDto{
   artId!:number;
   total!: number;
@@ -7,7 +9,7 @@ export class ArtikelKommissDto{
   minLosMenge!:number;
   gewicht!:number;
   basisEinheit!:number;
-  ARTIKELFLAGE!:number;
+  ARTIKELFLAGE!:ARTIKELFLAGE;
   fehlArtikelId!:number;
   fehlArtikelMenge!: number;
   resMenge!:number;

@@ -219,12 +219,16 @@ export class VerkaufService {
   
     let komm: KommissionirungEntity = new KommissionirungEntity();
     komm = await this.repo.findOneBy({'id': komissId});
+    
   
-   return await this.repoDetails.query(`SELECT kommDetails.artikelId, menge, gepackt, statlagerplatz,stuckProPal, paleteTyp,artikel.artikelId, artikel.name, artikel.minLosMenge,
+   return await this.repoDetails.query(`SELECT kommDetails.artikelId, menge, gepackt, statlagerplatz,proPalete, paleteTyp,artikel.artikelId, artikel.name, artikel.minLosMenge,
       artikel.grosse, artikel.gewicht, artikel.basisEinheit, artikel.artikelFlage FROM kommDetails 
       LEFT JOIN artikel ON artikel.artikelId = kommDetails.artikelId
-      LEFT JOIN (SELECT artId, lagerplatz AS statlagerplatz, mengeProPalete AS stuckProPal, palettenTyp AS paleteTyp FROM lagerplatz WHERE static = true ) lagerplatz ON lagerplatz.artId = kommDetails.artikelId
+      LEFT JOIN (SELECT artId, lagerplatz AS statlagerplatz, mengeProPalete AS proPalete, palettenTyp AS paleteTyp FROM lagerplatz WHERE static = true ) lagerplatz ON lagerplatz.artId = kommDetails.artikelId
       WHERE kommissId = '${komissId}' AND inBestellung = false ORDER BY statlagerplatz ASC` ).then(data=>{
+        if(artikels.length > 0){
+          artikels.splice(0, artikels.length);
+        }
        for(let i = 0; i !== data.length; i++){
         let art :PalettenMengeVorausDTO = new PalettenMengeVorausDTO();
         Object.assign(art,data[i]); 
@@ -232,8 +236,8 @@ export class VerkaufService {
         
        }
        if(komm.maxPalettenHoher !== null){
+        
         this.helper.getTotalPalettenMenge(komm.maxPalettenHoher, artikels, komissId);
-        console.log('totalgewicht '+ totalgewicht);
         return artikels;
        }
      
