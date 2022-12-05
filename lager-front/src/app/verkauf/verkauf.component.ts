@@ -2,10 +2,10 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DataDilerService } from '../data-diler.service';
-import { DispositorDTO } from '../dto/dispositor.dto';
+import { DispositorDto } from '../dto/dispositor.dto';
 import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
 import { PalettenMengeVorausToDruckDto } from '../dto/paletenMengeVorausKom.dto';
-import { SpeditionDTO } from '../dto/spedition.dto';
+import { SpeditionDto } from '../dto/spedition.dto';
 import { VerkaufService } from './verkauf.service';
 
 
@@ -18,8 +18,8 @@ import { VerkaufService } from './verkauf.service';
 export class VerkaufComponent implements OnInit {
   komiss : KomissDTO[] = new Array();
   kommStatus: typeof KOMMISIONSTATUS;
-  spedi : SpeditionDTO[] = new Array();
-  dispo: DispositorDTO[] = new Array();
+  spedi : SpeditionDto[] = new Array();
+  dispo: DispositorDto[] = new Array();
   showDownload:boolean = false;
   kommissToDruck: PalettenMengeVorausToDruckDto[] = new Array();
 

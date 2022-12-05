@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { isNumberObject } from 'util/types';
-import { DispositorDTO } from '../dto/dispositor.dto';
-import { SpeditionDTO } from '../dto/spedition.dto';
+import { DispositorDto } from '../dto/dispositor.dto';
+import { SpeditionDto } from '../dto/spedition.dto';
 import { DatenpflegeService } from './datenpflege.service';
 import { DebitorsComponent } from './debitors/debitors.component';
 
@@ -12,8 +11,8 @@ import { DebitorsComponent } from './debitors/debitors.component';
   styleUrls: ['./datenpflege.component.scss']
 })
 export class DatenpflegeComponent implements OnInit {
-  dispositors : DispositorDTO[] = new Array();
-  speditors : SpeditionDTO[] = new Array();
+  dispositors : DispositorDto[] = new Array();
+  speditors : SpeditionDto[] = new Array();
   show :number = 0;
   @ViewChild(DebitorsComponent) dispo!: DebitorsComponent;
   formSpedition : FormGroup;
@@ -54,7 +53,7 @@ getAllspeditiors(){
     });
   });
 }
-createNewSpeditor(s: SpeditionDTO){
+createNewSpeditor(s: SpeditionDto){
   if(!Number.isFinite(s.id)){
  return this.servi.createNewSpeditor(s).subscribe(d =>{
     this.speditors.push(d);
@@ -66,7 +65,7 @@ createNewSpeditor(s: SpeditionDTO){
  return this.updateSpeditor(s);
 }
 }
- updateSpeditor(s:SpeditionDTO){
+ updateSpeditor(s:SpeditionDto){
   this.servi.updateSpeditor(s, s.id);
  let index = this.speditors.findIndex((e) => e.id === s.id);
  this.speditors[index] = s;

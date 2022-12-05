@@ -2,7 +2,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { DispositorDTO } from 'src/app/dto/dispositor.dto';
+import { DispositorDto } from 'src/app/dto/dispositor.dto';
 import { DatenpflegeService } from '../datenpflege.service';
 import { AddDebitorComponent } from './add-debitor.component';
 
@@ -12,7 +12,7 @@ import { AddDebitorComponent } from './add-debitor.component';
   styleUrls: ['./debitors.component.scss']
 })
 export class DebitorsComponent implements OnInit{
-  @Input() dispositors: DispositorDTO[] = new Array();
+  @Input() dispositors: DispositorDto[] = new Array();
   constructor(private serv: DatenpflegeService, private toastr :ToastrService, private matDialg : MatDialog){
 
   }

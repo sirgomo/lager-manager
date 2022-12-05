@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DatenpflegeService } from './datenpflege/datenpflege.service';
-import { DispositorDTO } from './dto/dispositor.dto';
+import { DispositorDto } from './dto/dispositor.dto';
 import { KomissDTO } from './dto/komiss.dto';
-import { SpeditionDTO } from './dto/spedition.dto';
+import { SpeditionDto } from './dto/spedition.dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataDilerService {
   private komm :KomissDTO = new KomissDTO();
-  private spedi : SpeditionDTO[] = new Array();
-  private dispo: DispositorDTO[] = new Array();
+  private spedi : SpeditionDto[] = new Array();
+  private dispo: DispositorDto[] = new Array();
   constructor( private dataServ: DatenpflegeService) {
   this.setDispo();
   this.setSpedi();

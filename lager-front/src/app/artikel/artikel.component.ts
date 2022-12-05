@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { DataDilerService } from '../data-diler.service';
 import { ArtikelDTO, ARTIKELFLAGE } from '../dto/artikel.dto';
 import { UidDTO } from '../dto/artikel.dto';
+import { DispositorDto } from '../dto/dispositor.dto';
 import { HelperService } from '../helper.service';
 import { ArtikelService } from './artikel.service';
 
@@ -14,15 +16,17 @@ import { ArtikelService } from './artikel.service';
 export class ArtikelComponent implements OnInit {
   artikels: ArtikelDTO[] = new Array();
   artikel: ArtikelDTO = new ArtikelDTO();
+  liferants: DispositorDto[] = new Array();
   formArtikel: FormGroup;
   //tmp array for uids of edited artikel
   uids : UidDTO[] = new Array();
   index: number;
    searchModel : string = '';
+   public artikelFlags = Object.values(ARTIKELFLAGE);
 
 
   show : number = 1;
-  constructor(private servi : ArtikelService, private fb : FormBuilder, private helper: HelperService, private toaster: ToastrService) {
+  constructor(private servi : ArtikelService, private fb : FormBuilder, private helper: HelperService, private toaster: ToastrService, private dataServ : DataDilerService) {
      this.formArtikel = this.fb.group({
     artikelId : Number,
     name: [''],
@@ -43,7 +47,8 @@ export class ArtikelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   this.getArtikles();
+    this.getLiferants();
+
   }
   async getArtikles(){
     this.show  = 1;
@@ -53,6 +58,21 @@ export class ArtikelComponent implements OnInit {
     this.artikels.push(da);
     });
    });
+  }
+  async getLiferants(){
+
+    let tmp:DispositorDto[] = await this.dataServ.getDispositors();
+
+    if(tmp !== undefined && tmp !== null && tmp.length > 0){
+      this.liferants.splice(0, this.liferants.length);
+      this.liferants = Array(tmp.length);
+      for(let i = 0; i < tmp.length; i++){
+        this.liferants.splice(tmp[i].id, 1, tmp[i]);
+
+      }
+      this.getArtikles();
+    }
+
   }
   async getArtikelById(id:number, index:number){
 
@@ -162,10 +182,13 @@ export class ArtikelComponent implements OnInit {
     }
   }
   deleteArtikel(id: number, index : number){
-    this.servi.deleteArtikel(id).subscribe(d=> {
-      if(d){
-        this.artikels.splice(index, 1);
-      }
-    });
+    if(window.confirm('Bist du sicher dass du den Artikel löschen willst')){
+      this.servi.deleteArtikel(id).subscribe(d=> {
+        if(d){
+          this.artikels.splice(index, 1);
+        }
+      });
+    }
+
   }
 }

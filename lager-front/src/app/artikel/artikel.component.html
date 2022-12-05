@@ -2,7 +2,7 @@
   <div class="mt-2 col-md-12"></div>
   <div class="row clearfix justify-content-center">
     <div class="col-md-auto">
-      <button type="button" class="btn btn-primary" (click)="getArtikles()">Artikel List</button>
+      <button type="button" class="btn btn-primary" (click)="getLiferants()">Artikel List</button>
     </div>
     <div class="col-md-auto">
       <button type="button" class="btn btn-primary" [routerLink]="['/datenpflege']"
@@ -43,6 +43,9 @@
           Min. Los Menge
         </th>
         <th class="text-center">
+          Liferant Name
+        </th>
+        <th class="text-center">
           Delete ?
         </th>
       </tr>
@@ -57,10 +60,13 @@
         <td data-name="name" style="cursor: pointer;" (click)="getArtikelById(post.artikelId, i)">
           {{ post?.name }}
         </td>
-        <td data-name="uid">
+        <td data-name="minLosMenge">
 
           {{post?.minLosMenge}}
 
+        </td>
+        <td data-name="uid">
+         {{liferants[post.liferantId]?.name}}
         </td>
         <td class="text-center">
           <button class="btn btn-danger" (click)="deleteArtikel(post.artikelId, i)">Artikel Löschen</button>
@@ -131,9 +137,12 @@
     </div>
 
     <div class="col-md-4">
-      <label for="artikelFlage" class="form-label">Artikel Flage typ </label>
-      <input formControlName="artikelFlage" type="text" class="form-control" id="validationCustom02"
-        value="artikelFlage" required>
+        <div class="mb-3">
+          <label for="" class="form-label">Artikel Flage typ</label>
+          <select class="form-select form-select-lg" name="artikelFlage" id="artikelFlage" formControlName="artikelFlage">
+            <option *ngFor="let item of artikelFlags" [ngValue]="item" [selected]="item === formArtikel.get('artikelFlage')?.value">{{item}}</option>
+          </select>
+        </div>
       <div class="valid-feedback">
         Schein gut zu sein
       </div>
@@ -154,14 +163,18 @@
       </div>
     </div>
     <div class="col-md-4">
-      <label for="liferantId" class="form-label">Artikel liferand </label>
-      <input formControlName="liferantId" type="number" class="form-control" id="liferantId" value="liferantId" required>
+      <div class="mb-3">
+        <label for="liferantId" class="form-label">Artikel liferand </label>
+        <select class="form-select form-select-lg" formControlName="liferantId" name="liferantId" id="liferantId">
+          <option *ngFor="let item of liferants" [ngValue]="item?.id" [selected]="item?.id === artikels[index]?.liferantId">{{item?.name}}</option>
+        </select>
+      </div>
       <div class="valid-feedback">
         Schein gut zu sein
       </div>
     </div>
     <div class="col-md-4">
-      <label for="mehrwertsteuer" class="form-label">Artikel Mehrwertsteuer </label>
+      <label for="mehrwertsteuer" class="form-label">Artikel Mehrwertsteuer in %</label>
       <input formControlName="mehrwertsteuer" type="number" class="form-control" id="mehrwertsteuer" value="mehrwertsteuer" required>
       <div class="valid-feedback">
         Schein gut zu sein

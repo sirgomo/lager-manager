@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DispositorDTO } from 'src/app/dto/dispositor.dto';
+import { DispositorDto } from 'src/app/dto/dispositor.dto';
 import GlobalValidators from 'src/app/globalValidators';
 
 
@@ -28,7 +28,7 @@ export class AddDebitorComponent implements OnInit{
     this.formDispositors.patchValue(this.dialogData);
    }
   }
-  createNewDispo(debi:DispositorDTO){
+  createNewDispo(debi:DispositorDto){
       this.dialogRef.close(debi);
   }
 }

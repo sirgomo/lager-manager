@@ -5,7 +5,7 @@ import { ArtikelService } from '../artikel/artikel.service';
 import { DatenpflegeService } from '../datenpflege/datenpflege.service';
 import { ArtikelDTO } from '../dto/artikel.dto';
 import { BestArtikelMengeDto } from '../dto/bestArtikelMenge.dto';
-import { DispositorDTO } from '../dto/dispositor.dto';
+import { DispositorDto } from '../dto/dispositor.dto';
 import { WarenBuchungDto } from '../dto/warenBuchung.dto';
 import { HelperService } from '../helper.service';
 import { WarenBuchungService } from './warenbuchung.service';
@@ -23,7 +23,7 @@ export class WarenebuchungComponent implements OnInit {
   searchModel : string = '';
   artikels :ArtikelDTO[] = new Array();
   artikelMenge : number[] = new Array(this.artikels.length);
-  dispositors : DispositorDTO[] = new Array();
+  dispositors : DispositorDto[] = new Array();
   dispo : boolean = false;
 
   buchungArtikelMenge = new Array();

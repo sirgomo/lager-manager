@@ -1,8 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DispositorDTO } from '../dto/dispositor.dto';
-import { SpeditionDTO } from '../dto/spedition.dto';
+import { DispositorDto } from '../dto/dispositor.dto';
+import { SpeditionDto } from '../dto/spedition.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -13,15 +13,15 @@ export class DatenpflegeService {
   private API_URLS :string = 'http://localhost:3000/sped';
   constructor(private http: HttpClient) { }
 
-  getAllDispositors():Observable<DispositorDTO[]>{
-        return this.http.get<DispositorDTO[]>(this.API_URL);
+  getAllDispositors():Observable<DispositorDto[]>{
+        return this.http.get<DispositorDto[]>(this.API_URL);
   }
-  createNewDispositor(dispo : DispositorDTO):Observable<DispositorDTO>{
-        return this.http.post<DispositorDTO>(this.API_URL, dispo);
+  createNewDispositor(dispo : DispositorDto):Observable<DispositorDto>{
+        return this.http.post<DispositorDto>(this.API_URL, dispo);
   }
-  updateDispositor(dispo: DispositorDTO, id : number){
+  updateDispositor(dispo: DispositorDto, id : number){
     try{
-      this.http.patch<DispositorDTO>(this.API_URL + '/'+id, dispo).subscribe();
+      this.http.patch<DispositorDto>(this.API_URL + '/'+id, dispo).subscribe();
     }catch(error){
       throw new HttpErrorResponse({error});
     }
@@ -31,24 +31,24 @@ export class DatenpflegeService {
       this.http.delete(this.API_URL + '/' + id).subscribe();
   }
 
-  getAllSpeditions():Observable<SpeditionDTO[]>{
+  getAllSpeditions():Observable<SpeditionDto[]>{
     try{
-      return this.http.get<SpeditionDTO[]>(this.API_URLS);
+      return this.http.get<SpeditionDto[]>(this.API_URLS);
     }catch(error){
       throw new HttpErrorResponse({error});
     }
   }
-  createNewSpeditor(sped : SpeditionDTO):Observable<SpeditionDTO>{
+  createNewSpeditor(sped : SpeditionDto):Observable<SpeditionDto>{
     try{
-      return this.http.post<SpeditionDTO>(this.API_URLS, sped);
+      return this.http.post<SpeditionDto>(this.API_URLS, sped);
     }catch(error){
       throw new HttpErrorResponse({error});
     }
 
   }
-   updateSpeditor(sped: SpeditionDTO, id:number){
+   updateSpeditor(sped: SpeditionDto, id:number){
      try{
-      this.http.post<SpeditionDTO>(this.API_URLS + '/'+id, sped).subscribe();
+      this.http.post<SpeditionDto>(this.API_URLS + '/'+id, sped).subscribe();
     }catch(error){
       throw new HttpErrorResponse({error});
     }

@@ -3,7 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TruthyTypesOf } from 'rxjs';
 import { DatenpflegeService } from '../datenpflege/datenpflege.service';
 import { ArtikelMengeDto } from '../dto/artikelMenge.dto';
-import { DispositorDTO } from '../dto/dispositor.dto';
+import { DispositorDto } from '../dto/dispositor.dto';
 import { LagerPlatztDto, PALETTENTYP } from '../dto/lagerPlatz.dto';
 import { WarenBuchungDto } from '../dto/warenBuchung.dto';
 import { WarenEinArtikleDto } from '../dto/warenEinArtikle.dto';
@@ -17,7 +17,7 @@ import { WareningangService } from './wareningang.service';
 })
 export class WareneingangComponent implements OnInit {
   buchungen: WarenBuchungDto[] = new Array();
-  dispostors: DispositorDTO[] = new Array();
+  dispostors: DispositorDto[] = new Array();
   artikles: WarenEinArtikleDto[] = new Array();
   show : number = -1;
   currentLiferung :number = -1;

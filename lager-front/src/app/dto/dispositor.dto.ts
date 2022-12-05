@@ -1,4 +1,4 @@
-export class DispositorDTO{
+export class DispositorDto{
 
   id!: number;
   name!: string;

@@ -24,6 +24,9 @@ public  onSearch(text : string, artikels : ArtikelDTO[] ){
         let atmp: number = 0;
 
         for (let i = 0; i < tmpArr.length; i++) {
+          if(tmpArr[i] === undefined || tmpArr1[i] === undefined){
+            break;
+          }
           if (tmpArr[i].toLocaleLowerCase().trim() == tmpArr1[i].toLocaleLowerCase().trim()) {
             atmp += 1;
           }

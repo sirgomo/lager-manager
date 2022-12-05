@@ -4,7 +4,7 @@ import jsPDF from "jspdf";
 //import autoTable from 'jspdf-autotable'
 import html2canvas from 'html2canvas';
 import { DataDilerService } from '../data-diler.service';
-import { SpeditionDTO } from '../dto/spedition.dto';
+import { SpeditionDto } from '../dto/spedition.dto';
 @Component({
   selector: 'app-pdfkommiss',
   templateUrl: './pdfkommiss.component.html',
@@ -77,7 +77,7 @@ genpdf2(){
         pageCtx.drawImage(canvas, 0, page * pxPageHeight , w, h, 0, 0, w, h);
       }
 
-      let spedi :SpeditionDTO[] = this.dataDiel.getSpeditors();
+      let spedi :SpeditionDto[] = this.dataDiel.getSpeditors();
 
       // Add the page to the PDF.
       if (page > 0) pdf.addPage();

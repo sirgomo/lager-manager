@@ -78,12 +78,12 @@
             </select>
         </td>
                     <td data-name="del">
-                      <div class="row">
-                        <div class="col">
-                          <button class="btn btn-danger  row-remove" (click)="deleteKomm(i)"><span class="glyphicon  glyphicon-remove" aria-hidden="true"></span>X</button>
+                      <div class="row px-1">
+                        <div class="col-sm-6 px-1 ">
+                          <button class="btn btn-danger btn-sm" (click)="deleteKomm(i)"><span class="glyphicon  glyphicon-remove fs-6" aria-hidden="true" >Entfernen</span></button>
                         </div>
-                        <div class="col px-2">
-                          <button class="btn btn-success" (click)="getKommToDruck(i)" ><span class="glyphicon  glyphicon-hdd" aria-hidden="true"></span>Get Komm</button>
+                        <div class="col-sm-6 px-1">
+                          <button class="btn btn-success btn-sm" (click)="getKommToDruck(i)" ><span class="glyphicon  glyphicon-hdd fs-6" aria-hidden="true" >Kommiss PDF</span></button>
                         </div>
                       </div>
                     </td>

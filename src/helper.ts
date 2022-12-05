@@ -170,6 +170,8 @@ public getTotalPalettenMenge(palMaxHo: number, artikels: PalettenMengeVorausDTO[
     let totalPaletenMengeAltWeise: number = 0;
     totalGewichtAltWeise = this.artikelsAuftailen(artikels, totalGewichtAltWeise, alkKram, fassKram, sussKram);
     console.log('sus ' + sussKram.length + ' alk ' + alkKram.length + ' fass ' + fassKram.length);
+
+    //TODO was machen wir hiere nacher ? 
   
 } 
 
