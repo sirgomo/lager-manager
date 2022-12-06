@@ -14,4 +14,5 @@ export class ArtikelKommissDto{
   fehlArtikelMenge!: number;
   resMenge!:number;
   liferantId!:number;
+  logisticBelegNr!:string;
 }

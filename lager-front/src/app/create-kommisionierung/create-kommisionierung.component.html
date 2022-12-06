@@ -3,17 +3,17 @@
   <div class="row clearfix justify-content-center">
     <div class="col-md-auto">
       <button class="btn btn-primary" type="button" (click)="newKomm()">
-        Neue Kommissionirung
+         Neue Kommissionirung
     </button>
     </div>
     <div class="col-md-auto">
       <button class="btn btn-primary" type="button"  [routerLink]="['/verkauf']" routerLinkActive="router-link-active" >
-        Meine Kommissionierungen
+        Meine Kommissionierung
        </button>
     </div>
     <div class="col-md-auto">
       <button class="btn btn-primary" type="button"  [routerLink]="['/verkauf']" routerLinkActive="router-link-active">
-        Alle Kommissionierungen
+        Alle Kommissionierung
         </button>
     </div>
 
@@ -28,8 +28,6 @@
         <input type="hidden"
           class="form-control" formControlName="verkauferId" name="verkauferId" id="verkauferId" aria-describedby="helpId" placeholder="hier sollte benutzer nr sein" (ngValue)="verkaufer">
           <div class="form-control">{{verkauferData.username}}</div>
-        <small id="helpId" class="form-text text-muted">Verkaufer id</small>
-
       </div>
      </div>
      <div class="col  ">
@@ -37,7 +35,6 @@
         <label for="maxPalettenHoher" class="form-label">Maximale Palettenhöhe </label>
         <input type="number"
           class="form-control" formControlName="maxPalettenHoher" name="maxPalettenHoher" id="maxPalettenHoher" aria-describedby="helpId" placeholder="">
-        <small id="helpId" class="form-text text-muted">Wie hoch darf die Palette sein in cm.</small>
       </div>
      </div>
      <div class="col  ">
@@ -45,7 +42,6 @@
         <label for="gewunschtesLieferDatum" class="form-label">Gewünschte Lieferdatum</label>
         <input type="date"
           class="form-control" formControlName="gewunschtesLieferDatum" name="gewunschtesLieferDatum" id="gewunschtesLieferDatum" aria-describedby="helpId" placeholder="">
-        <small id="helpId" class="form-text text-muted">Wann sollte es gelifert werden</small>
       </div>
      </div>
     </div>
@@ -56,7 +52,6 @@
             <select formControlName="dispositorId" class="form-select form-select-lg" name="dispositorId" id="dispositorId">
               <option *ngFor="let item of dispo; let i = index;" [ngValue]="item?.id">{{item?.name}}</option>
             </select>
-            <small id="helpId" class="form-text text-muted" >Select Dispositor</small>
         </div>
        </div>
        <div class="col  ">
@@ -79,30 +74,35 @@
        </div>
     </div>
      <div class="row">
-          <div class="col-md-4">
-
+          <div class="col-md-6">
             <label for="versorungId" class="form-label">Versorugungs Id</label>
             <input type="text"
               class="form-control" formControlName="versorungId" name="versorungId" id="versorungId" aria-describedby="helpId" placeholder="">
-            <small id="helpId" class="form-text text-muted">Gib versorgung id ein</small>
-
           </div>
-          <div class="col-md-4 mt-2 mr-auto">
+          <div class="col-md-6 mt-2 mr-auto">
             <div>
               <label for="submitKom" class="form-label"></label>
             </div>
             <button type="submit" id="submitKom" class="btn btn-primary" (click)="saveKommissionierung(kommissForm.value)">Save Kommisionierung</button>
             <div>
-              <small id="submitKom" class="form-text text-muted">Zuerst speicher kommissionierung </small>
+              <small id="submitKom" class="form-text text-muted">Zuerst müsst die Kommissionierung gespeichert werden</small>
             </div>
           </div>
-          <div class="col-md-4 mt-2 mr-auto">
-            <div>
-              <label for="zeigArtikel" class="form-label"></label>
+          <div class="row justify-content-center align-items-center g-2">
+            <div class="col-md-4">
+              <label for="lbeleg" class="form-label">Logistic Beleg Nr</label>
+              <input type="text"
+                class="form-control" #logisticBeleg placeholder="" id="lbeleg">
+              <small id="helpId" class="form-text text-muted">Es kann mehr als einz sein</small>
             </div>
-            <button  id="zeigArtikel" class="btn btn-primary" (click)="showArtikelsinKomm()">Show Artikels</button>
-            <div>
-              <small id="zeigArtikel" class="form-text text-muted">Zeig artikels in Kommissionierung</small>
+            <div class="col-md-4 mt-3" >
+              <button type="button" id="lbeleg" class="btn btn-primary" (click)="addlogisticBeleg(logisticBeleg.value)">Add Nr</button>
+            </div>
+            <div class="col-md-4 mt-4">
+              <button  id="zeigArtikel" class="btn btn-success" (click)="showArtikelsinKomm()">Show Artikels</button>
+              <div>
+                <small id="zeigArtikel" class="form-text text-muted">Zeig Artikels in Kommissionierung</small>
+              </div>
             </div>
           </div>
      </div>
@@ -129,8 +129,9 @@
           <th scope="col">Min Los Menge</th>
           <th scope="col">Total Gewicht</th>
           <th scope="col">Liferant</th>
+          <th scope="col">Logistic Beleg Nr</th>
           <th scope="col">Neue Menge</th>
-          <th scope="col">Menge Andern</th>
+          <th scope="col">Mengenänderung</th>
           <th scope="col">Remove Position</th>
         </tr>
       </thead>
@@ -145,6 +146,7 @@
           <td>{{item.minLosMenge}}</td>
           <td>{{item.gewicht}}</td>
           <td>{{dispo[item.liferantId]?.name}}</td>
+          <td>{{item.logisticBelegNr}}</td>
           <td><div class="mb-3">
             <input type="number"  value="artikelMenge" [(ngModel)]="artikelMengeEdit[i]"
               class="form-control" name="artikelMenge" id="artikelMenge" aria-describedby="helpId" placeholder="">
@@ -191,6 +193,7 @@
         <th scope="col">Gewicht</th>
         <th scope="col">Basis Einheit</th>
         <th scope="col">Liferant</th>
+        <th scope="col">Logistic Beleg Nr</th>
         <th scope="col">Menge</th>
         <th scope="col">Artikel zufugen</th>
       </tr>
@@ -206,6 +209,11 @@
         <td>{{item.gewicht}}</td>
         <td>{{item.basisEinheit}}</td>
         <td>{{dispo[item.liferantId]?.name}}</td>
+        <td><div class="mb-3">
+          <select class="form-select form-select-sm" name="lbn" id="lbn" #lbn (change)="onChange(lbn.value)">
+            <option selected *ngFor="let item of logisticBelegNr" [selected]="logisticBelegNr[logisticBelegNr.length -1]" [value]="item" >{{item}}</option>
+          </select>
+        </div></td>
         <td><div class="mb-3">
           <input type="number" (click)="checkVerfurbarkeit(i)" [(ngModel)]="artikelMenge[i]"
             class="form-control"  name="artikelMenge" id="artikelMenge" aria-describedby="helpId" placeholder="">

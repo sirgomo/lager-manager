@@ -4,6 +4,7 @@ export class KommissDetailsDto{
   id! : number;
   gepackt! : ARTIKELSTATUS;
   inBestellung!: boolean;
+  logisticBelegNr!:string;
 }
 export enum ARTIKELSTATUS{
   INPACKEN = 'INPACKEN',

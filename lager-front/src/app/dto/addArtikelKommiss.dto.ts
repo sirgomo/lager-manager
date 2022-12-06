@@ -4,4 +4,5 @@ artMenge!:number;
 kommNr!:number;
 kommDeatailnr!:number;
 inBestellung!:boolean;
+logisticBelegNr!:string;
 }

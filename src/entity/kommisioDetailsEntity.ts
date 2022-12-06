@@ -18,6 +18,8 @@ gepackt : ARTIKELSTATUS;
 palettennr : number;
 @Column()
 inBestellung:boolean;
+@Column({nullable: false, type: 'varchar', width: 30})
+logisticBelegNr:string
 
 
 @ManyToOne(()=> KommissionirungEntity, 

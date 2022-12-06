@@ -57,13 +57,17 @@ return artikels;
     return artikels;
   }
     let tmpArrNew : ArtikelKommissDto[] = new Array();
+
    for (let o = 0; o < artikels.length; o++) {
+    if(artikels[o] === undefined || artikels[o].name === null) break;
         let tmpArr = Array.from(text);
         let tmpArr1 = Array.from(artikels[o].name);
 
         let atmp: number = 0;
 
         for (let i = 0; i < tmpArr.length; i++) {
+          if(tmpArr[i] === undefined || tmpArr1[i] === undefined) break;
+
           if (tmpArr[i].toLocaleLowerCase().trim() == tmpArr1[i].toLocaleLowerCase().trim()) {
             atmp += 1;
           }

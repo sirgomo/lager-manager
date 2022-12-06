@@ -36,6 +36,9 @@ export class CreateKommisionierungComponent implements OnInit {
   currentKomm : KomissDTO = new KomissDTO();
   stellplattzeB:number = 0;
   totalGewichtB:number = 0;
+  logisticBelegNr:string[] = new Array();
+  logisticBeleg:string = '';
+
   constructor(private kommServ: VerkaufService, private fb : FormBuilder
     ,private helper: HelperService, private dataDiel : DataDilerService, private router: Router, private toastr: ToastrService) {
     this.kommissForm = this.fb.group({
@@ -85,6 +88,19 @@ export class CreateKommisionierungComponent implements OnInit {
         return;
       }
     );
+  }
+  addlogisticBeleg(text:string){
+    if(text.length < 3){
+      this.toastr.error('Logistic Belege nr ist zu kurz')
+    }else{
+      this.toastr.error('Logistic Belege nr wurde hinzugefügt')
+      this.logisticBelegNr.push(text);
+      this.logisticBeleg = text;
+    }
+  }
+  onChange(text:string){
+    console.log('zmieniono na '+ text)
+    this.logisticBeleg = text;
   }
   async getArtikle(){
     //how many artikels are aviable ?
@@ -150,11 +166,13 @@ export class CreateKommisionierungComponent implements OnInit {
       this.spediSelected = this.kommissForm.get('spedition')?.getRawValue();
       this.kommissForm.get('spedition')?.valueChanges.subscribe(data=>{ this.spediSelected = data});
       for(let y = 0; y !== this.currentKomm.kommDetails.length; y++){
+        this.logisticBelegNr.push(this.currentKomm.kommDetails[y].logisticBelegNr);
         for(let i = 0; i !== this.artikels.length; i++){
          if(this.currentKomm.kommDetails[y].artikelId === this.artikels[i].artId){
           let tmpArti : ArtikelKommissDto = new ArtikelKommissDto();
           Object.assign(tmpArti, this.artikels[i]);
           tmpArti.total = this.currentKomm.kommDetails[y].menge;
+          tmpArti.logisticBelegNr = this.currentKomm.kommDetails[y].logisticBelegNr;
           this.artikelsInKomm.push(tmpArti);
           tmpArti = this.setGewichtFurArtikel(tmpArti);
           this.artikelStatus[y] = this.currentKomm.kommDetails[y].gepackt;
@@ -163,6 +181,9 @@ export class CreateKommisionierungComponent implements OnInit {
         }
       }
       if( this.currentKomm.kommDetails.length > 0 ){
+        let tmpSet = new Set(this.logisticBelegNr);
+        this.logisticBelegNr = Array.from(tmpSet);
+        this.logisticBeleg = this.logisticBelegNr[this.logisticBelegNr.length -1];
         //get total palet menge and gewicht ... it schould
         this.kommServ.getTotalGewichtAndPaleten(this.currentKomm.id).subscribe(data=>{
         //  console.log(JSON.stringify(data));
@@ -199,7 +220,11 @@ export class CreateKommisionierungComponent implements OnInit {
   }
 async addArtikelToKomm(index:number, edit:boolean){
   if( !isFinite(this.currentKomm.id)){
-    this.toastr.error('Du musst zuerst kommisionirung speichern!', 'Error', {'timeOut':700});
+    this.toastr.error('Du musst zuerst kommisionirung speichern!', 'Error', {'timeOut':900});
+    return;
+  }
+  if( this.logisticBeleg.length < 3){
+    this.toastr.error('Du musst zuerst Logistic Beleg Nr eingeben', 'Error', {'timeOut':900});
     return;
   }
   let art: AddArtikelKommissDto[] = new Array();
@@ -232,6 +257,7 @@ async addArtikelToKomm(index:number, edit:boolean){
           break;
         }
       }
+      tmpart.logisticBelegNr = this.logisticBeleg;
      art.push(tmpart);
 
     }else{
@@ -297,6 +323,7 @@ async addArtikelToKomm(index:number, edit:boolean){
         this.artikels[index].total -= this.artikelMenge[index];
         this.artikelsInKomm.push(tmpArt);
         this.artikelMenge[index] = 0;
+        artToAd.logisticBelegNr = this.logisticBeleg;
      art.push(artToAd);
 
 

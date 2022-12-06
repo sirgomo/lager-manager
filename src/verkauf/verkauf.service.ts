@@ -81,6 +81,7 @@ export class VerkaufService {
         }
       }
       tmp.inBestellung = art[i].inBestellung;
+      tmp.logisticBelegNr = art[i].logisticBelegNr;
       if(komm !== undefined && komm.id !== undefined){
         tmp.artikelId = art[i].artikelId;
         tmp.menge = art[i].artMenge;

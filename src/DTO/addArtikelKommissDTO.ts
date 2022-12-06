@@ -14,4 +14,6 @@ export class AddArtikelKommissDTO{
     kommDeatailnr:number;
     @IsOptional()
     inBestellung:boolean;
+    @IsNotEmpty()
+    logisticBelegNr:string;
 }
