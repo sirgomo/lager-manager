@@ -55,9 +55,19 @@ export class CreateKommisionierungComponent implements OnInit {
 //TODO show artikels powinno pokazywac w innym oknie a nie tak samo bo sie zlewa
   ngOnInit(): void {
     this.spedi = this.dataDiel.getSpeditors();
-    this.dispo = this.dataDiel.getDispositors();
+    this.getDispositors();
     this.getArtikle();
     this.getUser()
+  }
+  async getDispositors(){
+    let dispositor : DispositorDto[] = await this.dataDiel.getDispositors();
+    if(dispositor !== undefined && dispositor.length > 0){
+      this.dispo.splice(0, this.dispo.length);
+      this.dispo = Array(dispositor.length);
+      for(let i = 0; i < dispositor.length; i++){
+        this.dispo.splice(dispositor[i].id, 1, dispositor[i]);
+      }
+    }
   }
   async getUser(){
 

@@ -13,4 +13,5 @@ export class ArtikelKommissDto{
   fehlArtikelId!:number;
   fehlArtikelMenge!: number;
   resMenge!:number;
+  liferantId!:number;
 }

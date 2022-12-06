@@ -54,7 +54,7 @@
           <div class="mb-3">
             <label for="dispositorId" class="form-label">Dispositors</label>
             <select formControlName="dispositorId" class="form-select form-select-lg" name="dispositorId" id="dispositorId">
-              <option *ngFor="let item of dispo; let i = index" [ngValue]="item.id">{{item.name}}</option>
+              <option *ngFor="let item of dispo; let i = index;" [ngValue]="item?.id">{{item?.name}}</option>
             </select>
             <small id="helpId" class="form-text text-muted" >Select Dispositor</small>
         </div>
@@ -128,7 +128,7 @@
           <th scope="col">Verkauf Price</th>
           <th scope="col">Min Los Menge</th>
           <th scope="col">Total Gewicht</th>
-          <th scope="col">Basis Einheit</th>
+          <th scope="col">Liferant</th>
           <th scope="col">Neue Menge</th>
           <th scope="col">Menge Andern</th>
           <th scope="col">Remove Position</th>
@@ -144,7 +144,7 @@
           <td>{{item.verPrice}}</td>
           <td>{{item.minLosMenge}}</td>
           <td>{{item.gewicht}}</td>
-          <td>{{item.basisEinheit}}</td>
+          <td>{{dispo[item.liferantId]?.name}}</td>
           <td><div class="mb-3">
             <input type="number"  value="artikelMenge" [(ngModel)]="artikelMengeEdit[i]"
               class="form-control" name="artikelMenge" id="artikelMenge" aria-describedby="helpId" placeholder="">
@@ -190,6 +190,7 @@
         <th scope="col">Min Los Menge</th>
         <th scope="col">Gewicht</th>
         <th scope="col">Basis Einheit</th>
+        <th scope="col">Liferant</th>
         <th scope="col">Menge</th>
         <th scope="col">Artikel zufugen</th>
       </tr>
@@ -204,6 +205,7 @@
         <td>{{item.minLosMenge}}</td>
         <td>{{item.gewicht}}</td>
         <td>{{item.basisEinheit}}</td>
+        <td>{{dispo[item.liferantId]?.name}}</td>
         <td><div class="mb-3">
           <input type="number" (click)="checkVerfurbarkeit(i)" [(ngModel)]="artikelMenge[i]"
             class="form-control"  name="artikelMenge" id="artikelMenge" aria-describedby="helpId" placeholder="">

@@ -60,12 +60,12 @@
         <td data-name="name" style="cursor: pointer;" (click)="getArtikelById(post.artikelId, i)">
           {{ post?.name }}
         </td>
-        <td data-name="minLosMenge">
+        <td data-name="minLosMenge"  style="cursor: pointer;" (click)="getArtikelById(post.artikelId, i)">
 
           {{post?.minLosMenge}}
 
         </td>
-        <td data-name="uid">
+        <td data-name="liferant"  style="cursor: pointer;" (click)="getArtikelById(post.artikelId, i)">
          {{liferants[post.liferantId]?.name}}
         </td>
         <td class="text-center">
