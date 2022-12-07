@@ -26,12 +26,16 @@ export class VerkaufComponent implements OnInit {
 
   constructor(private serv : VerkaufService, private router : Router, private dataDie: DataDilerService, private toaster: ToastrService) {
     this.kommStatus = KOMMISIONSTATUS;
-    this.spedi = dataDie.getSpeditors();
-    this.dispo = dataDie.getDispositors();
+
    }
 
   ngOnInit(): void {
-   this.alleKommissionierungen();
+    this.load();
+  }
+  async load(){
+    this.spedi = await  this.dataDie.getSpeditors();
+    this.dispo = await  this.dataDie.getDispositors();
+   await this.alleKommissionierungen();
   }
   keyinenum() : Array<string> {
     var keys = Object.keys(this.kommStatus);

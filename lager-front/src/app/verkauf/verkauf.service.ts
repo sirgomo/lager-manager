@@ -18,8 +18,11 @@ export class VerkaufService {
 
   }
 
-  createKommissionierung(KomissDTO : KomissDTO):Observable<KomissDTO>{
-    return this.http.post<KomissDTO>(this.API_URL + '/new', KomissDTO);
+  createKommissionierung(komissDTO : KomissDTO):Observable<KomissDTO>{
+    return this.http.post<KomissDTO>(this.API_URL + '/new', komissDTO);
+  }
+  updateKomm(komiss: KomissDTO){
+    return this.http.put(this.API_URL + '/up', komiss);
   }
   deleteKommissionierung(id:number){
    return this.http.delete(this.API_URL + '/' +id);

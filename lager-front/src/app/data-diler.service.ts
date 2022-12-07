@@ -35,8 +35,11 @@ public getSpeditors(){
 private async setDispo(){
  await this.dataServ.getAllDispositors().subscribe(data=>{
     if(data !== null){
+      this.dispo.splice(0, this.dispo.length);
+      this.dispo = Array(data.length);
       for(let i = 0; i !== data.length; i++){
-        this.dispo.push(data[i]);
+      //  this.dispo.push(data[i]);
+      this.dispo.splice(data[i].id, 1, data[i])
       }
     }
    });
@@ -44,8 +47,11 @@ private async setDispo(){
 private async setSpedi(){
  await this.dataServ.getAllSpeditions().subscribe(data=>{
     if(data !== null){
+      this.spedi.splice(0, this.spedi.length);
+      this.spedi = Array(data.length);
       for(let i = 0; i !== data.length; i++ ){
-        this.spedi.push(data[i]);
+       // this.spedi.push(data[i]);
+       this.spedi.splice(data[i].id, 1, data[i]);
       }
     }
    });

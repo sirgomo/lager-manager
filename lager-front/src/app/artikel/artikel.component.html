@@ -165,8 +165,8 @@
     <div class="col-md-4">
       <div class="mb-3">
         <label for="liferantId" class="form-label">Artikel liferand </label>
-        <select class="form-select form-select-lg" formControlName="liferantId" name="liferantId" id="liferantId">
-          <option *ngFor="let item of liferants" [ngValue]="item?.id" [selected]="item?.id === artikels[index]?.liferantId">{{item?.name}}</option>
+        <select class="form-select form-select-lg" formControlName="liferantId" name="liferantId" id="liferantId" >
+          <option *ngFor="let item of liferants | filterNullItemPipe" [ngValue]="item?.id" [selected]="item?.id === artikels[index]?.liferantId" >{{item?.name}}</option>
         </select>
       </div>
       <div class="valid-feedback">

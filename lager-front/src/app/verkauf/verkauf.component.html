@@ -63,10 +63,10 @@
           {{ post.gewunschtesLieferDatum | date : 'dd-MM-yyyy' }}
         </td>
         <td data-name="Dispositor"  (click)="createKommissionirung(i)" style="cursor: pointer;">
-          {{ dispo[post.dispositorId-1].name }}
+          {{ dispo[post.dispositorId]?.name }}
         </td>
         <td data-name="SPeditor"  (click)="createKommissionirung(i)" style="cursor: pointer;">
-          {{ spedi[post.spedition-1].name }}
+          {{ spedi[post.spedition]?.name }}
         </td>
         <td data-name="Versorgungid"  (click)="createKommissionirung(i)" style="cursor: pointer;">
           {{ post.versorungId }}

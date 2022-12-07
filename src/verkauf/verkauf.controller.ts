@@ -48,8 +48,8 @@ export class VerkaufController {
     }
     @Put('/up')
     @ROLES(ROLE.VERKAUF)
-    updateKommissionierung(@Body(ValidationPipe) kom: KomissDTO):Promise<KommissionirungEntity>{
-        return;
+    updateKommissionierung(@Body(ValidationPipe) kom: KomissDTO):Promise<any>{
+        return this.verkService.updateKommiss(kom);
     }
     @Delete(':id')
     @ROLES(ROLE.VERKAUF)

@@ -57,21 +57,15 @@ export class CreateKommisionierungComponent implements OnInit {
    }
 //TODO show artikels powinno pokazywac w innym oknie a nie tak samo bo sie zlewa
   ngOnInit(): void {
-    this.spedi = this.dataDiel.getSpeditors();
-    this.getDispositors();
-    this.getArtikle();
-    this.getUser()
+   this.start();
   }
-  async getDispositors(){
-    let dispositor : DispositorDto[] = await this.dataDiel.getDispositors();
-    if(dispositor !== undefined && dispositor.length > 0){
-      this.dispo.splice(0, this.dispo.length);
-      this.dispo = Array(dispositor.length);
-      for(let i = 0; i < dispositor.length; i++){
-        this.dispo.splice(dispositor[i].id, 1, dispositor[i]);
-      }
-    }
+  async start(){
+    this.spedi = await this.dataDiel.getSpeditors();
+    this.dispo = await this.dataDiel.getDispositors();
+   await this.getArtikle();
+   await this.getUser()
   }
+
   async getUser(){
 
     if(isFinite(this.currentKomm.id)){
@@ -147,10 +141,17 @@ export class CreateKommisionierungComponent implements OnInit {
 
   }
   async saveKommissionierung(komm : KomissDTO){
-   return this.kommServ.createKommissionierung(komm).subscribe(data=>{
+   return await this.kommServ.createKommissionierung(komm).subscribe(data=>{
     this.router.navigateByUrl('verkauf').then();
     });
   }
+  async updateKommissionierung(komm : KomissDTO){
+    komm.kommDetails = this.currentKomm.kommDetails;
+    return await this.kommServ.updateKomm(komm).subscribe(data=>{
+      console.log(komm);
+    // this.router.navigateByUrl('verkauf').then();
+     });
+   }
   getKommFromKommponent(){
 
     this.currentKomm = this.dataDiel.getKomm();
@@ -207,7 +208,8 @@ export class CreateKommisionierungComponent implements OnInit {
 
   }
   newKomm(){
-    this.kommissForm.reset();
+      this.kommissForm.reset();
+      this.currentKomm = new KomissDTO();
       this.kommissForm.get('verkauferId')?.setValue(this.verkaufer);
       this.kommissForm.get('kommissStatus')?.setValue(KOMMISIONSTATUS.INBEARBEITUNG);
       this.kommissForm.get('spedition')?.valueChanges.subscribe(data=>{ this.spediSelected = data});

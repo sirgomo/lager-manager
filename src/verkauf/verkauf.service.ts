@@ -44,11 +44,38 @@ export class VerkaufService {
     }
    async createKommiss(komm: KomissDTO){
         try{
+         
             await this.repo.create(komm);
            return await   this.repo.save(komm); 
         }catch(err){
             throw new Error("Etwas ist schiff gelaufen in Kommiss Service on createKomm " + err);
         }
+    }
+    async updateKommiss(komm: KomissDTO){
+      try{
+        await this.repo.create(komm);
+        return await this.repo.findOne({'where':{'id' : komm.id}}).then(
+          data=>{
+           for(const[key, value] of Object.entries(data)){
+            for(const[key1,value1] of Object.entries(komm)){
+              if( key === key1 && value !== value1){
+                if(Array.isArray(data[key])) break;
+                
+                //console.log('key ' + key + ' value '+ value1)
+               // this.repo.query(`UPDATE kommissionirungen SET ${key} = ${value1} WHERE id= ${komm.id}`);
+                data[key]= value1;
+              }
+            }
+           }
+        
+           return this.repo.update({'id': komm.id, 'verkauferId': komm.verkauferId}, data).catch(err=>{
+            console.log(err);
+           });
+          }
+        )
+      }catch(err){
+        throw new Error("Etwas ist schiff gelaufen als ich wollte kommissionierung updaten")
+      }
     }
     async addArtikelToKommiss(art :AddArtikelKommissDTO[]){
       let kommArr: KommissionirungEntity[] = new Array();

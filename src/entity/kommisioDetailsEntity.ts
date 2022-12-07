@@ -23,7 +23,7 @@ logisticBelegNr:string
 
 
 @ManyToOne(()=> KommissionirungEntity, 
-(KommissionirungEntity)=> KommissionirungEntity.kommDetails, {onDelete: "CASCADE"})
+(KommissionirungEntity)=> KommissionirungEntity.kommDetails, { onDelete: "CASCADE", onUpdate: 'NO ACTION'})
 kommlist : KommissionirungEntity;
 
 }

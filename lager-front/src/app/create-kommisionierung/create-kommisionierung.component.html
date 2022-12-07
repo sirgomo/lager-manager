@@ -3,7 +3,7 @@
   <div class="row clearfix justify-content-center">
     <div class="col-md-auto">
       <button class="btn btn-primary" type="button" (click)="newKomm()">
-         Neue Kommissionirung
+         Neue Kommissionierung
     </button>
     </div>
     <div class="col-md-auto">
@@ -50,7 +50,7 @@
           <div class="mb-3">
             <label for="dispositorId" class="form-label">Dispositors</label>
             <select formControlName="dispositorId" class="form-select form-select-lg" name="dispositorId" id="dispositorId">
-              <option *ngFor="let item of dispo; let i = index;" [ngValue]="item?.id">{{item?.name}}</option>
+              <option *ngFor="let item of dispo | filterNullItemPipe; let i = index; " [ngValue]="item?.id">{{item?.name}}</option>
             </select>
         </div>
        </div>
@@ -67,9 +67,9 @@
         <div class="mb-3">
             <label for="spedition" class="form-label">Spedition</label>
             <select formControlName="spedition" class="form-select form-select-lg" name="spedition" id="spedition">
-              <option *ngFor="let item of spedi; let i = index" [ngValue]="item.id">{{item.name}}</option>
+              <option *ngFor="let item of spedi | filterNullItemPipe; let i = index" [ngValue]="item?.id">{{item?.name}}</option>
             </select>
-            <small id="helpId" class="form-text text-muted"  *ngIf="spedi[spediSelected -1] !== undefined"> {{'Max lade gewicht: '+ spedi[spediSelected-1].maxLadeGewicht + ' Max paletten: ' + spedi[spediSelected-1].maxPalettenMenge}}</small>
+            <small id="helpId" class="form-text text-muted"  *ngIf="spedi[spediSelected] !== undefined"> {{'Max lade gewicht: '+ spedi[spediSelected]?.maxLadeGewicht + ' Max paletten: ' + spedi[spediSelected]?.maxPalettenMenge}}</small>
         </div>
        </div>
     </div>
@@ -83,7 +83,8 @@
             <div>
               <label for="submitKom" class="form-label"></label>
             </div>
-            <button type="submit" id="submitKom" class="btn btn-primary" (click)="saveKommissionierung(kommissForm.value)">Save Kommisionierung</button>
+            <button type="submit" id="submitKom" class="btn btn-primary" *ngIf="currentKomm.id ===undefined" (click)="saveKommissionierung(kommissForm.value)">Kommissionierung Spiechern</button>
+            <button type="submit" id="submitKom" class="btn btn-primary" *ngIf="currentKomm.id !==undefined"(click)="updateKommissionierung(kommissForm.value)">Kommissionierung Aktualisieren</button>
             <div>
               <small id="submitKom" class="form-text text-muted">Zuerst müsst die Kommissionierung gespeichert werden</small>
             </div>
@@ -93,7 +94,6 @@
               <label for="lbeleg" class="form-label">Logistic Beleg Nr</label>
               <input type="text"
                 class="form-control" #logisticBeleg placeholder="" id="lbeleg">
-              <small id="helpId" class="form-text text-muted">Es kann mehr als einz sein</small>
             </div>
             <div class="col-md-4 mt-3" >
               <button type="button" id="lbeleg" class="btn btn-primary" (click)="addlogisticBeleg(logisticBeleg.value)">Add Nr</button>

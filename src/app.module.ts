@@ -45,7 +45,7 @@ import { UserModule } from './user/user.module';
       database: 'lager',
       entities: [DispositorEntity, ArtikelEntity, UserEntity, ArtikelReservationEntity, FehlendArtikelEntity, InKomissPalletenEntity, KommissionirungEntity,
       LagerPlatzEntity, PalettenEnttity, SpeditionEntity, WarenBestellungEntity, WarenEingangEntity, KommisioDetailsEntity, UiidEntity, WarenEingStat, WarenAusgStat, KreditorsEntity],
-      synchronize: false,
+      synchronize: false
     }),
     WareneingangModule,
     KomissionierModule,

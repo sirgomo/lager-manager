@@ -2,7 +2,8 @@ import { Column, Entity,  ManyToOne,  OneToMany,  PrimaryColumn, PrimaryGenerate
 import { KommisioDetailsEntity } from "./KommisioDetailsEntity";
 import { SpeditionEntity } from "./SpeditionEntity";
 
-@Entity('kommissionirungen')
+
+@Entity('kommissionierung')
 export class KommissionirungEntity{
 @PrimaryGeneratedColumn()
 id : number;
@@ -18,7 +19,7 @@ dispositorId : number;
 
 @Column()
 kommissStatus  : KOMMISIONSTATUS;
-@PrimaryColumn()
+@Column()
 spedition : number;
 @Column()
 versorungId : string;
