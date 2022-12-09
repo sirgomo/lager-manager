@@ -15,7 +15,7 @@ export class PdfkommissComponent implements OnInit {
   @ViewChild('htmlData') htmlData!: ElementRef;
   math:Math;
   displayedColumns :string[];
-
+  speditions :SpeditionDto[] =  new Array();
   constructor(private dataDiel : DataDilerService) {
 
     this.math = Math;
@@ -23,9 +23,11 @@ export class PdfkommissComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+this.getSpedytions();
   }
-
+  async getSpedytions(){
+    this.speditions = await this.dataDiel.getSpeditors();
+  }
 genpdf2(){
   let input = document.getElementById('htmlData');
   if(input === null ) return;
@@ -77,7 +79,7 @@ genpdf2(){
         pageCtx.drawImage(canvas, 0, page * pxPageHeight , w, h, 0, 0, w, h);
       }
 
-      let spedi :SpeditionDto[] = this.dataDiel.getSpeditors();
+
 
       // Add the page to the PDF.
       if (page > 0) pdf.addPage();
@@ -89,9 +91,9 @@ genpdf2(){
       pdf.text('Kommid:  ' + this.dataDiel.getKomm().id, 50 - margin[0], 34 - margin[1]);
       pdf.text('Versorgung id:  ' + this.dataDiel.getKomm().versorungId, 240 - margin[0], 30 - margin[1]);
       pdf.text('Liefer Datum: ' + this.dataDiel.getKomm().gewunschtesLieferDatum, 50 - margin[0], 30 - margin[1]);
-      for( let sp = 0; sp < spedi.length; sp++){
-        if(spedi[sp].id === this.dataDiel.getKomm().spedition)
-        pdf.text('Spedition:  ' + spedi[sp]?.name, 150 - margin[0], 30 - margin[1]);
+      for( let sp = 0; sp < this.speditions.length; sp++){
+        if(this.speditions[sp] !== undefined && this.speditions[sp].id === this.dataDiel.getKomm().spedition)
+        pdf.text('Spedition:  ' + this.speditions[sp]?.name, 150 - margin[0], 30 - margin[1]);
       }
 
       pdf.text('Versorgung id:  ' + this.dataDiel.getKomm().versorungId, 240 - margin[0], 30 - margin[1]);

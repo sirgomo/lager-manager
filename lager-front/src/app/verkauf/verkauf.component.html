@@ -2,47 +2,50 @@
   <div class="mt-2 col-md-12"></div>
   <div class="row clearfix justify-content-center">
       <div class="col-md-auto" >
-       <button type="button" class="btn btn-primary" (click)="createKommissionirung(-1)" > Neue Kommissionirung</button>
+       <button type="button" class="btn btn-primary btm-sm fs-s" (click)="createKommissionirung()" > Neue Kommissionirung</button>
       </div>
       <div class="col-md-auto" >
-      <button type="button" class="btn btn-primary"  (click)="meinKommissionierungen()"> Meine Kommissionierung</button>
+      <button type="button" class="btn btn-primary btm-sm fs-s"  (click)="meinKommissionierungen()"> Meine Kommissionierung</button>
       </div>
       <div class="col-md-auto" >
-     <button type="button" class="btn btn-primary" (click)="alleKommissionierungen()">Alle Kommissionierung</button>
+     <button type="button" class="btn btn-primary btm-sm fs-s" (click)="alleKommissionierungen()">Alle Kommissionierung</button>
       </div>
   </div>
   <div class="mt-2 col-md-12"></div>
   <div class="row clearfix">
-    <div class="col table-responsive">
-    <table class="table table-bordered table-hover table-sortable" id="tab_logic" *ngIf="!showDownload">
+    <div class="col table-responsive table-sm">
+    <table class="table table-sm table-bordered table-hover table-sortable" id="tab_logic" *ngIf="!showDownload">
       <thead>
         <tr >
-          <th class="text-center">
+          <th class="text-center fs-s">
             Kommissionierung id
           </th>
-          <th class="text-center">
+          <th class="text-center fs-s">
             Verkaufer id
           </th>
-          <th class="text-center">
+          <th class="text-center fs-s">
            Max Paletten Hoher
           </th>
-            <th class="text-center">
+            <th class="text-center fs-s">
            Liefer Datum
           </th>
-          <th class="text-center">
+          <th class="text-center fs-s">
             Dispositor
            </th>
-           <th class="text-center">
+           <th class="text-center fs-s">
             Spedition
            </th>
-           <th class="text-center">
+           <th class="text-center fs-s">
             Versorgungs id
            </th>
-           <th class="text-center">
+           <th class="text-center fs-s">
             Kommission Status
            </th>
-           <th class="text-center">
+           <th class="text-center fs-s">
             Entfernen!
+           </th>
+           <th class="text-center fs-s">
+            Ausdrucken
            </th>
 
         </tr>
@@ -50,41 +53,41 @@
       <tbody>
 
         <tr  *ngFor="let post of komiss; let i= index" class="hidden" >
-          <td data-name="komm id" (click)="createKommissionirung(i)" style="cursor: pointer;">
+          <td data-name="komm id" (click)="updateKommissionierung(i)" style="cursor: pointer;" class="fs-s">
             {{ post.id }}
         </td>
-        <td data-name="verkauferid" (click)="createKommissionirung(i)" style="cursor: pointer;">
+        <td data-name="verkauferid" (click)="updateKommissionierung(i)" style="cursor: pointer;"class="fs-s">
           {{ post.verkauferId }}
         </td>
-        <td data-name="maxPallhoher" (click)="createKommissionirung(i)" style="cursor: pointer;">
+        <td data-name="maxPallhoher" (click)="updateKommissionierung(i)" style="cursor: pointer;" class="fs-s">
           {{ post.maxPalettenHoher }}
         </td>
-        <td data-name="LiferDatum" (click)="createKommissionirung(i)" style="cursor: pointer;">
+        <td data-name="LiferDatum" (click)="updateKommissionierung(i)" style="cursor: pointer;" class="fs-s">
           {{ post.gewunschtesLieferDatum | date : 'dd-MM-yyyy' }}
         </td>
-        <td data-name="Dispositor"  (click)="createKommissionirung(i)" style="cursor: pointer;">
-          {{ dispo[post.dispositorId]?.name }}
+        <td data-name="Dispositor"  (click)="updateKommissionierung(i)" style="cursor: pointer;" class="fs-s" *ngIf="dispo[post.dispositorId].name !== undefined">
+          {{ dispo[post.dispositorId].name  }}
         </td>
-        <td data-name="SPeditor"  (click)="createKommissionirung(i)" style="cursor: pointer;">
-          {{ spedi[post.spedition]?.name }}
+        <td data-name="SPeditor"  (click)="updateKommissionierung(i)" style="cursor: pointer;" class="fs-s" *ngIf="spedi[post.spedition].name !== undefined">
+          {{ spedi[post.spedition].name }}
         </td>
-        <td data-name="Versorgungid"  (click)="createKommissionirung(i)" style="cursor: pointer;">
+        <td data-name="Versorgungid"  (click)="updateKommissionierung(i)" style="cursor: pointer;" class="fs-s" >
           {{ post.versorungId }}
         </td>
-          <td data-name="sel">
+          <td data-name="sel" class="fs-s">
             <select name="kommStatus" [(ngModel)]="post.kommissStatus" (ngModelChange)="kommStatusChange(post.id)" >
               <option *ngFor="let item of keyinenum()" [ngValue]="item"
                [selected]="item === post.kommissStatus" > {{ item }}</option>
             </select>
         </td>
                     <td data-name="del">
-                      <div class="row px-1">
                         <div class="col-sm-6 px-1 ">
-                          <button class="btn btn-danger btn-sm" (click)="deleteKomm(i)"><span class="glyphicon  glyphicon-remove fs-6" aria-hidden="true" >Entfernen</span></button>
+                          <button class="btn btn-danger btn-sm fs-s"  (click)="deleteKomm(i)"><span class="glyphicon  glyphicon-remove " aria-hidden="true" >Entfernen</span></button>
                         </div>
-                        <div class="col-sm-6 px-1">
-                          <button class="btn btn-success btn-sm" (click)="getKommToDruck(i)" ><span class="glyphicon  glyphicon-hdd fs-6" aria-hidden="true" >Kommiss PDF</span></button>
-                        </div>
+                    </td>
+                    <td>
+                      <div class="col-sm-6 px-1">
+                        <button class="btn btn-success btn-sm fs-s" (click)="getKommToDruck(i)" ><span class="glyphicon  glyphicon-hdd" aria-hidden="true" >Kommiss PDF</span></button>
                       </div>
                     </td>
         </tr>

@@ -61,8 +61,10 @@ export class ArtikelComponent implements OnInit {
   }
   async getLiferants(){
 
-   this.liferants= await this.dataServ.getDispositors()
-   this.getArtikles();
+   this.liferants = await this.dataServ.getDispositors();
+      if(this.liferants.length > 0){
+        this.getArtikles();
+      }
   }
   async getArtikelById(id:number, index:number){
 

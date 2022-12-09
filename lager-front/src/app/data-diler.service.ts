@@ -12,9 +12,11 @@ export class DataDilerService {
   private komm :KomissDTO = new KomissDTO();
   private spedi : SpeditionDto[] = new Array();
   private dispo: DispositorDto[] = new Array();
+
   constructor( private dataServ: DatenpflegeService) {
   this.setDispo();
   this.setSpedi();
+
 
    }
 public setKomm(komm:KomissDTO){
@@ -32,6 +34,7 @@ public getDispositors(){
 public getSpeditors(){
   return this.spedi;
 }
+
 private async setDispo(){
  await this.dataServ.getAllDispositors().subscribe(data=>{
     if(data !== null){
@@ -41,6 +44,7 @@ private async setDispo(){
       //  this.dispo.push(data[i]);
       this.dispo.splice(data[i].id, 1, data[i])
       }
+
     }
    });
 }
@@ -53,6 +57,7 @@ private async setSpedi(){
        // this.spedi.push(data[i]);
        this.spedi.splice(data[i].id, 1, data[i]);
       }
+
     }
    });
 }

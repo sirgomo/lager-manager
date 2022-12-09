@@ -17,7 +17,6 @@ export class VerkaufService {
     constructor(@InjectRepository(KommissionirungEntity) private repo: Repository<KommissionirungEntity>,
     @InjectRepository(KommisioDetailsEntity) private repoDetails: Repository<KommisioDetailsEntity>, private repoLager: LagerService,
     @InjectRepository(ArtikelReservationEntity) private repoReserv : Repository<ArtikelReservationEntity>){
-
     }
    async getAllKommiss(){
         try{
@@ -67,12 +66,12 @@ export class VerkaufService {
               }
             }
            }
+           return this.repo.update({'id': komm.id, 'verkauferId': komm.verkauferId}, data);
+          });
+          
         
-           return this.repo.update({'id': komm.id, 'verkauferId': komm.verkauferId}, data).catch(err=>{
-            console.log(err);
-           });
-          }
-        )
+          
+        
       }catch(err){
         throw new Error("Etwas ist schiff gelaufen als ich wollte kommissionierung updaten")
       }

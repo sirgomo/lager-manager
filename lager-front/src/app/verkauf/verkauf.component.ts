@@ -1,7 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { CreateKommisionierungComponent } from '../create-kommisionierung/create-kommisionierung.component';
 import { DataDilerService } from '../data-diler.service';
+import { DatenpflegeService } from '../datenpflege/datenpflege.service';
 import { DispositorDto } from '../dto/dispositor.dto';
 import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
 import { PalettenMengeVorausToDruckDto } from '../dto/paletenMengeVorausKom.dto';
@@ -24,19 +27,43 @@ export class VerkaufComponent implements OnInit {
   kommissToDruck: PalettenMengeVorausToDruckDto[] = new Array();
 
 
-  constructor(private serv : VerkaufService, private router : Router, private dataDie: DataDilerService, private toaster: ToastrService) {
+  constructor(private serv : VerkaufService, private router : Router, private dataDie: DataDilerService, private toaster: ToastrService,
+    private dialog: MatDialog, private datenPfleServ: DatenpflegeService) {
     this.kommStatus = KOMMISIONSTATUS;
 
    }
 
   ngOnInit(): void {
-    this.load();
+    this.getSpedition();
   }
-  async load(){
-    this.spedi = await  this.dataDie.getSpeditors();
-    this.dispo = await  this.dataDie.getDispositors();
-   await this.alleKommissionierungen();
+  async getSpedition(){
+    await this.datenPfleServ.getAllSpeditions().subscribe(data=>{
+      if(data !== null){
+        this.spedi.splice(0, this.spedi.length);
+        this.spedi = Array(data.length);
+        for(let i = 0; i !== data.length; i++ ){
+         // this.spedi.push(data[i]);
+         this.spedi.splice(data[i].id, 1, data[i]);
+        }
+        this.getDispositors();
+      }
+     });
   }
+  async getDispositors(){
+    return await this.datenPfleServ.getAllDispositors().subscribe(
+      data=>{
+        if(data !== null){
+          this.dispo.splice(0, this.dispo.length);
+          this.dispo = Array(data.length);
+          for(let i = 0; i !== data.length; i++){
+          //  this.dispo.push(data[i]);
+          this.dispo.splice(data[i].id, 1, data[i])
+          }
+          this.alleKommissionierungen();
+      }
+    });
+  }
+
   keyinenum() : Array<string> {
     var keys = Object.keys(this.kommStatus);
     return keys.slice();
@@ -61,15 +88,47 @@ async alleKommissionierungen(){
   });
 }
 
-createKommissionirung(index:number){
-  if(index !== -1){
-    this.dataDie.setKomm(this.komiss[index]);
-    this.router.navigateByUrl('verkauf/new').then();
-  }else{
-    this.dataDie.restetKomm();
-    this.router.navigateByUrl('verkauf/new').then();
-  }
+createKommissionirung(){
+  let conf: MatDialogConfig = new MatDialogConfig();
+  conf.width = 'auto';
+  conf.height = 'auto';
+  conf.minWidth = '100%';
+  conf.minHeight = '100%';
+  conf.maxHeight ='100vh';
+  conf.maxWidth = '100vh';
+  conf.panelClass = 'full-screen-modal';
+   this.dialog.open<CreateKommisionierungComponent>(CreateKommisionierungComponent, conf).afterClosed().subscribe(
+    data=>{
+      let tmpKom : KomissDTO = new KomissDTO();
+      Object.assign(tmpKom, data);
+      if(tmpKom !== null && isFinite(tmpKom.id)){
+        this.komiss.push(tmpKom);
+      }
+    }
+   );
+}
+updateKommissionierung(index:number){
+  let conf: MatDialogConfig = new MatDialogConfig();
+  conf.width = 'auto';
+  conf.height = 'auto';
+  conf.minWidth = '100%';
+  conf.minHeight = '100%';
+  conf.maxHeight ='100vh';
+  conf.maxWidth = '100vh';
 
+  conf.panelClass ='full-screen-modal';
+  conf.data = this.komiss[index];
+  this.dialog.open<CreateKommisionierungComponent>(CreateKommisionierungComponent, conf).afterClosed().subscribe(
+    data=>{
+      let tmpKom:KomissDTO = new KomissDTO();
+      Object.assign(tmpKom, data);
+      for(let i=0; i< this.komiss.length; i++){
+        if(this.komiss[i].id === tmpKom.id){
+          this.komiss[i] = tmpKom;
+        }
+      }
+    }
+  );
 }
 async meinKommissionierungen(){
   this.showDownload = false;
@@ -98,7 +157,7 @@ async getKommToDruck(kommid:number){
          this.dataDie.setKomm(this.komiss[kommid]);
          this.showDownload = true;
       }else{
-        this.toaster.error('Kommissionierung ist leer, es mussen zuerst Artikels zugefügt werden!', 'Error', {'timeOut': 800});
+        this.toaster.error('Kommissionierung ist leer, es mussen zuerst Artikels zugefügt werden!', 'Error', {'timeOut': 1000});
       }
 
     });

@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DataDilerService } from '../data-diler.service';
@@ -40,7 +41,8 @@ export class CreateKommisionierungComponent implements OnInit {
   logisticBeleg:string = '';
 
   constructor(private kommServ: VerkaufService, private fb : FormBuilder
-    ,private helper: HelperService, private dataDiel : DataDilerService, private router: Router, private toastr: ToastrService) {
+    ,private helper: HelperService, private dataDiel : DataDilerService, private router: Router, private toastr: ToastrService,
+    private dialogRef: MatDialogRef<CreateKommisionierungComponent>, @Optional() @Inject(MAT_DIALOG_DATA) private dialogData : KomissDTO) {
     this.kommissForm = this.fb.group({
       id: Number,
       verkauferId: Number,
@@ -57,13 +59,17 @@ export class CreateKommisionierungComponent implements OnInit {
    }
 //TODO show artikels powinno pokazywac w innym oknie a nie tak samo bo sie zlewa
   ngOnInit(): void {
-   this.start();
+
+    if(this.dialogData !== undefined && this.dialogData !== null && isFinite(this.dialogData.id)){
+      this.currentKomm = this.dialogData;
+    }
+    this.start();
   }
   async start(){
     this.spedi = await this.dataDiel.getSpeditors();
     this.dispo = await this.dataDiel.getDispositors();
    await this.getArtikle();
-   await this.getUser()
+
   }
 
   async getUser(){
@@ -71,17 +77,23 @@ export class CreateKommisionierungComponent implements OnInit {
     if(isFinite(this.currentKomm.id)){
       await this.kommServ.getUserById(this.currentKomm.verkauferId).subscribe(
         data=>{
-          this.verkauferData = data;
-          return;
+          if(data !== null){
+            this.verkauferData = new UserDataDto();
+            this.verkauferData = data;
+            this.verkaufer = data.id;
+          }
+        }
+      );
+    }else{
+      await this.kommServ.getUserById(this.verkaufer).subscribe(
+        data=>{
+          if(data !== null){
+            this.verkauferData = new UserDataDto();
+            this.verkauferData = data;
+          }
         }
       );
     }
-    await this.kommServ.getUserById(this.verkaufer).subscribe(
-      data=>{
-        this.verkauferData = data;
-        return;
-      }
-    );
   }
   addlogisticBeleg(text:string){
     if(text.length < 3){
@@ -93,7 +105,6 @@ export class CreateKommisionierungComponent implements OnInit {
     }
   }
   onChange(text:string){
-    console.log('zmieniono na '+ text)
     this.logisticBeleg = text;
   }
   async getArtikle(){
@@ -113,6 +124,7 @@ export class CreateKommisionierungComponent implements OnInit {
         this.artikels.push(tmp);
       }
       this.getKommFromKommponent();
+      this.getUser();
     });
   }
   onSearch(text:string){
@@ -142,27 +154,35 @@ export class CreateKommisionierungComponent implements OnInit {
   }
   async saveKommissionierung(komm : KomissDTO){
    return await this.kommServ.createKommissionierung(komm).subscribe(data=>{
-    this.router.navigateByUrl('verkauf').then();
+    if(data !== null && isFinite( data.id)){
+      this.toastr.success('Kommissionierung gespeichert');
+      this.dialogRef.close(data);
+      return;
+    }
+    this.toastr.error('Etwas ist schieff gelaufen, ich konnte die Kommissionierung nicht spiechern');
     });
   }
   async updateKommissionierung(komm : KomissDTO){
     komm.kommDetails = this.currentKomm.kommDetails;
     return await this.kommServ.updateKomm(komm).subscribe(data=>{
-      console.log(komm);
-    // this.router.navigateByUrl('verkauf').then();
+      if(Object.values(data)[2] === 1){
+        this.toastr.success('Das Kommissionierung wurde aktualisiert');
+        this.dialogRef.close(data);
+      }else{
+        this.toastr.error('Etwas ist schieff gegangen');
+      }
+
      });
    }
   getKommFromKommponent(){
-
-    this.currentKomm = this.dataDiel.getKomm();
     this.reasignKomm();
   }
   reasignKomm(){
     if(this.currentKomm.id !== undefined && this.currentKomm.id !== 0){
-      this.kommissForm.reset();
+     // this.kommissForm.reset();
       this.artikelsInKomm.splice(0, this.artikelsInKomm.length);
 
-      this.kommissForm.setValue(this.currentKomm);
+      this.kommissForm.patchValue(this.currentKomm);
       this.kommissForm.get('gewunschtesLieferDatum')?.setValue(new Date(this.currentKomm.gewunschtesLieferDatum).toISOString().split('T')[0]);
       this.spediSelected = this.kommissForm.get('spedition')?.getRawValue();
       this.kommissForm.get('spedition')?.valueChanges.subscribe(data=>{ this.spediSelected = data});
@@ -187,7 +207,6 @@ export class CreateKommisionierungComponent implements OnInit {
         this.logisticBeleg = this.logisticBelegNr[this.logisticBelegNr.length -1];
         //get total palet menge and gewicht ... it schould
         this.kommServ.getTotalGewichtAndPaleten(this.currentKomm.id).subscribe(data=>{
-        //  console.log(JSON.stringify(data));
         });
       }
 
@@ -272,9 +291,9 @@ async addArtikelToKomm(index:number, edit:boolean){
     for(let i = 0; i !== this.artikels.length; i++){
       if(this.artikelsInKomm[index].artId === this.artikels[i].artId){
         if(this.artikelMengeEdit[index] > this.artikels[i].total + this.artikelsInKomm[index].total){
-          let tmp : number = this.artikelMengeEdit[index] - this.artikels[i].total;
+          let tmp : number = this.artikelMengeEdit[index] - (this.artikels[i].total + this.artikelsInKomm[index].total);
           this.artikelMengeEdit[index] = this.artikels[i].total;
-          if(window.confirm('Wir können nur ' + this.artikels[i].total + ' lifern, soll ' + tmp + ' bestellt werden ?'))
+          if(window.confirm('Wir können nur ' + (this.artikels[i].total + this.artikelsInKomm[index].total) + ' lifern, soll ' + tmp + ' bestellt werden ?'))
           {
             let tmpart: AddArtikelKommissDto = new AddArtikelKommissDto();
               tmpart.artikelId = this.artikelsInKomm[index].artId;
@@ -284,6 +303,7 @@ async addArtikelToKomm(index:number, edit:boolean){
             }
             tmpart.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
             tmpart.artMenge = tmp;
+            tmpart.logisticBelegNr = this.artikelsInKomm[index].logisticBelegNr;
             tmpart.inBestellung = true;
             let artForLocal: ArtikelKommissDto = new ArtikelKommissDto();
              Object.assign(artForLocal, this.artikels[i]);
@@ -340,6 +360,7 @@ async addArtikelToKomm(index:number, edit:boolean){
       let artToAd : AddArtikelKommissDto = new AddArtikelKommissDto();
       artToAd.artikelId = this.artikelsInKomm[index].artId;
       artToAd.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
+      artToAd.logisticBelegNr = this.artikelsInKomm[index].logisticBelegNr;
       artToAd.kommDeatailnr = this.currentKomm.kommDetails[index].id;
       if(this.currentKomm.kommDetails[index].id !== -1){
         artToAd.artMenge = this.currentKomm.kommDetails[index].menge;

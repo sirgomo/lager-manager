@@ -66,7 +66,7 @@
 
         </td>
         <td data-name="liferant"  style="cursor: pointer;" (click)="getArtikelById(post.artikelId, i)">
-         {{liferants[post.liferantId]?.name}}
+         {{liferants[post.liferantId].name}}
         </td>
         <td class="text-center">
           <button class="btn btn-danger" (click)="deleteArtikel(post.artikelId, i)">Artikel Löschen</button>
@@ -140,7 +140,7 @@
         <div class="mb-3">
           <label for="" class="form-label">Artikel Flage typ</label>
           <select class="form-select form-select-lg" name="artikelFlage" id="artikelFlage" formControlName="artikelFlage">
-            <option *ngFor="let item of artikelFlags" [ngValue]="item" [selected]="item === formArtikel.get('artikelFlage')?.value">{{item}}</option>
+            <option *ngFor="let item of artikelFlags" [ngValue]="item" [selected]="formArtikel.get('artikelFlage')?.value !== null ? item === formArtikel.get('artikelFlage')?.value : item">{{item}}</option>
           </select>
         </div>
       <div class="valid-feedback">
@@ -166,7 +166,7 @@
       <div class="mb-3">
         <label for="liferantId" class="form-label">Artikel liferand </label>
         <select class="form-select form-select-lg" formControlName="liferantId" name="liferantId" id="liferantId" >
-          <option *ngFor="let item of liferants | filterNullItemPipe" [ngValue]="item?.id" [selected]="item?.id === artikels[index]?.liferantId" >{{item?.name}}</option>
+          <option *ngFor="let item of liferants | filterNullItemPipe" [ngValue]="item.id" [selected]="artikels[index] !== undefined ? item.id === artikels[index].liferantId : item.id" >{{item.name}}</option>
         </select>
       </div>
       <div class="valid-feedback">
