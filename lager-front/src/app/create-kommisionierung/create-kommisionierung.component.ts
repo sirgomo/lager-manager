@@ -8,7 +8,7 @@ import { AddArtikelKommissDto } from '../dto/addArtikelKommiss.dto';
 import { ArtikelKommissDto } from '../dto/artikelKommiss.dto';
 import { DispositorDto } from '../dto/dispositor.dto';
 import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
-import { KommissDetailsDto } from '../dto/kommissDetails.dto';
+import { ARTIKELSTATUS, KommissDetailsDto } from '../dto/kommissDetails.dto';
 import { SpeditionDto } from '../dto/spedition.dto';
 import { UserDataDto } from '../dto/userData.dto';
 import { HelperService } from '../helper.service';
@@ -39,6 +39,7 @@ export class CreateKommisionierungComponent implements OnInit {
   totalGewichtB:number = 0;
   logisticBelegNr:string[] = new Array();
   logisticBeleg:string = '';
+  border:string[] = new Array();
 
   constructor(private kommServ: VerkaufService, private fb : FormBuilder
     ,private helper: HelperService, private dataDiel : DataDilerService, private router: Router, private toastr: ToastrService,
@@ -195,6 +196,7 @@ export class CreateKommisionierungComponent implements OnInit {
           tmpArti.total = this.currentKomm.kommDetails[y].menge;
           tmpArti.logisticBelegNr = this.currentKomm.kommDetails[y].logisticBelegNr;
           this.artikelsInKomm.push(tmpArti);
+          this.setBorderfurArtikel(this.currentKomm.kommDetails[y]);
           tmpArti = this.setGewichtFurArtikel(tmpArti);
           this.artikelStatus[y] = this.currentKomm.kommDetails[y].gepackt;
           break;
@@ -225,6 +227,15 @@ export class CreateKommisionierungComponent implements OnInit {
      this.totalGewichtB = totalGewicht;
     }
 
+  }
+  setBorderfurArtikel(tmpArti : KommissDetailsDto){
+    if(tmpArti.gepackt === ARTIKELSTATUS.GEPACKT){
+      this.border.push("table-success border border-success");
+    }else if (tmpArti.inBestellung){
+      this.border.push("border border-danger table-danger");
+    }else{
+      this.border.push("border border-success table-light");
+    }
   }
   newKomm(){
       this.kommissForm.reset();
@@ -292,8 +303,14 @@ async addArtikelToKomm(index:number, edit:boolean){
       if(this.artikelsInKomm[index].artId === this.artikels[i].artId){
         if(this.artikelMengeEdit[index] > this.artikels[i].total + this.artikelsInKomm[index].total){
           let tmp : number = this.artikelMengeEdit[index] - (this.artikels[i].total + this.artikelsInKomm[index].total);
+          let totalWasWirHaben = (this.artikels[i].total + this.artikelsInKomm[index].total);
+          let message: string= 'Wir können nur ' + totalWasWirHaben + ' lifern, soll ' + tmp + ' bestellt werden ?';
+          if(this.currentKomm.kommDetails[index].artikelId === this.artikelsInKomm[index].artId && this.currentKomm.kommDetails[index].inBestellung){
+            tmp =  this.artikelMengeEdit[index];
+            message = 'Wir haben ' + this.artikelsInKomm[index].total + ' in bestellung ,soll noch zusätzlich ' + tmp + ' bestellt werden ?';
+          }
           this.artikelMengeEdit[index] = this.artikels[i].total;
-          if(window.confirm('Wir können nur ' + (this.artikels[i].total + this.artikelsInKomm[index].total) + ' lifern, soll ' + tmp + ' bestellt werden ?'))
+          if(window.confirm(message))
           {
             let tmpart: AddArtikelKommissDto = new AddArtikelKommissDto();
               tmpart.artikelId = this.artikelsInKomm[index].artId;
@@ -361,6 +378,8 @@ async addArtikelToKomm(index:number, edit:boolean){
       artToAd.artikelId = this.artikelsInKomm[index].artId;
       artToAd.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
       artToAd.logisticBelegNr = this.artikelsInKomm[index].logisticBelegNr;
+      artToAd.inBestellung =this.currentKomm.kommDetails[index].inBestellung;
+
       artToAd.kommDeatailnr = this.currentKomm.kommDetails[index].id;
       if(this.currentKomm.kommDetails[index].id !== -1){
         artToAd.artMenge = this.currentKomm.kommDetails[index].menge;
@@ -406,7 +425,7 @@ deletePositionInKomm(index:number){
       console.log(data);
       if(data == 1){
         for(let i = 0; i !== this.artikels.length; i++){
-          if(this.currentKomm.kommDetails[index].artikelId === this.artikels[i].artId){
+          if(this.currentKomm.kommDetails[index].artikelId === this.artikels[i].artId && !this.currentKomm.kommDetails[index].inBestellung){
             this.artikels[i].total += this.currentKomm.kommDetails[index].menge;
           }
         }

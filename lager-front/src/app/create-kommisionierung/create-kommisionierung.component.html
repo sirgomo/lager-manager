@@ -97,9 +97,9 @@
     </form>
     <div class="mt-2 col-md-12"></div>
     <div class="table-responsive" *ngIf="showArtikelsInKomm === 1">
-      <table class="table table-bordered table-hover table-sortable">
+      <table class="table table-bordered border-success table-hover table-sortable">
         <thead>
-          <tr>
+          <tr class="border border-success">
             <th scope="col" class="fs-s">Artikel id:</th>
             <th scope="col" class="fs-s">Menge in Kommisionierung</th>
             <th scope="col" class="fs-s">Name</th>
@@ -115,11 +115,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="" *ngFor="let item of artikelsInKomm; let i=index; ">
+          <tr   *ngFor="let item of artikelsInKomm; let i=index;" class="{{border[i]}}">
             <td class="fs-s">{{item.artId}}</td>
             <td class="fs-s">{{item.total}}</td>
-            <td *ngIf="currentKomm.kommDetails[i] !== undefined && currentKomm.kommDetails[i].inBestellung" class="border border-danger">{{item.name }}</td>
-            <td *ngIf="currentKomm.kommDetails[i] !== undefined && !currentKomm.kommDetails[i].inBestellung">{{item.name }}</td>
+            <td class="fs-s">{{item.name }}</td>
             <td class="fs-s">{{artikelStatus[i]}}</td>
             <td class="fs-s">{{item.verPrice}}</td>
             <td class="fs-s">{{item.minLosMenge}}</td>
@@ -178,7 +177,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="" *ngFor="let item of (artikels ? artikels.slice(0,200):[]); let i=index; trackBy : artikelTrackBy;">
+        <tr *ngFor="let item of (artikels ? artikels.slice(0,200):[]); let i=index; trackBy : artikelTrackBy;">
           <td class="fs-s">{{item.artId}}</td>
           <td class="fs-s">{{item.total}}</td>
           <td class="fs-s">{{item.name}}</td>

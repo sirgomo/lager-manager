@@ -91,7 +91,7 @@ async alleKommissionierungen(){
 createKommissionirung(){
   let conf: MatDialogConfig = new MatDialogConfig();
   conf.width = 'auto';
-  conf.height = 'auto';
+  conf.height = '100%';
   conf.minWidth = '100%';
   conf.minHeight = '100%';
   conf.maxHeight ='100vh';
@@ -110,12 +110,11 @@ createKommissionirung(){
 updateKommissionierung(index:number){
   let conf: MatDialogConfig = new MatDialogConfig();
   conf.width = 'auto';
-  conf.height = 'auto';
+  conf.height = '100%';
   conf.minWidth = '100%';
   conf.minHeight = '100%';
   conf.maxHeight ='100vh';
   conf.maxWidth = '100vh';
-
   conf.panelClass ='full-screen-modal';
   conf.data = this.komiss[index];
   this.dialog.open<CreateKommisionierungComponent>(CreateKommisionierungComponent, conf).afterClosed().subscribe(
@@ -140,7 +139,7 @@ async meinKommissionierungen(){
    });
 }
 async deleteKomm(index:number){
-  if(window.confirm('Bist du sicher, dass du die kommissionirung löchen wilsst?')){
+  if(window.confirm('Bist du sicher, dass du die kommissionirung löschen wilsst?')){
     await this.serv.deleteKommissionierung(this.komiss[index].id).subscribe(data=>{
       this.komiss.splice(index, 1);
      });
