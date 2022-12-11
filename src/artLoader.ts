@@ -31,6 +31,10 @@ export class ArtLoader{
                 artike.verPrice = artike.artikelPrice + artike.artikelPrice * 0.05;
                 artike.liferantId = this.getRandomInt(1,5);
                 artike.mehrwertsteuer = 6;
+                artike.artikelId = this.makeId(5);
+                artike.name2 = '';
+                artike.longBeschriftung = '';
+                artike.uids[0].artikelId = artike.artikelId;
                 arti[i] = artike;
             }else{
                 let artike : ArtikelEntity = new ArtikelEntity();
@@ -50,6 +54,10 @@ export class ArtLoader{
                 artike.verPrice = artike.artikelPrice + artike.artikelPrice * 0.05;
                 artike.liferantId = this.getRandomInt(1,5);
                 artike.mehrwertsteuer = 19;
+                artike.artikelId = this.makeId(5);
+                artike.name2 = '';
+                artike.longBeschriftung = '';
+                artike.uids[0].artikelId = artike.artikelId;
                 arti[i] = artike;
             }
            
@@ -69,6 +77,15 @@ export class ArtLoader{
             result += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
         return result;
+    }
+    private makeId(length) {
+        var result           = '';
+        var characters       = '12345678901234567890';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return Number(result);
     }
    
 }

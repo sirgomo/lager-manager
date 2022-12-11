@@ -4,9 +4,16 @@ import { UiidEntity } from 'src/entity/UiidEntity';
 export class ArtikelDTO{
     @IsOptional()
     @IsNumber()
+    aid:number;
+    @IsOptional()
+    @IsNumber()
     artikelId: number;
     @IsNotEmpty()
     name: string;
+    @IsOptional()
+    name2: string;
+    @IsOptional()
+    longBeschriftung:string;
     uids: UiidEntity[];
     @IsNotEmpty()
     @IsNumber()

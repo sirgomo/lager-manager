@@ -12,32 +12,19 @@ export class ArtikelService {
   constructor(private http: HttpClient) { }
 
   getAllArtikel():Observable<ArtikelDTO[]>{
-    try{
       return this.http.get<ArtikelDTO[]>(this.API_URL);
-    }catch(error){
-      throw new HttpErrorResponse({error});
-    }
   }
   createArtikel(art: ArtikelDTO):Observable<ArtikelDTO>{
-    try{
       return this.http.post<ArtikelDTO>(this.API_URL, art);
-    }catch(error){
-      throw new HttpErrorResponse({error});
-    }
   }
   deleteArtikel(id:number){
-    try{
       return this.http.delete(this.API_URL + '/' + id);
-    }catch(error){
-      throw new HttpErrorResponse({error});
-    }
   }
   getArtikelById(id: number){
-    try{
       return this.http.get<ArtikelDTO>(this.API_URL + '/' + id);
-    }catch(error){
-      throw new HttpErrorResponse({error});
-    }
+  }
+  updateArtikel(art: ArtikelDTO):Observable<ArtikelDTO>{
+    return this.http.patch<ArtikelDTO>(this.API_URL, art);
   }
 
 }

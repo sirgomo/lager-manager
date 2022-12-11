@@ -32,6 +32,7 @@ export class LagerService {
        let tmp = await this.artServ.getAllArticel();
             tmp.forEach(art =>{
                 let a :ArtikelMengeDTO = new ArtikelMengeDTO();
+                a.aid = art.aid;
                 a.artikelId = art.artikelId;
                 a.menge = art.bestand;
                 a.palete = PALETTENTYP.EU;
@@ -79,7 +80,7 @@ export class LagerService {
         try{
           if(lagerplatz.artId !== null && isFinite(lagerplatz.artId)){
                 let tmpArt : ArtikelDTO = new ArtikelDTO();
-                tmpArt = await this.artServ.getArtikel(lagerplatz.artId);
+                tmpArt = await this.artServ.getArtikelFurLager(lagerplatz.artId);
                 lagerplatz.einheit = tmpArt.basisEinheit;
                 lagerplatz.liferant = tmpArt.liferantId;
                 if(lagerplatz.palettenTyp === PALETTENTYP.KEINPALETTE){
@@ -122,7 +123,7 @@ export class LagerService {
             let volMenge : number[][] = new Array();
             let artikel :ArtikelDTO = new ArtikelDTO();
             let cont : number = 0;
-            await this.artServ.getArtikel(artMen.artikelId).then(data => { Object.assign(artikel, data)});
+            await this.artServ.getArtikel(artMen.aid).then(data => { Object.assign(artikel, data)});
             if(isFinite(artikel.artikelId)){
 
             
@@ -179,8 +180,8 @@ export class LagerService {
             let volMenge : number[][] = new Array();
             let artikel :ArtikelDTO = new ArtikelDTO();
             let cont : number = 0;
-            await this.artServ.getArtikel(artMen.artikelId).then(data => { Object.assign(artikel, data)});
-            if(isFinite(artikel.artikelId)){
+            await this.artServ.getArtikel(artMen.aid).then(data => { Object.assign(artikel, data)});
+            if(isFinite(artikel.aid)){
 
             
             volMenge = await this.helper.getPaletenVolumen(artikel.bestand, artikel.grosse, artikel.minLosMenge, 205);
@@ -218,7 +219,7 @@ export class LagerService {
                  tmps.mhd = this.helper.getRandomMhd();
                  tmps.einheit = artikel.basisEinheit;
                  tmps.palettenTyp = PALETTENTYP.EU;
-               await  this.repo.save(tmps);
+                 await  this.repo.save(tmps);
                
                  cont++;
             

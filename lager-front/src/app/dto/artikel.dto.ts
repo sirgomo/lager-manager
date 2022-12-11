@@ -1,6 +1,9 @@
  export class ArtikelDTO{
+    aid!:number;
     artikelId!: number;
     name!: string;
+    name2!: string;
+    longBeschriftung!:string;
     uids!: UidDTO[];
     gewicht!: number;
     grosse!: string;

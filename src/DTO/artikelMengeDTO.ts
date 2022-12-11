@@ -4,6 +4,9 @@ import { PALETTENTYP } from "src/entity/LagerPlatzEntity";
 export class ArtikelMengeDTO{
     @IsNotEmpty()
     @IsNumber()
+    aid:number;
+    @IsNotEmpty()
+    @IsNumber()
     artikelId:number;
     @IsNotEmpty()
     @IsNumber()

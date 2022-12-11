@@ -2,23 +2,23 @@
   <div class="mt-2 col-md-12"></div>
         <div class="row justify-content-center align-items-center g-2 ">
             <div class="col-md-auto" >
-              <button type="button" class="btn btn-primary"  (click)="createBuchung()">Neue Buchung</button>
+              <button type="button" class="btn btn-primary btn-sm fs-s"  (click)="createBuchung()">Waren Eingang Buchen</button>
             </div>
             <div class="col-md-auto">
-              <button type="button" class="btn btn-primary"  (click)="showBuchungenInBearbeitung()" >Buchungen In Bearbeitung</button>
+              <button type="button" class="btn btn-primary btn-sm fs-s"  (click)="showBuchungenInBearbeitung()" >Buchungen In Bearbeitung</button>
             </div>
             <div class="col-md-auto">
-            <button type="button" class="btn btn-primary" [routerLink]="['/datenpflege']" routerLinkActive="router-link-active" > Speditors / Dispositors</button>
+            <button type="button" class="btn btn-primary btn-sm fs-s" [routerLink]="['/datenpflege']" routerLinkActive="router-link-active" >Zurück zu Datenpfhlege</button>
           </div>
           <div class="col-md-auto" >
-         <button type="button" class="btn btn-primary" *ngIf="show === 2" (click)="getArtikelsInBuchung()">Zeigt gebuchtes Artikels</button>
+         <button type="button" class="btn btn-primary btn-sm fs-s" *ngIf="show === 2" (click)="getArtikelsInBuchung()">Zeigt gebuchtes Artikels</button>
          </div>
          <div class="col-md-auto">
-         <button type="button" class="btn btn-primary"  *ngIf="show === 3" (click)="goBack()">Zurück</button>
+         <button type="button" class="btn btn-primary btn-sm fs-s"  *ngIf="show === 3" (click)="goBack()">Zurück</button>
         </div>
       </div>
 
-<div class="mt-2 col-md-12"></div>
+
 <div class="mt-2 col-md-12"></div>
 <!--Add new buchung-->
 <div class="col-mt-12 justify-content-center align-items-center g-2">
@@ -31,11 +31,11 @@
   <div class="col-md-12">
 
     <div class="col">
-      <label for="tor" class="form-label ">Ware an Tor ?</label>
-      <input formControlName="tor" type="text" class="form-control" id="tor" value="name" required>
+      <label for="tor" class="fs-s">Ware an Tor ?</label>
+      <input formControlName="tor" type="text" class="form-control form-control-sm" id="tor" value="name" required>
     </div>
     <div class="col">
-      <label for="dispositor" class="form-label ">Dispositor</label>
+      <label for="dispositor" class="form-label fs-s">Dispositor</label>
       <select formControlName="dispositorId" class="form-select" id="dispositor" value="name"  required>
         <option *ngFor="let disp of dispositors" [ngValue]="disp.id" placeholder="Klick to select">
          {{ disp.name }}
@@ -61,7 +61,7 @@
 
      <div class="col-md-6">
       <label for="validationCustom02" class="form-label">Bestellung id </label>
-      <input formControlName="bestellungId" placeholder="Gibt bestellung nr an" type="number" class="form-control" id="validationCustom02" value="grosse" required>
+      <input formControlName="bestellungId" placeholder="Gibt bestellung nr an" type="number" class="form-control form-control-sm" id="validationCustom02" value="grosse" required>
       <div class="valid-feedback">
         Schein gut zu sein
       </div>
@@ -89,7 +89,7 @@
   </div>
 
 </div>
-<div class="mt-2 col-md-12"></div>
+<div class="mt-2 col-md-12 fs-s"></div>
 <table class="table table-bordered table-hover table-sortable" id="tab_logic" *ngIf="show === 2">
   <thead>
     <tr >

@@ -12,33 +12,33 @@ import { WarenbuchungService } from './warenbuchung.service';
 export class WarenbuchungController {
     constructor(private serv : WarenbuchungService){}
     @Post()
-    @ROLES(ROLE.WARENPFHLEGE)
+    @ROLES(ROLE.DATAPFHLEGE)
     async newBestellung(@Body(ValidationPipe) dto: WarenBuchungDto){
         return  this.serv.createBuchung(dto);   
     }
     @Post('/art')
-    @ROLES(ROLE.WARENPFHLEGE)
+    @ROLES(ROLE.DATAPFHLEGE)
     async addArtikel(@Body(ValidationPipe) best: BestArtikelMengeDTO){
         return this.serv.addArtikel(best);
     }
     @Get(':id')
-    @ROLES(ROLE.WARENPFHLEGE)
+    @ROLES(ROLE.DATAPFHLEGE)
     async getAllArtikels(@Param('id') id:number){
     return this.serv.getAllArticles(id);
     }
 
     @Delete(':id')
-    @ROLES(ROLE.WARENPFHLEGE)
+    @ROLES(ROLE.DATAPFHLEGE)
    async deleteBestellung(@Param('id') id:number){
         return this.serv.deletBuchung(id);
     } 
     @Get()
-    @ROLES(ROLE.WARENPFHLEGE)
+    @ROLES(ROLE.DATAPFHLEGE)
     async getBuchungen(){
         return this.serv.getBuchungen();
     }
     @Delete(':id/:bestid')
-    @ROLES(ROLE.WARENPFHLEGE)
+    @ROLES(ROLE.DATAPFHLEGE)
     async deleteArtikel(@Param('id') id:number, @Param('bestid') bestid: number){
         return this.serv.deleteArtikel(id, bestid);
     }

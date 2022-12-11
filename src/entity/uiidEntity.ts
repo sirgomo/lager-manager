@@ -9,7 +9,9 @@ export class UiidEntity{
     uid : string;
     @Column()
     artikelId : number;
-    @ManyToOne(()=> ArtikelEntity, (artikel) => artikel.uids)
-    @JoinColumn({name: 'artikelId'})
+    @Column()
+    aid:number;
+    @ManyToOne(()=> ArtikelEntity, (ArtikelEntity) => ArtikelEntity.uids, {onDelete:'CASCADE', onUpdate: 'NO ACTION'})
+    @JoinColumn({name: 'aid'})
     arikels : ArtikelEntity;
 }

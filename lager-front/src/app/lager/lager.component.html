@@ -2,13 +2,13 @@
   <div class="mt-2 col-md-12"></div>
   <div class="row clearfix justify-content-center">
     <div class="col-md-auto" style="cursor: pointer;">
-      <button type="button" class="btn btn-primary" (click)="showFront()">Stellpletze</button>
+      <button type="button" class="btn btn-primary btn-sm fs-s" (click)="showFront()">Stellpletze</button>
     </div>
     <div class="col-md-auto">
-      <button type="button" class="btn btn-primary" (click)="createUpdateLagerPlatz(-1)">Neue Stellplatz</button>
+      <button type="button" class="btn btn-primary btn-sm fs-s" (click)="createUpdateLagerPlatz(-1)">Neue Stellplatz</button>
     </div>
     <div class="col-md-auto">
-      <button type="button" class="btn btn-primary" [routerLink]="['/warenein']"
+      <button type="button" class="btn btn-primary btn-sm fs-s" [routerLink]="['/warenein']"
         routerLinkActive="router-link-active">Waren Eingang</button>
     </div>
   </div>
@@ -28,7 +28,7 @@
       </svg>
     </div>
     <div class="mt-2 col-md-12"></div>
-    <table class="table table-bordered table-hover table-sortable" id="tab_logic" *ngIf="show === 1">
+    <table class="table table-bordered table-hover table-sortable fs-s" id="tab_logic" *ngIf="show === 1">
       <thead>
         <tr>
           <th class="text-center">
@@ -102,18 +102,18 @@
     <form [formGroup]="lagerPlatztForm" class="row g-3 px-3" novalidate>
       <div class="row">
             <div class="col-md-6">
-              <label for="lagerplatz" class="form-label">Lager Platzt</label>
-              <input type="text" class="form-control" formControlName="lagerplatz" id="" aria-describedby="helpId"
+              <label for="lagerplatz" class="form-label fs-s">Lager Platzt</label>
+              <input type="text" class="form-control form-control-sm" formControlName="lagerplatz" id="" aria-describedby="helpId"
                 placeholder="1-50-1-3">
               <small id="lagerplatz" class="form-text text-muted"></small>
             </div>
             <div class="col-md-3">
-              <label for="artId" class="form-label">Artikel Id:</label>
+              <label for="artId" class="form-label fs-s">Artikel Id:</label>
               <span class="form-control border border-bottom border-start-0 border-end-0 border-top-0">{{lagerPlatztForm.controls['artId'].getRawValue()}}</span>
               <small id="artId" class="form-text text-muted"></small>
             </div>
             <div class="col-md-3">
-              <label for="name" class="form-label">Artikel Name</label>
+              <label for="name" class="form-label fs-s">Artikel Name</label>
                 <span class="form-control border border-bottom border-start-0 border-end-0 border-top-0">{{lagerPlatztForm.controls['name'].getRawValue()}}</span>
               <small id="artId" class="form-text text-muted"></small>
             </div>
@@ -121,13 +121,13 @@
       <div class="mt-2 col-md-12"></div>
       <div class="row">
             <div class="col-md-6">
-              <label for="artikelMenge" class="form-label">Artikel Menge</label>
+              <label for="artikelMenge" class="form-label fs-s">Artikel Menge</label>
               <span class="form-control border border-bottom border-start-0 border-end-0 border-top-0" id="artikelMenge"
                 aria-describedby="helpId">{{lagerPlatztForm.controls['artikelMenge'].getRawValue()}}</span>
               <small id="artikelMenge" class="form-text text-muted"></small>
             </div>
             <div class="col-md-6">
-              <label for="einheit" class="form-label">Artikel Einheit</label>
+              <label for="einheit" class="form-label fs-s">Artikel Einheit</label>
               <span class="form-control border border-bottom border-start-0 border-end-0 border-top-0" name="einheit" id="einheit"
                 aria-describedby="helpId" >{{lagerPlatztForm.controls['einheit'].getRawValue()}}</span>
               <small id="einheit" class="form-text text-muted"></small>
@@ -136,50 +136,50 @@
       <div class="mt-2 col-md-12"></div>
       <div class="row">
             <div class="col-md-6">
-              <label for="lagerPlatzVolumen" class="form-label">Welche Palette</label>
-              <select class="form-select" aria-label="Default select example" formControlName="palettenTyp">
+              <label for="lagerPlatzVolumen" class="form-label fs-s">Welche Palette</label>
+              <select class="form-select form-select-sm" aria-label="Default select example" formControlName="palettenTyp">
                 <option *ngFor="let item of palettenTyp | keyvalue" [ngValue]="item.value">{{item.value}}</option>
               </select>
               <small id="lagerPlatzVolumen" class="form-text text-muted">Select paletten Typ</small>
             </div>
             <div class="col-md-6">
-              <label for="mhd" class="form-label">Artikel Mhd</label>
+              <label for="mhd" class="form-label fs-s">Artikel Mhd</label>
                 <input type="date" formControlName="mhd" name="mhd" id="mhd" value="mhd"
-                  placeholder="Mhd für artikel, Jahr/Monat/Tag" class="form-control">
+                  placeholder="Mhd für artikel, Jahr/Monat/Tag" class="form-control form-control-sm">
                 <small id="mhd" class="form-text text-muted"></small>
             </div>
       </div>
       <div class="mt-2 col-md-12"></div>
       <div class="row">
         <div class="col-md-6">
-          <label for="lagerPlatzVolumen" class="form-label">Lagerplatz Größe</label>
-          <input type="text" class="form-control" formControlName="lagerPlatzVolumen" name="lagerPlatzVolumen" id=""
+          <label for="lagerPlatzVolumen" class="form-label fs-s">Lagerplatz Größe</label>
+          <input type="text" class="form-control form-control-sm" formControlName="lagerPlatzVolumen" name="lagerPlatzVolumen" id=""
             aria-describedby="lagerPlatzVolumen" placeholder="Wie groß ist der lager platz">
-          <small id="lagerPlatzVolumen" class="form-text text-muted">Volumen</small>
+          <small id="lagerPlatzVolumen" class="form-text text-muted fs-s">Volumen</small>
         </div>
         <div class="col-md-6">
           <div class="form-check mt-3 pt-3">
             <input type="checkbox" class="form-check-input" formControlName="static" name="static" id=""
               aria-describedby="static">
-            <small id="static" class="form-text text-muted">Static für alles was am bode ist</small>
+            <small id="static" class="form-text text-muted fs-s">Static für alles was am bode ist</small>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4">
-          <label for="mengeProPalete" class="form-label">Menge Pro Paltte</label>
-          <input type="number" class="form-control" formControlName="mengeProPalete" name="mengeProPalete" id="mengeProPalete"
+          <label for="mengeProPalete" class="form-label fs-s">Menge Pro Paltte</label>
+          <input type="number" class="form-control form-control-sm" formControlName="mengeProPalete" name="mengeProPalete" id="mengeProPalete"
             aria-describedby="mengeProPalete" placeholder="Artikel menge pro Palette">
             <small id="static" class="form-text text-muted"></small>
         </div>
         <div class="col-md-4">
-          <label for="barcode" class="form-label">Barcode</label>
-          <input type="text" class="form-control" formControlName="barcode" name="barcode" id="barcode"
+          <label for="barcode" class="form-label fs-s">Barcode</label>
+          <input type="text" class="form-control form-control-sm" formControlName="barcode" name="barcode" id="barcode"
             aria-describedby="barcode" placeholder="Barcode for stellpaltz">
             <small id="static" class="form-text text-muted"></small>
         </div>
         <div class="col-md-4">
-          <label for="liferant" class="form-label">Artikel Liferant</label>
+          <label for="liferant" class="form-label fs-s">Artikel Liferant</label>
           <span type="number" class="form-control border border-bottom border-start-0 border-end-0 border-top-0" name="liferant" id="liferant"
             aria-describedby="liferant" placeholder="Liferant">{{lagerPlatztForm.controls['liferant'].getRawValue()}}</span>
             <small id="static" class="form-text text-muted"></small>
@@ -190,17 +190,17 @@
         <!--  <div class="col"><button mat-stroked-button (click)="savePlatz(lagerPlatztForm.value)" color="primary">Spiecher lagerplatz</button></div>
     <div class="col"><button mat-stroked-button (click)="deletePlatz(lagerPlatztForm.value)" color="primary">Delete lagerplatz</button></div>-->
         <div class="col-md-6">
-          <button type="button" class="btn btn-primary" (click)="savePlatz(lagerPlatztForm.value)">Spiecher
+          <button type="button" class="btn btn-primary btn-sm fs-s" (click)="savePlatz(lagerPlatztForm.value)">Spiecher
             lagerplatz</button>
         </div>
         <div class="col-md-6">
-          <button type="button" class="btn btn-primary" (click)="deletePlatz(lagerPlatztForm.value)">Delete
+          <button type="button" class="btn btn-primary btn-sm fs-s" (click)="deletePlatz(lagerPlatztForm.value)">Delete
             lagerplatz</button>
         </div>
       </div>
 
       <!--  <button mat-stroked-buttoncolor="primary" ></button>-->
-      <button type="button" class="btn btn-primary" (click)="savePlatz(lagerPlatztForm.value)"
+      <button type="button" class="btn btn-primary btn-sm fs-s" (click)="savePlatz(lagerPlatztForm.value)"
         *ngIf="index === -1">Spiecher lagerplatz</button>
 
     </form>

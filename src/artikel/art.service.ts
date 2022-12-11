@@ -35,105 +35,87 @@ export class ArtService {
         }
        
         try {
-            return await this.repo.find();
+            return await this.repo.find({'select':{'aid': true, 'artikelId':true, 'name':true, 'minLosMenge':true,'liferantId':true}});
         }
         catch (err) {
-            throw new InternalServerErrorException('Etwas is schief gegangen');
+            throw new InternalServerErrorException('Etwas is schief gegangen ' + err);
         }
     }
-    async getArtikel(id: number){
+    async getArtikel( aid:number){
         try{
-            return  await this.repo.createQueryBuilder('artikel')
-           .leftJoinAndSelect('artikel.uids', 'uiid' )
-           .where('uiid.artikelId = :artikelId', {artikelId: id})
-           .getOne();
+            return await this.repo.findOne({'relations': {'uids': true}, 'where': {'aid': aid}}).then(data=>{
+                return data;
+            }, err=>{
+                console.log(err);
+                return err;
+            })
+
+        }catch (err){
+            console.log('error sie melduje ' + err);
+            return err;
+        }
+    }
+    async getArtikelFurLager( artid:number){
+        try{
+          /* let a = await this.repo.createQueryBuilder('artikel')
+            .leftJoinAndSelect('artikel.uids', 'uiid'  )
+            .where('uiid.artikelId = :artikelId', {artikelId: artid})
+            .getQuery();
+            console.log(a);*/
+            return await this.repo.findOne({'where':{'artikelId': artid}});
+
         }catch (err){
             console.log('error sie melduje ' + err);
             return err;
         }
     }
     async createArtikel(art : ArtikelDTO):Promise<ArtikelEntity>{
-       
-       if(art.artikelId == null){
         try{
-            let tmpUids : UiidsDTO[] = new Array();
-            tmpUids = art.uids;
-            art.uids = [];
-      
-            
             await this.repo.create(art);
-            await this.repo.save(art).then(data => {
-                tmpUids.forEach(uid => { uid.artikelId = data.artikelId});
-                
-                this.uidRepo.create(tmpUids);
-                this.uidRepo.save(tmpUids).then( uid => {
-                    data.uids = uid;
-                });
-                return data;
-            });
-           
-            
+           return await this.repo.save(art);    
         }catch(err){
-            console.log(err);
-            throw new InternalServerErrorException('Etwas is schief gegangen');
+           throw new Error("Etwas ist schif gegange beim artikel erstellen" + err);
         }
-    }else{
+   
+    }
+ 
+    async updateArtikel(art: ArtikelDTO){
+        await this.repo.create(art);
         try{
-            let a = await this.uidRepo.findBy({'artikelId': art.artikelId});
-            let uidsToSave: UiidEntity[] = new Array();
-            let uidToDelete: UiidEntity[] = new Array();
-           
-            if(art.uids.length < a.length){
-                uidToDelete = a;
-                while(art.uids.length < uidToDelete.length){
-                    art.uids.forEach(d => {
-                       for(let i = 0; i < uidToDelete.length; i++){
-                        if(d.id == uidToDelete[i].id){
-                            uidToDelete.splice(i, 1);
+          return await this.repo.findOne({where: {'aid':art.aid}, relations: {'uids': true}}).then(data=>{
+            if(art.uids.length !== undefined && data.uids.length !== undefined && data.uids.length > art.uids.length ){
+                let del =  data.uids.length;
+                for(let i = 0; i < del; i++){
+                    let delIt :boolean = true;
+                    for (let d= 0; d < art.uids.length; d++){
+                        if( data.uids[i].id == art.uids[d].id){
+                            delIt = false;
+                            console.log( ' uids ' + data.uids[i].uid + ' ' + art.uids[d].uid);
                         }
-                       }
-                    })
+                    }
+                    if(delIt){
+                        this.uidRepo.delete({'id':data.uids[i].id, 'aid': data.aid, 'artikelId': data.artikelId});
+                    }  
                 }
+                return this.repo.save(art).then(data =>{
+                    if (data !== null) return 1;
+                  }, err=>{
+                    console.log(err);
+                  });
+            } else{
+                console.log(JSON.stringify(art));
+                return this.repo.save(art).then(data =>{
+                    if (data !== null) return 1;
+                  }, err=>{
+                    console.log(err);
+                  });
             }
           
-            if(uidToDelete.length > 0){
-                uidToDelete.forEach(d=>{
-                    this.uidRepo.delete({'id': d.id, 'artikelId': d.artikelId});
-                })
-            
-               }
-              
-               
-                try{
-                    await this.uidRepo.save(art.uids);
-                    uidsToSave.splice(0, uidsToSave.length);
-                }catch (err){
-                    return err;
-                }
-                
-    
-           
-         
-   
-            await this.repo.preload(art);
-            return await this.repo.save(art);
-        
-        } catch(err){
-            console.log(err);
-            throw new InternalServerErrorException('Etwas is schief gegangen');
-        }
-        
-        }
-    }
-    async updateArtikel(art: ArtikelDTO, id: number):Promise<ArtikelEntity>{
-        await this.repo.create(art);
-       
-        try{
-            await this.repo.update(id, art);
-            return await this.repo.findOneBy({'artikelId':id});
+          });
+          // return await (await this.repo.update({'aid':art.aid}, art)).affected;
         }catch(err){
-           
-            throw new InternalServerErrorException('Etwas is schief gegangen');
+            console.log(err);
+            throw new Error("Etwas ist schief gelaufen beim artikel update " + err);
         }
     }
     async deleteArtikel(id: number){
@@ -142,7 +124,7 @@ export class ArtService {
             uids.forEach(d => {
                 this.uidRepo.delete({'id': d.id, 'artikelId': d.artikelId});
             });
-            return await this.repo.delete({'artikelId':id});
+            return await this.repo.delete({'aid':id});
         }
         catch(err){
             console.log(err);

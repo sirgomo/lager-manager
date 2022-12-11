@@ -16,17 +16,17 @@ export class SpeditionController {
         return this.service.getAllSpditors()
     }
     @Post()
-    @ROLES(ROLE.KAUF,ROLE.VERKAUF,ROLE.WARENPFHLEGE)
+    @ROLES(ROLE.KAUF,ROLE.VERKAUF,ROLE.DATAPFHLEGE)
     createSpedition(@Body(ValidationPipe) spedition : SpeditionDTO){
         return this.service.createSpeditor(spedition);
     }
     @Post(':id')
-    @ROLES(ROLE.KAUF,ROLE.VERKAUF,ROLE.WARENPFHLEGE)
+    @ROLES(ROLE.KAUF,ROLE.VERKAUF,ROLE.DATAPFHLEGE)
     updateSpedition(@Body(ValidationPipe) spedition : SpeditionDTO, @Param('id') id: number){
         return this.service.updateSpeditor(spedition, id);
     }
     @Delete(':id')
-    @ROLES(ROLE.KAUF,ROLE.VERKAUF,ROLE.WARENPFHLEGE)
+    @ROLES(ROLE.KAUF,ROLE.VERKAUF,ROLE.DATAPFHLEGE)
     deleteSpedition(@Param('id') id: number){
         return this.service.deleteSpeditor(id);
     }

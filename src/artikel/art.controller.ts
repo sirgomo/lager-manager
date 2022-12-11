@@ -21,7 +21,7 @@ export class ArtController {
         return this.ArtService.getArtikel(id);
     }
     @Post()
-    @ROLES(ROLE.WARENPFHLEGE)
+    @ROLES(ROLE.DATAPFHLEGE)
     @UsePipes(ArtikelflagsPipers)
     createArtikel(@Body(ValidationPipe) data : ArtikelDTO){
         return this.ArtService.createArtikel(data);
@@ -29,14 +29,13 @@ export class ArtController {
     //@Patch(':id')
     //updateArtikel(@Body('artikelFlag', ArtikelflagsPipers) artikelFlag: ARTIKELFLAGE, 
     //@Param('id') id: number){
-    @Patch(':id')
-    @ROLES(ROLE.WARENPFHLEGE)
-    updateArtikel(@Body(ValidationPipe) data: ArtikelDTO, 
-    @Param('id') id: number){
-       return this.ArtService.updateArtikel(data, id);
+    @Patch()
+    @ROLES(ROLE.DATAPFHLEGE)
+    updateArtikel(@Body(ValidationPipe) data: ArtikelDTO){
+       return this.ArtService.updateArtikel(data);
     }
     @Delete(':id')
-    @ROLES(ROLE.WARENPFHLEGE)
+    @ROLES(ROLE.DATAPFHLEGE)
     deleteArtikel(@Param('id') id: number ){
       return  this.ArtService.deleteArtikel(id);
      //   return this.ArtService.getAllArticel();

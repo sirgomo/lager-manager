@@ -28,9 +28,12 @@ export class ArtikelComponent implements OnInit {
   show : number = 1;
   constructor(private servi : ArtikelService, private fb : FormBuilder, private helper: HelperService, private toaster: ToastrService, private dataServ : DataDilerService) {
      this.formArtikel = this.fb.group({
+    aid : Number,
     artikelId : Number,
     name: [''],
+    name2: [''],
     uids: [''],
+    longBeschriftung: [''],
     gewicht: Number,
     grosse: [''],
     basisEinheit: Number,
@@ -67,36 +70,85 @@ export class ArtikelComponent implements OnInit {
       }
   }
   async getArtikelById(id:number, index:number){
-
     this.index = index;
-    this.show = 2;
-    this.uids.splice(0, this.uids.length);
      await  this.servi.getArtikelById(id).subscribe(d =>{
+      console.log(d);
       this.artikel = d;
       let uids : string  = '';
       //tmp uids for edition purpose
-      if(d.uids.length){
+      if(d.uids.length ){
+        this.uids.splice(0,uids.length);
         this.uids = d.uids;
-        console.log(JSON.stringify(this.uids));
-
 
       this.artikel.uids.forEach(da => {
             if(!uids && uids.length < 2){
               uids =  da.uid;
             }else{
-              uids += ' , ' + da.uid;
+              uids += ',' + da.uid;
             }
       });
     }
+    uids.trim();
       this.formArtikel.reset();
       this.formArtikel.patchValue(this.artikel);
       this.formArtikel.patchValue({'uids' : uids});
+      this.show = 2;
       });
+  }
+  updateArtikle(art: ArtikelDTO){
+    console.log(art);
+    let uids :string = this.formArtikel.get<string>('uids')?.value;
+    let uidss : string[] = uids.trim().split(',');
+    let tmpUid: UidDTO[] = new Array();
+    if(uidss.length >= 1){
+
+      for(let i = uidss.length; i > 0; i--){
+        if(this.uids.length > 0){
+          if(uidss.length > this.uids.length){
+            let a = new UidDTO();
+            a.uid = uidss[i-1]
+            a.artikelId = art.artikelId;
+            tmpUid.push(a);
+            uidss.splice(i-1,1);
+          }else {
+            this.uids[i-1].uid = uidss[i-1];
+            this.uids[i-1].artikelId = art.artikelId;
+            tmpUid.push(this.uids[i-1]);
+            this.uids.splice(i-1,1);
+            uidss.splice(i-1,1);
+          }
+      }else{
+        let a = new UidDTO();
+        a.uid = uidss[i]
+        a.artikelId = art.artikelId;
+        tmpUid.push(a);
+      }
+
+      }
+        /* for(let i = 0; i < uidss.length; i++){
+          let a = new UidDTO();
+          a.uid = uidss[i]
+          a.artikelId = art.artikelId;
+          tmpUid.push(a);
+          uidss.splice(i, 1);
+       }*/
+    }else{
+      tmpUid = [];
+    }
+    console.log(JSON.stringify(tmpUid));
+    art.uids = tmpUid;
+    //TODO still not working, needs refactoring!
+    this.servi.updateArtikel(art).subscribe(data=>{
+   // console.log(data);
+    if(data !== null){
+      this.toaster.success('Artikel wurde geändert : ' + data.artikelId, 'Artikel Ändern', {timeOut: 700});
+      this.artikels[this.index] = art;
+      this.show =1;
+    }
+  });
   }
   createUpdateArtikel(art : ArtikelDTO){
     this.searchModel = '';
-    if( this.index === 0.1){
-
       let lUid : UidDTO[] = new Array();
 
         let uids :string = this.formArtikel.get<string>('uids')?.value;
@@ -105,6 +157,7 @@ export class ArtikelComponent implements OnInit {
         uidss.forEach( uid => {
           let a = new UidDTO();
           a.uid = uid;
+          a.artikelId = art.artikelId;
           lUid.push(a);
         });
         art.uids = lUid;
@@ -118,46 +171,11 @@ export class ArtikelComponent implements OnInit {
           this.artikels.push(art);
         }
       });
-    }else{
-      let uids :string = this.formArtikel.get<string>('uids')?.value;
-      let uidss : string[] = uids.split(',');
-      if(uids.length > 3){
-        if(this.uids.length >= uidss.length){
-          for(let i = 0; i < this.uids.length; i++){
-            if(i <= uidss.length -1){
-             this.uids[i].uid = uidss[i];
-            }else{
-              this.uids.splice(i,1);
-            }
-          }
-        }else{
 
-          let i = 0;
-          while(uidss.length > this.uids.length){
-            let tmpUip: UidDTO = new UidDTO();
-            tmpUip.artikelId = this.artikel.artikelId;
-            tmpUip.uid = uidss[uidss.length -1 - i];
-            i++;
-            this.uids.push(tmpUip);
-          }
-
-        }
-      }else{
-        this.uids.splice(0, this.uids.length);
-      }
-      art.uids = this.uids;
-      //TODO still not working, needs refactoring!
-    this.servi.createArtikel(art).subscribe(data=>{
-      if(data !== null){
-        this.toaster.success('Artikel wurde geändert : ' + data.artikelId, 'Artikel Ändern', {timeOut: 700});
-        this.artikels[this.index] = art;
-        this.show =1;
-      }
-    });
-    }
 
   }
   newArtikel(){
+    this.artikel = new ArtikelDTO();
     this.formArtikel.reset();
     this.index = 0.1;
     this.show = 2;

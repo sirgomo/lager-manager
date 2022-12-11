@@ -1,5 +1,5 @@
 <div class="container">
-  <table class="table table-bordered table-hover table-sortable px-3" id="tab_logic" >
+  <table class="table table-bordered table-hover table-sortable px-3 fs-s" id="tab_logic" >
     <thead>
       <tr >
         <th class="text-center">
@@ -22,20 +22,20 @@
     <tbody>
 
       <tr  *ngFor="let post of dispositors; let i = index" class="hidden">
-        <td data-name="dispositor id">
+        <td >
           {{ post.id }}
       </td>
-      <td data-name="name"  (click)="editDispo(post.id)" style="cursor: pointer;">
+      <td  (click)="editDispo(post.id)" style="cursor: pointer;">
         {{ post.name }}
       </td>
-      <td data-name="name2"  (click)="editDispo(post.id)" style="cursor: pointer;">
+      <td (click)="editDispo(post.id)" style="cursor: pointer;">
         {{ post.name2 }}
       </td>
-      <td data-name="stadt"  (click)="editDispo(post.id)" style="cursor: pointer;">
+      <td   (click)="editDispo(post.id)" style="cursor: pointer;">
         {{ post.stadt }}
       </td>
                   <td class="text-center">
-                      <button class="btn btn-danger" (click)="deleteDispositor(post.id, i)" >Löschen</button>
+                      <button class="btn btn-danger btn-sm fs-s" (click)="deleteDispositor(post.id, i)" >Löschen</button>
                   </td>
       </tr>
     </tbody>

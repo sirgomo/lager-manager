@@ -1,15 +1,20 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
-import { KommisioDetailsEntity } from './KommisioDetailsEntity';
+import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { UiidEntity } from './UiidEntity';
 
 
 @Entity('artikel')
 export class ArtikelEntity {
   @PrimaryGeneratedColumn()
+  aid:number;
+  @Column({'nullable': false})
   artikelId: number;
   
   @Column()
   name: string;
+  @Column({'nullable': true})
+  name2: string;
+  @Column({type: 'longtext', 'nullable':true})
+  longBeschriftung:string;
  
   @Column()
   gewicht: number;
@@ -32,7 +37,7 @@ export class ArtikelEntity {
   @Column({nullable: false})
   mehrwertsteuer:number;
   
-  @OneToMany(()=> UiidEntity, (uid) => uid.arikels)
+  @OneToMany(()=> UiidEntity, (uid) => uid.arikels, {cascade: true})
   uids: UiidEntity[];
 }
 export enum ARTIKELFLAGE {

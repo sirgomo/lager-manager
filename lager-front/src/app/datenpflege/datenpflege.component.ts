@@ -39,7 +39,6 @@ getAllDispositors(){
         this.dispositors.push(dispo);
       });
     }
-    console.log('dispositors '+ JSON.stringify(data));
   });
 }
 

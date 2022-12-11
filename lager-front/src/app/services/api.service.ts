@@ -52,7 +52,7 @@ export class ApiService {
             case 'VERKAUF':
               this.router.navigateByUrl('verkauf').then();
               break;
-              case 'WARENPFHLEGE':
+              case 'DATAPFHLEGE':
               this.router.navigateByUrl('datenpflege').then();
               break;
               case 'LAGERVERWALTUNG':

@@ -4,6 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 export class KreditorsEntity{
 @PrimaryGeneratedColumn()
 id:number;
+
 @Column('text', {'nullable':false} )
 name:string;
 @Column('text', {'nullable':true} )
