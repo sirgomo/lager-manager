@@ -20,44 +20,22 @@ export class DatenpflegeService {
         return this.http.post<DispositorDto>(this.API_URL, dispo);
   }
   updateDispositor(dispo: DispositorDto, id : number){
-    try{
       this.http.patch<DispositorDto>(this.API_URL + '/'+id, dispo).subscribe();
-    }catch(error){
-      throw new HttpErrorResponse({error});
-    }
-
   }
   deleteDispositor(id:number){
       this.http.delete(this.API_URL + '/' + id).subscribe();
   }
 
   getAllSpeditions():Observable<SpeditionDto[]>{
-    try{
       return this.http.get<SpeditionDto[]>(this.API_URLS);
-    }catch(error){
-      throw new HttpErrorResponse({error});
-    }
   }
   createNewSpeditor(sped : SpeditionDto):Observable<SpeditionDto>{
-    try{
       return this.http.post<SpeditionDto>(this.API_URLS, sped);
-    }catch(error){
-      throw new HttpErrorResponse({error});
-    }
-
   }
    updateSpeditor(sped: SpeditionDto, id:number){
-     try{
-      this.http.post<SpeditionDto>(this.API_URLS + '/'+id, sped).subscribe();
-    }catch(error){
-      throw new HttpErrorResponse({error});
-    }
+     return this.http.post<SpeditionDto>(this.API_URLS + '/'+id, sped);
   }
   deleteSpeditor(id:number){
-    try{
       this.http.delete(this.API_URLS + '/'+id).subscribe();
-    }catch(error){
-      throw new HttpErrorResponse({error});
-    }
   }
 }

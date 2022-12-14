@@ -1,0 +1,44 @@
+ <div class="container">
+ <!-- Show speditors data-->
+ <table class="table table-bordered table-hover table-sortable px-3" id="tab_logic">
+    <thead>
+      <tr >
+        <th class="text-center fs-s">
+          Speditors id
+        </th>
+        <th class="text-center fs-s">
+         Speditors Name
+        </th>
+        <th class="text-center fs-s">
+         Speditors max lade gewicht
+        </th>
+        <th class="text-center fs-s">
+          Speditors max paletten menge
+         </th>
+         <th class="text-center fs-s">
+          Delete ?
+         </th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr  *ngFor="let post of spedi; let i = index;" class="hidden" (click)="editSpedi(i)" style="cursor: pointer;">
+        <td class="fs-s">
+          {{ post.id }}
+      </td>
+      <td class="fs-s">
+        {{ post.name }}
+      </td>
+      <td class="fs-s">
+        {{ post.maxLadeGewicht }}
+      </td>
+      <td class="fs-s">
+        {{ post.maxPalettenMenge }}
+      </td>
+                  <td class="text-center">
+                      <button  class="btn btn-danger glyphicon glyphicon-remove row-remove btn-sm fs-s" (click)="deleteSpeditor(post.id, i)"><span aria-hidden="true">Löschen</span></button>
+                  </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

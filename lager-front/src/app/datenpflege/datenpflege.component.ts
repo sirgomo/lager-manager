@@ -4,6 +4,8 @@ import { DispositorDto } from '../dto/dispositor.dto';
 import { SpeditionDto } from '../dto/spedition.dto';
 import { DatenpflegeService } from './datenpflege.service';
 import { DebitorsComponent } from './debitors/debitors.component';
+import { AddSpedition } from './speditors/addSpedition';
+import { SpeditorsComponent } from './speditors/speditors.component';
 
 @Component({
   selector: 'app-datenpflege',
@@ -15,16 +17,10 @@ export class DatenpflegeComponent implements OnInit {
   speditors : SpeditionDto[] = new Array();
   show :number = 0;
   @ViewChild(DebitorsComponent) dispo!: DebitorsComponent;
-  formSpedition : FormGroup;
-
+  @ViewChild(SpeditorsComponent) spedi!: SpeditorsComponent;
 
   constructor(private servi: DatenpflegeService, private fb: FormBuilder) {
-    this.formSpedition = this.fb.group({
-      id: Number,
-      name: [''],
-      maxLadeGewicht: [],
-      maxPalettenMenge: []
-    });
+
   }
 
   ngOnInit(): void {
@@ -52,46 +48,14 @@ getAllspeditiors(){
     });
   });
 }
-createNewSpeditor(s: SpeditionDto){
-  if(!Number.isFinite(s.id)){
- return this.servi.createNewSpeditor(s).subscribe(d =>{
-    this.speditors.push(d);
-    this.formSpedition.reset();
-    this.getAllspeditiors();
-  });
 
-}else{
- return this.updateSpeditor(s);
-}
-}
- updateSpeditor(s:SpeditionDto){
-  this.servi.updateSpeditor(s, s.id);
- let index = this.speditors.findIndex((e) => e.id === s.id);
- this.speditors[index] = s;
-    this.formSpedition.reset();
-    this.show = 3;
-
-
-}
-deleteSpeditor(id:number, index : number){
-   this.servi.deleteSpeditor(id);
-  this.speditors.splice(index, 1);
-
-}
 newSpedi(){
-  this.show = 4;
+  this.spedi.createNewSpeditor();
 }
 newDispo(){
  this.dispo.addDispositor();
 
 }
-editSpedi(id: number){
-  this.speditors.forEach(d=>{
-    if(d.id === id)
-      this.formSpedition.setValue({id: id, name: d.name, maxLadeGewicht: d.maxLadeGewicht, maxPalettenMenge: d.maxPalettenMenge});
 
-  });
-  this.show = 4;
-}
 
 }

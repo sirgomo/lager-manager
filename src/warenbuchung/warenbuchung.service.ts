@@ -43,10 +43,10 @@ export class WarenbuchungService {
                 await this.artRepo.findOneBy({'artikelId': buchungenFertig[i].artikelid}).then(data=>{
                     let eingStat : WarenEingStat = new WarenEingStat();
                     eingStat.artikelId = data.artikelId;
-                    eingStat.eingangDatum = new Date(Date.now());
+                //    eingStat.eingangDatum = new Date(Date.now());
                     eingStat.menge = buchungenFertig[i].menge;
-                    eingStat.price = data.artikelPrice;
-                    eingStat.verPrice = data.verPrice;
+                 //   eingStat.price = data.artikelPrice;
+                  //  eingStat.verPrice = data.verPrice;
                     this.repoStat.save(eingStat);
                     data.bestand += buchungenFertig[i].menge;
                     this.artRepo.save(data);

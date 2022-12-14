@@ -4,10 +4,20 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 export class SpeditionEntity{
 @PrimaryGeneratedColumn()
 id : number;
-@Column()
+@Column('text', {'nullable':false})
 name : string;
-@Column()
+@Column('text', {'nullable':true} )
+name2:string;
+@Column({ 'nullable': false})
 maxLadeGewicht : number;
-@Column()
+@Column({  'nullable': false})
 maxPalettenMenge : number;
+@Column('text', {'nullable': false})
+stadt:string;
+@Column('text', {'nullable': false})
+strasseUndNr:string;
+@Column('int', {'nullable': false})
+postleitzahl :number;
+@Column('text', {'nullable': false})
+uStIdentifikationsnummer:string;
 }

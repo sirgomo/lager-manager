@@ -89,7 +89,7 @@
               </div>
               <div class="col-md-4">
                 <label for="aName2" class="form-label fs-s">Artikel Name 2</label>
-                <input formControlName="name2" type="text" class="form-control form-control-sm" id="aName2" value="name2" required>
+                <input formControlName="name2" type="text" class="form-control form-control-sm" id="aName2" value="name2" >
                 <div class="valid-feedback fs-ss">
                   Schein gut zu sein
                 </div>
@@ -104,56 +104,56 @@
       </div>
       <div class="row">
           <div class="col-md-6">
-            <label for="" class="form-label fs-s"> Artikel uid</label>
-            <textarea formControlName="uids" class="form-control form-control-sm" value="uids" id="" rows="3" required></textarea>
+            <label for="uids" class="form-label fs-s"> Artikel uid</label>
+            <textarea formControlName="uids" class="form-control form-control-sm" value="uids" id="uids" rows="3" required></textarea>
             <p class="form-text text-muted small fs-s">
               Komma getrent!
             </p>
           </div>
           <div class="col-md-6">
             <label for="longBeschriftung" class="form-label fs-s"> Lange Beschriftung</label>
-            <textarea formControlName="longBeschriftung" class="form-control form-control-sm" value="longBeschriftung" id="" rows="3" required></textarea>
+            <textarea formControlName="longBeschriftung" class="form-control form-control-sm" value="longBeschriftung" id="longBeschriftung" rows="3"></textarea>
             <p class="form-text text-muted small fs-s">
             </p>
           </div>
       </div>
     </div>
     <div class="col-md-4">
-      <label for="validationCustom02" class="form-label fs-s">Artikel gewicht </label>
-      <input formControlName="gewicht" type="number" class="form-control form-control-sm" id="validationCustom02" value="gewicht"
+      <label for="gewicht" class="form-label fs-s">Artikel gewicht </label>
+      <input formControlName="gewicht" type="number" class="form-control form-control-sm" id="gewicht" value="gewicht"
         required>
       <div class="valid-feedback fs-ss">
         Schein gut zu sein
       </div>
     </div>
     <div class="col-md-4">
-      <label for="validationCustom02" class="form-label fs-s">Artikel Größe (H x B x L) </label>
-      <input formControlName="grosse" placeholder="H x B x L" type="text" class="form-control form-control-sm" id="validationCustom02"
+      <label for="grosse" class="form-label fs-s">Artikel Größe (H x B x L) </label>
+      <input formControlName="grosse" placeholder="H x B x L" type="text" class="form-control form-control-sm" id="grosse"
         value="grosse" required>
       <div class="valid-feedback fs-ss">
         Schein gut zu sein
       </div>
     </div>
     <div class="col-md-4">
-      <label for="validationCustom02" class="form-label fs-s">Artikel Basis Einheit </label>
-      <input formControlName="basisEinheit" type="number" class="form-control form-control-sm" id="validationCustom02"
+      <label for="basisEinheit" class="form-label fs-s">Artikel Basis Einheit </label>
+      <input formControlName="basisEinheit" type="number" class="form-control form-control-sm" id="basisEinheit"
         value="basisEinheit" required>
       <div class="valid-feedback fs-ss">
         Schein gut zu sein
       </div>
     </div>
     <div class="col-md-4">
-      <label for="validationCustom02" class="form-label fs-s">Min los Menge </label>
-      <input formControlName="minLosMenge" type="number" class="form-control form-control-sm" id="validationCustom02"
+      <label for="minLosMenge" class="form-label fs-s">Min los Menge </label>
+      <input formControlName="minLosMenge" type="number" class="form-control form-control-sm" id="minLosMenge"
         value="minLosMenge" required>
       <div class="valid-feedback fs-ss">
         Schein gut zu sein
       </div>
     </div>
     <div class="col-md-4">
-      <label for="validationCustom02" class="form-label fs-s">Bestand </label>
-      <input formControlName="bestand" type="number" class="form-control form-control-sm" id="validationCustom02"
-        value="durchschnittlicheLagerdauer" required>
+      <label for="bestand" class="form-label fs-s">Bestand </label>
+      <input formControlName="bestand" type="number" class="form-control form-control-sm" id="bestand"
+        value="bestand" required>
       <div class="valid-feedback fs-ss">
         Schein gut zu sein
       </div>
@@ -161,7 +161,7 @@
 
     <div class="col-md-4">
         <div class="mb-3">
-          <label for="" class="form-label fs-s">Artikel Flage typ</label>
+          <label for="artikelFlage" class="form-label fs-s">Artikel Flage typ</label>
           <select class="form-select form-select-sm" name="artikelFlage" id="artikelFlage" formControlName="artikelFlage">
             <option *ngFor="let item of artikelFlags" [selected]="formArtikel.get('artikelFlage')?.value !== null ? item === formArtikel.get('artikelFlage')?.value : item">{{item}}</option>
           </select>
@@ -172,7 +172,7 @@
     </div>
     <div class="col-md-4">
       <label for="artikelPrice" class="form-label fs-s">Artikel Price </label>
-      <input formControlName="artikelPrice" type="number" class="form-control form-control-sm" id="validationCustom02"
+      <input formControlName="artikelPrice" type="number" class="form-control form-control-sm" id="artikelPrice"
         value="artikelPrice" required>
       <div class="valid-feedback fs-ss">
         Schein gut zu sein

@@ -40,7 +40,7 @@ export class ArtikelComponent implements OnInit {
     minLosMenge: Number,
     bestand: Number,
     artikelFlage: ARTIKELFLAGE,
-    artikelPrice: Number,
+    verPrice2: Number,
     verPrice: Number,
     mehrwertsteuer: Number,
     liferantId:Number
@@ -96,7 +96,6 @@ export class ArtikelComponent implements OnInit {
       });
   }
   updateArtikle(art: ArtikelDTO){
-    console.log(art);
     let uids :string = this.formArtikel.get<string>('uids')?.value;
     let uidss : string[] = uids.trim().split(',');
     let tmpUid: UidDTO[] = new Array();
@@ -125,21 +124,14 @@ export class ArtikelComponent implements OnInit {
       }
 
       }
-        /* for(let i = 0; i < uidss.length; i++){
-          let a = new UidDTO();
-          a.uid = uidss[i]
-          a.artikelId = art.artikelId;
-          tmpUid.push(a);
-          uidss.splice(i, 1);
-       }*/
+
     }else{
       tmpUid = [];
     }
-    console.log(JSON.stringify(tmpUid));
+
     art.uids = tmpUid;
     //TODO still not working, needs refactoring!
     this.servi.updateArtikel(art).subscribe(data=>{
-   // console.log(data);
     if(data !== null){
       this.toaster.success('Artikel wurde geändert : ' + data.artikelId, 'Artikel Ändern', {timeOut: 700});
       this.artikels[this.index] = art;

@@ -11,7 +11,7 @@
     minLosMenge!: number;
     bestand!: number;
     ARTIKELFLAGE!: ARTIKELFLAGE;
-    artikelPrice!: number;
+    verPrice2!: number;
     verPrice!: number;
     mehrwertsteuer!: number;
     liferantId!: number;

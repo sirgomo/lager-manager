@@ -37,6 +37,8 @@ import { CreateUserComponent } from './admin/users/create-user/create-user.compo
 import { DebitorsComponent } from './datenpflege/debitors/debitors.component';
 import { AddDebitorComponent } from './datenpflege/debitors/add-debitor.component';
 import { FilterNullItemPipePipe } from './pipes/filter-null-item-pipe.pipe';
+import { SpeditorsComponent } from './datenpflege/speditors/speditors.component';
+import { AddSpedition } from './datenpflege/speditors/addSpedition';
 
 
 
@@ -65,7 +67,9 @@ import { FilterNullItemPipePipe } from './pipes/filter-null-item-pipe.pipe';
     CreateUserComponent,
     DebitorsComponent,
     AddDebitorComponent,
-    FilterNullItemPipePipe
+    FilterNullItemPipePipe,
+    SpeditorsComponent,
+    AddSpedition
   ],
   imports: [
     BrowserModule,

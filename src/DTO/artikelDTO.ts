@@ -34,7 +34,7 @@ export class ArtikelDTO{
     artikelFlage: ARTIKELFLAGE;
     @IsNotEmpty()
     @IsNumber()
-    artikelPrice: number;
+    verPrice2: number;
     @IsNotEmpty()
     @IsNumber()
     verPrice: number;

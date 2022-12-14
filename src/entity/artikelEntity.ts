@@ -29,7 +29,7 @@ export class ArtikelEntity {
   @Column()
   bestand: number;
   @Column({type : 'double', nullable: false})
-  artikelPrice : number;
+  verPrice2 : number;
   @Column({type: 'double', nullable: false})
   verPrice: number;
   @Column()

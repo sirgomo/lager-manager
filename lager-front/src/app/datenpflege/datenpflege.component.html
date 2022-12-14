@@ -27,82 +27,10 @@
 <div *ngIf="show === 1">
   <app-debitors [dispositors]="dispositors"></app-debitors>
 </div>
-   <!--Form to create speditors-->
-  <form class="row g-3 needs-validation px-3" novalidate *ngIf="show === 4"
-  [formGroup]="formSpedition" (ngSubmit)="createNewSpeditor(formSpedition.value)">
-  <input type="hidden" formControlName="id" >
-    <div class="col-md-4">
-      <label for="validationCustom01" class="form-label fs-s">Spedition Name</label>
-      <input formControlName="name" type="text" class="form-control form-control-sm" id="name" value="name" required>
-      <div class="valid-feedback">
-        Schein gut zu sein
-      </div>
-    </div>
-    <div class="col-md-4">
-      <label for="validationCustom02" class="form-label fs-s">Max Lade Gewicht : </label>
-      <input formControlName="maxLadeGewicht" type="number" class="form-control  form-control-sm" id="ladeGewicht" value="22000" required>
-      <div class="valid-feedback">
-        Schein gut zu sein
-      </div>
-    </div>
-    <div class="col-md-4">
-      <label for="validationCustomUsername" class="form-label fs-s">Max Paletten Menge</label>
-      <div class="input-group">
-        <input formControlName="maxPalettenMenge" type="number" class="form-control  form-control-sm" id="validationCustomUsername" value="33" required>
-        <div class="invalid-feedback fs-s">
-          Schreib bitte wie viel Paletten kann ich laden.
-        </div>
-      </div>
-    </div>
-    <div class="col-12">
-      <button class="btn btn-success btn-sm fs-s" type="submit">Save</button>
-    </div>
-  </form>
-  <div class="mt-2 col-md-12"></div>
-  <div class="row justify-content-center align-items-center g-10">
-
-  <!-- Show speditors data-->
-  <table class="table table-bordered table-hover table-sortable px-3" id="tab_logic" *ngIf="show === 3">
-    <thead>
-      <tr >
-        <th class="text-center fs-s">
-          Speditors id
-        </th>
-        <th class="text-center fs-s">
-         Speditors Name
-        </th>
-        <th class="text-center fs-s">
-         Speditors max lade gewicht
-        </th>
-        <th class="text-center fs-s">
-          Speditors max paletten menge
-         </th>
-         <th class="text-center fs-s">
-          Delete ?
-         </th>
-      </tr>
-    </thead>
-    <tbody>
-
-      <tr  *ngFor="let post of speditors; let i = index;" class="hidden" (click)="editSpedi(post.id)" style="cursor: pointer;">
-        <td class="fs-s">
-          {{ post.id }}
-      </td>
-      <td class="fs-s">
-        {{ post.name }}
-      </td>
-      <td class="fs-s">
-        {{ post.maxLadeGewicht }}
-      </td>
-      <td class="fs-s">
-        {{ post.maxPalettenMenge }}
-      </td>
-                  <td class="text-center">
-                      <button  class="btn btn-danger glyphicon glyphicon-remove row-remove btn-sm fs-s" (click)="deleteSpeditor(post.id, i)"><span aria-hidden="true">Löschen</span></button>
-                  </td>
-      </tr>
-    </tbody>
-  </table>
+<div *ngIf="show === 3">
+  <app-speditors [spedi]="speditors"></app-speditors>
 </div>
+
 </div>
+
 

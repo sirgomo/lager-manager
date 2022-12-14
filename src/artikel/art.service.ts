@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { ArtLoader } from 'src/ArtLoader';
 import { ArtikelDTO } from 'src/DTO/ArtikelDTO';
-import { UiidsDTO } from 'src/DTO/uiidsDTO';
 import { ArtikelEntity } from 'src/entity/ArtikelEntity';
 import { UiidEntity } from 'src/entity/UiidEntity';
 import { Repository } from 'typeorm';
@@ -90,7 +89,6 @@ export class ArtService {
                     for (let d= 0; d < art.uids.length; d++){
                         if( data.uids[i].id == art.uids[d].id){
                             delIt = false;
-                            console.log( ' uids ' + data.uids[i].uid + ' ' + art.uids[d].uid);
                         }
                     }
                     if(delIt){
@@ -114,7 +112,7 @@ export class ArtService {
           });
           // return await (await this.repo.update({'aid':art.aid}, art)).affected;
         }catch(err){
-            console.log(err);
+           
             throw new Error("Etwas ist schief gelaufen beim artikel update " + err);
         }
     }
