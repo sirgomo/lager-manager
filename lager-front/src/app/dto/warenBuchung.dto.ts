@@ -4,9 +4,13 @@ export class WarenBuchungDto{
   artikelid! : number;
   menge! : number;
   tor! : string;
-  dispositorId!: number;
+  kreditorId!: number;
   eingebucht! : boolean;
   bestellungId! : number;
   artikelsGebucht!: boolean;
+    lieferscheinNr!:string;
+    empfangDatum!: Date;
+    priceNetto!: number;
+    mehrwertsteuer!:number;
 
 }

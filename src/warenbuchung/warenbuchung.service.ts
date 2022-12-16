@@ -20,6 +20,7 @@ export class WarenbuchungService {
             if(buch.artikelsGebucht === null){
                 buch.artikelsGebucht = false;
             }
+          
           await  this.repo.create(buch);
           if(buch.eingebucht && !buch.artikelsGebucht){
          if( await this.updateArtikels(buch)){

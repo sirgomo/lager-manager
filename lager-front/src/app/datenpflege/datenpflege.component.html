@@ -5,7 +5,7 @@
                 <button type="button" class="btn btn-primary fs-s btn-sm" (click)="getAllspeditiors()"> Speditors</button>
             </div>
             <div class="col-md-auto"  (click)="getAllDispositors()">
-                <button type="button" class="btn btn-primary fs-s btn-sm"> Dispositors</button>
+                <button type="button" class="btn btn-primary fs-s btn-sm"> Debitoren</button>
             </div>
             <div class="col-md-auto">
               <button type="button" class="btn btn-primary fs-s btn-sm" [routerLink]="['/artikel']" routerLinkActive="router-link-active" >Artikels</button>
@@ -18,7 +18,7 @@
             <button type="button" class="btn btn-primary fs-s btn-sm"  (click)="newSpedi()" *ngIf="show === 3">Neu Spedition</button>
           </div>
           <div class="col-md-auto" *ngIf="show === 1">
-            <button type="button" class="btn btn-primary fs-s btn-sm"  (click)="newDispo()" > Neu Dispositor</button>
+            <button type="button" class="btn btn-primary fs-s btn-sm"  (click)="newDispo()" > Neue Debitor</button>
           </div>
  </div>
 </div>

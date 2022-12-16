@@ -17,5 +17,7 @@ strasseUndNr:string;
 postleitzahl :number;
 @Column('text', {'nullable': false})
 uStIdentifikationsnummer:string;
+@Column({type : 'double', nullable: true})
+kreditorSaldo: number;
 
 }

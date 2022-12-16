@@ -10,4 +10,10 @@ export class BestArtikelMengeDTO{
     @IsNotEmpty()
     @IsNumber()
     menge : number;
+    @IsNotEmpty()
+    @IsNumber()
+    priceNetto:number;
+    @IsNotEmpty()
+    @IsNumber()
+    mehrwertsteuer:number;
 }

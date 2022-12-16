@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { DataDilerService } from '../data-diler.service';
+import { DatenpflegeService } from '../datenpflege/datenpflege.service';
 import { ArtikelDTO, ARTIKELFLAGE } from '../dto/artikel.dto';
 import { UidDTO } from '../dto/artikel.dto';
 import { DispositorDto } from '../dto/dispositor.dto';
@@ -26,7 +27,7 @@ export class ArtikelComponent implements OnInit {
 
 
   show : number = 1;
-  constructor(private servi : ArtikelService, private fb : FormBuilder, private helper: HelperService, private toaster: ToastrService, private dataServ : DataDilerService) {
+  constructor(private servi : ArtikelService, private fb : FormBuilder, private helper: HelperService, private toaster: ToastrService, private dataServ : DatenpflegeService) {
      this.formArtikel = this.fb.group({
     aid : Number,
     artikelId : Number,
@@ -51,23 +52,29 @@ export class ArtikelComponent implements OnInit {
 
   ngOnInit(): void {
     this.getLiferants();
-
   }
   async getArtikles(){
-    this.show  = 1;
+
     this.artikels.splice(0,this.artikels.length);
     return await this.servi.getAllArtikel().subscribe(d => {
    d.map(da =>{
     this.artikels.push(da);
     });
+    this.show  = 1;
    });
   }
   async getLiferants(){
-
-   this.liferants = await this.dataServ.getDispositors();
-      if(this.liferants.length > 0){
-        this.getArtikles();
+    this.liferants.splice(0, this.liferants.length);
+   await this.dataServ.getAllDispositors().subscribe(data=>{
+    if(data !== null){
+      this.liferants = new Array(data.length);
+      for(let i = 0; i < data.length; i++){
+        this.liferants.splice(i, 1, data[i]);
       }
+      this.getArtikles();
+    }
+   });
+
   }
   async getArtikelById(id:number, index:number){
     this.index = index;
@@ -130,6 +137,7 @@ export class ArtikelComponent implements OnInit {
     }
 
     art.uids = tmpUid;
+    art.bestand = this.artikels[this.index].bestand;
     //TODO still not working, needs refactoring!
     this.servi.updateArtikel(art).subscribe(data=>{
     if(data !== null){
@@ -156,7 +164,7 @@ export class ArtikelComponent implements OnInit {
       }else{
         art.uids = [];
       }
-
+      art.bestand = 0;
       this.servi.createArtikel(art).subscribe(data=>{
         if(data !== null){
           this.toaster.success('Artikel zugefukt on id : ' + data.artikelId, 'Artikel zufugen', {timeOut: 700});
@@ -169,6 +177,7 @@ export class ArtikelComponent implements OnInit {
   newArtikel(){
     this.artikel = new ArtikelDTO();
     this.formArtikel.reset();
+    this.formArtikel.get('bestand')?.setValue('0');
     this.index = 0.1;
     this.show = 2;
   }

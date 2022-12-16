@@ -16,6 +16,7 @@ import { WarenBuchungService } from './warenbuchung.service';
   styleUrls: ['./warenebuchung.component.scss']
 })
 export class WarenebuchungComponent implements OnInit {
+  isNaN: Function = isNaN;
   buchngen : WarenBuchungDto[] = new Array();
   buchung : WarenBuchungDto = new WarenBuchungDto();
   formBuchung : FormGroup;
@@ -25,6 +26,10 @@ export class WarenebuchungComponent implements OnInit {
   artikelMenge : number[] = new Array(this.artikels.length);
   dispositors : DispositorDto[] = new Array();
   dispo : boolean = false;
+  nettoArr: number[] = new Array(this.artikels.length);
+  steuArr: number[] = new Array(this.artikels.length);
+
+
 
   buchungArtikelMenge = new Array();
 
@@ -37,10 +42,14 @@ export class WarenebuchungComponent implements OnInit {
       artikelid: Number,
       menge: Number,
       tor: [''],
-      dispositorId: Number,
+      kreditorId: Number,
       eingebucht: false,
       bestellungId: Number,
-      artikelsGebucht: Boolean
+      artikelsGebucht: Boolean,
+      lieferscheinNr: [''],
+      empfangDatum: Date,
+      priceNetto: Number,
+      mehrwertsteuer: Number
     });
 
   }
@@ -54,6 +63,7 @@ export class WarenebuchungComponent implements OnInit {
     this.getDispositors();
     this.buchngen.splice(0, this.buchngen.length);
      await  this.buchServi.getAllBuchungen().subscribe(data =>{
+
         data.forEach(buchung =>{
           if(!buchung.eingebucht){
             this.buchngen.push(buchung);
@@ -71,6 +81,9 @@ export class WarenebuchungComponent implements OnInit {
 
     });
   }
+  getBrutto(i:number){
+    return '' + (this.nettoArr[i] + (this.nettoArr[i] * this.steuArr[i] / 100));
+  }
   async createBuchung(){
     this.formBuchung.reset();
     this.show = 2;
@@ -80,13 +93,23 @@ export class WarenebuchungComponent implements OnInit {
     this.formBuchung.setValue(this.buchngen[id]);
     this.show = 2;
   }
-  addArtikel( artikelid:number, menge :number){
+  addArtikel( artikelid:number, menge :number, index: number){
     let bestelungId :number  = this.formBuchung.get('bestellungId')?.getRawValue();
+    if(bestelungId === null){
+      this.toastr.error('Das Buchung muss zuerst gespeichert werden !');
+      return;
+    }
+    if(!isFinite( this.steuArr[index]) && !isFinite( this.nettoArr[index])){
+      this.toastr.error('Du musst den Preise und Mehrwerhsteure eingeben')
+      return;
+    }
     this.artikelMenge.splice(0, this.artikelMenge.length);
     let bucharti : BestArtikelMengeDto = new BestArtikelMengeDto();
     bucharti.artikelId = artikelid;
     bucharti.bestellungId = bestelungId;
     bucharti.menge = menge;
+    bucharti.mehrwertsteuer = this.steuArr[index];
+    bucharti.priceNetto = this.nettoArr[index];
     this.buchServi.addArtikel(bucharti).subscribe(data=>{
       if(data) this.toastr.success('Artikel zugefugt', 'Artikel', {timeOut: 400});
     });
@@ -95,6 +118,7 @@ export class WarenebuchungComponent implements OnInit {
     if(buch.eingebucht === null){
       buch.eingebucht = false;
     }
+
    return this.buchServi.createBestellung(buch).subscribe(data=>{
     this.getBuchungen();
    });

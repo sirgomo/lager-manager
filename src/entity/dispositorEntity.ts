@@ -17,4 +17,6 @@ export class DispositorEntity {
   postleitzahl :number;
   @Column('text', {'nullable': false})
   uStIdentifikationsnummer:string;
+  @Column({type : 'double', nullable: true})
+  debitorSaldo: number;
 }

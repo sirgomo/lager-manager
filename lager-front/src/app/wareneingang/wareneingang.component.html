@@ -27,7 +27,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let item of buchungen" (click)="getAritkles(item.bestellungId)" style="cursor: pointer;">
-        <td class="text-center">{{dispostors[item.dispositorId -1].name}}</td>
+        <td class="text-center">{{dispostors[item.kreditorId -1].name}}</td>
         <td class="text-center">{{item?.tor}}</td>
         <td class="text-center">{{item?.bestellungId}}</td>
 

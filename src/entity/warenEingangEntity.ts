@@ -11,11 +11,22 @@ export class WarenEingangEntity{
     @Column()
     tor : string;
     @Column()
-    dispositorId: number;
+    kreditorId: number;
     @Column()
     eingebucht : boolean;
-    @PrimaryColumn()
+    @Column()
     bestellungId : number;
     @Column()
     artikelsGebucht: boolean = false;
+    @PrimaryColumn({'nullable': false})
+    lieferscheinNr:string;
+    @Column('date',{'nullable': false})
+    empfangDatum: Date;
+    @Column({type : 'double', nullable: true})
+    priceNetto: number;
+    @Column({nullable: true})
+    mehrwertsteuer:number;
+ 
+
+
 }

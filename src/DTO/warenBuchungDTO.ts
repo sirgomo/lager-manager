@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsOptional } from "class-validator";
+import { IsDate, IsDateString, IsNotEmpty, IsNumber, IsOptional } from "class-validator";
 
 export class WarenBuchungDto{
     @IsOptional()
@@ -12,7 +12,7 @@ export class WarenBuchungDto{
     tor : string;
     @IsNotEmpty()
     @IsNumber()
-    dispositorId: number;
+    kreditorId: number;
     @IsOptional()
     eingebucht : boolean;
     @IsNotEmpty()
@@ -20,5 +20,15 @@ export class WarenBuchungDto{
     bestellungId : number;
     @IsOptional()
     artikelsGebucht: boolean;
-   
+    @IsNotEmpty()
+    lieferscheinNr:string;
+    @IsNotEmpty()
+    @IsDateString()
+    empfangDatum: Date;
+    @IsOptional()
+    @IsNumber()
+    priceNetto: number;
+    @IsOptional()
+    @IsNumber()
+    mehrwertsteuer:number;
 }

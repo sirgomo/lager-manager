@@ -66,7 +66,7 @@
 
         </td>
         <td data-name="liferant"  style="cursor: pointer;" (click)="getArtikelById(post.aid, i)">
-         {{liferants[post.liferantId].name}}
+         {{liferants[post.liferantId-1].name}}
         </td>
         <td class="text-center">
           <button class="btn btn-danger btn-sm fs-s" (click)="deleteArtikel(post.aid, i)">Artikel Löschen</button>
@@ -152,11 +152,8 @@
     </div>
     <div class="col-md-4">
       <label for="bestand" class="form-label fs-s">Bestand </label>
-      <input formControlName="bestand" type="number" class="form-control form-control-sm" id="bestand"
-        value="bestand" required>
-      <div class="valid-feedback fs-ss">
-        Schein gut zu sein
-      </div>
+      <p type="number" class="form-control form-control-sm" id="bestand"
+        value="bestand" >{{formArtikel.get('bestand')?.getRawValue() }}</p>
     </div>
 
     <div class="col-md-4">
@@ -171,15 +168,15 @@
       </div>
     </div>
     <div class="col-md-4">
-      <label for="artikelPrice" class="form-label fs-s">Artikel Price </label>
-      <input formControlName="artikelPrice" type="number" class="form-control form-control-sm" id="artikelPrice"
-        value="artikelPrice" required>
+      <label for="verPrice2" class="form-label fs-s">Artikel Verkauf Preice 2 </label>
+      <input formControlName="verPrice2" type="number" class="form-control form-control-sm" id="verPrice2"
+        value="verPrice2" required>
       <div class="valid-feedback fs-ss">
         Schein gut zu sein
       </div>
     </div>
     <div class="col-md-4">
-      <label for="verPrice" class="form-label fs-s">Artikel Verkauf price </label>
+      <label for="verPrice" class="form-label fs-s">Artikel Verkauf Preice </label>
       <input formControlName="verPrice" type="number" class="form-control form-control-sm" id="verPrice" value="verPrice" required>
       <div class="valid-feedback fs-ss">
         Schein gut zu sein

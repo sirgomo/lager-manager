@@ -1,4 +1,4 @@
-<div class="container  !direction !spacing">
+<div class="container">
   <div class="mt-2 col-md-12"></div>
         <div class="row justify-content-center align-items-center g-2 ">
             <div class="col-md-auto" >
@@ -11,70 +11,71 @@
             <button type="button" class="btn btn-primary btn-sm fs-s" [routerLink]="['/datenpflege']" routerLinkActive="router-link-active" >Zurück zu Datenpfhlege</button>
           </div>
           <div class="col-md-auto" >
-         <button type="button" class="btn btn-primary btn-sm fs-s" *ngIf="show === 2" (click)="getArtikelsInBuchung()">Zeigt gebuchtes Artikels</button>
+         <button type="button" class="btn btn-secondary btn-sm fs-s" *ngIf="show === 2" (click)="getArtikelsInBuchung()">Zeigt gebuchtes Artikels</button>
          </div>
          <div class="col-md-auto">
-         <button type="button" class="btn btn-primary btn-sm fs-s"  *ngIf="show === 3" (click)="goBack()">Zurück</button>
+         <button type="button" class="btn btn-secondary btn-sm fs-s"  *ngIf="show === 3" (click)="goBack()">Zurück</button>
         </div>
       </div>
 
 
-<div class="mt-2 col-md-12"></div>
+<div class="mt-4 col-md-12"></div>
 <!--Add new buchung-->
-<div class="col-mt-12 justify-content-center align-items-center g-2">
-  <form class="row g-3 needs-validation" novalidate *ngIf="show === 2"
-   [formGroup]="formBuchung" (ngSubmit)="saveBuchung(formBuchung.value)">
-   <div class="row ">
-    <input type="hidden" formControlName="id" >
-   </div>
- <div class="row">
-  <div class="col-md-12">
-
-    <div class="col">
-      <label for="tor" class="fs-s">Ware an Tor ?</label>
-      <input formControlName="tor" type="text" class="form-control form-control-sm" id="tor" value="name" required>
-    </div>
-    <div class="col">
-      <label for="dispositor" class="form-label fs-s">Dispositor</label>
-      <select formControlName="dispositorId" class="form-select" id="dispositor" value="name"  required>
-        <option *ngFor="let disp of dispositors" [ngValue]="disp.id" placeholder="Klick to select">
-         {{ disp.name }}
-        </option>
-      </select>
-    </div>
-
-</div>
- </div>
-
 <div class="col-md-12 justify-content-center align-items-center g-2">
-
-     <div class="col-md-6">
-       <label for="validationCustom02" class="form-label">Ware eingebucht und berait zum Lagern? </label>
-       <div class="form-check">
-        <input formControlName="eingebucht" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-        <label class="form-check-label" style="margin: 3px;" for="eingebucht">
-          Buchung Fertig ?
-        </label>
+  <form class=" needs-validation" novalidate *ngIf="show === 2"
+   [formGroup]="formBuchung" (ngSubmit)="saveBuchung(formBuchung.value)">
+        <div class="row">
+          <input type="hidden" formControlName="id" >
+        </div>
+        <div class="row">
+            <div class="col">
+              <label for="tor" class="form-label form-lable-sm fs-s">Ware an Tor:</label>
+              <input formControlName="tor" type="text" class="form-control form-control-sm" id="tor" value="tor" required>
+            </div>
+            <div class="col">
+              <label for="kreditorId" class="form-label form-lable-sm fs-s">Kreditor</label>
+              <select formControlName="kreditorId" class="form-select form-select-sm" id="kreditorId" value="kreditorId"  required>
+                <option *ngFor="let disp of dispositors" [ngValue]="disp.id" placeholder="Klick to select">
+                {{ disp.name }}
+                </option>
+              </select>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <label for="lieferscheinNr" class="form-label fs-s">LieferSchein Nr:</label>
+            <input formControlName="lieferscheinNr" type="text" class="form-control form-control-sm" id="lieferscheinNr" value="lieferscheinNr" required>
+          </div>
+          <div class="col">
+            <label for="empfangDatum" class="form-label fs-s">Datum</label>
+            <input type="date" formControlName="empfangDatum" class="form-control form-control-sm" id="empfangDatum" value="empfangDatum"  required>
+          </div>
       </div>
 
-     </div>
+    <div class="row">
+        <div class="col-md-6">
+          <label for="eingebucht" class="form-label fs-s">Ware eingebucht und berait zum Lagern? </label>
+          <div class="form-check">
+            <input formControlName="eingebucht" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <label class="form-check-label fs-s" style="margin: 3px;" for="eingebucht">
+              Buchung Fertig ?
+            </label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="bestellungId" class="form-label fs-s">Bestellung Id </label>
+          <input formControlName="bestellungId" placeholder="Gibt bestellung nr an" type="number" class="form-control form-control-sm" id="bestellungId" value="bestellungId" required>
+          <div class="valid-feedback">
+            Schein gut zu sein
+          </div>
+        </div>
 
-     <div class="col-md-6">
-      <label for="validationCustom02" class="form-label">Bestellung id </label>
-      <input formControlName="bestellungId" placeholder="Gibt bestellung nr an" type="number" class="form-control form-control-sm" id="validationCustom02" value="grosse" required>
-      <div class="valid-feedback">
-        Schein gut zu sein
-      </div>
-    </div>
-
-</div>
 
      <div class="col-md-12">
-       <button class="btn btn-primary" type="submit">Save</button>
+       <button class="btn btn-primary btn-sm" type="submit">Buchung Speichern</button>
      </div>
-
-   </form>
 </div>
+</form>
 <div class="mt-2 col-md-12"></div>
 
 <div class="row " *ngIf="show === 2">
@@ -90,7 +91,7 @@
 
 </div>
 <div class="mt-2 col-md-12 fs-s"></div>
-<table class="table table-bordered table-hover table-sortable" id="tab_logic" *ngIf="show === 2">
+<table class="table table-bordered table-hover table-sortable table-sm" id="tab_logic" *ngIf="show === 2" >
   <thead>
     <tr >
       <th class="text-center">
@@ -100,7 +101,13 @@
         Name
       </th>
       <th class="text-center">
-       Min. Los Menge
+        Beschaffungspreis
+      </th>
+      <th class="text-center">
+        Die Mehrwertsteuer
+      </th>
+      <th class="text-center">
+        Brutto (St.)
       </th>
       <th class="text-center">
         Menge to buchen
@@ -119,18 +126,25 @@
     <td data-name="name"   style="cursor: pointer;" >
       {{ post?.name }}
     </td>
-    <td data-name="uid">
-
-    {{post?.minLosMenge}}
-
+    <td class="px-3" >
+    <input class="form-control form-control-sm" type="number" name="" id="" [(ngModel)]="nettoArr[i]" placeholder="netto price für stück">
     </td>
-    <td data-name="uid">
+    <td class="px-3">
+      <input class="form-control form-control-sm" type="number" name="" id="" [(ngModel)]="steuArr[i]" (onchange)="getBrutto(i)" placeholder="0 für keine Umsatzsteuer">
+      </td>
+      <td data-name="uid" *ngIf="!isNaN(getBrutto(i))">
+        {{getBrutto(i)}}
+        </td>
+        <td data-name="uid" *ngIf="isNaN(getBrutto(i))">
 
-     <input type="number" [(ngModel)]="artikelMenge[i]" name="" id="">
+          </td>
+    <td class="px-3">
+
+     <input class="form-control form-control-sm" type="number" [(ngModel)]="artikelMenge[i]" name="" id="">
 
       </td>
                 <td class="text-center">
-                    <button class="btn btn-success glyphicon glyphicon-remove row-remove" (click)="addArtikel(post.artikelId,artikelMenge[i])"><span aria-hidden="true">Add</span></button>
+                    <button class="btn btn-success glyphicon glyphicon-remove row-remove" (click)="addArtikel(post.artikelId,artikelMenge[i], i)"><span aria-hidden="true">Add</span></button>
                 </td>
     </tr>
   </tbody>
@@ -147,7 +161,7 @@
        Tor
       </th>
       <th class="text-center">
-       Dispositor
+        Kreditor
       </th>
       <th class="text-center">
        Bestellung id
@@ -165,7 +179,7 @@
       {{ post?.tor }}
     </td>
     <td data-name="dispositor" style="cursor: pointer;" (click)="bearbeiteBuchung(i)" *ngIf="dispositors.length > 0">
-    {{dispositors[post.dispositorId -1].name }}
+    {{dispositors[post.kreditorId -1].name }}
 
     </td>
       <td data-name="bestellungid" style="cursor: pointer;" (click)="bearbeiteBuchung(i)">
