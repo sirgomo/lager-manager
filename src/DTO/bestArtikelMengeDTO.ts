@@ -16,4 +16,7 @@ export class BestArtikelMengeDTO{
     @IsNotEmpty()
     @IsNumber()
     mehrwertsteuer:number;
+    @IsNotEmpty()
+    @IsNumber()
+    liferantId:number;
 }

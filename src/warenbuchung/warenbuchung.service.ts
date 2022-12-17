@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BestArtikelMengeDTO } from 'src/DTO/bestArtikelMengeDTO';
 import { WarenBuchungDto } from 'src/DTO/warenBuchungDTO';
@@ -41,13 +41,20 @@ export class WarenbuchungService {
           buchungenFertig =   await this.repo.find({where: { 'bestellungId': buch.bestellungId, 'artikelid': Not(IsNull())}});
           if(buchungenFertig.length > 0){
             for(let i = 0; i < buchungenFertig.length; i++){
-                await this.artRepo.findOneBy({'artikelId': buchungenFertig[i].artikelid}).then(data=>{
+                await this.artRepo.findOneBy({'artikelId': buchungenFertig[i].artikelid, 'liferantId': buchungenFertig[i].kreditorId}).then(data=>{
                     let eingStat : WarenEingStat = new WarenEingStat();
-                    eingStat.artikelId = data.artikelId;
-                //    eingStat.eingangDatum = new Date(Date.now());
+                    eingStat.artikelId = data.aid;
+                    eingStat.empfangDatum = buchungenFertig[i].empfangDatum;
                     eingStat.menge = buchungenFertig[i].menge;
-                 //   eingStat.price = data.artikelPrice;
-                  //  eingStat.verPrice = data.verPrice;
+                    eingStat.price = buchungenFertig[i].priceNetto;
+                    eingStat.mehrwertsteuer = buchungenFertig[i].mehrwertsteuer;
+                    eingStat.bezeichnung = data.name;
+                    eingStat.lieferandId = data.liferantId;
+                    eingStat.lieferscheinNr = buchungenFertig[i].lieferscheinNr;
+                    //TODO brauchen wir das ?? 
+                    eingStat.versandDatum = buchungenFertig[i].empfangDatum;
+                    
+                 
                     this.repoStat.save(eingStat);
                     data.bestand += buchungenFertig[i].menge;
                     this.artRepo.save(data);
@@ -55,7 +62,7 @@ export class WarenbuchungService {
                     ret = true;
                 }, err=>{
                     return ret;
-                    //nicht dum save errors tu database, to vewrfolgung mögliche problemen!
+                    //TODO nicht dum save errors tu database, to vewrfolgung mögliche problemen!
                 });
             }
           }
@@ -67,22 +74,25 @@ export class WarenbuchungService {
             let buch : WarenBuchungDto = new WarenBuchungDto(); 
         await     this.repo.findOneBy({'bestellungId': best.bestellungId}).then(
                 data => {
-                    if(buch.eingebucht === true){
-                        throw new Error("Diese buchung ist schon eingebucht! Du kannst kein artikel mehr zugeben!");
-                    }
                     buch = data;
                 },  err => {
-                    return err;
-                }
-             );
+                    throw err;
+                });
+                if(buch.eingebucht === true){
+                    throw new HttpException('Diese buchung ist schon eingebucht! Du kannst kein artikel mehr zugeben!', HttpStatus.FORBIDDEN);
+                  }
+                
              buch.id = null;
              buch.artikelid = best.artikelId;
              buch.menge = best.menge;
-        await     this.repo.create(buch);
-      return  await     this.repo.save(buch);
+             buch.priceNetto = best.priceNetto;
+             buch.mehrwertsteuer = best.mehrwertsteuer;
+             buch.kreditorId = best.liferantId;
+        await this.repo.create(buch);
+      return await this.repo.save(buch);
        
         }catch(err){
-            return err;
+           return err;
         }
     }
    async deleteArtikel(artid: number, bestid:number){
@@ -104,6 +114,9 @@ export class WarenbuchungService {
                 a.artikelId = data.artikelid
                 a.bestellungId = data.bestellungId;
                 a.menge = data.menge;
+                a.mehrwertsteuer = data.mehrwertsteuer;
+                a.priceNetto = data.priceNetto;
+                a.liferantId = data.kreditorId;
                 be.push(a);
               });
         }, error =>{
@@ -124,13 +137,11 @@ export class WarenbuchungService {
         }
     }
     async getBuchungen(){
-       
         try{
-            
             let tmp = await this.repo.findBy({'artikelid': IsNull()});
             let buchArr : WarenBuchungDto[] = new Array();
             if(tmp.length > 0){
-               
+        
                 tmp.forEach(dat =>{
                     buchArr.push(dat);
                 });

@@ -9,14 +9,14 @@
             </div>
             <div class="col-md-auto">
             <button type="button" class="btn btn-primary btn-sm fs-s" [routerLink]="['/datenpflege']" routerLinkActive="router-link-active" >Zurück zu Datenpfhlege</button>
-          </div>
-          <div class="col-md-auto" >
-         <button type="button" class="btn btn-secondary btn-sm fs-s" *ngIf="show === 2" (click)="getArtikelsInBuchung()">Zeigt gebuchtes Artikels</button>
-         </div>
-         <div class="col-md-auto">
+            </div>
+           <div class="col-md-auto" >
+            <button type="button" class="btn btn-secondary btn-sm fs-s" *ngIf="show === 2" (click)="showArtikleInBuchung()">Zeigt gebuchtes Artikels</button>
+           </div>
+           <div class="col-md-auto">
          <button type="button" class="btn btn-secondary btn-sm fs-s"  *ngIf="show === 3" (click)="goBack()">Zurück</button>
         </div>
-      </div>
+  </div>
 
 
 <div class="mt-4 col-md-12"></div>
@@ -24,23 +24,23 @@
 <div class="col-md-12 justify-content-center align-items-center g-2">
   <form class=" needs-validation" novalidate *ngIf="show === 2"
    [formGroup]="formBuchung" (ngSubmit)="saveBuchung(formBuchung.value)">
-        <div class="row">
+        <div class="col-md-12 g-2">
           <input type="hidden" formControlName="id" >
         </div>
-        <div class="row">
-            <div class="col">
+    <div class="row">
+            <div class="col-md-6">
               <label for="tor" class="form-label form-lable-sm fs-s">Ware an Tor:</label>
               <input formControlName="tor" type="text" class="form-control form-control-sm" id="tor" value="tor" required>
             </div>
-            <div class="col">
+            <div class="col-md-6">
               <label for="kreditorId" class="form-label form-lable-sm fs-s">Kreditor</label>
               <select formControlName="kreditorId" class="form-select form-select-sm" id="kreditorId" value="kreditorId"  required>
-                <option *ngFor="let disp of dispositors" [ngValue]="disp.id" placeholder="Klick to select">
+                <option *ngFor="let disp of dispositors | filterNullItemPipe" [ngValue]="disp.id" placeholder="Klick to select">
                 {{ disp.name }}
                 </option>
               </select>
             </div>
-        </div>
+    </div>
         <div class="row">
           <div class="col">
             <label for="lieferscheinNr" class="form-label fs-s">LieferSchein Nr:</label>
@@ -79,6 +79,13 @@
 <div class="mt-2 col-md-12"></div>
 
 <div class="row " *ngIf="show === 2">
+  <div class="row justify-content-center align-items-center  fs-s border rounded">
+    <div class="col">Total Position: {{buchungArtikelMenge.length}}</div>
+    <div class="col">Total Netto: {{getLiferungNetto()}}</div>
+    <div class="col">Total MwSt: {{getLieferungMstw()}}</div>
+    <div class="col">Total Brutto: {{getLiferungBrutto()}}</div>
+  </div>
+  <div class="mt-2 col-md-12"></div>
   <div class="col-md-11">
     <input type="search" class="form-control input-lg rounded" [ngModel]="searchModel" name="searchModel" placeholder = "write artikel name or id" id="" (ngModelChange)="onSearch($event)">
     {{searchModel}}
@@ -110,6 +117,12 @@
         Brutto (St.)
       </th>
       <th class="text-center">
+        Brutto (Total)
+      </th>
+      <th class="text-center">
+       Lieferant
+      </th>
+      <th class="text-center">
         Menge to buchen
        </th>
       <th class="text-center">
@@ -132,15 +145,14 @@
     <td class="px-3">
       <input class="form-control form-control-sm" type="number" name="" id="" [(ngModel)]="steuArr[i]" (onchange)="getBrutto(i)" placeholder="0 für keine Umsatzsteuer">
       </td>
-      <td data-name="uid" *ngIf="!isNaN(getBrutto(i))">
+      <td data-name="uid">
         {{getBrutto(i)}}
         </td>
-        <td data-name="uid" *ngIf="isNaN(getBrutto(i))">
-
-          </td>
+          <td> {{getTotalBrutto(i)}}</td>
+          <td>{{dispositors[post.liferantId].name}}</td>
     <td class="px-3">
 
-     <input class="form-control form-control-sm" type="number" [(ngModel)]="artikelMenge[i]" name="" id="">
+     <input class="form-control form-control-sm" type="number" [(ngModel)]="artikelMenge[i]" name="" id="" (onchange)="getTotalBrutto(i)">
 
       </td>
                 <td class="text-center">
@@ -164,8 +176,11 @@
         Kreditor
       </th>
       <th class="text-center">
-       Bestellung id
+       Bestellung Nr.
        </th>
+      <th class="text-center">
+        Lieferscheine Nr.
+      </th>
 
     </tr>
   </thead>
@@ -179,7 +194,7 @@
       {{ post?.tor }}
     </td>
     <td data-name="dispositor" style="cursor: pointer;" (click)="bearbeiteBuchung(i)" *ngIf="dispositors.length > 0">
-    {{dispositors[post.kreditorId -1].name }}
+    {{dispositors[post.kreditorId].name }}
 
     </td>
       <td data-name="bestellungid" style="cursor: pointer;" (click)="bearbeiteBuchung(i)">
@@ -187,6 +202,11 @@
         {{ post?.bestellungId }}
 
         </td>
+        <td data-name="bestellungid" style="cursor: pointer;" (click)="bearbeiteBuchung(i)">
+
+          {{ post?.lieferscheinNr }}
+
+          </td>
                 <td data-name="del">
                     <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove' (click)="deleteBuchung(i)"><span aria-hidden="true">X</span></button>
                 </td>
@@ -207,6 +227,9 @@
       <th class="text-center">
        Artikel Name
       </th>
+      <th class="text-center">
+        Artikel Lieferant
+       </th>
       <th class="text-center">
        Menge
        </th>
@@ -229,6 +252,12 @@
       <td data-name="bestellungid">
 
         {{ post?.artikelName }}
+
+        </td>
+
+      <td data-name="bestellungid">
+
+        {{ dispositors[post.liferantId]?.name }}
 
         </td>
         <td data-name="bestellungid">

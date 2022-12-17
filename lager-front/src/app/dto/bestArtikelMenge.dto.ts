@@ -4,4 +4,5 @@ export class BestArtikelMengeDto{
   menge!: number;
   priceNetto!:number;
   mehrwertsteuer!:number;
+  liferantId!:number;
 }

@@ -6,6 +6,7 @@ import { DatenpflegeService } from '../datenpflege/datenpflege.service';
 import { ArtikelDTO } from '../dto/artikel.dto';
 import { BestArtikelMengeDto } from '../dto/bestArtikelMenge.dto';
 import { DispositorDto } from '../dto/dispositor.dto';
+import { GebuchtesArtikelsDto } from '../dto/gebuchtesArtikels.dto';
 import { WarenBuchungDto } from '../dto/warenBuchung.dto';
 import { HelperService } from '../helper.service';
 import { WarenBuchungService } from './warenbuchung.service';
@@ -31,7 +32,8 @@ export class WarenebuchungComponent implements OnInit {
 
 
 
-  buchungArtikelMenge = new Array();
+
+  buchungArtikelMenge: GebuchtesArtikelsDto[] = new Array();
 
 
 
@@ -55,15 +57,11 @@ export class WarenebuchungComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getBuchungen();
-    this.getArtikels();
-
+    this.getDispositors();
   }
    async getBuchungen(){
-    this.getDispositors();
     this.buchngen.splice(0, this.buchngen.length);
      await  this.buchServi.getAllBuchungen().subscribe(data =>{
-
         data.forEach(buchung =>{
           if(!buchung.eingebucht){
             this.buchngen.push(buchung);
@@ -78,11 +76,20 @@ export class WarenebuchungComponent implements OnInit {
       data.forEach(art =>{
         this.artikels.push(art);
       });
-
+      this.getBuchungen();
     });
   }
   getBrutto(i:number){
-    return '' + (this.nettoArr[i] + (this.nettoArr[i] * this.steuArr[i] / 100));
+    if(isFinite(this.steuArr[i])){
+      return '' + (this.nettoArr[i] + (this.nettoArr[i] * this.steuArr[i] / 100)).toFixed(2);
+    }
+   return '';
+  }
+  getTotalBrutto(i:number){
+    if(isFinite( this.artikelMenge[i])){
+      return ((this.nettoArr[i] + (this.nettoArr[i] * this.steuArr[i] / 100)) * this.artikelMenge[i]).toFixed(2);
+    }
+    return '';
   }
   async createBuchung(){
     this.formBuchung.reset();
@@ -91,10 +98,11 @@ export class WarenebuchungComponent implements OnInit {
   bearbeiteBuchung(id :number){
     this.formBuchung.reset();
     this.formBuchung.setValue(this.buchngen[id]);
-    this.show = 2;
+    this.getArtikelsInBuchung();
   }
   addArtikel( artikelid:number, menge :number, index: number){
     let bestelungId :number  = this.formBuchung.get('bestellungId')?.getRawValue();
+    let kreditorId: number = this.formBuchung.get('kreditorId')?.getRawValue();
     if(bestelungId === null){
       this.toastr.error('Das Buchung muss zuerst gespeichert werden !');
       return;
@@ -103,6 +111,15 @@ export class WarenebuchungComponent implements OnInit {
       this.toastr.error('Du musst den Preise und Mehrwerhsteure eingeben')
       return;
     }
+    if(kreditorId !== this.artikels[index].liferantId){
+      if(window.confirm('Lieferant und artikel Lieferung sind nicht die selber, abbrechen ?')){
+        this.nettoArr.splice(0, this.nettoArr.length);
+        this.nettoArr = new Array(this.artikels.length);
+        this.steuArr.splice(0, this.steuArr.length);
+        this.steuArr = new Array(this.artikels.length);
+        return;
+      }
+    }
     this.artikelMenge.splice(0, this.artikelMenge.length);
     let bucharti : BestArtikelMengeDto = new BestArtikelMengeDto();
     bucharti.artikelId = artikelid;
@@ -110,9 +127,43 @@ export class WarenebuchungComponent implements OnInit {
     bucharti.menge = menge;
     bucharti.mehrwertsteuer = this.steuArr[index];
     bucharti.priceNetto = this.nettoArr[index];
+    bucharti.liferantId = this.artikels[index].liferantId;
     this.buchServi.addArtikel(bucharti).subscribe(data=>{
-      if(data) this.toastr.success('Artikel zugefugt', 'Artikel', {timeOut: 400});
+      if(isFinite( data.bestellungId)){
+        this.nettoArr.splice(0, this.nettoArr.length);
+        this.nettoArr = new Array(this.artikels.length);
+        this.steuArr.splice(0, this.steuArr.length);
+        this.steuArr = new Array(this.artikels.length);
+        this.refreshArtikels(data, index);
+        this.toastr.success('Artikel zugefugt', 'Artikel', {timeOut: 400});
+      }else{
+        let e = new Error();
+        Object.assign(e, data);
+        this.toastr.error(e.message);
+        this.nettoArr.splice(0, this.nettoArr.length);
+        this.nettoArr = new Array(this.artikels.length);
+        this.steuArr.splice(0, this.steuArr.length);
+        this.steuArr = new Array(this.artikels.length);
+      }
+
+
     });
+  }
+  refreshArtikels(art :BestArtikelMengeDto, index:number){
+    let bestelungId :number  = this.formBuchung.get('bestellungId')?.getRawValue();
+    let tmpArt: GebuchtesArtikelsDto = new GebuchtesArtikelsDto();
+    tmpArt.artikelid = this.artikels[index].artikelId;
+    tmpArt.menge = art.menge;
+    tmpArt.merhwersteure = art.mehrwertsteuer;
+    tmpArt.preise = art.priceNetto;
+    tmpArt.artikelName = this.artikels[index].name;
+    tmpArt.bestellungId = bestelungId;
+    tmpArt.liferantId = Object(art).kreditorId;
+
+    this.buchungArtikelMenge.push(tmpArt);
+    this.getLieferungMstw();
+    this.getLiferungBrutto();
+    this.getLiferungNetto();
   }
   saveBuchung(buch : WarenBuchungDto){
     if(buch.eingebucht === null){
@@ -136,10 +187,12 @@ export class WarenebuchungComponent implements OnInit {
   async getDispositors(){
     this.dispositors.splice(0,this.dispositors.length);
     await this.dispServic.getAllDispositors().subscribe(data => {
-      data.forEach(dis => {
-        this.dispositors.push(dis);
-      });
+      this.dispositors = new Array(data.length);
+      for(let i = 0; i< data.length; i++){
+        this.dispositors.splice(data[i].id, 1,data[i] )
+      }
       this.dispo = true;
+      this.getArtikels();
     });
 
   }
@@ -147,26 +200,35 @@ export class WarenebuchungComponent implements OnInit {
     let bestelungId :number  = this.formBuchung.get('bestellungId')?.getRawValue();
     await this.buchServi.getAllArtiklesInBestellung(bestelungId)
     .subscribe(data =>{
-      if(data === undefined || data.length === undefined) return;
+      if(data === undefined || data.length === undefined) {
+        this.show = 2;
+        return;
+      }
       this.buchungArtikelMenge.splice(0, this.buchungArtikelMenge.length);
       data.forEach(arti => {
         this.artikels.every( artikel =>{
           if(arti.artikelId == artikel.artikelId){
-           let gebuchteArtikel = {'bestellungId'  : 0 ,'artikelid' : 0  ,'artikelName' : '', 'menge' : 0 };
+           let gebuchteArtikel : GebuchtesArtikelsDto = new GebuchtesArtikelsDto;
             gebuchteArtikel.bestellungId = arti.bestellungId;
             gebuchteArtikel.artikelid = arti.artikelId;
             gebuchteArtikel.artikelName = artikel.name;
             gebuchteArtikel.menge = arti.menge;
+            gebuchteArtikel.preise = arti.priceNetto;
+            gebuchteArtikel.merhwersteure = arti.mehrwertsteuer;
+            gebuchteArtikel.liferantId = arti.liferantId;
+            console.log(gebuchteArtikel);
             this.buchungArtikelMenge.push(gebuchteArtikel);
             return false;
           }
           return true;
         });
       });
-
-      this.show = 3;
+      this.show = 2;
     });
 
+  }
+  showArtikleInBuchung(){
+    this.show = 3;
   }
   goBack(){
     let bestelungId :number  = this.formBuchung.get('bestellungId')?.getRawValue();
@@ -187,6 +249,30 @@ export class WarenebuchungComponent implements OnInit {
       this.toastr.success('Artikel wurde entfernt', 'Entfernen', {timeOut : 300});
       this.buchungArtikelMenge.splice(id, 1);
     });
+  }
+  getLiferungNetto():number{
+    let netto: number = 0;
+    if(this.buchungArtikelMenge.length < 1) return 0;
+    for(let i = 0; i < this.buchungArtikelMenge.length; i++){
+      netto += (this.buchungArtikelMenge[i].preise * this.buchungArtikelMenge[i].menge);
+    }
+    return Number( netto.toFixed(2));
+  }
+  getLiferungBrutto(): number{
+    let brutto:number = 0;
+    if(this.buchungArtikelMenge.length < 1) return 0;
+    for(let i = 0; i < this.buchungArtikelMenge.length; i++){
+      brutto += ((this.buchungArtikelMenge[i].preise + ((this.buchungArtikelMenge[i].preise * this.buchungArtikelMenge[i].merhwersteure) / 100) ) * this.buchungArtikelMenge[i].menge);
+    }
+    return Number( brutto.toFixed(2));
+  }
+  getLieferungMstw(){
+    let mwst:number = 0;
+    if(this.buchungArtikelMenge.length < 1) return 0;
+    for(let i = 0; i < this.buchungArtikelMenge.length; i++){
+      mwst += (((this.buchungArtikelMenge[i].preise * this.buchungArtikelMenge[i].merhwersteure) / 100 ) * this.buchungArtikelMenge[i].menge);
+    }
+    return Number( mwst.toFixed(2));
   }
   //TODO
   //controlle wenn zu viel oder zu wenig verbucht!

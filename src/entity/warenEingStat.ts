@@ -20,4 +20,6 @@ export class WarenEingStat{
     lieferandId: number;
     @Column({'nullable': false})
     lieferscheinNr:string;
+    @Column({nullable: false})
+    mehrwertsteuer:number;
 }

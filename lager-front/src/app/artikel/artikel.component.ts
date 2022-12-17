@@ -79,7 +79,6 @@ export class ArtikelComponent implements OnInit {
   async getArtikelById(id:number, index:number){
     this.index = index;
      await  this.servi.getArtikelById(id).subscribe(d =>{
-      console.log(d);
       this.artikel = d;
       let uids : string  = '';
       //tmp uids for edition purpose
@@ -100,6 +99,7 @@ export class ArtikelComponent implements OnInit {
       this.formArtikel.patchValue(this.artikel);
       this.formArtikel.patchValue({'uids' : uids});
       this.show = 2;
+
       });
   }
   updateArtikle(art: ArtikelDTO){
@@ -137,8 +137,8 @@ export class ArtikelComponent implements OnInit {
     }
 
     art.uids = tmpUid;
-    art.bestand = this.artikels[this.index].bestand;
-    //TODO still not working, needs refactoring!
+
+    art.bestand = this.artikel.bestand;
     this.servi.updateArtikel(art).subscribe(data=>{
     if(data !== null){
       this.toaster.success('Artikel wurde geändert : ' + data.artikelId, 'Artikel Ändern', {timeOut: 700});
