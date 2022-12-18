@@ -3,20 +3,20 @@
 
   <div class="row justify-content-center align-items-center g-2 ">
       <div class="col-md-auto">
-         <button type="button" class="btn btn-primary" (click)="getBuchungen()">Liferungen</button>
+         <button type="button" class="btn btn-primary btn-sm fs-s" (click)="getBuchungen()">Liferungen</button>
       </div>
       <div class="col-md-auto" *ngIf="show !==1">
-       <button type="button" class="btn btn-primary" (click)="getAritkles(currentLiferung)" > Artikel List</button>
+       <button type="button" class="btn btn-primary btn-sm fs-s" (click)="getAritkles(currentLiferung)" > Artikel List</button>
     </div>
     <div class="col-md-auto" *ngIf="role !== null && role === 'LAGERVERWALTUNG'">
-     <button type="button" class="btn btn-primary" [routerLink]="['/lager']" routerLinkActive="router-link-active">Lager verwaltung</button>
+     <button type="button" class="btn btn-primary btn-sm fs-s" [routerLink]="['/lager']" routerLinkActive="router-link-active">Lager verwaltung</button>
   </div>
 
 </div>
 
 <div class="mt-2 col-md-12"></div>
 <div class="table-responsive">
-  <table class="table table-bordered table-hover table-sortable" *ngIf="show === 1 && dispostors !== undefined">
+  <table class="table table-bordered table-hover table-sortable fs-s table-sm" *ngIf="show === 1 && dispostors !== undefined">
     <thead>
       <tr>
         <th class="text-center">Liferant</th>
@@ -35,7 +35,7 @@
     </tbody>
   </table>
   <!--artikels list-->
-  <table class="table table-bordered table-hover table-sortable" *ngIf="show === 2">
+  <table class="table table-bordered table-hover table-sortable fs-s table-sm" *ngIf="show === 2">
     <thead>
       <tr>
         <th class="text-center">Artikel id</th>
@@ -67,7 +67,7 @@
   </div>
 
       <div class="mt-2 col-md-12"></div>
-      <div class="row" *ngIf="lagerPlatz === undefined && manualLagerPlatz === ''">
+      <div class="row fs-s" *ngIf="lagerPlatz === undefined && manualLagerPlatz === ''">
 
           <div class="col d-block p-2 form-control">
             <label for="currentArtikelMenge"> Menge :
@@ -81,9 +81,9 @@
           </div>
           <div class="col d-block p-2 form-control">
             <label for="palette">Palette :
-            <div class="btn-group form-control" role="group" data-bs-toggle="buttons">
-              <label class="btn btn-primary active">
-              <input type="checkbox" class="me-2" name="" id="palette" [(ngModel)]="palete" autocomplete="off"> Palette ?
+            <div class="btn-group form-control-sm" role="group" data-bs-toggle="buttons">
+              <label class="btn btn-primary active btn-sm">
+              <input type="checkbox" class="me-2 fs-s" name="" id="palette" [(ngModel)]="palete" autocomplete="off"> Palette ?
               </label>
             </div>
           </label>
@@ -91,8 +91,8 @@
           <div class="col d-block p-2 form-control"  *ngIf="palete">
             <div class="btn-group form-control" role="group" data-bs-toggle="buttons">
               <div class="mb-3">
-                <label for="paltyp" class="form-label-md">Palette Typ</label>
-                <select class="form-select form-select-md" name=""  [(ngModel)]="paletteTyp" id="paltyp">
+                <label for="paltyp" class="form-label-sm">Palette Typ</label>
+                <select class="form-select form-select-sm" name=""  [(ngModel)]="paletteTyp" id="paltyp">
                   <option *ngFor="let item of palettenTypEnum | keyvalue" (ngValue)="item.value">{{item.value}}</option>
 
                 </select>
@@ -102,22 +102,22 @@
       </div>
       <div class="mt-2 col-md-12"></div>
        <!--Lagerplatz undefinded-->
-      <div class="row" *ngIf="lagerPlatz === undefined && manualLagerPlatz === ''">
+      <div class="row fs-s" *ngIf="lagerPlatz === undefined && manualLagerPlatz === ''">
         <div class="col d-block p-2">
             <div class="d-grid gap-2">
-              <button type="button" name="" id="" class="btn btn-primary" (click)="getPlatz()">Find Stellplatz</button>
+              <button type="button" name="" id="" class="btn btn-primary btn-sm fs-s" (click)="getPlatz()">Find Stellplatz</button>
             </div>
         </div>
         <div class="col d-block p-2">
             <div class="d-grid gap-2" *ngIf="role !== null && role === 'LAGERVERWALTUNG'">
-              <button type="button" name="" id="" class="btn btn-danger" (click)="createPlatz()">Gib Stellplatz(per Hand)</button>
+              <button type="button" name="" id="" class="btn btn-danger btn-sm fs-s" (click)="createPlatz()">Gib Stellplatz(per Hand)</button>
             </div>
         </div>
       </div>
       <!--Lagerplatz gefunden-->
       <div class="row" *ngIf="lagerPlatz !== undefined">
         <div class="row">
-            <div class="col-md-6 text-center">
+            <div class="col-md-6 text-center fs-s">
              Hier einlagern:
             </div>
             <div class="col-md-6 border-danger rounded text-center font-weight-bold bg-dark text-white">
@@ -127,7 +127,7 @@
         <div class="mt-2 col-md-12"></div>
         <div class="col">
             <div class="d-grid gap-2">
-              <button type="button" name="" id="" class="btn btn-secondary" (click)="lageEsEin()">Lager es ein!</button>
+              <button type="button" name="" id="" class="btn btn-secondary btn-sm fs-s" (click)="lageEsEin()">Lager es ein!</button>
             </div>
         </div>
       </div>
@@ -146,7 +146,7 @@
         <div class="mt-2 col-md-12"></div>
         <div class="col">
             <div class="d-grid gap-2">
-              <button type="button" name="" id="" class="btn btn-secondary" (click)="lageEsEin()">Lager es ein!</button>
+              <button type="button" name="" id="" class="btn btn-secondary btn-sm fs-s" (click)="lageEsEin()">Lager es ein!</button>
             </div>
         </div>
       </div>
