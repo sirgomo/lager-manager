@@ -12,6 +12,7 @@ import { SpeditionDto } from '../dto/spedition.dto';
 })
 export class PdfkommissComponent implements OnInit {
   @Input() kommToDruck: PalettenMengeVorausToDruckDto[] = new Array();
+  
   @ViewChild('htmlData') htmlData!: ElementRef;
   math:Math;
   displayedColumns :string[];

@@ -100,7 +100,7 @@ export class CreateKommisionierungComponent implements OnInit {
     if(text.length < 3){
       this.toastr.error('Logistic Belege nr ist zu kurz')
     }else{
-      this.toastr.error('Logistic Belege nr wurde hinzugefügt')
+      this.toastr.success('Logistic Belege nr wurde hinzugefügt')
       this.logisticBelegNr.push(text);
       this.logisticBeleg = text;
     }

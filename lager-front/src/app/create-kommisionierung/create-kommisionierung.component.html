@@ -5,7 +5,7 @@
         <h3 *ngIf="currentKomm.id !==undefined">Kommissionierung aktualisieren</h3>
     </div>
   </mat-toolbar>
-  <div mat-dialog-content>
+  <div matDialogContent class="DialogContent">
     <div class="mt-2 col-md-12"></div>
     <form [formGroup]="kommissForm">
       <input type="hidden" formControlName="id" name="id">
@@ -165,7 +165,7 @@
           <th scope="col" class="fs-s">Artikel id:</th>
           <th scope="col" class="fs-s">Verfugbare Menge</th>
           <th scope="col" class="fs-s">Name</th>
-          <th scope="col" class="fs-s">Beschafung Price</th>
+          <th scope="col" class="fs-s">Verkauf Price 2</th>
           <th scope="col" class="fs-s">Verkauf Price</th>
           <th scope="col" class="fs-s">Min Los Menge</th>
           <th scope="col" class="fs-s">Gewicht</th>
@@ -181,7 +181,7 @@
           <td class="fs-s">{{item.artId}}</td>
           <td class="fs-s">{{item.total}}</td>
           <td class="fs-s">{{item.name}}</td>
-          <td class="fs-s">{{item.artikelPrice}}</td>
+          <td class="fs-s">{{item.verPrice2}}</td>
           <td class="fs-s">{{item.verPrice}}</td>
           <td class="fs-s">{{item.minLosMenge}}</td>
           <td class="fs-s">{{item.gewicht}}</td>

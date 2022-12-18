@@ -2,7 +2,7 @@ export class ArtikelKommissDTO{
     artId:number;
     total: number;
     name: string;
-    artikelPrice: number;
+    verPrice2: number;
     verPrice:number;
     minLosMenge:number;
     gewicht:number;

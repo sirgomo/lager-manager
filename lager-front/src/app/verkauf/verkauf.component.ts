@@ -90,12 +90,10 @@ async alleKommissionierungen(){
 
 createKommissionirung(){
   let conf: MatDialogConfig = new MatDialogConfig();
-  conf.width = 'auto';
-  conf.height = '100%';
-  conf.minWidth = '100%';
-  conf.minHeight = '100%';
+  conf.width = '100vw';
+  conf.height = '100vh';
   conf.maxHeight ='100vh';
-  conf.maxWidth = '100vh';
+  conf.maxWidth = '100vw';
   conf.panelClass = 'full-screen-modal';
    this.dialog.open<CreateKommisionierungComponent>(CreateKommisionierungComponent, conf).afterClosed().subscribe(
     data=>{
@@ -109,13 +107,11 @@ createKommissionirung(){
 }
 updateKommissionierung(index:number){
   let conf: MatDialogConfig = new MatDialogConfig();
-  conf.width = 'auto';
-  conf.height = '100%';
-  conf.minWidth = '100%';
-  conf.minHeight = '100%';
+  conf.width = '100vw';
+  conf.height = '100vh';
   conf.maxHeight ='100vh';
-  conf.maxWidth = '100vh';
-  conf.panelClass ='full-screen-modal';
+  conf.maxWidth = '100vw';
+  conf.panelClass = 'full-screen-modal';
   conf.data = this.komiss[index];
   this.dialog.open<CreateKommisionierungComponent>(CreateKommisionierungComponent, conf).afterClosed().subscribe(
     data=>{

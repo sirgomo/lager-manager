@@ -181,14 +181,20 @@ export class VerkaufService {
     
    async getArtikels(){
     let art : ArtikelKommissDTO[] = new Array();
-    await this.repoLager.getArtiklesForKommiss().then(data=>{
-        for(let i = 0; i !== data.length; i++){
-            let tmp : ArtikelKommissDTO = new ArtikelKommissDTO();
-            Object.assign(tmp, data[i]);
-            art.push(tmp);
-        }
-    });
-    return art;
+    try{
+      await this.repoLager.getArtiklesForKommiss().then(data=>{
+        if(data.length === undefined || data === null) return art;
+          for(let i = 0; i !== data.length; i++){
+              let tmp : ArtikelKommissDTO = new ArtikelKommissDTO();
+              Object.assign(tmp, data[i]);
+              art.push(tmp);
+          }
+      });
+      return art;
+    }catch(err){
+      return err;
+    }
+
    }
    async getCurrentArtikelMenge(artid:number){
     try{
