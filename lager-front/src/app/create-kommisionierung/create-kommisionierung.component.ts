@@ -190,7 +190,8 @@ export class CreateKommisionierungComponent implements OnInit {
       for(let y = 0; y !== this.currentKomm.kommDetails.length; y++){
         this.logisticBelegNr.push(this.currentKomm.kommDetails[y].logisticBelegNr);
         for(let i = 0; i !== this.artikels.length; i++){
-         if(this.currentKomm.kommDetails[y].artikelId === this.artikels[i].artId){
+         if(this.currentKomm.kommDetails[y].artikelId === this.artikels[i].artId
+          && this.currentKomm.kommDetails[y].kreditorId === this.artikels[i].liferantId){
           let tmpArti : ArtikelKommissDto = new ArtikelKommissDto();
           Object.assign(tmpArti, this.artikels[i]);
           tmpArti.total = this.currentKomm.kommDetails[y].menge;
@@ -270,8 +271,10 @@ async addArtikelToKomm(index:number, edit:boolean){
       if(edit){
         tmpart.artikelId = this.artikelsInKomm[index].artId;
         tmpart.kommDeatailnr = this.currentKomm.kommDetails[index].id;
+        tmpart.kreditorId = this.currentKomm.kommDetails[index].kreditorId;
       }else{
         tmpart.artikelId = this.artikels[index].artId;
+        tmpart.kreditorId = this.artikels[index].liferantId;
       }
 
       if(tmp % this.artikels[index].minLosMenge !== 0){
@@ -314,6 +317,7 @@ async addArtikelToKomm(index:number, edit:boolean){
           {
             let tmpart: AddArtikelKommissDto = new AddArtikelKommissDto();
               tmpart.artikelId = this.artikelsInKomm[index].artId;
+              tmpart.kreditorId = this.artikelsInKomm[index].liferantId;
               this.currentKomm.kommDetails[index].id = -1;
             if(tmp % this.artikels[i].minLosMenge !== 0){
               tmp += this.artikels[i].minLosMenge -( tmp % this.artikels[i].minLosMenge);
@@ -355,6 +359,7 @@ async addArtikelToKomm(index:number, edit:boolean){
       let artToAd : AddArtikelKommissDto = new AddArtikelKommissDto();
         artToAd.artMenge = this.artikelMenge[index];
         artToAd.artikelId = this.artikels[index].artId;
+        artToAd.kreditorId = this.artikels[index].liferantId;
         artToAd.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
       let tmpArt: ArtikelKommissDto = new ArtikelKommissDto();
         Object.assign(tmpArt, this.artikels[index]);
@@ -376,6 +381,7 @@ async addArtikelToKomm(index:number, edit:boolean){
       }
       let artToAd : AddArtikelKommissDto = new AddArtikelKommissDto();
       artToAd.artikelId = this.artikelsInKomm[index].artId;
+      artToAd.kreditorId = this.artikelsInKomm[index].liferantId;
       artToAd.kommNr = Number( this.kommissForm.get('id')?.getRawValue());
       artToAd.logisticBelegNr = this.artikelsInKomm[index].logisticBelegNr;
       artToAd.inBestellung =this.currentKomm.kommDetails[index].inBestellung;

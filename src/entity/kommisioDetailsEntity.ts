@@ -16,6 +16,8 @@ menge: number;
 gepackt : ARTIKELSTATUS;
 @Column({nullable: true})
 palettennr : number;
+@Column({nullable: true})
+kreditorId : number;
 @Column()
 inBestellung:boolean;
 @Column({nullable: false, type: 'varchar', width: 30})

@@ -272,7 +272,7 @@ public getTotalPalettenMenge(palMaxHo: number, artikels: PalettenMengeVorausDTO[
     return totalGewichtAltWeise;
   }
 
-  private makePalId(length) {
+  public makePalId(length) {
     var result           = '';
     var characters       = '1234567890';
     var charactersLength = characters.length;

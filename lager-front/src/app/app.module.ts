@@ -39,6 +39,7 @@ import { AddDebitorComponent } from './datenpflege/debitors/add-debitor.componen
 import { FilterNullItemPipePipe } from './pipes/filter-null-item-pipe.pipe';
 import { SpeditorsComponent } from './datenpflege/speditors/speditors.component';
 import { AddSpedition } from './datenpflege/speditors/addSpedition';
+import { NeupalComponent } from './kommisionier/neupal/neupal.component';
 
 
 
@@ -69,7 +70,8 @@ import { AddSpedition } from './datenpflege/speditors/addSpedition';
     AddDebitorComponent,
     FilterNullItemPipePipe,
     SpeditorsComponent,
-    AddSpedition
+    AddSpedition,
+    NeupalComponent
   ],
   imports: [
     BrowserModule,

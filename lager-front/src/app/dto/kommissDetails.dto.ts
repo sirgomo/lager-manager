@@ -4,6 +4,7 @@ export class KommissDetailsDto{
   id! : number;
   gepackt! : ARTIKELSTATUS;
   inBestellung!: boolean;
+  kreditorId!:number;
   logisticBelegNr!:string;
 }
 export enum ARTIKELSTATUS{

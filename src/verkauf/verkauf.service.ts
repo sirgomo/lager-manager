@@ -113,6 +113,7 @@ export class VerkaufService {
         tmp.menge = art[i].artMenge;
         tmp.kommissId = komm.id;
         tmp.gepackt = ARTIKELSTATUS.INPACKEN;
+        tmp.kreditorId = art[i].kreditorId;
        
         if(art[i].kommDeatailnr !== null && art[i].kommDeatailnr !== undefined){
           tmp.id = art[i].kommDeatailnr;

@@ -16,4 +16,6 @@ export class AddArtikelKommissDTO{
     inBestellung:boolean;
     @IsNotEmpty()
     logisticBelegNr:string;
+    @IsNotEmpty()
+    kreditorId:number;
 }

@@ -1,0 +1,22 @@
+import { IsNotEmpty, IsNumber } from "class-validator";
+import { PALETTENTYP } from "src/entity/LagerPlatzEntity";
+
+export class ArtikelAufPaletteDTO{
+    @IsNotEmpty()
+    @IsNumber()
+    paletteid:number;
+    @IsNotEmpty()
+    @IsNumber()
+    kommissDetailId:number;
+    @IsNotEmpty()
+    @IsNumber()
+    artikelMenge:number;
+    @IsNotEmpty()
+    @IsNumber()
+    artid:number;
+    @IsNotEmpty()
+    palTyp: PALETTENTYP;
+    @IsNotEmpty()
+    @IsNumber()
+    kommissionierId: number;
+}

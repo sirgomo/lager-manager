@@ -1,1 +1,38 @@
-<p>kommisionier works!</p>
+<div class="container">
+    <div class="row-flex">
+        <div class="row-flex-button">
+         <button name="" id="" class="btn btn-primary btn-sm fs-s" (click)="neuePalete()" *ngIf="currentPalatte === 0 && kommDetails !== undefined && kommDetails.length > 0"> Neue Palette</button>
+        </div>
+        <div class="row-flex-button">
+            <button name="" id="" class="btn btn-primary btn-sm fs-s" *ngIf="currentPalatte !== 0 ">Gewicht Erfassen</button>
+        </div>
+    </div>
+    <div class="box" *ngIf="kommDetails !== undefined && kommDetails.length < 1">
+        <div class="box-mid">
+                <div class="d-flex flex-row justify-content-center mt-5 align-items-center">
+                    <input class="form-control form-control-sm fs-s" type="text" name="" id="" style="width: 50%;" [(ngModel)]="kommid">
+                </div>
+            <div class="d-flex flex-row justify-content-center mt-3 align-items-center">
+                <button name="" id="" class="btn btn-primary btn-sm" (click)="getKomm()"> Kommissionieren</button>
+            </div>
+        </div>
+    </div>
+    <div>
+  <div *ngIf="kommDetails !== undefined && kommDetails.length > 1">
+    <div class="d-flex row-flex border rounded fs-s" >
+      <div class="d-flex flex-column">Platz:</div>
+      <div class="d-flex flex-column">Karton Menge:(+St.)</div>
+      <div class="d-flex flex-column">Name:</div>
+      <div class="d-flex flex-column">Art. Id</div>
+  </div>
+      <div class="d-flex row-item border rounded fs-s" *ngFor="let item of kommDetails; let i = index;">
+          <div class="d-flex flex-column p-2">{{item.platz}}</div>
+          <div class="d-flex flex-column p-2">{{getCartonMenge(i)}}</div>
+          <div class="d-flex flex-column p-2">{{item.artname}}</div>
+          <div class="d-flex flex-column p-2">{{item.artikelId}}</div>
+      </div>
+  </div>
+
+    </div>
+
+</div>

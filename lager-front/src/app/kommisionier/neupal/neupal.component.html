@@ -1,0 +1,32 @@
+<div class="container justify-content-center align-items-center">
+        <div class="fs-s">Neue Palette Erstellen</div>
+        <mat-dialog-content>
+          <form class="row g-3 needs-validation" novalidate [formGroup]="neuPalForm">
+            <div class="col-auto">
+              <label for="kommid" class="form-label fs-s">Kommissionierung Nr.: </label>
+              <input type="hidden" class="form-control form-control-sm fs-s" id="kommid" formControlName="kommId" >
+              <div class="fs-s">{{neuPalForm.get('kommId')?.getRawValue()}}</div>
+            </div>
+            <div class="col-auto">
+              <label for="palTyp" class="form-label fs-s">Paleten Typ.</label>
+              <div>
+                <select formControlName="palTyp" id="palTyp">
+                  <option *ngFor="let item of paletetyp" [selected]="item === 'EU'" [value]="item">{{item}}</option>
+                 </select>
+              </div>
+            </div>
+            <div class="col-auto">
+              <label for="gewicht" class="form-label fs-s">Palette Gewicht.: </label>
+              <input type="number" class="form-control form-control-sm fs-s" id="gewicht" formControlName="gewicht" >
+            </div>
+          </form>
+        </mat-dialog-content>
+
+        <mat-dialog-actions>
+      <div class="d-grid gap-2">
+        <button type="button" name="" id="" class="btn btn-success btn-sm fs-s" (click)="palSpeichern()">Speicher</button>
+        <button type="button" name="" id="" class="btn btn-primary btn-sm fs-s" mat-dialog-close>Abbruch</button>
+      </div>
+        </mat-dialog-actions>
+
+</div>

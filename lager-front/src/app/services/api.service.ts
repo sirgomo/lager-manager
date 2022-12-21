@@ -64,6 +64,9 @@ export class ApiService {
               case 'ADMIN':
                 this.router.navigateByUrl('admin').then();
                 break;
+              case 'KOMMISIONIER':
+                this.router.navigateByUrl('kommisionier').then();
+                break;
 
             default:
               this.router.navigateByUrl('auth').then();
