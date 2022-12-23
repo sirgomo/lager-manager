@@ -17,6 +17,7 @@ export class KommisionierComponent implements OnInit {
   kommid :number = 0;
   currentPalatte:number = 0;
   kommDetails: DataFurKomisDto[] = new Array();
+  uid :string = '';
   constructor(private kommServi: KommisionierService, private toastr: ToastrService, private dial: MatDialog) { }
 
   ngOnInit(): void {
@@ -72,22 +73,43 @@ export class KommisionierComponent implements OnInit {
   tmpNPal.palid = this.currentPalatte;
   conf.data = tmpNPal;
   await this.dial.open(NeupalComponent, conf).afterClosed().subscribe(data=>{
-
-    this.kommServi.gewichtErfassen(data).subscribe(res=>{
-      console.log(res);
-      this.currentPalatte = res;
-    });
+    if(data !== undefined && data !== '') {
+      this.kommServi.gewichtErfassen(data).subscribe(res=>{
+        this.currentPalatte = 0;
+      });
+    }
   });
  }
  async getLastKomm(){
   await this.kommServi.getLastActiveKomm(Number(localStorage.getItem('myId'))).subscribe(data=>{
-    console.log(data);
-    if(data !== null){
+    if(data !== undefined && data.length > 2){
       let tmp :string[] = String(data).split('/');
       this.kommid = Number(tmp[0]);
       this.currentPalatte = Number(tmp[1]);
       this.getKomm();
+    }else{
+      this.kommid = 0;
+      this.currentPalatte = 0;
     }
   });
+ }
+ findbyuidorArtId(uid:string){
+  console.log('szukam ')
+  if(this.kommDetails === undefined || this.kommDetails.length === 0) return;
+  for(let i = 0; i < this.kommDetails.length; i++){
+    if(uid.length > 1 && isFinite(Number(uid))){
+      if(Number(uid) === this.kommDetails[i].artikelId){
+        console.log('hab gefunden artikel id');
+      }
+    }
+    if(uid.length > 1){
+      for(let y = 0; y < this.kommDetails[i].uids.length; y++){
+        if(this.kommDetails[i].uids[y] === uid){
+          console.log('hab uid gefunden');
+        }
+      }
+    }
+
+  }
  }
 }

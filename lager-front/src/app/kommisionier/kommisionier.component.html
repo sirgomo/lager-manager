@@ -4,7 +4,7 @@
          <button name="" id="" class="btn btn-primary btn-sm fs-s" (click)="neuePalete()" *ngIf="currentPalatte === 0 && kommDetails !== undefined && kommDetails.length > 0"> Neue Palette</button>
         </div>
         <div class="row-flex-button">
-            <button name="" id="" class="btn btn-primary btn-sm fs-s" *ngIf="currentPalatte !== 0 ">Gewicht Erfassen</button>
+            <button name="" id="" class="btn btn-primary btn-sm fs-s" *ngIf="currentPalatte !== 0 " (click)="gewichtErfassen()">Gewicht Erfassen</button>
         </div>
     </div>
     <div class="box" *ngIf="kommDetails !== undefined && kommDetails.length < 1">
@@ -18,18 +18,26 @@
         </div>
     </div>
     <div>
+      <div class="row">
+        <div class="col align-self-start p-1">
+          <input type="text" class="form-control form-control-sm fs-s" value="uid" name="search" id="search" placeholder="Artikel scannen" [(ngModel)]="uid" (ngModelChange)="findbyuidorArtId(uid)">
+        </div>
+        <div class="col align-self-end p-1">
+          <button type="button" class="btn btn-primary btn-sm" (click)="findbyuidorArtId(uid)">Find</button>
+        </div>
+      </div>
   <div *ngIf="kommDetails !== undefined && kommDetails.length > 1">
     <div class="d-flex row-flex border rounded fs-s" >
-      <div class="d-flex flex-column">Platz:</div>
-      <div class="d-flex flex-column">Karton Menge:(+St.)</div>
-      <div class="d-flex flex-column">Name:</div>
-      <div class="d-flex flex-column">Art. Id</div>
+      <div class="d-flex flex-column ml-1 ">Platz:</div>
+      <div class="d-flex flex-column ml-1 border-start">Karton Menge:(+St.)</div>
+      <div class="d-flex flex-column ml-1 border-start">Name:</div>
+      <div class="d-flex flex-column ml-1 border-start">Art. Id</div>
   </div>
       <div class="d-flex row-item border rounded fs-s" *ngFor="let item of kommDetails; let i = index;">
-          <div class="d-flex flex-column p-2">{{item.platz}}</div>
-          <div class="d-flex flex-column p-2">{{getCartonMenge(i)}}</div>
-          <div class="d-flex flex-column p-2">{{item.artname}}</div>
-          <div class="d-flex flex-column p-2">{{item.artikelId}}</div>
+          <div class="d-flex flex-column p-2 ml-1 ">{{item.platz}}</div>
+          <div class="d-flex flex-column p-2 ml-1 border-start">{{getCartonMenge(i)}}</div>
+          <div class="d-flex flex-column p-2 ml-1 border-start">{{item.artname}}</div>
+          <div class="d-flex flex-column p-2 ml-1 border-start">{{item.artikelId}}</div>
       </div>
   </div>
 

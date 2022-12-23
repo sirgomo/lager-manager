@@ -19,14 +19,37 @@ export class KommissionierService {
     async getKommissionierung(kommId : number):Promise<DataFurKomissDTO[]>{
         try{
             // lager platz, name, id, menge, komdetailid
-          return  await this.kommDet.query(`SELECT artikelId, menge, kreditorId, platz, artname, minLos FROM kommDetails
-            LEFT JOIN (SELECT artId,lagerplatz as platz,liferant FROM lagerplatz ) AS l ON  artikelId = l.artId AND kreditorId = l.liferant 
+          return  await this.kommDet.query(`SELECT artikelId, menge, kreditorId, platz, artname, minLos, uids FROM kommDetails
+            LEFT JOIN (SELECT artikelId as arid, GROUP_CONCAT(uid SEPARATOR ',') as uids FROM uiids GROUP BY arid) AS u ON artikelId = u.arid
+            LEFT JOIN (SELECT artId,lagerplatz as platz,static,liferant FROM lagerplatz ) AS l ON  artikelId = l.artId AND kreditorId = l.liferant AND static = true
             LEFT JOIN (SELECT artikelId as aaid,name as artname,minLosMenge as minLos,liferantId FROM artikel) AS a ON artikelId = a.aaid  AND kreditorId = a.liferantId
             WHERE kommissId = '${kommId}' AND inBestellung = '0' AND gepackt = 'INPACKEN' ORDER BY platz ASC`).then(data=>{
                 let tmpData : DataFurKomissDTO[] = new Array();
+               
                 Object.assign(tmpData, data);
+                for(let y = 0; y < tmpData.length; y++){
+                    let tmparr : string[] = new Array();
+                   let tmps:string = '';
+                   for (let i = 0; i < tmpData[y].uids.length; i++){
+                    if(tmpData[y].uids[i] !== ' ') {
+                                if(tmpData[y].uids[i] === ','){
+                                    tmps.replace(/^\s+|\s+$/g, '');
+                                    tmparr.push(tmps);
+                                    tmps = '';
+                                }else{
+                                    tmps += tmpData[y].uids[i];
+                                }
+                            }
+                   }
+                   tmps.replace(/^\s+|\s+$/g, '');
+                    tmparr.push(tmps);
+                   
+                   tmpData[y].uids = tmparr;        
+                }
+               
                 return tmpData;
             }, err=>{
+                console.log(err)
                 throw new Error('Kommissionierung nicht gefunden');
             });
         }catch (err){

@@ -25,7 +25,6 @@ export class KomissionierController {
     @Post('/gerf')
     @ROLES(ROLE.KOMMISIONIER)
     gewichtErfassen(@Body(ValidationPipe) data: NeuePaletteDTO){
-        console.log(data);
         return this.komSercive.gewichtErfassen(data);
     }
     @Get('/lastkomm/:id')

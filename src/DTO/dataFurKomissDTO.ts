@@ -5,4 +5,5 @@ export class DataFurKomissDTO{
     platz:string;
     artname:number;
     minLos:number;
+    uids:string[];
 }

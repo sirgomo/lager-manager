@@ -13,7 +13,7 @@ export class NeupalComponent implements OnInit{
   neuPalForm: FormGroup;
   paletetyp = Object.values(PALETTENTYP);
     constructor(private dialRef : MatDialogRef<NeupalComponent>, private fb : FormBuilder,
-      @Optional() @Inject(MAT_DIALOG_DATA) private data: NeuePaletteDto){
+      @Optional() @Inject(MAT_DIALOG_DATA) public data: NeuePaletteDto){
       this.neuPalForm = this.fb.group({
         kommId: [Number],
         palTyp: [PALETTENTYP],
@@ -29,6 +29,7 @@ export class NeupalComponent implements OnInit{
   palSpeichern(){
     let tmpData :NeuePaletteDto = new NeuePaletteDto()
     Object.assign(tmpData, this.neuPalForm.value);
+    tmpData.kommId = Number(this.neuPalForm.get('kommId')?.getRawValue());
     this.dialRef.close(tmpData);
   }
 

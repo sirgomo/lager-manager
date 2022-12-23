@@ -40,6 +40,7 @@ import { FilterNullItemPipePipe } from './pipes/filter-null-item-pipe.pipe';
 import { SpeditorsComponent } from './datenpflege/speditors/speditors.component';
 import { AddSpedition } from './datenpflege/speditors/addSpedition';
 import { NeupalComponent } from './kommisionier/neupal/neupal.component';
+import { AddartikelComponent } from './kommisionier/addartikel/addartikel.component';
 
 
 
@@ -71,7 +72,8 @@ import { NeupalComponent } from './kommisionier/neupal/neupal.component';
     FilterNullItemPipePipe,
     SpeditorsComponent,
     AddSpedition,
-    NeupalComponent
+    NeupalComponent,
+    AddartikelComponent
   ],
   imports: [
     BrowserModule,
