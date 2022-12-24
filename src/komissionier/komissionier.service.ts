@@ -63,6 +63,7 @@ export class KommissionierService {
             pal.kommId = neuPal.kommId;
             pal.palettenTyp = neuPal.palTyp;
             pal.userId = neuPal.kommissionierId;
+            pal.erwartetPaletteGewicht = neuPal.gewicht;
             return (await this.pal.save(pal)).id;
         }catch (err){
             return err;
@@ -71,9 +72,12 @@ export class KommissionierService {
     async gewichtErfassen(neuPal: NeuePaletteDTO):Promise<Number>{
         try{  
             //TODO es sollt geprüft werden ob realgewicht is fast die selber wie erwartete pallete gewicht
-            return await this.pal.findOne({'where':{ 'id': neuPal.palid, 'artikelId' : 0, 'kommId': neuPal.kommId}}).then(data=>{
+            return await this.pal.findOne({'where':{ 'id': neuPal.palid, 'artikelId' : 0, 'kommId': neuPal.kommId, 'paletteRealGewicht':0}}).then(data=>{
                 data.paletteRealGewicht = neuPal.gewicht;
-                this.pal.save(data);
+                this.pal.save(data).catch(err=>{
+                    console.log(err);
+                });
+                console.log(data);
                 return data.paletteRealGewicht;
             })
         }catch (err){
@@ -131,7 +135,7 @@ export class KommissionierService {
     }
     async getlastActiveKom(kommisionierId: number):Promise<string>{
         try{
-           return await this.pal.findOne({where:{'userId': kommisionierId, 'paletteRealGewicht' : 0}}).then(data=>{
+           return await this.pal.findOne({where:{'userId': kommisionierId, 'paletteRealGewicht' : 0, 'artikelId':0}}).then(data=>{
             if(data !== undefined && isFinite(data.kommId)){
                 return data.kommId + '/' + data.id + '/' + data.palettenTyp;
             }
