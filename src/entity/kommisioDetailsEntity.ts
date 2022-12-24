@@ -12,6 +12,8 @@ artikelId : number;
 kommissId : number;
 @Column({nullable: true})
 menge: number;
+@Column({nullable: false, default: 0})
+currentGepackt: number;
 @Column({nullable: true})
 gepackt : ARTIKELSTATUS;
 @Column({nullable: true})

@@ -7,7 +7,7 @@ export class ArtikelAufPaletteDTO{
     paletteid:number;
     @IsNotEmpty()
     @IsNumber()
-    kommissDetailId:number;
+    kommissId:number;
     @IsNotEmpty()
     @IsNumber()
     artikelMenge:number;

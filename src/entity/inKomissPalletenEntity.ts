@@ -3,6 +3,8 @@ import { PALETTENTYP } from "./LagerPlatzEntity";
 
 @Entity('inKomissPal')
 export class InKomissPalletenEntity{
+    @PrimaryGeneratedColumn()
+    autoid:number;
     @Column()
     id : number = 0;
     @Column()

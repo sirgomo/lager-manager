@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ArtikelAufPaletteDto } from '../dto/artikelAufPalete.dto';
 import { DataFurKomisDto } from '../dto/dataFurKomis.dto';
 import { KommissDetailsDto } from '../dto/kommissDetails.dto';
 import { NeuePaletteDto } from '../dto/neuePalette.dto';
@@ -23,5 +24,8 @@ export class KommisionierService {
   }
   getLastActiveKomm(kommisionierid:number){
     return this.http.get(this.API_URL + '/lastkomm/'+ kommisionierid, {responseType: 'text'});
+  }
+  addArtikelAufPalette(art:ArtikelAufPaletteDto):Observable<number>{
+    return this.http.post<number>(this.API_URL + '/art', art);
   }
 }

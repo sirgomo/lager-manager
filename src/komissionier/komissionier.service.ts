@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ArtikelAufPaletteDTO } from 'src/DTO/artikelAufPaletteDTO';
 import { DataFurKomissDTO } from 'src/DTO/dataFurKomissDTO';
@@ -19,11 +19,11 @@ export class KommissionierService {
     async getKommissionierung(kommId : number):Promise<DataFurKomissDTO[]>{
         try{
             // lager platz, name, id, menge, komdetailid
-          return  await this.kommDet.query(`SELECT artikelId, menge, kreditorId, platz, artname, minLos, uids FROM kommDetails
+          return  await this.kommDet.query(`SELECT artikelId, menge, currentGepackt, kreditorId, platz, artname, minLos, uids FROM kommDetails 
             LEFT JOIN (SELECT artikelId as arid, GROUP_CONCAT(uid SEPARATOR ',') as uids FROM uiids GROUP BY arid) AS u ON artikelId = u.arid
             LEFT JOIN (SELECT artId,lagerplatz as platz,static,liferant FROM lagerplatz ) AS l ON  artikelId = l.artId AND kreditorId = l.liferant AND static = true
             LEFT JOIN (SELECT artikelId as aaid,name as artname,minLosMenge as minLos,liferantId FROM artikel) AS a ON artikelId = a.aaid  AND kreditorId = a.liferantId
-            WHERE kommissId = '${kommId}' AND inBestellung = '0' AND gepackt = 'INPACKEN' ORDER BY platz ASC`).then(data=>{
+            WHERE kommissId = '${kommId}' AND inBestellung = '0' AND gepackt = 'INPACKEN'  GROUP BY id HAVING SUM(menge - currentGepackt ) > 0 ORDER BY platz ASC`).then(data=>{
                 let tmpData : DataFurKomissDTO[] = new Array();
                
                 Object.assign(tmpData, data);
@@ -80,11 +80,62 @@ export class KommissionierService {
             return err;
         }
     }
-    async addAdrtikelToPalete(art : ArtikelAufPaletteDTO){}
+    async addAdrtikelToPalete(art : ArtikelAufPaletteDTO){
+        console.log(art);
+        try{
+            return await this.kommDet.findOne({where:{ 'artikelId': art.artid, 'kommissId': art.kommissId}}).then(
+                data=>{
+                    if(data.kommissId === art.kommissId){
+                        data.currentGepackt += art.artikelMenge;
+                        data.palettennr = art.paletteid;
+                        let pal :InKomissPalletenEntity = new InKomissPalletenEntity();
+                        pal.artikelId = art.artid;
+                        pal.artikelMenge = art.artikelMenge;
+                        pal.inPaken = true;
+                        pal.kommId = art.kommissId;
+                        pal.id = art.paletteid;
+                        pal.userId = art.kommissionierId;
+                        pal.palettenTyp = art.palTyp;
+                        //TODO
+                        //es sollte noch erwartete gewicht hier sein
+                        if(data.currentGepackt === data.menge){
+                            data.gepackt = ARTIKELSTATUS.GEPACKT;  
+                            pal.gepackt = true;
+                        }
+                    if(art.artikelMenge < 0){
+                        this.pal.delete({'artikelId': art.artid, 'kommId' : art.kommissId, 'userId': art.kommissionierId});
+                        if(data.currentGepackt > 0){
+                            pal.artikelMenge = data.currentGepackt;
+                            this.pal.save(pal);
+                        }
+                    }else{
+                        this.pal.save(pal);
+                    }
+                 
+                     return   this.kommDet.save(data).then(
+                            data=>{
+                                if(data !== undefined && data !== null){
+                                    return 1;
+                                }
+                                return 0;
+                            }
+                        );
+
+                    }
+                    throw new HttpException('Etwas ist schieff gelaufen, kommisid nicht gefunden', HttpStatus.NOT_FOUND);
+                }
+            )
+        }catch(err){
+            return err;
+        }
+    }
     async getlastActiveKom(kommisionierId: number):Promise<string>{
         try{
            return await this.pal.findOne({where:{'userId': kommisionierId, 'paletteRealGewicht' : 0}}).then(data=>{
-            return data.kommId + '/' + data.id;
+            if(data !== undefined && isFinite(data.kommId)){
+                return data.kommId + '/' + data.id + '/' + data.palettenTyp;
+            }
+            return '';
            });
         }catch(err){
             return err;

@@ -1,5 +1,6 @@
 import { Controller, Get, Req, UseGuards, Post, Delete, Body, ValidationPipe, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ArtikelAufPaletteDto } from 'lager-front/src/app/dto/artikelAufPalete.dto';
 import { ROLES } from 'src/auth/roleDecorator';
 import { RoleGuard } from 'src/auth/RoleGuard';
 import { NeuePaletteDTO } from 'src/DTO/neuePaletteDTO';
@@ -31,6 +32,11 @@ export class KomissionierController {
     @ROLES(ROLE.KOMMISIONIER)
     getLastActiveKomm(@Param('id') kommissid:number){
         return this.komSercive.getlastActiveKom(kommissid);
+    }
+    @Post('/art')
+    @ROLES(ROLE.KOMMISIONIER)
+    artikelAufPalette(@Body(ValidationPipe) art: ArtikelAufPaletteDto){
+        return this.komSercive.addAdrtikelToPalete(art);
     }
  
     
