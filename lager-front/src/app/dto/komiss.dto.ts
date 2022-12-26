@@ -1,29 +1,28 @@
-import { ArtikelDTO } from "./artikel.dto";
-import { KommissDetailsDto } from "./kommissDetails.dto";
+import { ArtikelDTO } from './artikel.dto';
+import { KommissDetailsDto } from './kommissDetails.dto';
 
-export class KomissDTO{
-
-  id! : number;
+export class KomissDTO {
+  id!: number;
 
   verkauferId!: number;
 
-  maxPalettenHoher! : number;
+  maxPalettenHoher!: number;
 
-  gewunschtesLieferDatum! : Date;
+  gewunschtesLieferDatum!: Date;
 
-  dispositorId! : number;
+  dispositorId!: number;
 
-  kommissStatus!  : KOMMISIONSTATUS;
+  kommissStatus!: KOMMISIONSTATUS;
 
-  spedition! : number;
+  spedition!: number;
 
-  versorungId! : string;
-  artikels!:ArtikelDTO[];
-  kommDetails! : KommissDetailsDto[];
+  versorungId!: string;
+  artikels!: ArtikelDTO[];
+  kommDetails!: KommissDetailsDto[];
 }
-export enum KOMMISIONSTATUS{
-    INBEARBEITUNG = 'INBEARBEITUNG',
-    INKOMMISSIONIRUNG = 'INKOMMISSIONIRUNG',
-    FREI = 'BEREIT',
-    FERTIG = 'FERTIG'
+export enum KOMMISIONSTATUS {
+  INBEARBEITUNG = 'INBEARBEITUNG',
+  INKOMMISSIONIRUNG = 'INKOMMISSIONIRUNG',
+  FREI = 'BEREIT',
+  FERTIG = 'FERTIG',
 }

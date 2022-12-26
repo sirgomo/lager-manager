@@ -131,10 +131,12 @@
               <small id="helpId" class="form-text text-muted fs-ss">Total für diese Position!</small>
             </div></td>
             <td class="fs-s"><div class="d-grid gap-2">
-              <button type="button" name="" id="" class="btn btn-primary fs-s" (click)="addArtikelToKomm(i, true) ">Bestätigen</button>
+              <button *ngIf="artikelStatus[i] !== 'GEPACKT'" type="button" name="" id="" class="btn btn-primary fs-s" (click)="addArtikelToKomm(i, true) ">Bestätigen</button>
+              <button *ngIf="artikelStatus[i] === 'GEPACKT'" type="button" name="" id="" class="btn btn-primary fs-s" (click)="addArtikelToKomm(i, true) " disabled>Bestätigen</button>
             </div></td>
             <td class="fs-s"><div class="d-grid gap-2">
-              <button type="button" name="" id="" class="btn btn-danger fs-s" (click)="deletePositionInKomm(i)">Delete</button>
+              <button *ngIf="artikelStatus[i] !== 'GEPACKT'" type="button" name="" id="" class="btn btn-danger fs-s" (click)="deletePositionInKomm(i)">Delete</button>
+              <button *ngIf="artikelStatus[i] === 'GEPACKT'" type="button" name="" id="" class="btn btn-danger fs-s" (click)="deletePositionInKomm(i)" disabled>Delete</button>
             </div></td>
           </tr>
         </tbody>
