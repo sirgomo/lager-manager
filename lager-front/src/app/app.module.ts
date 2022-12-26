@@ -41,6 +41,7 @@ import { SpeditorsComponent } from './datenpflege/speditors/speditors.component'
 import { AddSpedition } from './datenpflege/speditors/addSpedition';
 import { NeupalComponent } from './kommisionier/neupal/neupal.component';
 import { AddartikelComponent } from './kommisionier/addartikel/addartikel.component';
+import { FindWareComponent } from './kommisionier/find-ware/find-ware.component';
 
 
 
@@ -73,7 +74,8 @@ import { AddartikelComponent } from './kommisionier/addartikel/addartikel.compon
     SpeditorsComponent,
     AddSpedition,
     NeupalComponent,
-    AddartikelComponent
+    AddartikelComponent,
+    FindWareComponent
   ],
   imports: [
     BrowserModule,

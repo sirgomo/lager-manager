@@ -46,6 +46,10 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "allowedCommonJsDependencies": [
+              "raf",
+              "rgbcolor",
+              "html2canvas"
+
            ],
             "assets": [
               "src/favicon.ico",

@@ -20,7 +20,7 @@
     <div>
       <div class="d-flex row-flex rounded fs-s justify-content-center align-items-center">
         <div class="col align-self-start p-1">
-          <input type="text" class="form-control form-control-sm fs-s" value="uid" name="search" id="search" placeholder="Artikel scannen oder eingeben" [(ngModel)]="uid" (ngModelChange)="findbyuidorArtId(uid)">
+          <input type="text" class="form-control form-control-sm fs-s" name="search" id="search" placeholder="Artikel scannen oder eingeben" [(ngModel)]="uid" (ngModelChange)="findbyuidorArtId(uid)">
         </div>
         <div class="col align-self-end p-1">
           <button type="button" class="btn btn-primary btn-sm" (click)="findbyuidorArtId(uid)">Find</button>
@@ -34,7 +34,9 @@
       <div class="d-flex flex-column ml-1 border-start">Art. Id</div>
   </div>
       <div *ngFor="let item of kommDetails; let i = index;" class="{{borders[i]}}">
-          <div class="d-flex flex-column p-2 ml-1 ">{{item.platz}}</div>
+          <div class="d-flex flex-column p-2 ml-1 ">
+            <button type="button" class="btn btn-outline-primary btn-sm" (click)="getPlatzMitArtikel(i)">{{item.platz}}</button>
+             </div>
           <div class="d-flex flex-column p-2 ml-1 border-start">{{getCartonMenge(i)}}</div>
           <div class="d-flex flex-column p-2 ml-1 border-start">{{item.artname}}</div>
           <div class="d-flex flex-column p-2 ml-1 border-start">{{item.artikelId}}</div>

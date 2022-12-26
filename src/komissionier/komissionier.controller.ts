@@ -1,4 +1,12 @@
-import { Controller, Get, Req, UseGuards, Post, Delete, Body, ValidationPipe, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  UseGuards,
+  Post,
+  Body,
+  ValidationPipe,
+  Param,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ArtikelAufPaletteDto } from 'lager-front/src/app/dto/artikelAufPalete.dto';
 import { ROLES } from 'src/auth/roleDecorator';
@@ -10,35 +18,37 @@ import { KommissionierService } from './komissionier.service';
 @Controller('komi')
 @UseGuards(AuthGuard(), RoleGuard)
 export class KomissionierController {
-    constructor(private komSercive : KommissionierService){}
+  constructor(private komSercive: KommissionierService) {}
 
-    @Get(':id')
-    @ROLES(ROLE.KOMMISIONIER)
-    getAllkommissionierungenById(@Param('id') id:number){
-       return this.komSercive.getKommissionierung(id);
-    }
-    @Post('/neupal')
-    @ROLES(ROLE.KOMMISIONIER)
-    neuePaletteErstellen(@Body(ValidationPipe) data: NeuePaletteDTO){
-        console.log(data);
-        return this.komSercive.neuePalete(data);
-    }
-    @Post('/gerf')
-    @ROLES(ROLE.KOMMISIONIER)
-    gewichtErfassen(@Body(ValidationPipe) data: NeuePaletteDTO){
-        return this.komSercive.gewichtErfassen(data);
-    }
-    @Get('/lastkomm/:id')
-    @ROLES(ROLE.KOMMISIONIER)
-    getLastActiveKomm(@Param('id') kommissid:number){
-        return this.komSercive.getlastActiveKom(kommissid);
-    }
-    @Post('/art')
-    @ROLES(ROLE.KOMMISIONIER)
-    artikelAufPalette(@Body(ValidationPipe) art: ArtikelAufPaletteDto){
-        return this.komSercive.addAdrtikelToPalete(art);
-    }
- 
-    
-
+  @Get(':id')
+  @ROLES(ROLE.KOMMISIONIER)
+  getAllkommissionierungenById(@Param('id') id: number) {
+    return this.komSercive.getKommissionierung(id);
+  }
+  @Post('/neupal')
+  @ROLES(ROLE.KOMMISIONIER)
+  neuePaletteErstellen(@Body(ValidationPipe) data: NeuePaletteDTO) {
+    console.log(data);
+    return this.komSercive.neuePalete(data);
+  }
+  @Post('/gerf')
+  @ROLES(ROLE.KOMMISIONIER)
+  gewichtErfassen(@Body(ValidationPipe) data: NeuePaletteDTO) {
+    return this.komSercive.gewichtErfassen(data);
+  }
+  @Get('/lastkomm/:id')
+  @ROLES(ROLE.KOMMISIONIER)
+  getLastActiveKomm(@Param('id') kommissid: number) {
+    return this.komSercive.getlastActiveKom(kommissid);
+  }
+  @Post('/art')
+  @ROLES(ROLE.KOMMISIONIER)
+  artikelAufPalette(@Body(ValidationPipe) art: ArtikelAufPaletteDto) {
+    return this.komSercive.addAdrtikelToPalete(art);
+  }
+  @Get('/artikel/:aid/:lid')
+  @ROLES(ROLE.KOMMISIONIER)
+  getPlatzmitArtikel(@Param('aid') aid: number, @Param('lid') lid: number) {
+    return this.komSercive.getLagerPatzMitArtikel(aid, lid);
+  }
 }
