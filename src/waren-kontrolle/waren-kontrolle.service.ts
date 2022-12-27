@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InKomissPalletenEntity } from 'src/entity/InKomissPalletenEntity';
 import { KommisioDetailsEntity } from 'src/entity/KommisioDetailsEntity';
@@ -17,21 +17,28 @@ export class WarenKontrolleService {
   ) {}
 
   async getAllKommisionierungen(): Promise<KommissionirungEntity[]> {
-    return await this.komRepo
-      .query(
-        `SELECT id, verkauferId, verk,maxPalettenHoher,gewunschtesLieferDatum,
-    dispositorId,kommissStatus,spedition,versorungId FROM kommissionierung 
-    LEFT JOIN(SELECT id as uid, CONCAT(vorname,'.',nachname) as verk FROM users )  as u ON u.uid = verkauferId
-    WHERE kommissStatus != 'INBEARBEITUNG' OR 'FERTIG'`,
-      )
-      .then(
-        (data) => {
-          return data;
-        },
-        (err) => {
-          console.log(err);
-        },
-      );
+    try {
+      return await this.komRepo
+        .query(
+          `SELECT id, verkauferId, verk,maxPalettenHoher,gewunschtesLieferDatum,
+      dispositorId,kommissStatus,spedition,versorungId FROM kommissionierung 
+      LEFT JOIN(SELECT id as uid, CONCAT(vorname,'.',nachname) as verk FROM users )  as u ON u.uid = verkauferId
+      WHERE kommissStatus != 'INBEARBEITUNG' OR 'FERTIG'`,
+        )
+        .then(
+          (data) => {
+            return data;
+          },
+          () => {
+            throw new HttpException(
+              'Etwas ist schieff gelaufen als ich kommissionierungen krigen wollte',
+              HttpStatus.NOT_FOUND,
+            );
+          },
+        );
+    } catch (err) {
+      return err;
+    }
     /*  return await this.komRepo
       .find({
         where: {
