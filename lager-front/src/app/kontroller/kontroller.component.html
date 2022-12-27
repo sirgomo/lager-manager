@@ -1,1 +1,65 @@
-<p>login works!</p>
+<div class="container">
+  <div class="mt-2 col-md-12"></div>
+  <div class="row clearfix">
+    <div class="table-responsive table-sm">
+    <table class="table table-sm table-bordered table-hover table-sortable">
+      <thead>
+        <tr >
+          <th class="text-center fs-s" style="width:5%">
+            Kommissionierung Nr:
+          </th>
+          <th class="text-center fs-s" style="width:5%">
+            Versorung Nr:
+          </th>
+          <th class="text-center fs-s" style="width:5%">
+            Maximale Palettenhöhe:
+          </th>
+          <th class="text-center fs-s" style="width:15%">
+            Lieferdatum:
+          </th>
+          <th class="text-center fs-s" style="width:15%">
+            Dispositor:
+          </th>
+          <th class="text-center fs-s" style="width:15%">
+            Kommissionierung Status:
+          </th>
+          <th class="text-center fs-s" style="width:15%">
+            Spedition:
+          </th>
+          <th class="text-center fs-s" style="width:15%">
+            Verkaufer:
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of kommiss; let i = index">
+        <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s">
+            {{item.id}}
+        </td>
+        <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s">
+          {{item.versorungId}}
+        </td>
+        <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s">
+          {{item.maxPalettenHoher}}
+        </td>
+        <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s">
+          {{item.gewunschtesLieferDatum | date : 'shortDate'}}
+        </td>
+        <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s">
+          {{dispositors[item.dispositorId].name}}
+        </td>
+        <th data-name="kommiss" class="text-center fs-s">
+          {{item.kommissStatus}}
+        </th>
+        <th data-name="kommiss" class="text-center fs-s">
+          <div>
+            {{spedition[item.spedition].name + ' (' + spedition[item.spedition].maxLadeGewicht + ',' + spedition[item.spedition].maxPalettenMenge +' )' }}
+          </div>
+        </th>
+        <th data-name="kommiss" class="text-center fs-s">
+          {{getVerkaufer(namen[i])}}
+        </th>
+        </tr>
+      </tbody>
+    </table>
+</div>

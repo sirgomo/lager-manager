@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AddArtikelKommissDTO } from 'src/DTO/addArtikelKommissDTO';
 import { ArtikelKommissDTO } from 'src/DTO/artikelKommissDTO';
@@ -309,5 +309,25 @@ export class VerkaufService {
           return artikels;
         }
       });
+  }
+  async changeKommStatus(kommId: number, status: any) {
+    try {
+      return await this.repo.findOne({ where: { id: kommId } }).then((data) => {
+        if (
+          data === undefined ||
+          data === null ||
+          status.kommissStatus === undefined
+        ) {
+          throw new HttpException(
+            'Kommissionierung nicht gefunden',
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+        data.kommissStatus = status.kommissStatus;
+        return this.repo.save(data);
+      });
+    } catch (err) {
+      return err;
+    }
   }
 }

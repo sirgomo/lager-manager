@@ -14,8 +14,18 @@ import { VerkaufController } from './verkauf.controller';
 import { VerkaufService } from './verkauf.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([KommisioDetailsEntity, KommissionirungEntity, LagerPlatzEntity, ArtikelEntity, UiidEntity, ArtikelReservationEntity]), AuthModule],
+  imports: [
+    TypeOrmModule.forFeature([
+      KommisioDetailsEntity,
+      KommissionirungEntity,
+      LagerPlatzEntity,
+      ArtikelEntity,
+      UiidEntity,
+      ArtikelReservationEntity,
+    ]),
+    AuthModule,
+  ],
   controllers: [VerkaufController],
-  providers: [VerkaufService, LagerService, ArtService, UidService]
+  providers: [VerkaufService, LagerService, ArtService, UidService],
 })
 export class VerkaufModule {}

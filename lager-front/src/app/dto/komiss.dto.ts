@@ -1,4 +1,3 @@
-import { ArtikelDTO } from './artikel.dto';
 import { KommissDetailsDto } from './kommissDetails.dto';
 
 export class KomissDTO {
@@ -17,7 +16,6 @@ export class KomissDTO {
   spedition!: number;
 
   versorungId!: string;
-  artikels!: ArtikelDTO[];
   kommDetails!: KommissDetailsDto[];
 }
 export enum KOMMISIONSTATUS {
@@ -25,4 +23,5 @@ export enum KOMMISIONSTATUS {
   INKOMMISSIONIRUNG = 'INKOMMISSIONIRUNG',
   FREI = 'BEREIT',
   FERTIG = 'FERTIG',
+  DRINGEND = 'DRINGEND',
 }

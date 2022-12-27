@@ -31,8 +31,7 @@ import { EinkaufModule } from './einkauf/einkauf.module';
 import { AdminModule } from './admin/admin.module';
 import { KreditorsEntity } from './entity/kreditorsEntity';
 import { UserModule } from './user/user.module';
-
-
+import { WarenKontrolleModule } from './waren-kontrolle/waren-kontrolle.module';
 
 @Module({
   imports: [
@@ -43,9 +42,26 @@ import { UserModule } from './user/user.module';
       username: 'root',
       password: 'beta1243',
       database: 'lager',
-      entities: [DispositorEntity, ArtikelEntity, UserEntity, ArtikelReservationEntity, FehlendArtikelEntity, InKomissPalletenEntity, KommissionirungEntity,
-      LagerPlatzEntity, PalettenEnttity, SpeditionEntity, WarenBestellungEntity, WarenEingangEntity, KommisioDetailsEntity, UiidEntity, WarenEingStat, WarenAusgStat, KreditorsEntity],
-      synchronize: false
+      entities: [
+        DispositorEntity,
+        ArtikelEntity,
+        UserEntity,
+        ArtikelReservationEntity,
+        FehlendArtikelEntity,
+        InKomissPalletenEntity,
+        KommissionirungEntity,
+        LagerPlatzEntity,
+        PalettenEnttity,
+        SpeditionEntity,
+        WarenBestellungEntity,
+        WarenEingangEntity,
+        KommisioDetailsEntity,
+        UiidEntity,
+        WarenEingStat,
+        WarenAusgStat,
+        KreditorsEntity,
+      ],
+      synchronize: false,
     }),
     WareneingangModule,
     KomissionierModule,
@@ -59,9 +75,9 @@ import { UserModule } from './user/user.module';
     EinkaufModule,
     AdminModule,
     UserModule,
-   
+    WarenKontrolleModule,
   ],
   controllers: [AppController],
-  providers: [ RoleGuard],
+  providers: [RoleGuard],
 })
 export class AppModule {}

@@ -73,14 +73,13 @@ export class VerkaufComponent implements OnInit {
     //mach etwas wenn kommisionirung status geendert wurde, nur check ob arbeitet
     this.komiss.forEach((data: KomissDTO) => {
       if (data.id == id) {
-        console.log(
-          'id ' +
-            id +
-            ' new status ' +
-            data.kommissStatus +
-            ' status in data ' +
-            data.kommissStatus,
-        );
+        this.serv
+          .changeStatus(data.id, {
+            kommissStatus: data.kommissStatus.toString(),
+          })
+          .subscribe((data) => {
+            console.log(data);
+          });
       }
     });
   }

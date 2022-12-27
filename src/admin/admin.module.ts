@@ -8,8 +8,6 @@ import { AdminService } from './admin.service';
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity]), AuthModule],
   controllers: [AdminController],
-  providers: [AdminService]
+  providers: [AdminService],
 })
-export class AdminModule {
-  constructor(){}
-}
+export class AdminModule {}

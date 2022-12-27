@@ -1,37 +1,37 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
-import { ArtikelEntity } from "./ArtikelEntity";
-import { KommissionirungEntity } from "./KommissionirungEntity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { KommissionirungEntity } from './KommissionirungEntity';
 
 @Entity('kommDetails')
-export class KommisioDetailsEntity{
-@PrimaryGeneratedColumn()
-id : number;
-@Column({nullable: true})
-artikelId : number;
-@Column({nullable: true})
-kommissId : number;
-@Column({nullable: true})
-menge: number;
-@Column({nullable: false, default: 0})
-currentGepackt: number;
-@Column({nullable: true})
-gepackt : ARTIKELSTATUS;
-@Column({nullable: true})
-palettennr : number;
-@Column({nullable: true})
-kreditorId : number;
-@Column()
-inBestellung:boolean;
-@Column({nullable: false, type: 'varchar', width: 30})
-logisticBelegNr:string
+export class KommisioDetailsEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+  @Column({ nullable: true })
+  artikelId: number;
+  @Column({ nullable: true })
+  kommissId: number;
+  @Column({ nullable: true })
+  menge: number;
+  @Column({ nullable: false, default: 0 })
+  currentGepackt: number;
+  @Column({ nullable: true })
+  gepackt: ARTIKELSTATUS;
+  @Column({ nullable: true })
+  palettennr: number;
+  @Column({ nullable: true })
+  kreditorId: number;
+  @Column()
+  inBestellung: boolean;
+  @Column({ nullable: false, type: 'varchar', width: 30 })
+  logisticBelegNr: string;
 
-
-@ManyToOne(()=> KommissionirungEntity, 
-(KommissionirungEntity)=> KommissionirungEntity.kommDetails, { onDelete: "CASCADE", onUpdate: 'NO ACTION'})
-kommlist : KommissionirungEntity;
-
+  @ManyToOne(
+    () => KommissionirungEntity,
+    (KommissionirungEntity) => KommissionirungEntity.kommDetails,
+    { onDelete: 'CASCADE', onUpdate: 'NO ACTION' },
+  )
+  kommlist: KommissionirungEntity;
 }
-export enum ARTIKELSTATUS{
-    INPACKEN = 'INPACKEN',
-    GEPACKT = 'GEPACKT'
+export enum ARTIKELSTATUS {
+  INPACKEN = 'INPACKEN',
+  GEPACKT = 'GEPACKT',
 }
