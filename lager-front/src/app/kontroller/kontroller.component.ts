@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { DatenpflegeService } from '../datenpflege/datenpflege.service';
 import { DispositorDto } from '../dto/dispositor.dto';
 import { KomissDTO } from '../dto/komiss.dto';
 import { SpeditionDto } from '../dto/spedition.dto';
+import { HelperService } from '../helper.service';
 import { KontrollerService } from './kontroller.service';
 
 @Component({
@@ -15,9 +17,11 @@ export class KontrollerComponent implements OnInit {
   spedition: SpeditionDto[] = [];
   dispositors: DispositorDto[] = [];
   namen: string[] = [];
+  helper: HelperService = new HelperService();
   constructor(
     private service: KontrollerService,
     private dataPServ: DatenpflegeService,
+    private toaster: ToastrService,
   ) {}
 
   ngOnInit(): void {
@@ -26,12 +30,14 @@ export class KontrollerComponent implements OnInit {
 
   private async getKommiss() {
     await this.service.getKommissionierungen().subscribe((data) => {
-      if (data.length > 0) {
+      if (data !== null && data.length > 0) {
         this.kommiss.splice(0, this.kommiss.length);
         for (let i = 0; i < data.length; i++) {
           this.namen.push(data[i].verk);
           this.kommiss.push(data[i]);
         }
+      } else {
+        this.toaster.error(this.helper.getErrorNachricht(data), 'Error');
       }
     });
   }
@@ -56,6 +62,8 @@ export class KontrollerComponent implements OnInit {
           this.spedition.splice(data[i].id, 1, data[i]);
         }
         this.getKommiss();
+      } else {
+        this.toaster.error(this.helper.getErrorNachricht(data), 'Error');
       }
     });
   }
