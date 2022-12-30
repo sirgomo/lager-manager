@@ -1,4 +1,4 @@
-export class ArtikelInfo {
+export class ArtikelInfoDto {
   artId!: number;
   liferantn!: string;
   id!: number;

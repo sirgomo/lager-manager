@@ -34,4 +34,13 @@ export class KommisionierService {
       this.API_URL + '/artikel/' + artid + '/' + liferid,
     );
   }
+  getArtikelMenge(artid: number, liferid: number): Observable<any> {
+    return this.http.get<any>(this.API_URL + '/menge/' + artid + '/' + liferid);
+  }
+  lagerPlatzNachfullen(staticid: number, hid: number): Observable<any> {
+    return this.http.get<any>(this.API_URL + '/platz/' + staticid + '/' + hid);
+  }
+  getMengeOnPlatzId(platzid: number) {
+    return this.http.get<number>(this.API_URL + '/platz/' + platzid);
+  }
 }

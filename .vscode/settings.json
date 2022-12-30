@@ -8,10 +8,10 @@
             "server": "localhost",
             "port": 3306,
             "driver": "MySQL",
-            "name": "asd",
-            "database": "lager",
+            "name": "localhost",
             "username": "root",
-            "password": "beta1243"
+            "password": "beta1243",
+            "database": "lager"
         }
     ]
 }

@@ -3,25 +3,37 @@
     <span>Stellplatze</span>
 </mat-toolbar>
 <mat-dialog-content>
-  <div class="d-flex row-flex border rounded fs-s ">
+  <div class="d-flex row-flex border rounded fs-s text-center">
     <div class="d-flex flex-column ml-1 ">Lager Platz</div>
     <div class="d-flex flex-column ml-1 border-start">Artikel Nr.</div>
     <div class="d-flex flex-column ml-1 border-start">mhd</div>
-    <div class="d-flex flex-column ml-1 border-start">Liferant</div>
-    <div class="d-flex flex-column ml-1 border-start">Menge</div>
+    <!--<div class="d-flex flex-column ml-1 border-start">Liferant</div>
+    <div class="d-flex flex-column ml-1 border-start">Menge</div>-->
   </div>
-  <div class="d-flex row-flex border rounded fs-s" *ngFor="let item of artikelinfo; let i = index">
-    <div class="d-flex flex-column ml-1 border border-success ">{{item.lagerplatz}}</div>
-    <div class="d-flex flex-column ml-1 border-start">{{item.artId}}</div>
-    <div class="d-flex flex-column ml-1 border-start" *ngIf="item.mhd === undefined">...</div>
-    <div class="d-flex flex-column ml-1 border-start" *ngIf="item.mhd !== undefined">{{item.mhd | date: 'shortDate'}}</div>
-    <div class="d-flex flex-column ml-1 border-start">{{item.liferantn}}</div>
-    <div class="d-flex flex-column ml-1 border-start">{{item.artikelMenge}}</div>
+  <div *ngFor="let item of artikelinfo; let i = index">
+    <div class="d-flex row-flex border rounded fs-s text-center">
+      <div class="d-flex flex-column ml-1 border border-success ">{{item.lagerplatz}}</div>
+      <div class="d-flex flex-column ml-1 border-start">{{item.artId}}</div>
+      <div class="d-flex flex-column ml-1 border-start" *ngIf="item.mhd === undefined">...</div>
+      <div class="d-flex flex-column ml-1 border-start" *ngIf="item.mhd !== undefined">{{item.mhd | date: 'shortDate'}}</div>
+      <!--<div class="d-flex flex-column ml-1 border-start">{{item.liferantn}}</div>
+      <div class="d-flex flex-column ml-1 border-start">{{item.artikelMenge}}</div>-->
+    </div>
+    <div class="d-flex row-flex border rounded fs-s">
+      <div class="col-sm d-grid gap-2">
+        <button type="button" name="" id="" class="btn btn-success btn-sm fs-s" (click)=" lagerPlatzNachfullen(i)">Nachfullen</button>
+      </div>
+      <div class="col-sm d-grid gap-2">
+        <button type="button" name="" id="" class="btn btn-success btn-sm fs-s" (click)="artikelKommissioniren(i)">Neue Palette</button>
+      </div>
+    </div>
   </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="center">
-    <button mat-raised-button matDialogClose class="fs-s" color="primary">Fenster Schließen</button>
+  <div class="d-grid gap-2">
+    <button type="button" name="" id="" matDialogClose class="btn btn-primary btn-sm fs-s">Fenster Schließen</button>
+  </div>
 </mat-dialog-actions>
 
 </div>

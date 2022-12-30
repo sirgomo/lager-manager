@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { ArtikelAufPaletteDto } from '../dto/artikelAufPalete.dto';
-import { ArtikelInfo } from '../dto/artikelinfo.dto';
+import { ArtikelInfoDto } from '../dto/artikelinfo.dto';
 import { DataFurKomisDto } from '../dto/dataFurKomis.dto';
 import { PALETTENTYP } from '../dto/lagerPlatz.dto';
 import { NeuePaletteDto } from '../dto/neuePalette.dto';
@@ -23,6 +23,7 @@ export class KommisionierComponent implements OnInit {
   kommDetails: DataFurKomisDto[] = [];
   borders: string[] = [];
   uid = '';
+  fullPaletteMenge = 0;
   constructor(
     private kommServi: KommisionierService,
     private toastr: ToastrService,
@@ -64,7 +65,7 @@ export class KommisionierComponent implements OnInit {
     }
     return car;
   }
-  async neuePalete() {
+  async neuePalete(art: ArtikelInfoDto | null) {
     const conf: MatDialogConfig = new MatDialogConfig();
     conf.minHeight = '100vh';
     conf.minWidth = '100vw';
@@ -78,8 +79,20 @@ export class KommisionierComponent implements OnInit {
       .open(NeupalComponent, conf)
       .afterClosed()
       .subscribe((data) => {
+        if (data === undefined || data === null) {
+          this.toastr.info('Vorgang Abgebrochen', 'Neue Palette Erstellen', {
+            timeOut: 700,
+          });
+          return;
+        }
         this.kommServi.paletteErstellen(data).subscribe((res) => {
-          this.currentPalatte = res;
+          console.log('neue palete ' + res);
+          if (isFinite(res)) {
+            this.currentPalatte = res;
+            if (art !== null) {
+              //TODO
+            }
+          }
         });
       });
   }
@@ -187,10 +200,11 @@ export class KommisionierComponent implements OnInit {
     const tmpArt: ArtikelAufPaletteDto = new ArtikelAufPaletteDto();
     tmpArt.artid = this.kommDetails[i].artikelId;
     tmpArt.artikelMenge = data;
-    tmpArt.kommissId = this.kommid;
+    tmpArt.kommissId = this.kommDetails[i].id;
     tmpArt.kommissionierId = Number(localStorage.getItem('myId'));
     tmpArt.palTyp = this.currentPaletteTyp;
     tmpArt.paletteid = this.currentPalatte;
+    tmpArt.platzid = this.kommDetails[i].platzid;
     this.kommServi.addArtikelAufPalette(tmpArt).subscribe((data) => {
       if (data === 1) {
         this.toastr.success('Artikel erfasst', 'Artikel Erfassen', {
@@ -204,9 +218,16 @@ export class KommisionierComponent implements OnInit {
           );
           this.kommDetails[i].menge -= tmpArt.artikelMenge;
           this.kommDetails[i].currentGepackt += tmpArt.artikelMenge;
+          if (
+            this.kommDetails[i].menge === 0 ||
+            this.kommDetails[i].currentGepackt === 0
+          ) {
+            this.borders.splice(i, 1, 'd-flex row-item border rounded fs-s');
+          }
           this.uid = '';
         } else {
           this.uid = '';
+          this.borders.splice(i, 1);
           this.kommDetails.splice(i, 1);
         }
       }
@@ -225,13 +246,28 @@ export class KommisionierComponent implements OnInit {
     }
   }
   async getPlatzMitArtikel(index: number) {
+    let currentArtikelMenge = 0;
+    let currentArtikelId = 0;
+    await this.kommServi
+      .getArtikelMenge(
+        this.kommDetails[index].artikelId,
+        this.kommDetails[index].kreditorId,
+      )
+      .subscribe((data) => {
+        if (data !== undefined && data !== null) {
+          currentArtikelId = Number(data[0].id);
+          currentArtikelMenge = Number(data[0].artikelMenge);
+        } else {
+          this.toastr.error(data.message);
+        }
+      });
     await this.kommServi
       .getPlatzMitArtikels(
         this.kommDetails[index].artikelId,
         this.kommDetails[index].kreditorId,
       )
       .subscribe((data) => {
-        const tmpArtikelInfo: ArtikelInfo[] = [];
+        const tmpArtikelInfo: ArtikelInfoDto[] = [];
         Object.assign(tmpArtikelInfo, data);
         console.log(tmpArtikelInfo);
         if (Object(data).message !== undefined && Object(data).message !== '') {
@@ -240,7 +276,7 @@ export class KommisionierComponent implements OnInit {
         }
         if (tmpArtikelInfo === undefined || tmpArtikelInfo.length === 0) {
           this.toastr.info('Es gibt kein mehr!', 'Kein Artikel Mehr', {
-            timeOut: 700,
+            timeOut: 800,
           });
           return;
         }
@@ -249,8 +285,63 @@ export class KommisionierComponent implements OnInit {
         conf.width = '100vw';
         conf.minWidth = '100vw';
         conf.panelClass = 'full-screen-modal';
-        conf.data = tmpArtikelInfo;
-        this.dial.open(FindWareComponent, conf);
+        conf.data = [tmpArtikelInfo, index];
+        this.dial
+          .open(FindWareComponent, conf)
+          .afterClosed()
+          .subscribe((data) => {
+            if (
+              data !== undefined &&
+              data[0] !== undefined &&
+              data[0] !== null
+            ) {
+              // artikelMenge -- 1 nachfullen -- 2 kommissioniren
+              if (data[0].artikelMenge === 1) {
+                if (currentArtikelMenge > this.kommDetails[index].menge) {
+                  this.toastr.error(
+                    'Am Lagerplatz ist mehr als notwendig, Abgebrochen',
+                  );
+                  return;
+                }
+                this.kommServi
+                  .lagerPlatzNachfullen(
+                    this.kommDetails[index].platzid,
+                    data[0].id,
+                  )
+                  .subscribe((res) => {
+                    if (res !== 1) {
+                      this.toastr.error(
+                        'Etwas ist schieff gelaufen, platz wurde nicht nachgefullt',
+                        'Platz Nachfullen',
+                      );
+                      return;
+                    }
+                    this.toastr.success(
+                      'Platz wurde nachgefullt',
+                      'Platz Nachfullen',
+                    );
+                  });
+              } else {
+                // kommissioniren
+                if (this.kommDetails[index].menge < data[0].artikelMenge) {
+                  this.toastr.error(
+                    'Du solltest der Lagerplatz nachfüllen nicht neue Palette erfassen',
+                  );
+                  return;
+                }
+                if (this.currentPalatte !== 0) {
+                  this.toastr.error(
+                    'Das Gewicht solltest du zuerst erfassen',
+                    'Gewicht Erfassen',
+                  );
+                  return;
+                }
+                //neue palete so nr erstellen und die ware gleich an die neue palette bewegen
+                this.currentPalatte = 0;
+                this.neuePalete(data[0]);
+              }
+            }
+          });
       });
   }
 }

@@ -29,9 +29,9 @@ export class KommissionierService {
       // lager platz, name, id, menge, komdetailid
       return await this.kommDet
         .query(
-          `SELECT artikelId, menge, currentGepackt, kreditorId, platz, artname, minLos, uids FROM kommDetails 
+          `SELECT id,artikelId, menge, currentGepackt, kreditorId, platz, platzid, artname, minLos, uids FROM kommDetails 
             LEFT JOIN (SELECT artikelId as arid, GROUP_CONCAT(uid SEPARATOR ',') as uids FROM uiids GROUP BY arid) AS u ON artikelId = u.arid
-            LEFT JOIN (SELECT artId,lagerplatz as platz,static,liferant FROM lagerplatz ) AS l ON  artikelId = l.artId AND kreditorId = l.liferant AND static = true
+            LEFT JOIN (SELECT id as platzid, artId,lagerplatz as platz,static,liferant FROM lagerplatz ) AS l ON  artikelId = l.artId AND kreditorId = l.liferant AND static = true
             LEFT JOIN (SELECT artikelId as aaid,name as artname,minLosMenge as minLos,liferantId FROM artikel) AS a ON artikelId = a.aaid  AND kreditorId = a.liferantId
             WHERE kommissId = '${kommId}' AND inBestellung = '0' AND gepackt = 'INPACKEN'  GROUP BY id HAVING SUM(menge - currentGepackt ) > 0 ORDER BY platz ASC`,
         )
@@ -108,9 +108,11 @@ export class KommissionierService {
   async addAdrtikelToPalete(art: ArtikelAufPaletteDTO) {
     try {
       return await this.kommDet
-        .findOne({ where: { artikelId: art.artid, kommissId: art.kommissId } })
+        .findOne({ where: { artikelId: art.artid, id: art.kommissId } })
         .then((data) => {
-          if (data.kommissId === art.kommissId) {
+          const backup: KommisioDetailsEntity = data;
+          let palid;
+          if (data !== null) {
             data.currentGepackt += art.artikelMenge;
             data.palettennr = art.paletteid;
             const pal: InKomissPalletenEntity = new InKomissPalletenEntity();
@@ -135,18 +137,51 @@ export class KommissionierService {
               });
               if (data.currentGepackt > 0) {
                 pal.artikelMenge = data.currentGepackt;
-                this.pal.save(pal);
+                palid = this.pal.save(pal).catch(() => {
+                  throw new HttpException(
+                    'Etwas ist schiefgegangen, ich konnte die Artikel auf Palette nicht bewegen',
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                  );
+                });
+              } else {
+                data.palettennr = null;
               }
             } else {
-              this.pal.save(pal);
+              palid = this.pal.save(pal).catch(() => {
+                throw new HttpException(
+                  'Etwas ist schiefgegangen, ich konnte die Artikel auf Palette nicht bewegen',
+                  HttpStatus.INTERNAL_SERVER_ERROR,
+                );
+              });
             }
 
-            return this.kommDet.save(data).then((data) => {
-              if (data !== undefined && data !== null) {
-                return 1;
-              }
-              return 0;
-            });
+            return this.kommDet.save(data).then(
+              (data) => {
+                if (data !== undefined && data !== null) {
+                  this.kommDet
+                    .query(
+                      `UPDATE lagerplatz SET artikelMenge = artikelMenge - ${art.artikelMenge} WHERE id=${art.platzid}`,
+                    )
+                    .catch(() => {
+                      this.kommDet.save(backup);
+                      this.pal.delete(palid.autoid);
+                      throw new HttpException(
+                        'Etwas ist schiefgegangen, ich konnte die Artikel nicht bewegen',
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                      );
+                    });
+                  return 1;
+                }
+                return 0;
+              },
+              () => {
+                this.pal.delete(palid.autoid);
+                throw new HttpException(
+                  'Etwas ist schiefgegangen, ich konnte die Artikel nicht bewegen',
+                  HttpStatus.INTERNAL_SERVER_ERROR,
+                );
+              },
+            );
           }
           throw new HttpException(
             'Etwas ist schieff gelaufen, kommisid nicht gefunden',
@@ -199,6 +234,73 @@ export class KommissionierService {
             );
           },
         );
+    } catch (err) {
+      return err;
+    }
+  }
+  async lagerPlatzNachfullen(staticId: number, lagerId: number) {
+    try {
+      return await this.kommDet
+        .query(`SELECT artikelMenge, mhd FROM lagerplatz WHERE id=${lagerId}`)
+        .then(
+          (data) => {
+            if (data !== null) {
+              let tmpdate: string = null;
+              if (data[0].mhd !== null) {
+                tmpdate = new Date(data[0].mhd)
+                  .toISOString()
+                  .split('T')[0]
+                  .trim();
+              }
+              return this.kommDet
+                .query(
+                  `UPDATE lagerplatz SET artikelMenge = (artikelMenge + ${data[0].artikelMenge}), mhd = '${tmpdate}' WHERE id=${staticId}`,
+                )
+                .then(
+                  (dataS) => {
+                    if (dataS !== null) {
+                      return this.kommDet
+                        .query(
+                          `UPDATE lagerplatz SET artId= NULL, artikelMenge = NULL, mhd = NULL, liferant = NULL WHERE id=${lagerId}`,
+                        )
+                        .then(
+                          (daFi) => {
+                            console.log(' dafi ' + JSON.stringify(daFi));
+                            return daFi.affectedRows;
+                          },
+                          (err) => {
+                            console.log(err);
+                          },
+                        );
+                    }
+                  },
+                  (err) => {
+                    console.log(err);
+                  },
+                );
+            }
+          },
+          (err) => {
+            console.log(err);
+          },
+        );
+    } catch (err) {
+      return err;
+    }
+  }
+  async getMengeOnStaticPlatz(artId: number, lifernatId: number) {
+    try {
+      return await this.kommDet
+        .query(
+          `SELECT id, artikelMenge FROM lagerplatz WHERE artId= ${artId}
+       AND static = true AND liferant=${lifernatId}`,
+        )
+        .catch(() => {
+          throw new HttpException(
+            'Etwas ist schiefgelaufen als ich nach Artikel Menge ersuchte',
+            HttpStatus.NOT_FOUND,
+          );
+        });
     } catch (err) {
       return err;
     }

@@ -1,4 +1,6 @@
-import { Column,  Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+/* eslint-disable @typescript-eslint/no-inferrable-types */
+/* eslint-disable prettier/prettier */
+import { Column,  Entity, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity('lagerplatz')

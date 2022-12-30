@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row-flex">
         <div class="row-flex-button">
-         <button name="" id="" class="btn btn-primary btn-sm fs-s" (click)="neuePalete()" *ngIf="currentPalatte === 0 && kommDetails !== undefined && kommDetails.length > 0"> Neue Palette</button>
+         <button name="" id="" class="btn btn-primary btn-sm fs-s" (click)="neuePalete(null)" *ngIf="currentPalatte === 0 && kommDetails !== undefined && kommDetails.length > 0"> Neue Palette</button>
         </div>
         <div class="row-flex-button">
             <button name="" id="" class="btn btn-primary btn-sm fs-s" *ngIf="currentPalatte !== 0 " (click)="gewichtErfassen()">Gewicht Erfassen</button>

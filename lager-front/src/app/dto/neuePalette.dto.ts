@@ -1,10 +1,9 @@
-import { PALETTENTYP } from "./lagerPlatz.dto";
+import { PALETTENTYP } from './lagerPlatz.dto';
 
-export class NeuePaletteDto
-{
-  palid!:number;
-  kommId!:number;
+export class NeuePaletteDto {
+  palid!: number;
+  kommId!: number;
   palTyp!: PALETTENTYP;
   kommissionierId!: number;
-  gewicht!:number;
+  gewicht!: number;
 }
