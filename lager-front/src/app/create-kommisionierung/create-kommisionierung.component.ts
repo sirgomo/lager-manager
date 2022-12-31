@@ -203,6 +203,12 @@ export class CreateKommisionierungComponent implements OnInit {
       this.kommissForm.get('spedition')?.valueChanges.subscribe((data) => {
         this.spediSelected = data;
       });
+      if (
+        this.currentKomm.kommDetails === undefined &&
+        this.currentKomm.kommDetails === null
+      ) {
+        return;
+      }
       for (let y = 0; y !== this.currentKomm.kommDetails.length; y++) {
         this.logisticBelegNr.push(
           this.currentKomm.kommDetails[y].logisticBelegNr,

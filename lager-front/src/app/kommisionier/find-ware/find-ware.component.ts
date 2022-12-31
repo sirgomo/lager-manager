@@ -11,7 +11,7 @@ export class FindWareComponent implements OnInit {
   artikelinfo: ArtikelInfoDto[] = [];
   constructor(
     private dialRef: MatDialogRef<FindWareComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: [ArtikelInfoDto[], number],
+    @Inject(MAT_DIALOG_DATA) public data: [ArtikelInfoDto[], number, number],
   ) {}
 
   ngOnInit(): void {
@@ -22,14 +22,27 @@ export class FindWareComponent implements OnInit {
   lagerPlatzNachfullen(index: number) {
     this.data[0][index].artikelMenge = 1;
     if (window.confirm('Willst du der Lagerpaltz nachfüllen ?')) {
-      return this.dialRef.close([this.data[0][index], this.data[1]]);
+      return this.dialRef.close([
+        this.data[0][index],
+        this.data[1],
+        this.data[2],
+      ]);
     }
     this.dialRef.close(null);
   }
   artikelKommissioniren(index: number) {
     if (window.confirm('Paletten zur Kommissionierung hinzufügen')) {
-      return this.dialRef.close([this.data[0][index], this.data[1]]);
+      return this.dialRef.close([
+        this.data[0][index],
+        this.data[1],
+        this.data[2],
+      ]);
     }
     this.dialRef.close(null);
+  }
+  istEsWenigerAufDemLagerPlatz(): boolean {
+    if (this.data[2] > this.data[0][0].artikelMenge) return true;
+
+    return false;
   }
 }

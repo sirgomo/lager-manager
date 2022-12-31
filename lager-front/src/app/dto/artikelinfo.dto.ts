@@ -1,7 +1,7 @@
 export class ArtikelInfoDto {
   artId!: number;
   liferantn!: string;
-  id!: number;
+  lagerplatzid!: number;
   lagerplatz!: string;
   artikelMenge!: number;
   mhd!: Date;

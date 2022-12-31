@@ -5,6 +5,7 @@ export class DataFurKomisDto {
   currentGepackt!: number;
   kreditorId!: number;
   platz!: string;
+  artikelMengeOnPlatz!: number;
   platzid!: number;
   artname!: number;
   minLos!: number;

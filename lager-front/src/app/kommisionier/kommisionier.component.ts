@@ -22,6 +22,7 @@ export class KommisionierComponent implements OnInit {
   currentPaletteTyp = PALETTENTYP.EINWEG;
   kommDetails: DataFurKomisDto[] = [];
   borders: string[] = [];
+  braucheIchMehr: boolean[] = [];
   uid = '';
   fullPaletteMenge = 0;
   constructor(
@@ -35,10 +36,15 @@ export class KommisionierComponent implements OnInit {
   }
   async getKomm() {
     await this.kommServi.getKommissionierung(this.kommid).subscribe((data) => {
-      if (data !== undefined && data !== null) {
+      if (data[0] !== undefined && data[0] !== null) {
         this.kommDetails.splice(0, this.kommDetails.length);
         this.borders.splice(0, this.borders.length);
+        this.braucheIchMehr.splice(0, this.braucheIchMehr.length);
         for (let i = 0; i < data.length; i++) {
+          this.braucheIchMehr[i] = false;
+          if (data[i].menge > data[i].artikelMengeOnPlatz) {
+            this.braucheIchMehr[i] = true;
+          }
           this.kommDetails.push(data[i]);
           data[i].menge -= data[i].currentGepackt;
           this.getBorder(data[i].menge, data[i].currentGepackt);
@@ -65,7 +71,7 @@ export class KommisionierComponent implements OnInit {
     }
     return car;
   }
-  async neuePalete(art: ArtikelInfoDto | null) {
+  async neuePalete(art: ArtikelInfoDto | null, index: number | null) {
     const conf: MatDialogConfig = new MatDialogConfig();
     conf.minHeight = '100vh';
     conf.minWidth = '100vw';
@@ -89,8 +95,13 @@ export class KommisionierComponent implements OnInit {
           console.log('neue palete ' + res);
           if (isFinite(res)) {
             this.currentPalatte = res;
-            if (art !== null) {
-              //TODO
+            this.currentPaletteTyp = tmpNPal.palTyp;
+            if (art !== null && index !== null) {
+              const tmpData: DataFurKomisDto = new DataFurKomisDto();
+              Object.assign(tmpData, this.kommDetails[index]);
+              tmpData.platzid = art.lagerplatzid;
+              tmpData.menge = art.artikelMenge;
+              this.sendMengeToServer(index, tmpData);
             }
           }
         });
@@ -156,7 +167,9 @@ export class KommisionierComponent implements OnInit {
           conf.minHeight = '100vh';
           conf.minWidth = '100vw';
           conf.panelClass = 'full-screen-modal';
-          conf.data = this.kommDetails[i];
+          const tmpData: DataFurKomisDto = new DataFurKomisDto();
+          Object.assign(tmpData, this.kommDetails[i]);
+          conf.data = tmpData;
           this.dial
             .open(AddartikelComponent, conf)
             .afterClosed()
@@ -196,15 +209,18 @@ export class KommisionierComponent implements OnInit {
       }
     }
   }
-  private sendMengeToServer(i: number, data: any) {
+  private sendMengeToServer(i: number, data: DataFurKomisDto) {
     const tmpArt: ArtikelAufPaletteDto = new ArtikelAufPaletteDto();
     tmpArt.artid = this.kommDetails[i].artikelId;
-    tmpArt.artikelMenge = data;
+    tmpArt.artikelMenge = data.menge;
     tmpArt.kommissId = this.kommDetails[i].id;
     tmpArt.kommissionierId = Number(localStorage.getItem('myId'));
     tmpArt.palTyp = this.currentPaletteTyp;
     tmpArt.paletteid = this.currentPalatte;
-    tmpArt.platzid = this.kommDetails[i].platzid;
+    tmpArt.platzid = data.platzid;
+    console.log(
+      'tmpMenge ' + this.kommDetails[i].menge + ' datamenge ' + data.menge,
+    );
     this.kommServi.addArtikelAufPalette(tmpArt).subscribe((data) => {
       if (data === 1) {
         this.toastr.success('Artikel erfasst', 'Artikel Erfassen', {
@@ -237,17 +253,13 @@ export class KommisionierComponent implements OnInit {
   getBorder(menge: number, currentMenge: number) {
     if (currentMenge === 0) {
       this.borders.push('d-flex row-item border rounded fs-s');
-    } else if (currentMenge !== 0 && currentMenge < menge) {
+    } else if (currentMenge !== 0 && menge !== 0) {
       this.borders.push('d-flex row-item border border-danger rounded fs-s');
-    } else {
-      this.toastr.error(
-        'Etwas ist schieff gegangen, currentMenge is großer als menge!!',
-      );
     }
   }
   async getPlatzMitArtikel(index: number) {
     let currentArtikelMenge = 0;
-    let currentArtikelId = 0;
+    //let currentArtikelId = 0;
     await this.kommServi
       .getArtikelMenge(
         this.kommDetails[index].artikelId,
@@ -255,7 +267,7 @@ export class KommisionierComponent implements OnInit {
       )
       .subscribe((data) => {
         if (data !== undefined && data !== null) {
-          currentArtikelId = Number(data[0].id);
+          //currentArtikelId = Number(data[0].id);
           currentArtikelMenge = Number(data[0].artikelMenge);
         } else {
           this.toastr.error(data.message);
@@ -280,18 +292,22 @@ export class KommisionierComponent implements OnInit {
           });
           return;
         }
+        const artikelMenge: number =
+          this.kommDetails[index].menge -
+          this.kommDetails[index].currentGepackt;
         const conf: MatDialogConfig = new MatDialogConfig();
         conf.height = '100vh';
         conf.width = '100vw';
         conf.minWidth = '100vw';
         conf.panelClass = 'full-screen-modal';
-        conf.data = [tmpArtikelInfo, index];
+        conf.data = [tmpArtikelInfo, index, artikelMenge];
         this.dial
           .open(FindWareComponent, conf)
           .afterClosed()
           .subscribe((data) => {
             if (
               data !== undefined &&
+              data !== null &&
               data[0] !== undefined &&
               data[0] !== null
             ) {
@@ -306,7 +322,7 @@ export class KommisionierComponent implements OnInit {
                 this.kommServi
                   .lagerPlatzNachfullen(
                     this.kommDetails[index].platzid,
-                    data[0].id,
+                    data[0].lagerplatzid,
                   )
                   .subscribe((res) => {
                     if (res !== 1) {
@@ -338,7 +354,7 @@ export class KommisionierComponent implements OnInit {
                 }
                 //neue palete so nr erstellen und die ware gleich an die neue palette bewegen
                 this.currentPalatte = 0;
-                this.neuePalete(data[0]);
+                this.neuePalete(data[0], data[1]);
               }
             }
           });

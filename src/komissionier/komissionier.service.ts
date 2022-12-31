@@ -8,7 +8,10 @@ import {
   ARTIKELSTATUS,
   KommisioDetailsEntity,
 } from 'src/entity/KommisioDetailsEntity';
-import { KommissionirungEntity } from 'src/entity/KommissionirungEntity';
+import {
+  KOMMISIONSTATUS,
+  KommissionirungEntity,
+} from 'src/entity/KommissionirungEntity';
 import { Helper } from 'src/helper';
 import { Repository } from 'typeorm';
 
@@ -27,11 +30,23 @@ export class KommissionierService {
   async getKommissionierung(kommId: number): Promise<DataFurKomissDTO[]> {
     try {
       // lager platz, name, id, menge, komdetailid
+      await this.komm.findOne({ where: { id: kommId } }).then((data) => {
+        if (
+          data === null ||
+          data.kommissStatus === KOMMISIONSTATUS.INBEARBEITUNG ||
+          data.kommissStatus === KOMMISIONSTATUS.FERTIG
+        ) {
+          throw new HttpException(
+            'Kommissionierung nicht erlaubt! oder falsch nummer',
+            HttpStatus.FORBIDDEN,
+          );
+        }
+      });
       return await this.kommDet
         .query(
-          `SELECT id,artikelId, menge, currentGepackt, kreditorId, platz, platzid, artname, minLos, uids FROM kommDetails 
+          `SELECT id,artikelId, menge, currentGepackt, kreditorId, platzid, artikelMengeOnPlatz, platz, artname, minLos, uids FROM kommDetails 
             LEFT JOIN (SELECT artikelId as arid, GROUP_CONCAT(uid SEPARATOR ',') as uids FROM uiids GROUP BY arid) AS u ON artikelId = u.arid
-            LEFT JOIN (SELECT id as platzid, artId,lagerplatz as platz,static,liferant FROM lagerplatz ) AS l ON  artikelId = l.artId AND kreditorId = l.liferant AND static = true
+            LEFT JOIN (SELECT id as platzid, artId,artikelMenge as artikelMengeOnPlatz,lagerplatz as platz,static,liferant FROM lagerplatz ) AS l ON  artikelId = l.artId AND kreditorId = l.liferant AND static = true
             LEFT JOIN (SELECT artikelId as aaid,name as artname,minLosMenge as minLos,liferantId FROM artikel) AS a ON artikelId = a.aaid  AND kreditorId = a.liferantId
             WHERE kommissId = '${kommId}' AND inBestellung = '0' AND gepackt = 'INPACKEN'  GROUP BY id HAVING SUM(menge - currentGepackt ) > 0 ORDER BY platz ASC`,
         )
@@ -162,16 +177,46 @@ export class KommissionierService {
                 if (data !== undefined && data !== null) {
                   this.kommDet
                     .query(
-                      `UPDATE lagerplatz SET artikelMenge = artikelMenge - ${art.artikelMenge} WHERE id=${art.platzid}`,
+                      `SELECT static FROM lagerplatz where id=${art.platzid}`,
                     )
-                    .catch(() => {
-                      this.kommDet.save(backup);
-                      this.pal.delete(palid.autoid);
-                      throw new HttpException(
-                        'Etwas ist schiefgegangen, ich konnte die Artikel nicht bewegen',
-                        HttpStatus.INTERNAL_SERVER_ERROR,
-                      );
-                    });
+                    .then(
+                      (data) => {
+                        //ist plazt  auf dem boden, nur menge ändern
+                        if (data[0].static === 1) {
+                          this.kommDet
+                            .query(
+                              `UPDATE lagerplatz SET artikelMenge = artikelMenge - ${art.artikelMenge} WHERE id=${art.platzid}`,
+                            )
+                            .catch(() => {
+                              this.kommDet.save(backup);
+                              this.pal.delete(palid.autoid);
+                              throw new HttpException(
+                                'Etwas ist schiefgegangen, ich konnte die Artikel nicht bewegen',
+                                HttpStatus.INTERNAL_SERVER_ERROR,
+                              );
+                            });
+                          //ist es kein stellen wir artId,menge,mhd,mengepropalete und liferant to null
+                        } else {
+                          this.kommDet
+                            .query(
+                              `UPDATE lagerplatz SET artId=null,artikelMenge=null,mhd=null,
+                          mengeProPalete=null,liferant=null WHERE id=${art.platzid}`,
+                            )
+                            .catch(() => {
+                              this.kommDet.save(backup);
+                              this.pal.delete(palid.autoid);
+                              throw new HttpException(
+                                'Etwas ist schiefgegangen, ich konnte die Artikel nicht bewegen',
+                                HttpStatus.INTERNAL_SERVER_ERROR,
+                              );
+                            });
+                        }
+                      },
+                      (err) => {
+                        console.log(err + ' nie znalazlem ');
+                      },
+                    );
+
                   return 1;
                 }
                 return 0;
@@ -220,7 +265,7 @@ export class KommissionierService {
       //lagerplatz name menge (artid and liferntid hab ich  ) lagerpaltzid
       return await this.kommDet
         .query(
-          `SELECT id, lagerplatz,artId, artikelMenge, mhd, liferantn FROM lagerplatz 
+          `SELECT id as lagerplatzid, lagerplatz,artId, artikelMenge, mhd, liferantn FROM lagerplatz 
           LEFT JOIN (SELECT id as did, name as liferantn FROM dispositor ) as dispo ON dispo.did = ${lieferantid}
            WHERE artId = ${artid} AND liferant = ${lieferantid} AND static = false ORDER BY mhd ASC`,
         )
