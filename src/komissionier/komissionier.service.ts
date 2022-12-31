@@ -62,9 +62,11 @@ export class KommissionierService {
 
             return tmpData;
           },
-          (err) => {
-            // console.log(err)
-            throw new Error('Kommissionierung nicht gefunden ' + err);
+          () => {
+            throw new HttpException(
+              'Kommissionierung nicht gefunden!',
+              HttpStatus.NOT_FOUND,
+            );
           },
         );
     } catch (err) {
@@ -265,7 +267,6 @@ export class KommissionierService {
                         )
                         .then(
                           (daFi) => {
-                            console.log(' dafi ' + JSON.stringify(daFi));
                             return daFi.affectedRows;
                           },
                           (err) => {

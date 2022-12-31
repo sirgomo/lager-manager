@@ -56,7 +56,7 @@
     </ng-container>
     <ng-container matColumnDef="Kartons" >
       <th mat-header-cell *matHeaderCellDef> Kartons. </th>
-      <td mat-cell *matCellDef="let item" >{{ math.floor(item.menge / item.minLosMenge) + ' Kartons +' + item.menge % item.minLosMenge+ ' St.' }}</td>
+      <td mat-cell *matCellDef="let item" >{{ getCartonMenge(item.menge,item.minLosMenge)}}</td>
       <td mat-footer-cell *matFooterCellDef></td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
