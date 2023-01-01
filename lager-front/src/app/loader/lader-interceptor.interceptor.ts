@@ -4,44 +4,48 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpResponse
+  HttpResponse,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoaderService } from './loader.service';
 
 @Injectable()
 export class LaderInterceptorInterceptor implements HttpInterceptor {
-  private requests: HttpRequest<any>[] = new Array();
+  private requests: HttpRequest<any>[] = [];
 
   constructor(private loaderSer: LoaderService) {}
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-   // return next.handle(request);
-   this.requests.push(request);
+  intercept(
+    request: HttpRequest<unknown>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<unknown>> {
+    // return next.handle(request);
+    this.requests.push(request);
     //let subscrition: Observable<HttpEvent<any>> =
     this.loaderSer.isLoading.next(true);
-    return new Observable(observer =>{
-      const subscrition = next.handle(request)
-      .subscribe({next: (data) => {
-        if(data instanceof HttpResponse){
+    return new Observable((observer) => {
+      const subscrition = next.handle(request).subscribe({
+        next: (data) => {
+          if (data instanceof HttpResponse) {
+            this.removeRequest(request);
+            observer.next(data);
+          }
+        },
+        error: (err) => {
+          alert(err.message);
           this.removeRequest(request);
-          observer.next(data);
-        }
-      }, error: (err) => {
-        alert(err.message);
+          subscrition.unsubscribe();
+        },
+        complete: () => {
+          this.removeRequest(request);
+          observer.complete();
+        },
+      });
+      return () => {
         this.removeRequest(request);
         subscrition.unsubscribe();
-      },
-      complete: ()=> {
-        this.removeRequest(request);
-        observer.complete();
-      }});
-      return () =>{
-        this.removeRequest(request);
-        subscrition.unsubscribe();
-      }
+      };
     });
-
   }
   removeRequest(req: HttpRequest<any>) {
     const i = this.requests.indexOf(req);
@@ -50,5 +54,4 @@ export class LaderInterceptorInterceptor implements HttpInterceptor {
     }
     this.loaderSer.isLoading.next(this.requests.length > 0);
   }
-
 }

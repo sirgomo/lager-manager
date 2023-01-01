@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -33,7 +33,50 @@ export class ApiService {
 
   login(user: UserDTO) {
     //TODO fix subscribe
-    this.http.post<any>(`${this.API_URL}auth`, user).subscribe(
+    this.http.post<any>(`${this.API_URL}auth`, user).subscribe((res) => {
+      if (res.token.length > 5) {
+        this.token = res.token;
+        this.toast
+          .success('login success', 'redirect now....', {
+            timeOut: 600,
+            positionClass: 'toast-top-center',
+          })
+          .onHidden.subscribe(() => {
+            this.jwtToken$.next(this.token);
+            localStorage.setItem('act', btoa(this.token));
+            localStorage.setItem('role', this.getRole().toString());
+
+            switch (this.getRole()) {
+              case 'VERKAUF':
+                this.router.navigateByUrl('verkauf').then();
+                break;
+              case 'DATAPFHLEGE':
+                this.router.navigateByUrl('datenpflege').then();
+                break;
+              case 'LAGERVERWALTUNG':
+                this.router.navigateByUrl('lager').then();
+                break;
+              case 'WARENEINGANG':
+                this.router.navigateByUrl('warenein').then();
+                break;
+              case 'ADMIN':
+                this.router.navigateByUrl('admin').then();
+                break;
+              case 'KOMMISIONIER':
+                this.router.navigateByUrl('kommisionier').then();
+                break;
+              case 'KONTROLLER':
+                this.router.navigateByUrl('kontroller').then();
+                break;
+
+              default:
+                this.router.navigateByUrl('auth').then();
+                break;
+            }
+          });
+      }
+    });
+    /*  this.http.post<any>(`${this.API_URL}auth`, user).subscribe(
       (res: { token: string }) => {
         this.token = res.token;
         if (this.token) {
@@ -78,7 +121,7 @@ export class ApiService {
         }
       },
       (err: HttpErrorResponse) => console.log(err.message),
-    );
+    );*/
   }
   logut() {
     this.token = '';

@@ -26,5 +26,6 @@ export class AppComponent implements OnInit {
   logout() {
     this.isLogged = false;
     this.api.logut();
+    this.toolbarInfo = 'Lager Manger';
   }
 }
