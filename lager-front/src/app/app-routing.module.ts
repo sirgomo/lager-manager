@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ArtikelComponent } from './artikel/artikel.component';
-import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
 import { KommisionierComponent } from './kommisionier/kommisionier.component';
 import { LagerComponent } from './lager/lager.component';
 import { KontrollerComponent } from './kontroller/kontroller.component';
@@ -16,7 +16,7 @@ import { AdminComponent } from './admin/admin.component';
 const routes: Routes = [
   {
     path: 'auth',
-    component: HomeComponent,
+    component: LoginComponent,
   },
   {
     path: 'kontroller',

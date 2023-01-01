@@ -4,19 +4,17 @@ import { LoaderService } from './loader.service';
 @Component({
   selector: 'app-loader',
   templateUrl: './loader.component.html',
-  styleUrls: ['./loader.component.scss']
+  styleUrls: ['./loader.component.scss'],
 })
 export class LoaderComponent implements OnInit {
   loading!: boolean;
 
-  constructor(private loaderServ: LoaderService ) {
-    this.loaderServ.isLoading.subscribe( v=> {
+  constructor(private loaderServ: LoaderService) {
+    this.loaderServ.isLoading.subscribe((v) => {
       this.loading = v;
-    })
-   }
-
-  ngOnInit(): void {
-
+    });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  ngOnInit(): void {}
 }

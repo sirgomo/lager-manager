@@ -48,7 +48,7 @@ export class KommissionierService {
             LEFT JOIN (SELECT artikelId as arid, GROUP_CONCAT(uid SEPARATOR ',') as uids FROM uiids GROUP BY arid) AS u ON artikelId = u.arid
             LEFT JOIN (SELECT id as platzid, artId,artikelMenge as artikelMengeOnPlatz,lagerplatz as platz,static,liferant FROM lagerplatz ) AS l ON  artikelId = l.artId AND kreditorId = l.liferant AND static = true
             LEFT JOIN (SELECT artikelId as aaid,name as artname,minLosMenge as minLos,liferantId FROM artikel) AS a ON artikelId = a.aaid  AND kreditorId = a.liferantId
-            WHERE kommissId = '${kommId}' AND inBestellung = '0' AND gepackt = 'INPACKEN'  GROUP BY id HAVING SUM(menge - currentGepackt ) > 0 ORDER BY platz ASC`,
+            WHERE kommissId = '${kommId}' AND inBestellung = '0' AND gepackt != 'GEPACKT'  GROUP BY id HAVING SUM(menge - currentGepackt ) > 0 ORDER BY platz ASC`,
         )
         .then(
           (data) => {

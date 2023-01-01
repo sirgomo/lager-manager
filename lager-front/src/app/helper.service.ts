@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { ArtikelDTO, ARTIKELFLAGE } from './dto/artikel.dto';
 import { ArtikelKommissDto } from './dto/artikelKommiss.dto';
 import { LagerPlatztDto } from './dto/lagerPlatz.dto';
@@ -7,6 +8,10 @@ import { LagerPlatztDto } from './dto/lagerPlatz.dto';
   providedIn: 'root',
 })
 export class HelperService {
+  public toolbarInfo: Subject<string>;
+  constructor() {
+    this.toolbarInfo = new Subject();
+  }
   public onSearch(text: string, artikels: ArtikelDTO[]) {
     if (text === undefined || text.length === 0) {
       return artikels;
@@ -208,5 +213,8 @@ export class HelperService {
     const tmpErr: Error = new Error();
     Object.assign(tmpErr, data);
     return tmpErr.message;
+  }
+  public setToolbar(value: string) {
+    this.toolbarInfo.next(value);
   }
 }

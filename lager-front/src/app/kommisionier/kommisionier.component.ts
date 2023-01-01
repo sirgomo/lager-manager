@@ -6,6 +6,7 @@ import { ArtikelInfoDto } from '../dto/artikelinfo.dto';
 import { DataFurKomisDto } from '../dto/dataFurKomis.dto';
 import { PALETTENTYP } from '../dto/lagerPlatz.dto';
 import { NeuePaletteDto } from '../dto/neuePalette.dto';
+import { HelperService } from '../helper.service';
 import { AddartikelComponent } from './addartikel/addartikel.component';
 import { FindWareComponent } from './find-ware/find-ware.component';
 import { KommisionierService } from './kommisionier.service';
@@ -29,6 +30,7 @@ export class KommisionierComponent implements OnInit {
     private kommServi: KommisionierService,
     private toastr: ToastrService,
     private dial: MatDialog,
+    private helper: HelperService,
   ) {}
 
   ngOnInit(): void {
@@ -49,6 +51,7 @@ export class KommisionierComponent implements OnInit {
           data[i].menge -= data[i].currentGepackt;
           this.getBorder(data[i].menge, data[i].currentGepackt);
         }
+        this.helper.setToolbar('Kommiss Nr: ' + this.kommid);
       } else {
         this.toastr.error(Object(data).message);
       }
