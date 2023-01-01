@@ -34,4 +34,5 @@ export class KommisioDetailsEntity {
 export enum ARTIKELSTATUS {
   INPACKEN = 'INPACKEN',
   GEPACKT = 'GEPACKT',
+  TEILGEPACKT = 'TEILGEPACKT',
 }

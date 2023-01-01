@@ -1,13 +1,14 @@
-export class KommissDetailsDto{
-  artikelId! : number;
+export class KommissDetailsDto {
+  artikelId!: number;
   menge!: number;
-  id! : number;
-  gepackt! : ARTIKELSTATUS;
+  id!: number;
+  gepackt!: ARTIKELSTATUS;
   inBestellung!: boolean;
-  kreditorId!:number;
-  logisticBelegNr!:string;
+  kreditorId!: number;
+  logisticBelegNr!: string;
 }
-export enum ARTIKELSTATUS{
+export enum ARTIKELSTATUS {
   INPACKEN = 'INPACKEN',
-  GEPACKT = 'GEPACKT'
+  GEPACKT = 'GEPACKT',
+  TEILGEPACKT = 'TEILGEPACKT',
 }

@@ -261,7 +261,10 @@ export class CreateKommisionierungComponent implements OnInit {
     }
   }
   setBorderfurArtikel(tmpArti: KommissDetailsDto) {
-    if (tmpArti.gepackt === ARTIKELSTATUS.GEPACKT) {
+    if (
+      tmpArti.gepackt === ARTIKELSTATUS.GEPACKT ||
+      tmpArti.gepackt === ARTIKELSTATUS.TEILGEPACKT
+    ) {
       this.border.push('table-success border border-success');
     } else if (tmpArti.inBestellung) {
       this.border.push('border border-danger table-danger');
@@ -295,9 +298,13 @@ export class CreateKommisionierungComponent implements OnInit {
       return;
     }
     if (this.logisticBeleg.length < 3) {
-      this.toastr.error('Du musst zuerst Logistic Beleg Nr eingeben', 'Error', {
-        timeOut: 900,
-      });
+      this.toastr.error(
+        'Du musst zuerst Logistic Beleg Nr eingeben und speichern',
+        'Error',
+        {
+          timeOut: 900,
+        },
+      );
       return;
     }
     const art: AddArtikelKommissDto[] = [];
@@ -355,6 +362,13 @@ export class CreateKommisionierungComponent implements OnInit {
       if (this.currentKomm.kommDetails[index].gepackt === 'GEPACKT') {
         this.toastr.error(
           'Du kannst bei gepackten ware die menge nicht ändern!',
+          'Menge ändern',
+        );
+        return;
+      }
+      if (this.currentKomm.kommDetails[index].gepackt === 'TEILGEPACKT') {
+        this.toastr.error(
+          'Die ware ist schön teilweise gepackt, kann man nicht ändern!',
           'Menge ändern',
         );
         return;
@@ -454,6 +468,13 @@ export class CreateKommisionierungComponent implements OnInit {
         );
         return;
       }
+      if (this.currentKomm.kommDetails[index].gepackt === 'TEILGEPACKT') {
+        this.toastr.error(
+          'Die ware ist schön teilweise gepackt, kann man nicht ändern!',
+          'Menge ändern',
+        );
+        return;
+      }
       if (this.artikelMengeEdit[index] > 0) {
         if (
           this.artikelMengeEdit[index] % this.artikels[index].minLosMenge !==
@@ -519,6 +540,13 @@ export class CreateKommisionierungComponent implements OnInit {
       this.toastr.error(
         'Du kannst gepackt ware nicht löschen!',
         'Ware Löschen',
+      );
+      return;
+    }
+    if (this.currentKomm.kommDetails[index].gepackt === 'TEILGEPACKT') {
+      this.toastr.error(
+        'Die ware ist schön teilweise gepackt, kann man nicht ändern!',
+        'Menge ändern',
       );
       return;
     }

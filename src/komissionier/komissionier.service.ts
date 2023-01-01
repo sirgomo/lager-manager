@@ -146,6 +146,9 @@ export class KommissionierService {
               data.gepackt = ARTIKELSTATUS.GEPACKT;
               pal.gepackt = true;
             }
+            if (data.currentGepackt !== data.menge && data.currentGepackt > 0) {
+              data.gepackt = ARTIKELSTATUS.TEILGEPACKT;
+            }
             if (art.artikelMenge < 0) {
               this.pal.delete({
                 artikelId: art.artid,
