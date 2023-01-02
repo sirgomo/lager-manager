@@ -4,7 +4,7 @@ export class ArtikelKommissDto {
   artId!: number;
   total!: number;
   name!: string;
-  verPrice2!: number;
+  rabatt!: number;
   verPrice!: number;
   minLosMenge!: number;
   gewicht!: number;

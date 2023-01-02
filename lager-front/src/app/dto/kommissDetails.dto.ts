@@ -1,6 +1,7 @@
 export class KommissDetailsDto {
   artikelId!: number;
   menge!: number;
+  rabatt!: number;
   id!: number;
   gepackt!: ARTIKELSTATUS;
   inBestellung!: boolean;

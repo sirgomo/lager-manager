@@ -28,6 +28,7 @@ export class CreateKommisionierungComponent implements OnInit {
   spedi: SpeditionDto[] = [];
   spediSelected = -1;
   searchModel = '';
+  rabats: number[] = [];
   artikels: ArtikelKommissDto[] = [];
   artikelMenge: number[] = [];
   artikelMengeEdit: number[] = [];
@@ -57,6 +58,8 @@ export class CreateKommisionierungComponent implements OnInit {
       maxPalettenHoher: Number,
       gewunschtesLieferDatum: Date,
       dispositorId: Number,
+      skonto: Number,
+      skontoFrist: Number,
       kommissStatus: KOMMISIONSTATUS,
       spedition: Number,
       versorungId: [''],
@@ -79,6 +82,7 @@ export class CreateKommisionierungComponent implements OnInit {
     this.spedi = await this.dataDiel.getSpeditors();
     this.dispo = await this.dataDiel.getDispositors();
     await this.getArtikle();
+    this.rabats = Array(this.artikels.length);
   }
 
   async getUser() {
@@ -103,9 +107,11 @@ export class CreateKommisionierungComponent implements OnInit {
   }
   addlogisticBeleg(text: string) {
     if (text.length < 3) {
-      this.toastr.error('Logistic Belege nr ist zu kurz');
+      this.toastr.error('Logistik Beleg nr ist zu kurz');
     } else {
-      this.toastr.success('Logistic Belege nr wurde hinzugefügt');
+      this.toastr.success(
+        'Logistik Beleg nr wurde hinzugefügt, aber noch nicht gespeichert!',
+      );
       this.logisticBelegNr.push(text);
       this.logisticBeleg = text;
     }
@@ -176,8 +182,9 @@ export class CreateKommisionierungComponent implements OnInit {
     komm.kommDetails = this.currentKomm.kommDetails;
     return await this.kommServ.updateKomm(komm).subscribe((data) => {
       if (Object.values(data)[2] === 1) {
+        this.kommissForm.patchValue(komm);
         this.toastr.success('Das Kommissionierung wurde aktualisiert');
-        this.dialogRef.close(data);
+        this.dialogRef.close(komm);
       } else {
         this.toastr.error('Etwas ist schieff gegangen');
       }
@@ -225,6 +232,11 @@ export class CreateKommisionierungComponent implements OnInit {
             tmpArti.total = this.currentKomm.kommDetails[y].menge;
             tmpArti.logisticBelegNr =
               this.currentKomm.kommDetails[y].logisticBelegNr;
+            tmpArti.rabatt = this.currentKomm.kommDetails[y].rabatt;
+            tmpArti.verPrice = this.getPriceMitRabat(
+              this.artikels[i].verPrice,
+              this.currentKomm.kommDetails[y].rabatt,
+            );
             this.artikelsInKomm.push(tmpArti);
             this.setBorderfurArtikel(this.currentKomm.kommDetails[y]);
             tmpArti = this.setGewichtFurArtikel(tmpArti);
@@ -337,12 +349,14 @@ export class CreateKommisionierungComponent implements OnInit {
         }
         tmpart.kommNr = Number(this.kommissForm.get('id')?.getRawValue());
         tmpart.artMenge = tmp;
+        tmpart.rabatt = this.rabats[index];
         tmpart.inBestellung = true;
         const artForLocal: ArtikelKommissDto = new ArtikelKommissDto();
         for (let i = 0; i !== this.artikels.length; i++) {
           if (tmpart.artikelId === this.artikels[i].artId) {
             Object.assign(artForLocal, this.artikels[i]);
             artForLocal.total = tmpart.artMenge;
+            artForLocal.rabatt = tmpart.rabatt;
             this.artikelsInKomm.push(artForLocal);
             break;
           }
@@ -449,6 +463,7 @@ export class CreateKommisionierungComponent implements OnInit {
       }
       const artToAd: AddArtikelKommissDto = new AddArtikelKommissDto();
       artToAd.artMenge = this.artikelMenge[index];
+      artToAd.rabatt = this.rabats[index];
       artToAd.artikelId = this.artikels[index].artId;
       artToAd.kreditorId = this.artikels[index].liferantId;
       artToAd.kommNr = Number(this.kommissForm.get('id')?.getRawValue());
@@ -458,6 +473,7 @@ export class CreateKommisionierungComponent implements OnInit {
       this.artikels[index].total -= this.artikelMenge[index];
       this.artikelsInKomm.push(tmpArt);
       this.artikelMenge[index] = 0;
+      this.rabats[index] = 0;
       artToAd.logisticBelegNr = this.logisticBeleg;
       art.push(artToAd);
     } else {
@@ -494,7 +510,7 @@ export class CreateKommisionierungComponent implements OnInit {
         artToAd.kommNr = Number(this.kommissForm.get('id')?.getRawValue());
         artToAd.logisticBelegNr = this.artikelsInKomm[index].logisticBelegNr;
         artToAd.inBestellung = this.currentKomm.kommDetails[index].inBestellung;
-
+        artToAd.rabatt = this.rabats[index];
         artToAd.kommDeatailnr = this.currentKomm.kommDetails[index].id;
         if (this.currentKomm.kommDetails[index].id !== -1) {
           artToAd.artMenge = this.currentKomm.kommDetails[index].menge;
@@ -514,10 +530,10 @@ export class CreateKommisionierungComponent implements OnInit {
 
         art.push(artToAd);
         this.artikelMengeEdit[index] = 0;
+        this.rabats[index] = 0;
       }
     }
     art.reverse();
-    console.log(JSON.stringify(art));
     this.saveArtikel(art);
   }
   async saveArtikel(art: AddArtikelKommissDto[]) {
@@ -569,5 +585,19 @@ export class CreateKommisionierungComponent implements OnInit {
           this.reasignKomm();
         }
       });
+  }
+  getCurrentPrice(index: number): number {
+    if (this.rabats[index] !== undefined && this.rabats[index] > 0) {
+      return Number(
+        Number(
+          this.artikels[index].verPrice -
+            (this.artikels[index].verPrice * this.rabats[index]) / 100,
+        ).toFixed(2),
+      );
+    }
+    return this.artikels[index].verPrice;
+  }
+  getPriceMitRabat(price: number, rabatt: number) {
+    return Number((price - (price * rabatt) / 100).toFixed(2));
   }
 }

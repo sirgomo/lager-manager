@@ -30,8 +30,6 @@ export class ArtikelEntity {
   @Column()
   bestand: number;
   @Column({type : 'double', nullable: false})
-  verPrice2 : number;
-  @Column({type: 'double', nullable: false})
   verPrice: number;
   @Column()
   liferantId: number;

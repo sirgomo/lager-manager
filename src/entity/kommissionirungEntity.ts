@@ -20,7 +20,10 @@ export class KommissionirungEntity {
   gewunschtesLieferDatum: Date;
   @Column()
   dispositorId: number;
-
+  @Column({ type: 'tinyint', default: 0 })
+  skonto: number;
+  @Column({ type: 'smallint', default: 0 })
+  skontoFrist: number;
   @Column()
   kommissStatus: KOMMISIONSTATUS;
   @Column()

@@ -10,8 +10,11 @@ import { LagerController } from './lager.controller';
 import { LagerService } from './lager.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([LagerPlatzEntity, ArtikelEntity, UiidEntity]), AuthModule],
+  imports: [
+    TypeOrmModule.forFeature([LagerPlatzEntity, ArtikelEntity, UiidEntity]),
+    AuthModule,
+  ],
   controllers: [LagerController],
-  providers: [LagerService, ArtService, UidService]
+  providers: [LagerService, ArtService, UidService],
 })
 export class LagerModule {}

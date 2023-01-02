@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { KommisioDetailsEntity } from 'src/entity/KommisioDetailsEntity';
 import { KOMMISIONSTATUS } from 'src/entity/KommissionirungEntity';
 
@@ -13,6 +13,12 @@ export class KomissDTO {
   gewunschtesLieferDatum: Date;
   @IsNotEmpty()
   dispositorId: number;
+  @IsNotEmpty()
+  @IsNumber()
+  skonto: number;
+  @IsNotEmpty()
+  @IsNumber()
+  skontoFrist: number;
   @IsNotEmpty({
     message:
       'INBEARBEITUNG oder INKOMMISSIONIRUNG oder FERTIG oder BEREIT oder DRINGEND',

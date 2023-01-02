@@ -74,9 +74,6 @@ export class VerkaufService {
             for (const [key1, value1] of Object.entries(komm)) {
               if (key === key1 && value !== value1) {
                 if (Array.isArray(data[key])) break;
-
-                //console.log('key ' + key + ' value '+ value1)
-                // this.repo.query(`UPDATE kommissionirungen SET ${key} = ${value1} WHERE id= ${komm.id}`);
                 data[key] = value1;
               }
             }
@@ -134,6 +131,7 @@ export class VerkaufService {
           tmp.kommissId = komm.id;
           tmp.gepackt = ARTIKELSTATUS.INPACKEN;
           tmp.kreditorId = art[i].kreditorId;
+          tmp.rabatt = art[i].rabatt;
 
           if (
             art[i].kommDeatailnr !== null &&
@@ -177,7 +175,6 @@ export class VerkaufService {
         );
       }
     }
-    console.log(JSON.stringify(kommArr));
     return kommArr;
   }
   async updateResevation(komm: number, artid: number, menge: number) {

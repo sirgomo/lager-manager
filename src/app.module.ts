@@ -32,6 +32,7 @@ import { AdminModule } from './admin/admin.module';
 import { KreditorsEntity } from './entity/kreditorsEntity';
 import { UserModule } from './user/user.module';
 import { WarenKontrolleModule } from './waren-kontrolle/waren-kontrolle.module';
+import { VorschlagEntity } from './entity/vorschlagEntitiy';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { WarenKontrolleModule } from './waren-kontrolle/waren-kontrolle.module';
         WarenEingStat,
         WarenAusgStat,
         KreditorsEntity,
+        VorschlagEntity,
       ],
       synchronize: false,
     }),

@@ -11,6 +11,8 @@ export class KommisioDetailsEntity {
   kommissId: number;
   @Column({ nullable: true })
   menge: number;
+  @Column({ type: 'double', nullable: false, default: 0 })
+  rabatt = 0;
   @Column({ nullable: false, default: 0 })
   currentGepackt: number;
   @Column({ nullable: true })

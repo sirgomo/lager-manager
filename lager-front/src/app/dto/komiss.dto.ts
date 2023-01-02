@@ -10,7 +10,8 @@ export class KomissDTO {
   gewunschtesLieferDatum!: Date;
 
   dispositorId!: number;
-
+  skonto!: number;
+  skontoFrist!: number;
   kommissStatus!: KOMMISIONSTATUS;
 
   spedition!: number;

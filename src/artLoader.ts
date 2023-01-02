@@ -31,10 +31,9 @@ export class ArtLoader {
         //artike.mhd = new Date(this.getRandomInt(2023,2024), this.getRandomInt(0,11) + 1, this.getRandomInt(0,28) + 1);
 
         artike.bestand = this.getRandomInt(2, 1000);
-        artike.verPrice2 = Math.round(
+        artike.verPrice = Math.round(
           ((this.getRandomInt(1, 100) + Math.random()) * 100) / 100,
         );
-        artike.verPrice = artike.verPrice2 + artike.verPrice2 * 0.05;
         artike.liferantId = this.getRandomInt(1, 5);
         artike.mehrwertsteuer = 6;
         artike.artikelId = this.makeId(5);
@@ -61,10 +60,9 @@ export class ArtLoader {
         artike.artikelFlage = ARTIKELFLAGE.ALK;
         //  artike.mhd = new Date(this.getRandomInt(2023,2026), this.getRandomInt(0,11) + 1, this.getRandomInt(0,28) + 1);
         artike.bestand = this.getRandomInt(2, 1000);
-        artike.verPrice2 = Math.round(
+        artike.verPrice = Math.round(
           ((this.getRandomInt(1, 100) + Math.random()) * 100) / 100,
         );
-        artike.verPrice = artike.verPrice2 + artike.verPrice2 * 0.05;
         artike.liferantId = this.getRandomInt(1, 5);
         artike.mehrwertsteuer = 19;
         artike.artikelId = this.makeId(5);

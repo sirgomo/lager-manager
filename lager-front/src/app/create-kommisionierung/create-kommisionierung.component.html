@@ -62,12 +62,22 @@
          </div>
       </div>
        <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
               <label for="versorungId" class="fs-s">Versorugungs Id</label>
               <input type="text"
                 class="form-control form-control-sm fs-s" formControlName="versorungId" name="versorungId" id="versorungId" aria-describedby="helpId" placeholder="">
             </div>
-            <div class="col-md-6 mt-2 mr-auto">
+            <div class="col-md-3">
+              <label for="skonto" class="fs-s">Skonto: </label>
+              <input type="number"
+                class="form-control form-control-sm fs-s" formControlName="skonto" name="skonto" id="skonto" aria-describedby="skonto" placeholder="">
+            </div>
+            <div class="col-md-3">
+              <label for="skontoFrist" class="fs-s">Skonto Frist: </label>
+              <input type="number"
+                class="form-control form-control-sm fs-s" formControlName="skontoFrist" name="skontoFrist" id="skontoFrist" aria-describedby="skontoFrist" placeholder="">
+            </div>
+            <div class="col-md-3">
               <div>
                 <label for="submitKom" class="fs-s"></label>
               </div>
@@ -76,24 +86,30 @@
               <div>
                 <small id="submitKom" class="form-text text-muted fs-ss">Zuerst müsst die Kommissionierung gespeichert werden</small>
               </div>
-            </div>
-            <div class="row justify-content-center align-items-center g-2">
+           </div>
+       </div>
+        <div class="row">
               <div class="col-md-4">
                 <label for="lbeleg" class="fs-s">Logistic Beleg Nr</label>
                 <input type="text"
                   class="form-control form-control-sm fs-s" #logisticBeleg placeholder="" id="lbeleg">
               </div>
-              <div class="col-md-4 mt-3" >
+              <div class="col-md-4" >
+                <div>
+                  <label for="lbeleg" class="fs-s"></label>
+                </div>
                 <button type="button" id="lbeleg" class="btn btn-primary fs-s" (click)="addlogisticBeleg(logisticBeleg.value)">Gib Logistic Beleg Nr ein</button>
               </div>
-              <div class="col-md-4 mt-4">
+              <div class="col-md-4 text-end">
+                <div>
+                  <label for="zeigArtikel" class="fs-s"></label>
+                </div>
                 <button  id="zeigArtikel" class="btn btn-success fs-s" (click)="showArtikelsinKomm()">Zeig Artikeln</button>
                 <div>
                   <small id="zeigArtikel" class="form-text text-muted fs-ss">Zeig Artikels in Kommissionierung</small>
                 </div>
               </div>
-            </div>
-       </div>
+        </div>
     </form>
     <div class="mt-2 col-md-12"></div>
     <div class="table-responsive" *ngIf="showArtikelsInKomm === 1">
@@ -105,7 +121,7 @@
             <th scope="col" class="fs-s">Name</th>
             <th scope="col" class="fs-s">Artikel Status</th>
             <th scope="col" class="fs-s">Verkauf Price</th>
-            <th scope="col" class="fs-s">Min Los Menge</th>
+            <th scope="col" class="fs-s">Rabatt: </th>
             <th scope="col" class="fs-s">Total Gewicht</th>
             <th scope="col" class="fs-s">Liferant</th>
             <th scope="col" class="fs-s">Logistic Beleg Nr</th>
@@ -121,7 +137,7 @@
             <td class="fs-s">{{item.name }}</td>
             <td class="fs-s">{{artikelStatus[i]}}</td>
             <td class="fs-s">{{item.verPrice}}</td>
-            <td class="fs-s">{{item.minLosMenge}}</td>
+            <td class="fs-s">{{item.rabatt}}</td>
             <td class="fs-s">{{item.gewicht}}</td>
             <td class="fs-s">{{dispo[item.liferantId].name}}</td>
             <td class="fs-s">{{item.logisticBelegNr}}</td>
@@ -167,7 +183,7 @@
           <th scope="col" class="fs-s">Artikel id:</th>
           <th scope="col" class="fs-s">Verfugbare Menge</th>
           <th scope="col" class="fs-s">Name</th>
-          <th scope="col" class="fs-s">Verkauf Price 2</th>
+          <th scope="col" class="fs-s">Rabat in %</th>
           <th scope="col" class="fs-s">Verkauf Price</th>
           <th scope="col" class="fs-s">Min Los Menge</th>
           <th scope="col" class="fs-s">Gewicht</th>
@@ -183,8 +199,12 @@
           <td class="fs-s">{{item.artId}}</td>
           <td class="fs-s">{{item.total}}</td>
           <td class="fs-s">{{item.name}}</td>
-          <td class="fs-s">{{item.verPrice2}}</td>
-          <td class="fs-s">{{item.verPrice}}</td>
+          <td class="fs-s">
+            <div>
+              <input type="number" class="form-control form-control-sm fs-s" name="rabat" id="rabat" [(ngModel)]="rabats[i]">
+            </div>
+          </td>
+          <td class="fs-s">{{getCurrentPrice(i)}}</td>
           <td class="fs-s">{{item.minLosMenge}}</td>
           <td class="fs-s">{{item.gewicht}}</td>
           <td class="fs-s">{{item.basisEinheit}}</td>
