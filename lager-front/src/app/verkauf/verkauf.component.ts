@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CreateKommisionierungComponent } from '../create-kommisionierung/create-kommisionierung.component';
 import { DataDilerService } from '../data-diler.service';
@@ -26,7 +25,6 @@ export class VerkaufComponent implements OnInit {
 
   constructor(
     private serv: VerkaufService,
-    private router: Router,
     private dataDie: DataDilerService,
     private toaster: ToastrService,
     private dialog: MatDialog,
@@ -121,23 +119,30 @@ export class VerkaufComponent implements OnInit {
     conf.height = '100vh';
     conf.maxHeight = '100vh';
     conf.maxWidth = '100vw';
+    conf.enterAnimationDuration = 400;
     conf.panelClass = 'full-screen-modal';
-    conf.data = this.komiss[index];
-    this.dialog
-      .open<CreateKommisionierungComponent>(
-        CreateKommisionierungComponent,
-        conf,
-      )
-      .afterClosed()
-      .subscribe((data) => {
-        const tmpKom: KomissDTO = new KomissDTO();
-        Object.assign(tmpKom, data);
-        for (let i = 0; i < this.komiss.length; i++) {
-          if (this.komiss[i].id === tmpKom.id) {
-            this.komiss[i] = tmpKom;
+    this.serv.getKommissById(this.komiss[index].id).subscribe((data) => {
+      if (data === null) {
+        this.toaster.error('Etwas ist schieffgelaufen, nicht gefunden');
+        return;
+      }
+      conf.data = data;
+      this.dialog
+        .open<CreateKommisionierungComponent>(
+          CreateKommisionierungComponent,
+          conf,
+        )
+        .afterClosed()
+        .subscribe((data) => {
+          const tmpKom: KomissDTO = new KomissDTO();
+          Object.assign(tmpKom, data);
+          for (let i = 0; i < this.komiss.length; i++) {
+            if (this.komiss[i].id === tmpKom.id) {
+              this.komiss[i] = tmpKom;
+            }
           }
-        }
-      });
+        });
+    });
   }
   async meinKommissionierungen() {
     this.showDownload = false;

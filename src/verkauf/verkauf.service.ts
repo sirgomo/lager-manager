@@ -29,8 +29,15 @@ export class VerkaufService {
   async getAllKommiss() {
     try {
       return await this.repo.find({
-        relations: {
-          kommDetails: true,
+        select: {
+          id: true,
+          verkauferId: true,
+          maxPalettenHoher: true,
+          gewunschtesLieferDatum: true,
+          dispositorId: true,
+          spedition: true,
+          versorgungId: true,
+          kommissStatus: true,
         },
       });
     } catch (err) {
@@ -42,10 +49,19 @@ export class VerkaufService {
   async getAllKommisByVerkaufer(verkaufer: number) {
     try {
       return await this.repo.find({
-        relations: {
-          kommDetails: true,
+        select: {
+          id: true,
+          verkauferId: true,
+          maxPalettenHoher: true,
+          gewunschtesLieferDatum: true,
+          dispositorId: true,
+          spedition: true,
+          versorgungId: true,
+          kommissStatus: true,
         },
-        where: { verkauferId: verkaufer },
+        where: {
+          verkauferId: verkaufer,
+        },
       });
     } catch (err) {
       throw new Error(
@@ -322,6 +338,18 @@ export class VerkaufService {
         }
         data.kommissStatus = status.kommissStatus;
         return this.repo.save(data);
+      });
+    } catch (err) {
+      return err;
+    }
+  }
+  getKommById(kommId: number): Promise<KommissionirungEntity> {
+    try {
+      return this.repo.findOne({
+        where: { id: kommId },
+        relations: {
+          kommDetails: true,
+        },
       });
     } catch (err) {
       return err;

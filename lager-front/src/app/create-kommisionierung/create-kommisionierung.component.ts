@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DataDilerService } from '../data-diler.service';
 import { AddArtikelKommissDto } from '../dto/addArtikelKommiss.dto';
@@ -47,7 +46,6 @@ export class CreateKommisionierungComponent implements OnInit {
     private fb: FormBuilder,
     private helper: HelperService,
     private dataDiel: DataDilerService,
-    private router: Router,
     private toastr: ToastrService,
     private dialogRef: MatDialogRef<CreateKommisionierungComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: KomissDTO,
@@ -58,11 +56,13 @@ export class CreateKommisionierungComponent implements OnInit {
       maxPalettenHoher: Number,
       gewunschtesLieferDatum: Date,
       dispositorId: Number,
+      buchungsDatum: Date,
+      falligkeitDatum: Date,
       skonto: Number,
       skontoFrist: Number,
       kommissStatus: KOMMISIONSTATUS,
       spedition: Number,
-      versorungId: [''],
+      versorgungId: [''],
       kommDetails: KommissDetailsDto,
     });
     this.kommStatus = KOMMISIONSTATUS;

@@ -116,7 +116,7 @@ export class PdfkommissComponent implements OnInit {
           34 - margin[1],
         );
         pdf.text(
-          'Versorgung id:  ' + this.dataDiel.getKomm().versorungId,
+          'Versorgung id:  ' + this.dataDiel.getKomm().versorgungId,
           240 - margin[0],
           30 - margin[1],
         );
@@ -138,7 +138,7 @@ export class PdfkommissComponent implements OnInit {
         }
 
         pdf.text(
-          'Versorgung id:  ' + this.dataDiel.getKomm().versorungId,
+          'Versorgung id:  ' + this.dataDiel.getKomm().versorgungId,
           240 - margin[0],
           30 - margin[1],
         );

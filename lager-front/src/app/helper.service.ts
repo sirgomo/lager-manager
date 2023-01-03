@@ -180,17 +180,6 @@ export class HelperService {
     let stellplattze = 0;
     let sussgewicht = 0;
     for (let i = 0; i !== artikels.length; i++) {
-      console.log(
-        typeof artikels[i].total +
-          '  ' +
-          typeof artikels[i].minLosMenge +
-          ' ' +
-          typeof artikels[i].gewicht +
-          ' ' +
-          typeof totalGewicht +
-          ' ' +
-          typeof Math.ceil(artikels[i].total / artikels[i].minLosMenge),
-      );
       if (artikels[i].ARTIKELFLAGE == ARTIKELFLAGE.FASS) {
         totalGewicht += artikels[i].gewicht;
       }

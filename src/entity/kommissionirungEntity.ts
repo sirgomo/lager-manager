@@ -29,7 +29,11 @@ export class KommissionirungEntity {
   @Column()
   spedition: number;
   @Column()
-  versorungId: string;
+  versorgungId: string;
+  @Column({ type: 'date' })
+  buchungsDatum: Date;
+  @Column({ type: 'date' })
+  falligkeitDatum: Date;
 
   @OneToMany(
     () => KommisioDetailsEntity,
@@ -41,7 +45,7 @@ export class KommissionirungEntity {
 export enum KOMMISIONSTATUS {
   INBEARBEITUNG = 'INBEARBEITUNG',
   INKOMMISSIONIRUNG = 'INKOMMISSIONIRUNG',
-  FREI = 'BEREIT',
+  FREIGEGEBEN = 'FREIGEGEBEN',
   FERTIG = 'FERTIG',
   DRINGEND = 'DRINGEND',
 }

@@ -87,4 +87,9 @@ export class VerkaufController {
   ) {
     return this.verkService.changeKommStatus(kommId, status);
   }
+  @Get('kommid/:id')
+  @ROLES(ROLE.VERKAUF)
+  getKommById(@Param('id') id: number) {
+    return this.verkService.getKommById(id);
+  }
 }

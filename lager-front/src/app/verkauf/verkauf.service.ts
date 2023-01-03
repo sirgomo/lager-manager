@@ -65,4 +65,7 @@ export class VerkaufService {
       }),
     });
   }
+  getKommissById(id: number) {
+    return this.http.get<KomissDTO>(this.API_URL + '/kommid/' + id);
+  }
 }

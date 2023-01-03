@@ -10,62 +10,60 @@
     <form [formGroup]="kommissForm">
       <input type="hidden" formControlName="id" name="id">
       <div class="row">
-       <div class="col  ">
-        <div class="mb-3">
+        <div class="col-md-3">
           <label for="verkauferId" class="fs-s "> Verkaufer</label>
           <input type="hidden"
             class="form-control form-control-sm fs-s" formControlName="verkauferId" name="verkauferId" id="verkauferId" aria-describedby="helpId" placeholder="hier sollte benutzer nr sein" (ngValue)="verkaufer">
             <div class="form-control form-control-sm">{{verkauferData.username}}</div>
         </div>
-       </div>
-       <div class="col">
-        <div class="mb-3">
+        <div class="col-md-3">
           <label for="maxPalettenHoher" class="fs-s">Maximale Palettenhöhe </label>
           <input type="number"
             class="form-control form-control-sm fs-s" formControlName="maxPalettenHoher" name="maxPalettenHoher" id="maxPalettenHoher" aria-describedby="helpId" placeholder="">
         </div>
-       </div>
-       <div class="col  ">
-        <div class="mb-3">
+        <div class="col-md-3">
           <label for="gewunschtesLieferDatum" class="fs-s">Gewünschte Lieferdatum</label>
           <input type="date"
             class="form-control form-control-sm fs-s" formControlName="gewunschtesLieferDatum" name="gewunschtesLieferDatum" id="gewunschtesLieferDatum" aria-describedby="helpId" placeholder="">
         </div>
-       </div>
+        <div class="col-md-3">
+          <label for="falligkeitDatum" class="fs-s">Fälligkeitdatum</label>
+          <input type="date"
+            class="form-control form-control-sm fs-s" formControlName="falligkeitDatum" name="falligkeitDatum" id="falligkeitDatum" aria-describedby="helpId" placeholder="">
+        </div>
       </div>
       <div class="row">
-        <div class="col  ">
-            <div class="mb-3">
+        <div class="col-md-3">
               <label for="dispositorId" class="fs-s">Debitor</label>
               <select formControlName="dispositorId" class="form-select form-select-sm fs-s" name="dispositorId" id="dispositorId">
                 <option *ngFor="let item of dispo | filterNullItemPipe; let i = index; " [ngValue]="item?.id">{{item?.name}}</option>
               </select>
-          </div>
          </div>
-         <div class="col  ">
-          <div class="mb-3">
+         <div class="col-md-3">
               <label for="" class="fs-s">Kommissionierung Status</label>
               <select formControlName="kommissStatus" class="form-select form-select-sm fs-s" name="kommissStatus" id="">
-                <option *ngFor="let item of kommStatus | keyvalue" [ngValue]="item.value" >{{item.value}}</option>
+                <option *ngFor="let item of kommStatus | keyvalue" [ngValue]="item.value" [ngValue]="item?.value">{{item.value}}</option>
               </select>
-            <small id="helpId" class="form-text text-muted fs-ss"> Inbearbeitung, bereit kann man kommissioniren</small>
+            <small id="helpId" class="form-text text-muted fs-ss"> Inbearbeitung, frei kann man kommissioniren</small>
           </div>
-         </div>
-         <div class="col  ">
-          <div class="mb-3">
+         <div class="col-md-3">
               <label for="spedition" class="fs-s">Spedition</label>
               <select formControlName="spedition" class="form-select form-select-sm fs-s" name="spedition" id="spedition">
                 <option *ngFor="let item of spedi | filterNullItemPipe; let i = index" [ngValue]="item?.id">{{item?.name}}</option>
               </select>
               <small id="helpId" class="form-text text-muted fs-ss"  *ngIf="spedi[spediSelected] !== undefined"> {{'Max lade gewicht: '+ spedi[spediSelected].maxLadeGewicht + ' Max paletten: ' + spedi[spediSelected].maxPalettenMenge}}</small>
           </div>
-         </div>
+          <div class="col-md-3">
+            <label for="buchungsDatum" class="fs-s">Buchungsdatum</label>
+            <input type="date"
+              class="form-control form-control-sm fs-s" formControlName="buchungsDatum" name="buchungsDatum" id="buchungsDatum" aria-describedby="helpId" placeholder="">
+          </div>
       </div>
        <div class="row">
             <div class="col-md-3">
-              <label for="versorungId" class="fs-s">Versorugungs Id</label>
+              <label for="versorgungId" class="fs-s">Versorugungs Id</label>
               <input type="text"
-                class="form-control form-control-sm fs-s" formControlName="versorungId" name="versorungId" id="versorungId" aria-describedby="helpId" placeholder="">
+                class="form-control form-control-sm fs-s" formControlName="versorgungId" name="versorgungId" id="versorgungId" aria-describedby="helpId" placeholder="">
             </div>
             <div class="col-md-3">
               <label for="skonto" class="fs-s">Skonto: </label>

@@ -19,15 +19,16 @@ export class KomissDTO {
   @IsNotEmpty()
   @IsNumber()
   skontoFrist: number;
-  @IsNotEmpty({
-    message:
-      'INBEARBEITUNG oder INKOMMISSIONIRUNG oder FERTIG oder BEREIT oder DRINGEND',
-  })
+  @IsNotEmpty()
   kommissStatus: KOMMISIONSTATUS;
   @IsNotEmpty()
   spedition: number;
   @IsNotEmpty({ message: 'Versorung id' })
-  versorungId: string;
+  versorgungId: string;
+  @IsNotEmpty()
+  buchungsDatum!: Date;
+  @IsNotEmpty()
+  falligkeitDatum!: Date;
   @IsOptional()
   kommDetails: KommisioDetailsEntity[];
 }
