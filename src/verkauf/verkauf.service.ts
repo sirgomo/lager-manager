@@ -4,7 +4,6 @@ import { AddArtikelKommissDTO } from 'src/DTO/addArtikelKommissDTO';
 import { ArtikelKommissDTO } from 'src/DTO/artikelKommissDTO';
 import { KomissDTO } from 'src/DTO/KomissDTO';
 import { PalettenMengeVorausDTO } from 'src/DTO/palettenMengeVorausDTO';
-import { ArtikelReservationEntity } from 'src/entity/ArtikelReservationEntity';
 import {
   ARTIKELSTATUS,
   KommisioDetailsEntity,
@@ -23,8 +22,6 @@ export class VerkaufService {
     @InjectRepository(KommisioDetailsEntity)
     private repoDetails: Repository<KommisioDetailsEntity>,
     private repoLager: LagerService,
-    @InjectRepository(ArtikelReservationEntity)
-    private repoReserv: Repository<ArtikelReservationEntity>,
   ) {}
   async getAllKommiss() {
     try {
@@ -162,7 +159,7 @@ export class VerkaufService {
             let found = false;
             komm.kommDetails.forEach((data) => {
               if (data !== null && data.id === art[i].kommDeatailnr) {
-                data.menge += tmp.menge;
+                data.menge = tmp.menge;
                 found = true;
               }
             });
@@ -174,14 +171,6 @@ export class VerkaufService {
           }
 
           kommArr[i] = await this.repo.save(komm).then((data) => {
-            if (!data) return;
-            if (!tmp.inBestellung) {
-              this.updateResevation(
-                art[i].kommNr,
-                art[i].artikelId,
-                art[i].artMenge,
-              );
-            }
             return data;
           });
         }
@@ -192,31 +181,6 @@ export class VerkaufService {
       }
     }
     return kommArr;
-  }
-  async updateResevation(komm: number, artid: number, menge: number) {
-    const tmpRes: ArtikelReservationEntity = new ArtikelReservationEntity();
-    tmpRes.artikelId = artid;
-
-    tmpRes.kommId = komm;
-    try {
-      await this.repoReserv
-        .findOneBy({ artikelId: artid, kommId: komm })
-        .then((data) => {
-          if (data !== null && data.id !== null) {
-            tmpRes.id = data.id;
-            tmpRes.menge = data.menge;
-            tmpRes.menge += menge;
-          } else {
-            tmpRes.menge = menge;
-          }
-        });
-      await this.repoReserv.create(tmpRes);
-      await this.repoReserv.save(tmpRes);
-    } catch (err) {
-      throw new Error(
-        'Etwas ist schiff gelaufen in Kommiss serv on up reservation ' + err,
-      );
-    }
   }
 
   async getArtikels() {
@@ -250,8 +214,6 @@ export class VerkaufService {
   }
   async deleteKomm(id: number) {
     try {
-      await this.repoReserv.delete({ kommId: id });
-
       return await (
         await this.repo.delete({ id: id })
       ).affected;
@@ -275,9 +237,6 @@ export class VerkaufService {
       }
       return await this.repoDetails.delete({ id: id }).then(
         (data) => {
-          if (!tmp.inBestellung) {
-            this.updateResevation(tmp.kommissId, tmp.artikelId, -tmp.menge);
-          }
           return data.affected;
         },
         (err) => {

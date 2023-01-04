@@ -13,7 +13,6 @@ import { ArtikelModule } from './artikel/artikel.module';
 import { AuthModule } from './auth/auth.module';
 import { UserEntity } from './entity/UserEntity';
 import { RoleGuard } from './auth/RoleGuard';
-import { ArtikelReservationEntity } from './entity/ArtikelReservationEntity';
 import { FehlendArtikelEntity } from './entity/FehlendArtikelEntity';
 import { InKomissPalletenEntity } from './entity/InKomissPalletenEntity';
 import { KommissionirungEntity } from './entity/KommissionirungEntity';
@@ -47,7 +46,6 @@ import { VorschlagEntity } from './entity/vorschlagEntitiy';
         DispositorEntity,
         ArtikelEntity,
         UserEntity,
-        ArtikelReservationEntity,
         FehlendArtikelEntity,
         InKomissPalletenEntity,
         KommissionirungEntity,

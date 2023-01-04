@@ -161,6 +161,7 @@ export class CreateKommisionierungComponent implements OnInit {
         if (data.fehlArtikelMenge !== null) {
           tmp.total -= data.fehlArtikelMenge;
         }
+        if (tmp.total < 0) tmp.total = 0;
         this.artikels[index].total = tmp.total;
       });
   }
@@ -238,13 +239,13 @@ export class CreateKommisionierungComponent implements OnInit {
               this.currentKomm.kommDetails[y].rabatt,
             );
             this.artikelsInKomm.push(tmpArti);
-            this.setBorderfurArtikel(this.currentKomm.kommDetails[y]);
             tmpArti = this.setGewichtFurArtikel(tmpArti);
             this.artikelStatus[y] = this.currentKomm.kommDetails[y].gepackt;
             break;
           }
         }
       }
+      this.setBorderfurArtikel();
       if (this.currentKomm.kommDetails.length > 0) {
         const tmpSet = new Set(this.logisticBelegNr);
         this.logisticBelegNr = Array.from(tmpSet);
@@ -272,16 +273,19 @@ export class CreateKommisionierungComponent implements OnInit {
       this.totalGewichtB = totalGewicht;
     }
   }
-  setBorderfurArtikel(tmpArti: KommissDetailsDto) {
-    if (
-      tmpArti.gepackt === ARTIKELSTATUS.GEPACKT ||
-      tmpArti.gepackt === ARTIKELSTATUS.TEILGEPACKT
-    ) {
-      this.border.push('table-success border border-success');
-    } else if (tmpArti.inBestellung) {
-      this.border.push('border border-danger table-danger');
-    } else {
-      this.border.push('border border-success table-light');
+  setBorderfurArtikel() {
+    this.border.splice(0, this.border.length);
+    for (let i = 0; i < this.artikelsInKomm.length; i++) {
+      if (
+        this.currentKomm.kommDetails[i].gepackt === ARTIKELSTATUS.GEPACKT ||
+        this.currentKomm.kommDetails[i].gepackt === ARTIKELSTATUS.TEILGEPACKT
+      ) {
+        this.border.push('table-success border border-success');
+      } else if (this.currentKomm.kommDetails[i].inBestellung) {
+        this.border.push('border border-danger table-danger');
+      } else {
+        this.border.push('border border-success table-light');
+      }
     }
   }
   newKomm() {
@@ -437,7 +441,6 @@ export class CreateKommisionierungComponent implements OnInit {
               Object.assign(artForLocal, this.artikels[i]);
               artForLocal.total = tmpart.artMenge;
               this.artikelsInKomm.push(artForLocal);
-
               art.push(tmpart);
             } else {
               this.toastr.show(' ok, keine andreungen!', '', { timeOut: 800 });
@@ -512,21 +515,7 @@ export class CreateKommisionierungComponent implements OnInit {
         artToAd.inBestellung = this.currentKomm.kommDetails[index].inBestellung;
         artToAd.rabatt = this.rabats[index];
         artToAd.kommDeatailnr = this.currentKomm.kommDetails[index].id;
-        if (this.currentKomm.kommDetails[index].id !== -1) {
-          artToAd.artMenge = this.currentKomm.kommDetails[index].menge;
-
-          if (artToAd.artMenge > this.artikelMengeEdit[index]) {
-            artToAd.artMenge = -(
-              artToAd.artMenge - this.artikelMengeEdit[index]
-            );
-            this.artikelsInKomm[index].total += artToAd.artMenge;
-          } else {
-            artToAd.artMenge = this.artikelMengeEdit[index] - artToAd.artMenge;
-            this.artikelsInKomm[index].total += artToAd.artMenge;
-          }
-        } else {
-          artToAd.artMenge = this.artikelMengeEdit[index];
-        }
+        artToAd.artMenge = this.artikelMengeEdit[index];
 
         art.push(artToAd);
         this.artikelMengeEdit[index] = 0;
@@ -541,6 +530,10 @@ export class CreateKommisionierungComponent implements OnInit {
       if (data !== null) {
         Object.assign(this.currentKomm, data[data.length - 1]);
         this.reasignKomm();
+        if (art[art.length - 1].inBestellung) {
+          console.log(art[art.length - 1]);
+          this.setBorderfurArtikel(art as unknown as KommissDetailsDto);
+        }
       }
     });
   }
