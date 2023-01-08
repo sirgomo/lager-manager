@@ -11,6 +11,8 @@ export class AppComponent implements OnInit {
   isLogged = false;
   title = 'Lager';
   toolbarInfo = 'Lager Manger';
+  kommissionier = false;
+  palNr = '';
   constructor(private api: ApiService, private helper: HelperService) {}
   ngOnInit(): void {
     this.api.getJwtUserToken().subscribe((token: string) => {
@@ -18,14 +20,18 @@ export class AppComponent implements OnInit {
         this.isLogged = true;
       }
     });
+    this.kommissionier = false;
     this.helper.toolbarInfo.subscribe((d) => {
       if (d.length < 1) return;
-      this.toolbarInfo = d;
+      this.toolbarInfo = d[0];
+      this.palNr = d[1];
+      this.kommissionier = true;
     });
   }
   logout() {
     this.isLogged = false;
-    this.api.logut();
+    this.kommissionier = false;
     this.toolbarInfo = 'Lager Manger';
+    this.api.logut();
   }
 }

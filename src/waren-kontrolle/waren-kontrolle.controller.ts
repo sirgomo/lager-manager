@@ -1,5 +1,5 @@
 import { Controller, UseGuards } from '@nestjs/common';
-import { Get } from '@nestjs/common/decorators';
+import { Get, Param } from '@nestjs/common/decorators';
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
 import { RoleGuard } from 'src/auth/RoleGuard';
@@ -14,5 +14,20 @@ export class WarenKontrolleController {
   @ROLES(ROLE.KONTROLLER)
   getKommissionierungen() {
     return this.service.getAllKommisionierungen();
+  }
+  @Get(':id')
+  @ROLES(ROLE.KONTROLLER)
+  getKommByNr(@Param('id') id: number) {
+    return this.service.getKommById(id);
+  }
+  @Get('palette/:id')
+  @ROLES(ROLE.KONTROLLER)
+  getPalatenbyKomId(@Param('id') kommid: number) {
+    return this.service.getPaletenByKomissId(kommid);
+  }
+  @Get('kommissionier/:id')
+  @ROLES(ROLE.KONTROLLER)
+  getKommissionierByPalId(@Param('id') id: number) {
+    return this.service.getKommissionier(id);
   }
 }

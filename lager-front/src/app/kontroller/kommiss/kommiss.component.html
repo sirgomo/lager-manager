@@ -1,0 +1,60 @@
+<div class="container">
+<mat-toolbar color="primary">
+  <div>
+    <div class="row">
+      <div class="col-md-3 fs-s" *ngIf="currentKomiss[0] !== undefined">
+        <span>Kommissionierung Nr: {{currentKomiss[0].kommissId}}</span>
+      </div>
+      <div class="col-md-6"></div>
+      <div class="col-md-3 fs-sl mt-1 px-1">
+        <div>{{'Stellplatze (Vorausgesehen): ' + stellPlat}}</div>
+        <div>{{'Total Gewicht (Vorausgeshen): ' + gewicht}}</div>
+      </div>
+    </div>
+    </div>
+</mat-toolbar>
+<div matDialogContent class="DialogContent">
+  <div  [(ngModel)]="user" ngDefaultControl>
+    <div class="row">
+      <div class="col">
+        <button mat-raised-button (click)="showPaleten()" color="primary">Paletten Zeigen</button>
+      </div>
+    </div>
+    <div class="col-md-12 mt-1 mb-1"></div>
+    <div *ngIf="showPal === 1">
+      <app-paletten></app-paletten>
+    </div>
+    <div *ngIf="showFront === 1">
+    <table class="table table-bordered table-hover table-sortable fs-s text-center">
+      <thead>
+        <tr>
+          <th>Artikel Nr:</th>
+          <th>Artikel Name</th>
+          <th>Artikel Menge</th>
+          <th>Artikel Gepackt ?</th>
+          <th>Kommissionier </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of currentKomiss; ">
+          <th>{{item.aid}}</th>
+          <th>{{item.name}}</th>
+          <th>{{item.menge}}</th>
+          <th>{{item.gepackt}}</th>
+          <th>{{user}}</th>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<mat-dialog-actions align="end">
+  <div>
+    <button mat-button matDialogClose>Close dialog</button>
+    <button mat-button>Action</button>
+  </div>
+</mat-dialog-actions>
+</div>
+
+

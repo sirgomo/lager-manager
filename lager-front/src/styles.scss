@@ -1,36 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
-@import "assets/bootstrap.min.css";
+/*@import "assets/bootstrap.min.css";*/
 @import "toastr.css";
-
 
 html, body { height: 100%; width: 100%;}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;  }
 
 
-.well:default{
-  margin: 2px;
-
-}
-.well:hover{
-  background-color: rgb(187, 94, 245);
-
-}
-.well{
-  background-color:rgb(221, 212, 228);
-  margin: 2px;
-  max-width: 350px;
+.icons mat-icon, .icons div {
   cursor: pointer;
 }
+
+.spacer{
+ flex: 1 1 auto;
+}
+
 .mat-toolbar{
   min-height: 20px;
   max-height: 40px;
 }
+.container{
+  width: 100%;
+  min-width: 100vw;
+  height: 100%;
+  min-height: 100vh;
+}
 
-.mat-dialog-content{
-  margin: auto;
-  width: auto;
-  height: 95%;
-  max-height: 95vh;
+.matDialogContent{
+  width: 90%;
+  min-width: 90vw;
+  height: 100%;
+  min-height: 100vh;
+}
+.DialogContent{
+  width: 90%;
+  min-width: 90vw;
+  height: 85%;
+  min-height: 85vh;
 }
 h3 {
   padding-top: 7px;
@@ -45,6 +50,11 @@ h3 {
 .fs-s{
   font-size:.8rem;
 }
+.fs-sl{
+  font-size:.8rem;
+  line-height: 0.8rem;
+}
 .fs-ss{
   font-size:.6rem;
 }
+

@@ -51,7 +51,10 @@ export class KommisionierComponent implements OnInit {
           data[i].menge -= data[i].currentGepackt;
           this.getBorder(data[i].menge, data[i].currentGepackt);
         }
-        this.helper.setToolbar('Kommiss Nr: ' + this.kommid);
+        this.helper.setToolbar([
+          'Kommiss Nr: ' + this.kommid,
+          'Palette Nr: ' + this.currentPalatte,
+        ]);
       } else {
         this.toastr.error(Object(data).message);
       }
@@ -94,6 +97,7 @@ export class KommisionierComponent implements OnInit {
           });
           return;
         }
+        //return paletten nr
         this.kommServi.paletteErstellen(data).subscribe((res) => {
           console.log('neue palete ' + res);
           if (isFinite(res)) {

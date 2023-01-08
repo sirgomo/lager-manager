@@ -8,7 +8,7 @@ import { LagerPlatztDto } from './dto/lagerPlatz.dto';
   providedIn: 'root',
 })
 export class HelperService {
-  public toolbarInfo: Subject<string>;
+  public toolbarInfo: Subject<string[]>;
   constructor() {
     this.toolbarInfo = new Subject();
   }
@@ -176,24 +176,25 @@ export class HelperService {
   }
 
   getPaletsDeatails(artikels: ArtikelKommissDto[]) {
+    console.log(artikels);
     let totalGewicht = 0;
     let stellplattze = 0;
     let sussgewicht = 0;
     for (let i = 0; i !== artikels.length; i++) {
       if (artikels[i].ARTIKELFLAGE == ARTIKELFLAGE.FASS) {
-        totalGewicht += artikels[i].gewicht;
+        totalGewicht += Number(artikels[i].gewicht);
       }
       if (artikels[i].ARTIKELFLAGE == ARTIKELFLAGE.ALK) {
-        totalGewicht += artikels[i].gewicht;
+        totalGewicht += Number(artikels[i].gewicht);
       }
       if (artikels[i].ARTIKELFLAGE == ARTIKELFLAGE.SUSS) {
-        sussgewicht += artikels[i].gewicht;
+        sussgewicht += Number(artikels[i].gewicht);
       }
     }
 
     stellplattze = Number(Math.ceil(totalGewicht / 750));
     stellplattze += Number(Math.ceil(sussgewicht / 250));
-    console.log(totalGewicht + ' ' + sussgewicht);
+    console.log('data ' + totalGewicht + ' ' + sussgewicht);
     totalGewicht = totalGewicht + sussgewicht;
 
     return { stellplattze, totalGewicht };
@@ -203,7 +204,7 @@ export class HelperService {
     Object.assign(tmpErr, data);
     return tmpErr.message;
   }
-  public setToolbar(value: string) {
+  public setToolbar(value: string[]) {
     this.toolbarInfo.next(value);
   }
 }

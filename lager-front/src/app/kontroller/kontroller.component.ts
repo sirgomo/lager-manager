@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { DatenpflegeService } from '../datenpflege/datenpflege.service';
 import { DispositorDto } from '../dto/dispositor.dto';
 import { KomissDTO } from '../dto/komiss.dto';
 import { SpeditionDto } from '../dto/spedition.dto';
 import { HelperService } from '../helper.service';
+import { KommissComponent } from './kommiss/kommiss.component';
 import { KontrollerService } from './kontroller.service';
 
 @Component({
@@ -18,10 +20,12 @@ export class KontrollerComponent implements OnInit {
   dispositors: DispositorDto[] = [];
   namen: string[] = [];
   helper: HelperService = new HelperService();
+
   constructor(
     private service: KontrollerService,
     private dataPServ: DatenpflegeService,
     private toaster: ToastrService,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -75,5 +79,23 @@ export class KontrollerComponent implements OnInit {
       tmpNameArr[1].charAt(0).toUpperCase() +
       tmpNameArr[1].substring(1, tmpNameArr[1].length)
     );
+  }
+  async getKommis(index: number) {
+    await this.service.getKommByNr(this.kommiss[index].id).subscribe((res) => {
+      if (res.length === undefined) {
+        const err = res as unknown as Error;
+        this.toaster.error(err.message);
+        return;
+      }
+      const conf: MatDialogConfig = new MatDialogConfig();
+      conf.width = '100vw';
+      conf.height = '100vh';
+      conf.maxHeight = '100vh';
+      conf.maxWidth = '100vw';
+      conf.enterAnimationDuration = 400;
+      conf.panelClass = 'full-screen-modal';
+      conf.data = res;
+      this.dialog.open(KommissComponent, conf);
+    });
   }
 }

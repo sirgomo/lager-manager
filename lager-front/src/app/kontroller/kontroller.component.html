@@ -5,13 +5,13 @@
     <table class="table table-sm table-bordered table-hover table-sortable">
       <thead>
         <tr >
-          <th class="text-center fs-s" style="width:5%">
+          <th class="text-center fs-s" style="width:10%">
             Kommissionierung Nr:
           </th>
-          <th class="text-center fs-s" style="width:5%">
+          <th class="text-center fs-s" style="width:10%">
             Versorung Nr:
           </th>
-          <th class="text-center fs-s" style="width:5%">
+          <th class="text-center fs-s" style="width:10%">
             Maximale Palettenhöhe:
           </th>
           <th class="text-center fs-s" style="width:15%">
@@ -24,22 +24,23 @@
             Kommissionierung Status:
           </th>
           <th class="text-center fs-s" style="width:15%">
-            Spedition:
+            <div> Spedition: </div>
+           <div class="fs-ss"> (Gewicht, Stellplätze)</div>
           </th>
-          <th class="text-center fs-s" style="width:15%">
+          <th class="text-center fs-s" style="width:10%">
             Verkaufer:
           </th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of kommiss; let i = index">
-        <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s">
+        <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s" (click)="getKommis(i)">
             {{item.id}}
         </td>
-        <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s">
+        <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s" (click)="getKommis(i)">
           {{item.versorgungId}}
         </td>
-        <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s">
+        <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s" (click)="getKommis(i)">
           {{item.maxPalettenHoher}}
         </td>
         <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s">
@@ -53,7 +54,10 @@
         </th>
         <th data-name="kommiss" class="text-center fs-s">
           <div>
-            {{spedition[item.spedition].name + ' (' + spedition[item.spedition].maxLadeGewicht + ',' + spedition[item.spedition].maxPalettenMenge +' )' }}
+            {{spedition[item.spedition].name }}
+          </div>
+          <div class="fs-s">
+            {{'(' + spedition[item.spedition].maxLadeGewicht + ',' + spedition[item.spedition].maxPalettenMenge +' )'}}
           </div>
         </th>
         <th data-name="kommiss" class="text-center fs-s">

@@ -1,16 +1,19 @@
 <mat-toolbar color="primary">
-    <div class="container d-flex p-3 my-3">
-        <span routerLink="/" style="cursor:pointer;"> {{toolbarInfo}} </span>
-        <span class="spacer"> </span>
-            <div class="d-flex justify-content-around icons" style="width:100px ;" *ngIf="!isLogged">
-             </div>
-        <div class="d-flex justify-content-around icons" style="width:100px;" *ngIf="isLogged">
-        <div class="d-flex align-items-center ml-2 p px-3">
-            <span (click)="logout()" class="px-2"> Logout</span>
-            <mat-icon  (click)="logout()"> logout</mat-icon>
+      <mat-toolbar-row>
+        <div>
+          <span routerLink="/" style="cursor:pointer;" *ngIf="!kommissionier"> {{toolbarInfo}} </span>
+          <div *ngIf="kommissionier" class="fs-s mt-2">
+            <div style="line-height: 0.6em;">{{toolbarInfo}}</div>
+            <div>{{palNr}}</div>
+           </div>
         </div>
-    </div>
-</div>
+        <span class="spacer"></span>
+          <div *ngIf="isLogged">
+            <button mat-icon-button class="example-icon" aria-label="logout button" (click)="logout()">
+              <mat-icon>logout</mat-icon>
+            </button>
+          </div>
+      </mat-toolbar-row>
 </mat-toolbar>
   <router-outlet></router-outlet>
   <app-loader></app-loader>

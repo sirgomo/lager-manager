@@ -42,6 +42,8 @@ import { AddSpedition } from './datenpflege/speditors/addSpedition';
 import { NeupalComponent } from './kommisionier/neupal/neupal.component';
 import { AddartikelComponent } from './kommisionier/addartikel/addartikel.component';
 import { FindWareComponent } from './kommisionier/find-ware/find-ware.component';
+import { KommissComponent } from './kontroller/kommiss/kommiss.component';
+import { PalettenComponent } from './kontroller/paletten/paletten.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +71,8 @@ import { FindWareComponent } from './kommisionier/find-ware/find-ware.component'
     NeupalComponent,
     AddartikelComponent,
     FindWareComponent,
+    KommissComponent,
+    PalettenComponent,
   ],
   imports: [
     BrowserModule,

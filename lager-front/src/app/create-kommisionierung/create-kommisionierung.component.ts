@@ -532,7 +532,7 @@ export class CreateKommisionierungComponent implements OnInit {
         this.reasignKomm();
         if (art[art.length - 1].inBestellung) {
           console.log(art[art.length - 1]);
-          this.setBorderfurArtikel(art as unknown as KommissDetailsDto);
+          this.setBorderfurArtikel();
         }
       }
     });
