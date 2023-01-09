@@ -108,4 +108,26 @@ export class WarenKontrolleService {
       return err;
     }
   }
+  async setNewStatus(kommid: number, status: any) {
+    try {
+      return await this.komRepo
+        .findOne({ where: { id: kommid } })
+        .then((data) => {
+          data.kommissStatus = status.KOMMISIONSTATUS;
+          return this.komRepo.update({ id: kommid }, data).then(
+            () => {
+              return 1;
+            },
+            () => {
+              throw new HttpException(
+                'Etwas ist schiefgegangen, ich konnte Kommisionierung status nicht ändern',
+                HttpStatus.INTERNAL_SERVER_ERROR,
+              );
+            },
+          );
+        });
+    } catch (err) {
+      return err;
+    }
+  }
 }

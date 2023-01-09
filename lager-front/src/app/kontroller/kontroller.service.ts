@@ -21,4 +21,7 @@ export class KontrollerService {
   getKommissionierbyPalId(palid: number) {
     return this.http.get<any>(this.API_URL + '/kommissionier/' + palid);
   }
+  setKommissStatus(kommid: number, status: any) {
+    return this.http.patch(this.API_URL + '/komm/' + kommid, status);
+  }
 }

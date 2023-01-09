@@ -1,69 +1,43 @@
 <div class="container">
-  <div class="mt-2 col-md-12"></div>
-  <div class="row clearfix">
-    <div class="table-responsive table-sm">
-    <table class="table table-sm table-bordered table-hover table-sortable">
-      <thead>
-        <tr >
-          <th class="text-center fs-s" style="width:10%">
-            Kommissionierung Nr:
-          </th>
-          <th class="text-center fs-s" style="width:10%">
-            Versorung Nr:
-          </th>
-          <th class="text-center fs-s" style="width:10%">
-            Maximale Palettenhöhe:
-          </th>
-          <th class="text-center fs-s" style="width:15%">
-            Lieferdatum:
-          </th>
-          <th class="text-center fs-s" style="width:15%">
-            Dispositor:
-          </th>
-          <th class="text-center fs-s" style="width:15%">
-            Kommissionierung Status:
-          </th>
-          <th class="text-center fs-s" style="width:15%">
-            <div> Spedition: </div>
-           <div class="fs-ss"> (Gewicht, Stellplätze)</div>
-          </th>
-          <th class="text-center fs-s" style="width:10%">
-            Verkaufer:
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of kommiss; let i = index">
-        <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s" (click)="getKommis(i)">
-            {{item.id}}
+
+    <table mat-table [dataSource]="dataSource" >
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>Kommissionierung Nr:</th>
+        <td mat-cell *matCellDef="let item">{{item.id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="versorgung">
+        <th mat-header-cell *matHeaderCellDef>Versorung Nr:</th>
+        <td mat-cell *matCellDef="let item; let i = index" (click)="getKommis(i)">{{item.versorgungId}}</td>
+      </ng-container>
+      <ng-container matColumnDef="paletH">
+        <th mat-header-cell *matHeaderCellDef>Maximale Palettenhöhe:</th>
+        <td mat-cell *matCellDef="let item">{{item.maxPalettenHoher}}</td>
+      </ng-container>
+      <ng-container matColumnDef="lieferD">
+        <th mat-header-cell *matHeaderCellDef>Lieferdatum:</th>
+        <td mat-cell *matCellDef="let item">{{item.gewunschtesLieferDatum | date : 'shortDate'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="dispo">
+        <th mat-header-cell *matHeaderCellDef>Dispositor:</th>
+        <td mat-cell *matCellDef="let item">{{dispositors[item.dispositorId].name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="komStatus">
+        <th mat-header-cell *matHeaderCellDef>Kommissionierung Status:</th>
+        <td mat-cell *matCellDef="let item; let i = index ">
+          <mat-select [(ngModel)]="item.kommissStatus" (selectionChange)="onStatusChange(i)">
+              <mat-option *ngFor="let key of keyinenum()" [value]="key">{{key}}</mat-option>
+          </mat-select>
         </td>
-        <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s" (click)="getKommis(i)">
-          {{item.versorgungId}}
-        </td>
-        <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s" (click)="getKommis(i)">
-          {{item.maxPalettenHoher}}
-        </td>
-        <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s">
-          {{item.gewunschtesLieferDatum | date : 'shortDate'}}
-        </td>
-        <td data-name="kommiss" style="cursor: pointer;" class="text-center fs-s">
-          {{dispositors[item.dispositorId].name}}
-        </td>
-        <th data-name="kommiss" class="text-center fs-s">
-          {{item.kommissStatus}}
-        </th>
-        <th data-name="kommiss" class="text-center fs-s">
-          <div>
-            {{spedition[item.spedition].name }}
-          </div>
-          <div class="fs-s">
-            {{'(' + spedition[item.spedition].maxLadeGewicht + ',' + spedition[item.spedition].maxPalettenMenge +' )'}}
-          </div>
-        </th>
-        <th data-name="kommiss" class="text-center fs-s">
-          {{getVerkaufer(namen[i])}}
-        </th>
-        </tr>
-      </tbody>
+      </ng-container>
+      <ng-container matColumnDef="sped">
+        <th mat-header-cell *matHeaderCellDef>Spedition:</th>
+        <td mat-cell *matCellDef="let item">{{spedition[item.spedition].name }}</td>
+      </ng-container>
+      <ng-container matColumnDef="verk">
+        <th mat-header-cell *matHeaderCellDef>Verkaufer:</th>
+        <td mat-cell *matCellDef="let item; let i = index;">{{getVerkaufer(namen[i])}}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="tabeleCoumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: tabeleCoumns"></tr>
     </table>
 </div>

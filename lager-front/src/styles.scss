@@ -14,9 +14,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;  }
  flex: 1 1 auto;
 }
 
+.login{
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.login button {
+ left: 50%;
+ transform: translateX(-50%);
+}
+
+
 .mat-toolbar{
-  min-height: 20px;
-  max-height: 40px;
+min-height: 20px;
+max-height: 40px;
 }
 .container{
   width: 100%;

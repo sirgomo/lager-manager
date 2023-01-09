@@ -1,26 +1,20 @@
-<div class="container  ">
-  <div class="mt-2 col-sm-12"></div>
-  <div class="row ">
-    <div class="col-10 offset-1 col-lg-8 offset-lg-2 div-wrapper d-flex justify-content-center align-items-center">
-
-      <div class="div-to-align">
-    <form class="form-login" [formGroup]="formLogin" (ngSubmit)="loginUser()">
+<div class="container">
+  <div class="login">
+    <form [formGroup]="formLogin" (ngSubmit)="loginUser()">
       <!-- User input -->
-      <div class="form-outline mb-1">
-        <input type="username" id="username" autocomplete="off" formControlName="username" name="username" class="form-control" />
-        <label class="form-label" for="form2Example1">Benutzer</label>
-      </div>
-
+      <p><mat-form-field>
+        <mat-label>Benutzer</mat-label>
+        <input type="text" matInput autocomplete="off" formControlName="username" name="username" required/>
+      </mat-form-field></p>
       <!-- Password input -->
-      <div class="form-outline mb-1">
-        <input type="password" id="password" formControlName="password" autocomplete="off" name="password" class="form-control" />
-        <label class="form-label" for="form2Example2">Password</label>
-      </div>
+      <p>
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input type="text" matInput autocomplete="off" formControlName="password" name="username" required/>
+      </mat-form-field></p>
       <!-- Submit button -->
-      <button type="submit" class="btn btn-primary btn-block mb-1" (ngSubmit)="loginUser()">Sign in</button>
+      <button mat-raised-button type="submit" color="primary" (ngSubmit)="loginUser()">Sign in</button>
     </form>
-  </div>
-  </div>
   </div>
 </div>
 

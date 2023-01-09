@@ -1,4 +1,4 @@
-import { Controller, UseGuards } from '@nestjs/common';
+import { Body, Controller, Patch, UseGuards } from '@nestjs/common';
 import { Get, Param } from '@nestjs/common/decorators';
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
@@ -29,5 +29,10 @@ export class WarenKontrolleController {
   @ROLES(ROLE.KONTROLLER)
   getKommissionierByPalId(@Param('id') id: number) {
     return this.service.getKommissionier(id);
+  }
+  @Patch('komm/:id')
+  @ROLES(ROLE.KONTROLLER)
+  setKommStatus(@Body() body: any, @Param('id') kommid: number) {
+    return this.service.setNewStatus(kommid, body);
   }
 }

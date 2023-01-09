@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { DatenpflegeService } from '../datenpflege/datenpflege.service';
 import { DispositorDto } from '../dto/dispositor.dto';
-import { KomissDTO } from '../dto/komiss.dto';
+import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
 import { SpeditionDto } from '../dto/spedition.dto';
 import { HelperService } from '../helper.service';
 import { KommissComponent } from './kommiss/kommiss.component';
@@ -16,17 +17,31 @@ import { KontrollerService } from './kontroller.service';
 })
 export class KontrollerComponent implements OnInit {
   kommiss: KomissDTO[] = [];
+  dataSource: MatTableDataSource<KomissDTO> = new MatTableDataSource();
   spedition: SpeditionDto[] = [];
   dispositors: DispositorDto[] = [];
   namen: string[] = [];
   helper: HelperService = new HelperService();
+  tabeleCoumns = [
+    'id',
+    'versorgung',
+    'paletH',
+    'lieferD',
+    'dispo',
+    'komStatus',
+    'sped',
+    'verk',
+  ];
+  komStatus: typeof KOMMISIONSTATUS;
 
   constructor(
     private service: KontrollerService,
     private dataPServ: DatenpflegeService,
     private toaster: ToastrService,
     private dialog: MatDialog,
-  ) {}
+  ) {
+    this.komStatus = KOMMISIONSTATUS;
+  }
 
   ngOnInit(): void {
     this.getDispositors();
@@ -40,6 +55,7 @@ export class KontrollerComponent implements OnInit {
           this.namen.push(data[i].verk);
           this.kommiss.push(data[i]);
         }
+        this.dataSource = new MatTableDataSource(this.kommiss);
       } else {
         this.toaster.error(this.helper.getErrorNachricht(data), 'Error');
       }
@@ -97,5 +113,26 @@ export class KontrollerComponent implements OnInit {
       conf.data = res;
       this.dialog.open(KommissComponent, conf);
     });
+  }
+  keyinenum(): Array<string> {
+    const keys = Object.keys(this.komStatus);
+    return keys.slice();
+  }
+  onStatusChange(index: number) {
+    this.service
+      .setKommissStatus(this.kommiss[index].id, {
+        KOMMISIONSTATUS: this.kommiss[index].kommissStatus,
+      })
+      .subscribe((res) => {
+        if (res === 1) {
+          this.toaster.success('Status wurde geändert', 'Status Update', {
+            timeOut: 600,
+          });
+          return;
+        }
+        const err: Error = new Error();
+        Object.assign(err, res);
+        this.toaster.error(err.message);
+      });
   }
 }
