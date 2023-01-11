@@ -1,49 +1,58 @@
 <div class="container">
 <mat-toolbar color="primary">
-  <div>
-    <div class="row">
-      <div class="col-md-3 fs-s" *ngIf="currentKomiss[0] !== undefined">
-        <span>Kommissionierung Nr: {{currentKomiss[0].kommissId}}</span>
-      </div>
-      <div class="col-md-6"></div>
-      <div class="col-md-3 fs-sl mt-1 px-1">
-        <div>{{'Stellplatze (Vorausgesehen): ' + stellPlat}}</div>
-        <div>{{'Total Gewicht (Vorausgeshen): ' + gewicht}}</div>
-      </div>
-    </div>
-    </div>
+  <mat-toolbar-row>
+          <div>
+            <div *ngIf="currentKomiss[0] !== undefined">
+              <span class="fs-s">Kommissionierung Nr: {{currentKomiss[0].kommissId}}</span>
+            </div>
+          </div>
+            <span class="spacer"></span>
+            <div class="fs-sl">
+              <div>{{'Stellplatze (Vorausgesehen): ' + stellPlat}}</div>
+              <div>{{'Total Gewicht (Vorausgeshen): ' + gewicht}}</div>
+            </div>
+  </mat-toolbar-row>
+          <mat-toolbar-row class="second-row">
+            <div>
+              <div>
+                <button mat-raised-button (click)="showPaleten()" *ngIf="showPal !== 1" color="primary" clas="fs-s">Paletten Zeigen</button>
+              </div>
+              <div>
+                <button mat-raised-button (click)="showPaleten()" *ngIf="showPal === 1" color="primary" class="fs-s">Kommissionierung Zeigen</button>
+              </div>
+            </div>
+          </mat-toolbar-row>
 </mat-toolbar>
-<div matDialogContent class="DialogContent">
+<div matDialogContent class="matDialogContent">
   <div  [(ngModel)]="user" ngDefaultControl>
-    <div class="row">
-      <div class="col">
-        <button mat-raised-button (click)="showPaleten()" color="primary">Paletten Zeigen</button>
-      </div>
-    </div>
-    <div class="col-md-12 mt-1 mb-1"></div>
+
     <div *ngIf="showPal === 1">
-      <app-paletten></app-paletten>
+      <app-paletten [kommNr]="currentKomiss[0].kommissId"></app-paletten>
     </div>
     <div *ngIf="showFront === 1">
-    <table class="table table-bordered table-hover table-sortable fs-s text-center">
-      <thead>
-        <tr>
-          <th>Artikel Nr:</th>
-          <th>Artikel Name</th>
-          <th>Artikel Menge</th>
-          <th>Artikel Gepackt ?</th>
-          <th>Kommissionier </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of currentKomiss; ">
-          <th>{{item.aid}}</th>
-          <th>{{item.name}}</th>
-          <th>{{item.menge}}</th>
-          <th>{{item.gepackt}}</th>
-          <th>{{user}}</th>
-        </tr>
-      </tbody>
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="artId">
+        <th mat-header-cell *matHeaderCellDef>Artikel Nr:</th>
+        <td mat-cell *matCellDef="let item">{{item.aid}}</td>
+      </ng-container>
+      <ng-container matColumnDef="artName">
+        <th mat-header-cell *matHeaderCellDef>Artikel Name</th>
+        <td mat-cell *matCellDef="let item">{{item.name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="artMenge">
+        <th mat-header-cell *matHeaderCellDef>Artikel Menge</th>
+        <td mat-cell *matCellDef="let item">{{item.menge}}</td>
+      </ng-container>
+      <ng-container matColumnDef="artGepackt">
+      <th mat-header-cell *matHeaderCellDef>Artikel Gepackt ?</th>
+      <td mat-cell *matCellDef="let item">{{item.gepackt}}</td>
+      </ng-container>
+      <ng-container matColumnDef="kommissionier">
+        <th mat-header-cell *matHeaderCellDef>Kommissionier </th>
+        <td mat-cell *matCellDef="let item">{{user}}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnName"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnName"></tr>
     </table>
     </div>
   </div>
@@ -56,5 +65,4 @@
   </div>
 </mat-dialog-actions>
 </div>
-
 

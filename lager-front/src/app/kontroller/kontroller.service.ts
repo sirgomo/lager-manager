@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ControllerKomissDataDto } from '../dto/controllerKomissData.dto';
+import { PaleteForControlleDto } from '../dto/paleteForControlle.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +16,10 @@ export class KontrollerService {
   getKommByNr(id: number): Observable<ControllerKomissDataDto[]> {
     return this.http.get<ControllerKomissDataDto[]>(this.API_URL + '/' + id);
   }
-  getPalattenByKommId(kommid: number): Observable<any[]> {
-    return this.http.get<any[]>(this.API_URL + '/palette/' + kommid);
+  getPalattenByKommId(kommid: number): Observable<PaleteForControlleDto[]> {
+    return this.http.get<PaleteForControlleDto[]>(
+      this.API_URL + '/palette/' + kommid,
+    );
   }
   getKommissionierbyPalId(palid: number) {
     return this.http.get<any>(this.API_URL + '/kommissionier/' + palid);

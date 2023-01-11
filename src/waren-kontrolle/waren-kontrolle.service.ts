@@ -64,7 +64,7 @@ export class WarenKontrolleService {
   async getPaletenByKomissId(id: number) {
     try {
       return await this.palRepo
-        .createQueryBuilder('pal')
+        .createQueryBuilder('t')
         .select([
           'autoid',
           'id',
@@ -72,11 +72,18 @@ export class WarenKontrolleService {
           'kontrolliert',
           'paletteRealGewicht',
         ])
-        .where('artikelId = : null AND kommId = :id', { id: id })
+        //TODO change it to null and not deafult 0
+        .where('artikelId = 0')
+        .andWhere('kommId = :id', { id: id })
         .getRawMany()
         .then(
           (data) => {
-            console.log(data);
+            if (data.length === 0 || data === null) {
+              throw new HttpException(
+                'Keine Paleten gefunden!',
+                HttpStatus.NOT_FOUND,
+              );
+            }
             return data;
           },
           (err) => {

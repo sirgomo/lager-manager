@@ -1,5 +1,4 @@
 <div class="container">
-
     <table mat-table [dataSource]="dataSource" >
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>Kommissionierung Nr:</th>
@@ -7,7 +6,9 @@
       </ng-container>
       <ng-container matColumnDef="versorgung">
         <th mat-header-cell *matHeaderCellDef>Versorung Nr:</th>
-        <td mat-cell *matCellDef="let item; let i = index" (click)="getKommis(i)">{{item.versorgungId}}</td>
+        <td mat-cell *matCellDef="let item; let i = index" >
+          <button mat-raised-button (click)="getKommis(i)" color="primary">{{item.versorgungId}}</button>
+        </td>
       </ng-container>
       <ng-container matColumnDef="paletH">
         <th mat-header-cell *matHeaderCellDef>Maximale Palettenhöhe:</th>

@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { ArtikelKommissDto } from 'src/app/dto/artikelKommiss.dto';
 import { ControllerKomissDataDto } from 'src/app/dto/controllerKomissData.dto';
@@ -13,11 +14,14 @@ import { KontrollerService } from '../kontroller.service';
 })
 export class KommissComponent implements OnInit {
   currentKomiss: ControllerKomissDataDto[] = [];
+  dataSource: MatTableDataSource<ControllerKomissDataDto> =
+    new MatTableDataSource();
   stellPlat = 0;
   gewicht = 0;
   user = '';
   showPal = 0;
   showFront = 0;
+  columnName = ['artId', 'artName', 'artMenge', 'artGepackt', 'kommissionier'];
   constructor(
     private dialRef: MatDialogRef<KommissComponent>,
     @Optional()
@@ -41,6 +45,7 @@ export class KommissComponent implements OnInit {
     this.gewicht = totalGewicht;
     this.checkName();
     this.showFront = 1;
+    this.dataSource = new MatTableDataSource(this.data);
   }
 
   async checkName() {

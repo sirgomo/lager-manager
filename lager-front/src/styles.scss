@@ -2,7 +2,7 @@
 /*@import "assets/bootstrap.min.css";*/
 @import "toastr.css";
 
-html, body { height: 100%; width: 100%;}
+html, body { height: 100%; width: 100%; overflow: auto;}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;  }
 
 
@@ -35,20 +35,17 @@ max-height: 40px;
   min-width: 100vw;
   height: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .matDialogContent{
-  width: 90%;
-  min-width: 90vw;
-  height: 100%;
-  min-height: 100vh;
+  width: 95%;
+  min-width: 95vw;
+  height: 88%;
+  min-height: 88vh;
+  margin-top: 0.1rem;
 }
-.DialogContent{
-  width: 90%;
-  min-width: 90vw;
-  height: 85%;
-  min-height: 85vh;
-}
+
 h3 {
   padding-top: 7px;
   color: aliceblue;
@@ -68,5 +65,8 @@ h3 {
 }
 .fs-ss{
   font-size:.6rem;
+}
+.second-row{
+  margin-top: 0.4rem;
 }
 
