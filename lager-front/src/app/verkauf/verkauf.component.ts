@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatSidenav } from '@angular/material/sidenav';
+import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { CreateKommisionierungComponent } from '../create-kommisionierung/create-kommisionierung.component';
 import { DataDilerService } from '../data-diler.service';
@@ -8,6 +10,7 @@ import { DispositorDto } from '../dto/dispositor.dto';
 import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
 import { PalettenMengeVorausToDruckDto } from '../dto/paletenMengeVorausKom.dto';
 import { SpeditionDto } from '../dto/spedition.dto';
+import { HelperService } from '../helper.service';
 import { VerkaufService } from './verkauf.service';
 
 @Component({
@@ -16,7 +19,22 @@ import { VerkaufService } from './verkauf.service';
   styleUrls: ['./verkauf.component.scss'],
 })
 export class VerkaufComponent implements OnInit {
+  @ViewChild('sidenav', { static: true }) public sidenav!: MatSidenav;
   komiss: KomissDTO[] = [];
+  dataRes: MatTableDataSource<KomissDTO> = new MatTableDataSource();
+  columnDef = [
+    'kommid',
+    'verkauferid',
+    'maxPH',
+    'lieferD',
+    'dispo',
+    'spedi',
+    'versorgid',
+    'kommStatus',
+    'entfernen',
+    'ausdrucken',
+  ];
+
   kommStatus: typeof KOMMISIONSTATUS;
   spedi: SpeditionDto[] = [];
   dispo: DispositorDto[] = [];
@@ -29,11 +47,13 @@ export class VerkaufComponent implements OnInit {
     private toaster: ToastrService,
     private dialog: MatDialog,
     private datenPfleServ: DatenpflegeService,
+    private helper: HelperService,
   ) {
     this.kommStatus = KOMMISIONSTATUS;
   }
 
   ngOnInit(): void {
+    this.helper.setSideNav(this.sidenav);
     this.getSpedition();
   }
   async getSpedition() {
@@ -86,9 +106,16 @@ export class VerkaufComponent implements OnInit {
     this.komiss.splice(0, this.komiss.length);
     this.showDownload = false;
     await this.serv.getAll().subscribe((res) => {
-      res.forEach((kom) => {
-        this.komiss.push(kom);
-      });
+      if (res !== undefined && res !== null && res.length > 0) {
+        for (let i = 0; i < res.length; i++) {
+          this.komiss.push(res[i]);
+        }
+        this.dataRes = new MatTableDataSource(this.komiss);
+        return;
+      }
+      this.toaster.error(
+        'Etwas is schieff gegangen, kein Kommissionierung gefunden',
+      );
     });
   }
 
@@ -110,10 +137,11 @@ export class VerkaufComponent implements OnInit {
         Object.assign(tmpKom, data);
         if (tmpKom !== null && isFinite(tmpKom.id)) {
           this.komiss.push(tmpKom);
+          this.dataRes = new MatTableDataSource(this.komiss);
         }
       });
   }
-  updateKommissionierung(index: number) {
+  async updateKommissionierung(index: number) {
     const conf: MatDialogConfig = new MatDialogConfig();
     conf.width = '100vw';
     conf.height = '100vh';
@@ -121,7 +149,7 @@ export class VerkaufComponent implements OnInit {
     conf.maxWidth = '100vw';
     conf.enterAnimationDuration = 400;
     conf.panelClass = 'full-screen-modal';
-    this.serv.getKommissById(this.komiss[index].id).subscribe((data) => {
+    await this.serv.getKommissById(this.komiss[index].id).subscribe((data) => {
       if (data === null) {
         this.toaster.error('Etwas ist schieffgelaufen, nicht gefunden');
         return;
@@ -138,7 +166,8 @@ export class VerkaufComponent implements OnInit {
           Object.assign(tmpKom, data);
           for (let i = 0; i < this.komiss.length; i++) {
             if (this.komiss[i].id === tmpKom.id) {
-              this.komiss[i] = tmpKom;
+              this.komiss.splice(i, 1, tmpKom);
+              this.dataRes = new MatTableDataSource(this.komiss);
             }
           }
         });
@@ -149,10 +178,17 @@ export class VerkaufComponent implements OnInit {
     this.komiss.splice(0, this.komiss.length);
     await this.serv
       .getAllByVerkufer(Number(localStorage.getItem('myId')))
-      .subscribe((data) => {
-        data.forEach((komm) => {
-          this.komiss.push(komm);
-        });
+      .subscribe((res) => {
+        if (res !== undefined && res !== null && res.length > 0) {
+          for (let i = 0; i < res.length; i++) {
+            this.komiss.push(res[i]);
+          }
+          this.dataRes = new MatTableDataSource(this.komiss);
+          return;
+        }
+        this.toaster.error(
+          'Etwas is schieff gegangen, kein Kommissionierung gefunden',
+        );
       });
   }
   async deleteKomm(index: number) {

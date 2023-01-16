@@ -3,36 +3,44 @@
     <span>Stellplatze</span>
 </mat-toolbar>
 <mat-dialog-content>
-  <div class="d-flex row-flex border rounded fs-s text-center">
-    <div class="d-flex flex-column ml-1 ">Lager Platz</div>
-    <div class="d-flex flex-column ml-1 border-start">Artikel Menge</div>
-    <div class="d-flex flex-column ml-1 border-start">mhd</div>
-    <!--<div class="d-flex flex-column ml-1 border-start">Liferant</div>
-    <div class="d-flex flex-column ml-1 border-start">Menge</div>-->
-  </div>
-  <div *ngFor="let item of artikelinfo; let i = index">
-    <div class="d-flex row-flex border rounded fs-s text-center">
-      <div class="d-flex flex-column ml-1 border border-success ">{{item.lagerplatz}}</div>
-      <div class="d-flex flex-column ml-1 border-start">{{item.artikelMenge}}</div>
-      <div class="d-flex flex-column ml-1 border-start" *ngIf="item.mhd === undefined">...</div>
-      <div class="d-flex flex-column ml-1 border-start" *ngIf="item.mhd !== undefined">{{item.mhd | date: 'shortDate'}}</div>
-      <!--<div class="d-flex flex-column ml-1 border-start">{{item.liferantn}}</div>
-      <div class="d-flex flex-column ml-1 border-start">{{item.artikelMenge}}</div>-->
-    </div>
-    <div class="d-flex row-flex border rounded fs-s">
-      <div class="col-sm d-grid gap-2">
-        <button type="button" name="" id="" class="btn btn-success btn-sm fs-s" (click)=" lagerPlatzNachfullen(i)">Nachfullen</button>
-      </div>
-      <div class="col-sm d-grid gap-2" *ngIf="istEsWenigerAufDemLagerPlatz()">
-        <button type="button" name="" id="" class="btn btn-success btn-sm fs-s" (click)="artikelKommissioniren(i)">Neue Palette</button>
-      </div>
-    </div>
-  </div>
+  <mat-table [dataSource]="dataRes">
+    <ng-container matColumnDef="lagerp">
+      <th mat-header-cell *matHeaderCellDef>Lager Platz</th>
+      <td mat-cell *matCellDef="let item; let i =index">
+        <div>
+          {{item.lagerplatz}}
+        </div>
+        <div class="buttons">
+          <button type="button" mat-raised-button (click)=" lagerPlatzNachfullen(i)">Nachfullen</button>
+        </div>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="artmenge">
+      <th mat-header-cell *matHeaderCellDef>Artikel Menge</th>
+      <td mat-cell *matCellDef="let item; let i = index">
+        <div>
+          {{item.artikelMenge}}
+        </div>
+        <div *ngIf="istEsWenigerAufDemLagerPlatz()" class="buttons">
+          <button type="button" mat-raised-button (click)="artikelKommissioniren(i)">Neue Palette</button>
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="mhd">
+      <th mat-header-cell *matHeaderCellDef>Artikel Mhd</th>
+      <td mat-cell *matCellDef="let item;">
+          <div  *ngIf="item.mhd === undefined">...</div>
+          <div  *ngIf="item.mhd !== undefined">{{item.mhd | date: 'shortDate'}}</div>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columnDef"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnDef"></tr>
+  </mat-table>
 </mat-dialog-content>
 
 <mat-dialog-actions align="center">
-  <div class="d-grid gap-2">
-    <button type="button" name="" id="" matDialogClose class="btn btn-primary btn-sm fs-s">Fenster Schließen</button>
+  <div >
+    <button type="button" color="primary" mat-raised-button matDialogClose >Fenster Schließen</button>
   </div>
 </mat-dialog-actions>
 

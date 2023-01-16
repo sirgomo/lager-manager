@@ -2,21 +2,25 @@
   <mat-toolbar color="primary">
       <span class="fs-s">Artikel Erfassen</span>
   </mat-toolbar>
+
   <mat-dialog-content>
-    <div class="col justify-content-center align-items-center g-1">
-      <div class="row border m-2 rounded">{{artikel.artname}}</div>
-      <div class="row border m-2 rounded">{{artikel.menge}}</div>
-      <div class="row border m-2 rounded"><input type="number" class="form-control form-control-sm" name="menge" id="menge" placeholder="Artikel menge in stück" #menge></div>
+    <div class="art">
+      <div>{{artikel.artname}}</div>
+      <div>{{artikel.menge}}</div>
+      <div>
+        <div class="divider"></div>
+        <mat-form-field>
+          <mat-label>Artikel menge in stück</mat-label>
+          <input type="number" matInput #menge autocomplete="off">
+        </mat-form-field>
+      </div>
     </div>
   </mat-dialog-content>
-
-  <mat-dialog-actions>
-      <div class="d-grid gap-2 p-2">
-        <button type="button" name="" id="" class="btn btn-primary btn-sm" (click)="aufPaletehinzufugen(menge.value)">Erfassen</button>
-      </div>
-      <div class="d-grid gap-2 p-2">
-        <button class="btn btn-primary btn-sm" matDialogClose>Abbrechen</button>
-      </div>
-  </mat-dialog-actions>
+  <div>
+    <div class="act">
+      <button type="button" mat-raised-button color="primary" (click)="aufPaletehinzufugen(menge.value)">Erfassen</button>
+      <button mat-raised-button matDialogClose>Abbrechen</button>
+    </div>
+  </div>
 
 </div>

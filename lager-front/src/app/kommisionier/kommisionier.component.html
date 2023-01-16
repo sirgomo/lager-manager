@@ -1,51 +1,63 @@
 <div class="container">
-    <div class="row-flex">
-        <div class="row-flex-button">
-         <button name="" id="" class="btn btn-primary btn-sm fs-s" (click)="neuePalete(null, null)" *ngIf="currentPalatte === 0 && kommDetails !== undefined && kommDetails.length > 0"> Neue Palette</button>
-        </div>
-        <div class="row-flex-button">
-            <button name="" id="" class="btn btn-primary btn-sm fs-s" *ngIf="currentPalatte !== 0 " (click)="gewichtErfassen()">Gewicht Erfassen</button>
-        </div>
-    </div>
-    <div class="box" *ngIf="kommDetails !== undefined && kommDetails.length < 1">
-        <div class="box-mid">
-                <div class="d-flex flex-row justify-content-center mt-5 align-items-center">
-                    <input class="form-control form-control-sm fs-s" type="text" name="" id="" style="width: 50%;" [(ngModel)]="kommid">
-                </div>
-            <div class="d-flex flex-row justify-content-center mt-3 align-items-center">
-                <button name="" id="" class="btn btn-primary btn-sm" (click)="getKomm()"> Kommissionieren</button>
+    <div class="gewicht">
+        <div>
+            <div>
+            <button  mat-raised-button  color="primary"  (click)="neuePalete(null, null)" *ngIf="currentPalatte === 0 && kommDetails !== undefined && kommDetails.length > 0"> Neue Palette</button>
+            </div>
+            <div >
+                <button *ngIf="currentPalatte !== 0"  mat-raised-button  color="primary" (click)="gewichtErfassen()">Gewicht Erfassen</button>
             </div>
         </div>
-    </div>
-    <div>
-      <div class="d-flex row-flex rounded fs-s justify-content-center align-items-center" *ngIf="currentPalatte !== 0">
-        <div class="col align-self-start p-1">
-          <input type="text" class="form-control form-control-sm fs-s" name="search" id="search" placeholder="Artikel scannen oder eingeben" [(ngModel)]="uid" (ngModelChange)="findbyuidorArtId(uid)">
+        <div  *ngIf="kommDetails !== undefined && kommDetails.length < 1">
+          <div class="divider"></div>
+            <div>
+                    <div>
+                      <mat-form-field>
+                        <input type="text" matInput  style="width: 50%;" [(ngModel)]="kommid">
+                      </mat-form-field>
+                    </div>
+                    <div >
+                        <button  mat-raised-button color="primary" (click)="getKomm()">Kommissionieren</button>
+                    </div>
+            </div>
         </div>
-        <div class="col align-self-end p-1">
-          <button type="button" class="btn btn-primary btn-sm" (click)="findbyuidorArtId(uid)">Find</button>
-        </div>
-      </div>
-  <div *ngIf="kommDetails !== undefined && kommDetails.length > 1">
-    <div class="d-flex row-flex border rounded fs-s" >
-      <div class="d-flex flex-column ml-1 p-2">Platz:</div>
-      <div class="d-flex flex-column ml-1 border-start p-2">Karton Menge:(+St.)</div>
-      <div class="d-flex flex-column ml-1 border-start p-2">Name:</div>
-      <div class="d-flex flex-column ml-1 border-start p-2">Art. Id</div>
-  </div>
-      <div *ngFor="let item of kommDetails; let i = index;" class="{{borders[i]}}">
-          <div class="d-flex flex-column p-2 ml-1 " *ngIf="braucheIchMehr[i] === true">
-            <button type="button" class="btn btn-outline-primary btn-sm" (click)="getPlatzMitArtikel(i)">{{item.platz}}</button>
-             </div>
-          <div class="d-flex flex-column p-2 ml-1 " *ngIf="braucheIchMehr[i] !== true">
-          <button type="button" class="btn btn-outline-success btn-sm" (click)="getPlatzMitArtikel(i)">{{item.platz}}</button>
+        <div>
+          <div  *ngIf="currentPalatte !== 0">
+            <div >
+              <mat-form-field>
+                <input matInput type="text" name="search" id="search" placeholder="Artikel scannen oder eingeben" [(ngModel)]="uid" (ngModelChange)="findbyuidorArtId(uid)">
+              </mat-form-field>
+            </div>
+            <div >
+              <button type="button" mat-raised-button  color="primary" (click)="findbyuidorArtId(uid)">Find</button>
+            </div>
           </div>
-          <div class="d-flex flex-column p-2 ml-1 border-start">{{getCartonMenge(i)}}</div>
-          <div class="d-flex flex-column p-2 ml-1 border-start">{{item.artname}}</div>
-          <div class="d-flex flex-column p-2 ml-1 border-start">{{item.artikelId}}</div>
       </div>
-  </div>
-
     </div>
-
+  <div *ngIf="kommDetails !== undefined && kommDetails.length > 1">
+    <table mat-table [dataSource]="dataRes">
+      <ng-container matColumnDef="platz">
+        <th mat-header-cell *matHeaderCellDef>Platz:</th>
+        <td mat-cell *matCellDef="let item; let i = index">
+          <div class="fs-s">
+            <button mat-raised-button color="primary" *ngIf="braucheIchMehr[i] === true" (click)="getPlatzMitArtikel(i)">{{item.platz}}</button>
+            <button mat-raised-button color="secondary" *ngIf="braucheIchMehr[i] !== true" (click)="getPlatzMitArtikel(i)">{{item.platz}}</button>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="karton">
+        <th mat-header-cell *matHeaderCellDef> Karton Menge:(+St.)</th>
+        <td mat-cell *matCellDef="let item; let i = index">{{getCartonMenge(i)}}</td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name:</th>
+        <td mat-cell *matCellDef="let item">{{item.artname}}</td>
+      </ng-container>
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>Art. Id</th>
+        <td mat-cell *matCellDef="let item">{{item.artikelId}}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnDef"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnDef"></tr>
+    </table>
 </div>

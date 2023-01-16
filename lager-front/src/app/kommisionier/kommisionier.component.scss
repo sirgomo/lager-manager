@@ -1,19 +1,41 @@
-.row-flex{
+.mat-header-cell{
   display: flex;
-    justify-content: center;
-    padding: 0.5rem;
-    flex-grow: 1;
-    gap: 0.5rem;
-    align-items: center;
-    flex-wrap: wrap;
 }
-.row-item{
+.mat-cell{
   display: flex;
-    justify-content: center;
-    padding: 0.5rem;
-    flex-grow: 1;
-    gap: 0.5rem;
-    align-items: center;
-    flex-wrap: wrap;
+}
+.mat-header-cell-platz{
+  display: flex;
+  width: 28% !important;
+  flex-wrap: nowrap;
+}
+.mat-cell-platz{
+  display: flex;
+  width: 28% !important;
+  flex-wrap: nowrap;
+}
+.gewicht {
+display: grid;
+grid-auto-rows: auto;
+justify-items: center;
+text-align: center;
+}
+.gewicht button {
+  margin-bottom: 0.3rem;
+  margin-top:  0.3rem;
+}
+.mat-column-platz{
+  width: 40%;
+  min-width: 20% !important;
+  white-space: nowrap;
+}
+.mat-column-karton{
+  width: 5% !important;
+}
+.mat-column-id{
+  width: 20%;
+}
+.mat-column-name{
+  width: auto;
 }
 

@@ -1,6 +1,14 @@
-import { Component, Inject, OnInit, Optional } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  Optional,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { DataDilerService } from '../data-diler.service';
 import { AddArtikelKommissDto } from '../dto/addArtikelKommiss.dto';
@@ -40,6 +48,38 @@ export class CreateKommisionierungComponent implements OnInit {
   logisticBelegNr: string[] = [];
   logisticBeleg = '';
   border: string[] = [];
+  // eslint-disable-next-line prettier/prettier
+  tabResForArtInKom: MatTableDataSource<ArtikelKommissDto> = new MatTableDataSource();
+  tabResArti: MatTableDataSource<ArtikelKommissDto> = new MatTableDataSource();
+  shittest: string[] = [];
+  artInKomColumnDef: string[] = [
+    'artidink',
+    'mengeink',
+    'nameink',
+    'artSink',
+    'verkPink',
+    'rabatink',
+    'totalGink',
+    'liferantink',
+    'lbelegink',
+    'nMengeink',
+    'mengeAink',
+    'removeink',
+  ];
+  artikelsColumnDef: string[] = [
+    'aid',
+    'menge',
+    'name',
+    'rabat',
+    'price',
+    'minMenge',
+    'gewicht',
+    'basis',
+    'liferant',
+    'lnumer',
+    'addmenge',
+    'add',
+  ];
 
   constructor(
     private kommServ: VerkaufService,
@@ -49,6 +89,7 @@ export class CreateKommisionierungComponent implements OnInit {
     private toastr: ToastrService,
     private dialogRef: MatDialogRef<CreateKommisionierungComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: KomissDTO,
+    private changeDetector: ChangeDetectorRef,
   ) {
     this.kommissForm = this.fb.group({
       id: Number,
@@ -133,17 +174,21 @@ export class CreateKommisionierungComponent implements OnInit {
         if (tmp.fehlArtikelMenge !== null) {
           tmp.total -= data[i].fehlArtikelMenge;
         }
+        if (tmp.total < 0) tmp.total = 0;
         this.artikels.push(tmp);
       }
-      this.getKommFromKommponent();
+      this.tabResArti = new MatTableDataSource(this.artikels.slice(0, 50));
+      this.reasignKomm();
       this.getUser();
     });
   }
   onSearch(text: string) {
     this.artikels = this.helper.onSearchK(text, this.artikels);
+    this.tabResArti = new MatTableDataSource(this.artikels.slice(0, 50));
   }
   artikelTrackBy(index: number) {
     if (this.artikels !== undefined && this.artikels.length > 0) {
+      this.tabResArti = new MatTableDataSource(this.artikels.slice(0, 50));
       return this.artikels[index].artId;
     }
     return;
@@ -191,9 +236,7 @@ export class CreateKommisionierungComponent implements OnInit {
       }
     });
   }
-  getKommFromKommponent() {
-    this.reasignKomm();
-  }
+
   reasignKomm() {
     if (this.currentKomm.id !== undefined && this.currentKomm.id !== 0) {
       // this.kommissForm.reset();
@@ -212,7 +255,7 @@ export class CreateKommisionierungComponent implements OnInit {
         this.spediSelected = data;
       });
       if (
-        this.currentKomm.kommDetails === undefined &&
+        this.currentKomm.kommDetails === undefined ||
         this.currentKomm.kommDetails === null
       ) {
         return;
@@ -245,7 +288,6 @@ export class CreateKommisionierungComponent implements OnInit {
           }
         }
       }
-      this.setBorderfurArtikel();
       if (this.currentKomm.kommDetails.length > 0) {
         const tmpSet = new Set(this.logisticBelegNr);
         this.logisticBelegNr = Array.from(tmpSet);
@@ -275,16 +317,17 @@ export class CreateKommisionierungComponent implements OnInit {
   }
   setBorderfurArtikel() {
     this.border.splice(0, this.border.length);
+    this.border = new Array(this.artikelsInKomm.length);
     for (let i = 0; i < this.artikelsInKomm.length; i++) {
       if (
         this.currentKomm.kommDetails[i].gepackt === ARTIKELSTATUS.GEPACKT ||
         this.currentKomm.kommDetails[i].gepackt === ARTIKELSTATUS.TEILGEPACKT
       ) {
-        this.border.push('table-success border border-success');
+        this.border.splice(i, 1, 'gepackt');
       } else if (this.currentKomm.kommDetails[i].inBestellung) {
-        this.border.push('border border-danger table-danger');
+        this.border.splice(i, 1, 'inBestellung');
       } else {
-        this.border.push('border border-success table-light');
+        this.border.splice(i, 1, 'inPacken');
       }
     }
   }
@@ -480,14 +523,20 @@ export class CreateKommisionierungComponent implements OnInit {
       artToAd.logisticBelegNr = this.logisticBeleg;
       art.push(artToAd);
     } else {
-      if (this.currentKomm.kommDetails[index].gepackt === 'GEPACKT') {
+      if (
+        this.currentKomm.kommDetails[index] !== undefined &&
+        this.currentKomm.kommDetails[index].gepackt === 'GEPACKT'
+      ) {
         this.toastr.error(
           'Du kannst bei gepackten ware die menge nicht ändern!',
           'Menge ändern',
         );
         return;
       }
-      if (this.currentKomm.kommDetails[index].gepackt === 'TEILGEPACKT') {
+      if (
+        this.currentKomm.kommDetails[index] !== undefined &&
+        this.currentKomm.kommDetails[index].gepackt === 'TEILGEPACKT'
+      ) {
         this.toastr.error(
           'Die ware ist schön teilweise gepackt, kann man nicht ändern!',
           'Menge ändern',
@@ -530,19 +579,19 @@ export class CreateKommisionierungComponent implements OnInit {
       if (data !== null) {
         Object.assign(this.currentKomm, data[data.length - 1]);
         this.reasignKomm();
-        if (art[art.length - 1].inBestellung) {
-          console.log(art[art.length - 1]);
-          this.setBorderfurArtikel();
-        }
+        this.tabResForArtInKom = new MatTableDataSource(this.artikelsInKomm);
       }
     });
   }
   showArtikelsinKomm() {
+    this.setBorderfurArtikel();
     if (this.showArtikelsInKomm === 0) {
       this.showArtikelsInKomm = 1;
     } else {
       this.showArtikelsInKomm = 0;
     }
+    this.tabResForArtInKom = new MatTableDataSource(this.artikelsInKomm);
+    //  this.changeDetector.detectChanges();
   }
   deletePositionInKomm(index: number) {
     if (this.currentKomm.kommDetails[index].gepackt === 'GEPACKT') {

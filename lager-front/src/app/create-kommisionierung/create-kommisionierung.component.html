@@ -1,244 +1,301 @@
 <div class="container">
-  <mat-toolbar color="primary">
-    <div class="mt-1">
-        <h3 *ngIf="currentKomm.id ===undefined">Neue Kommissionierung Erstellen</h3>
-        <h3 *ngIf="currentKomm.id !==undefined">Kommissionierung aktualisieren</h3>
-    </div>
-  </mat-toolbar>
-  <div matDialogContent class="DialogContent">
-    <div class="mt-2 col-md-12"></div>
+      <mat-toolbar color="primary">
+        <div >
+            <h3 *ngIf="currentKomm.id ===undefined">Neue Kommissionierung Erstellen</h3>
+            <h3 *ngIf="currentKomm.id !==undefined">Kommissionierung aktualisieren</h3>
+        </div>
+      </mat-toolbar>
+  <div matDialogContent class="matDialogContent">
     <form [formGroup]="kommissForm">
-      <input type="hidden" formControlName="id" name="id">
-      <div class="row">
-        <div class="col-md-3">
-          <label for="verkauferId" class="fs-s "> Verkaufer</label>
-          <input type="hidden"
-            class="form-control form-control-sm fs-s" formControlName="verkauferId" name="verkauferId" id="verkauferId" aria-describedby="helpId" placeholder="hier sollte benutzer nr sein" (ngValue)="verkaufer">
-            <div class="form-control form-control-sm">{{verkauferData.username}}</div>
-        </div>
-        <div class="col-md-3">
-          <label for="maxPalettenHoher" class="fs-s">Maximale Palettenhöhe </label>
-          <input type="number"
-            class="form-control form-control-sm fs-s" formControlName="maxPalettenHoher" name="maxPalettenHoher" id="maxPalettenHoher" aria-describedby="helpId" placeholder="">
-        </div>
-        <div class="col-md-3">
-          <label for="gewunschtesLieferDatum" class="fs-s">Gewünschte Lieferdatum</label>
-          <input type="date"
-            class="form-control form-control-sm fs-s" formControlName="gewunschtesLieferDatum" name="gewunschtesLieferDatum" id="gewunschtesLieferDatum" aria-describedby="helpId" placeholder="">
-        </div>
-        <div class="col-md-3">
-          <label for="falligkeitDatum" class="fs-s">Fälligkeitdatum</label>
-          <input type="date"
-            class="form-control form-control-sm fs-s" formControlName="falligkeitDatum" name="falligkeitDatum" id="falligkeitDatum" aria-describedby="helpId" placeholder="">
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-3">
-              <label for="dispositorId" class="fs-s">Debitor</label>
-              <select formControlName="dispositorId" class="form-select form-select-sm fs-s" name="dispositorId" id="dispositorId">
-                <option *ngFor="let item of dispo | filterNullItemPipe; let i = index; " [ngValue]="item?.id">{{item?.name}}</option>
-              </select>
+        <input type="hidden" formControlName="id">
+          <div class="row">
+            <div>
+              <fieldset class="hidd">
+                <legend>Verkaufer :</legend>
+                <input type="hidden"
+                formControlName="verkauferId" (ngValue)="verkaufer">
+                  <span>{{verkauferData.username}}</span>
+              </fieldset>
+            </div>
+            <div>
+              <mat-form-field>
+                <mat-label>Maximale Palettenhöhe</mat-label>
+                <input type="number" matInput
+              formControlName="maxPalettenHoher">
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <mat-label>Gewünschte Lieferdatum</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="gewunschtesLieferDatum">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <mat-label>Fälligkeitdatum</mat-label>
+                <input matInput [matDatepicker]="picker2" formControlName="falligkeitDatum">
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+        <div class="row">
+            <div>
+              <mat-form-field>
+                <mat-label>Debitor</mat-label>
+                <mat-select formControlName="dispositorId">
+                    <mat-option *ngFor="let item of dispo | filterNullItemPipe; let i = index; " [value]="item.id">{{item?.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <mat-label>Kommissionierung Status</mat-label>
+                <mat-select formControlName="kommissStatus">
+                    <mat-option *ngFor="let item of kommStatus | keyvalue" [value]="item.value">{{item.value}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              </div>
+              <div>
+              <mat-form-field>
+                <mat-label>Spedition</mat-label>
+                <mat-select formControlName="spedition" >
+                    <mat-option *ngFor="let item of spedi | filterNullItemPipe; let i = index" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                  <mat-hint class="fs-ss" *ngIf="spedi[spediSelected] !== undefined">{{'Gewicht: '+ spedi[spediSelected].maxLadeGewicht + ' Stellplätze: ' + spedi[spediSelected].maxPalettenMenge}}</mat-hint>
+              </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field>
+                  <mat-label>Buchungsdatum</mat-label>
+                      <input matInput
+                      formControlName="buchungsDatum"
+                            [matDatepicker]="datePickerRef"
+                            >
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                      <mat-datepicker-toggle matIconSuffix [for]="datePickerRef"></mat-datepicker-toggle>
+                      <mat-datepicker #datePickerRef></mat-datepicker>
+                </mat-form-field>
+              </div>
          </div>
-         <div class="col-md-3">
-              <label for="" class="fs-s">Kommissionierung Status</label>
-              <select formControlName="kommissStatus" class="form-select form-select-sm fs-s" name="kommissStatus" id="">
-                <option *ngFor="let item of kommStatus | keyvalue" [ngValue]="item.value" [ngValue]="item?.value">{{item.value}}</option>
-              </select>
-            <small id="helpId" class="form-text text-muted fs-ss"> Inbearbeitung, frei kann man kommissioniren</small>
-          </div>
-         <div class="col-md-3">
-              <label for="spedition" class="fs-s">Spedition</label>
-              <select formControlName="spedition" class="form-select form-select-sm fs-s" name="spedition" id="spedition">
-                <option *ngFor="let item of spedi | filterNullItemPipe; let i = index" [ngValue]="item?.id">{{item?.name}}</option>
-              </select>
-              <small id="helpId" class="form-text text-muted fs-ss"  *ngIf="spedi[spediSelected] !== undefined"> {{'Max lade gewicht: '+ spedi[spediSelected].maxLadeGewicht + ' Max paletten: ' + spedi[spediSelected].maxPalettenMenge}}</small>
-          </div>
-          <div class="col-md-3">
-            <label for="buchungsDatum" class="fs-s">Buchungsdatum</label>
-            <input type="date"
-              class="form-control form-control-sm fs-s" formControlName="buchungsDatum" name="buchungsDatum" id="buchungsDatum" aria-describedby="helpId" placeholder="">
-          </div>
-      </div>
-       <div class="row">
-            <div class="col-md-3">
-              <label for="versorgungId" class="fs-s">Versorugungs Id</label>
-              <input type="text"
-                class="form-control form-control-sm fs-s" formControlName="versorgungId" name="versorgungId" id="versorgungId" aria-describedby="helpId" placeholder="">
+      <div class="divider"></div>
+      <div class="row">
+            <div>
+              <mat-form-field>
+                <mat-label>Versorugungs Id</mat-label>
+                <input type="text"
+                matInput formControlName="versorgungId">
+              </mat-form-field>
             </div>
-            <div class="col-md-3">
-              <label for="skonto" class="fs-s">Skonto: </label>
-              <input type="number"
-                class="form-control form-control-sm fs-s" formControlName="skonto" name="skonto" id="skonto" aria-describedby="skonto" placeholder="">
+            <div>
+              <mat-form-field>
+                <mat-label>Skonto:</mat-label>
+                <input type="number"
+                matInput formControlName="skonto">
+              </mat-form-field>
             </div>
-            <div class="col-md-3">
-              <label for="skontoFrist" class="fs-s">Skonto Frist: </label>
-              <input type="number"
-                class="form-control form-control-sm fs-s" formControlName="skontoFrist" name="skontoFrist" id="skontoFrist" aria-describedby="skontoFrist" placeholder="">
+            <div>
+              <mat-form-field>
+                <mat-label>Skonto Frist:</mat-label>
+                <input type="number"
+                matInput formControlName="skontoFrist">
+              </mat-form-field>
             </div>
-            <div class="col-md-3">
+            <div>
               <div>
                 <label for="submitKom" class="fs-s"></label>
               </div>
-              <button type="submit" id="submitKom" class="btn btn-primary fs-s" *ngIf="currentKomm.id ===undefined" (click)="saveKommissionierung(kommissForm.value)">Kommissionierung Spiechern</button>
-              <button type="submit" id="submitKom" class="btn btn-primary fs-s" *ngIf="currentKomm.id !==undefined"(click)="updateKommissionierung(kommissForm.value)">Kommissionierung Aktualisieren</button>
+              <button type="submit" id="submitKom" mat-raised-button color="primary" *ngIf="currentKomm.id ===undefined" (click)="saveKommissionierung(kommissForm.value)">Kommissionierung Spiechern</button>
+              <button type="submit" id="submitKom" mat-raised-button color="primary" *ngIf="currentKomm.id !==undefined"(click)="updateKommissionierung(kommissForm.value)">Kommissionierung Aktualisieren</button>
               <div>
                 <small id="submitKom" class="form-text text-muted fs-ss">Zuerst müsst die Kommissionierung gespeichert werden</small>
               </div>
            </div>
-       </div>
+      </div>
         <div class="row">
-              <div class="col-md-4">
-                <label for="lbeleg" class="fs-s">Logistic Beleg Nr</label>
-                <input type="text"
-                  class="form-control form-control-sm fs-s" #logisticBeleg placeholder="" id="lbeleg">
+              <div>
+                <mat-form-field>
+                  <mat-label>Logistic Beleg Nr</mat-label>
+                  <input type="text"
+                  matInput #logisticBeleg placeholder="" id="lbeleg">
+                </mat-form-field>
               </div>
-              <div class="col-md-4" >
-                <div>
-                  <label for="lbeleg" class="fs-s"></label>
-                </div>
-                <button type="button" id="lbeleg" class="btn btn-primary fs-s" (click)="addlogisticBeleg(logisticBeleg.value)">Gib Logistic Beleg Nr ein</button>
-              </div>
-              <div class="col-md-4 text-end">
-                <div>
-                  <label for="zeigArtikel" class="fs-s"></label>
-                </div>
-                <button  id="zeigArtikel" class="btn btn-success fs-s" (click)="showArtikelsinKomm()">Zeig Artikeln</button>
-                <div>
-                  <small id="zeigArtikel" class="form-text text-muted fs-ss">Zeig Artikels in Kommissionierung</small>
-                </div>
+              <div>
+                <button type="button" mat-raised-button color="primary" (click)="addlogisticBeleg(logisticBeleg.value)">Gib Logistic Beleg Nr ein</button>
               </div>
         </div>
     </form>
-    <div class="mt-2 col-md-12"></div>
-    <div class="table-responsive" *ngIf="showArtikelsInKomm === 1">
-      <table class="table table-bordered border-success table-hover table-sortable">
-        <thead>
-          <tr class="border border-success">
-            <th scope="col" class="fs-s">Artikel id:</th>
-            <th scope="col" class="fs-s">Menge in Kommisionierung</th>
-            <th scope="col" class="fs-s">Name</th>
-            <th scope="col" class="fs-s">Artikel Status</th>
-            <th scope="col" class="fs-s">Verkauf Price</th>
-            <th scope="col" class="fs-s">Rabatt: </th>
-            <th scope="col" class="fs-s">Total Gewicht</th>
-            <th scope="col" class="fs-s">Liferant</th>
-            <th scope="col" class="fs-s">Logistic Beleg Nr</th>
-            <th scope="col" class="fs-s">Neue Menge</th>
-            <th scope="col" class="fs-s">Mengenänderung</th>
-            <th scope="col" class="fs-s">Remove Position</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr   *ngFor="let item of artikelsInKomm; let i=index;" class="{{border[i]}}">
-            <td class="fs-s">{{item.artId}}</td>
-            <td class="fs-s">{{item.total}}</td>
-            <td class="fs-s">{{item.name }}</td>
-            <td class="fs-s">{{artikelStatus[i]}}</td>
-            <td class="fs-s">{{item.verPrice}}</td>
-            <td class="fs-s">{{item.rabatt}}</td>
-            <td class="fs-s">{{item.gewicht}}</td>
-            <td class="fs-s">{{dispo[item.liferantId].name}}</td>
-            <td class="fs-s">{{item.logisticBelegNr}}</td>
-            <td class="fs-s"><div class="mb-3">
-              <input type="number"  value="artikelMenge" [(ngModel)]="artikelMengeEdit[i]"
-                class="form-control form-control-sm fs-s" name="artikelMenge" id="artikelMenge" aria-describedby="helpId" placeholder="">
-              <small id="helpId" class="form-text text-muted fs-ss">Total für diese Position!</small>
-            </div></td>
-            <td class="fs-s"><div class="d-grid gap-2">
-              <button *ngIf="artikelStatus[i] === 'INPACKEN'" type="button" name="" id="" class="btn btn-primary fs-s" (click)="addArtikelToKomm(i, true) ">Bestätigen</button>
-              <button *ngIf="artikelStatus[i] === 'GEPACKT' || artikelStatus[i] === 'TEILGEPACKT'" type="button" name="" id="" class="btn btn-primary fs-s" (click)="addArtikelToKomm(i, true) " disabled>Bestätigen</button>
-            </div></td>
-            <td class="fs-s"><div class="d-grid gap-2">
-              <button *ngIf="artikelStatus[i] === 'INPACKEN'" type="button" name="" id="" class="btn btn-danger fs-s" (click)="deletePositionInKomm(i)">Delete</button>
-              <button *ngIf="artikelStatus[i] === 'GEPACKT' || artikelStatus[i] === 'TEILGEPACKT'" type="button" name="" id="" class="btn btn-danger fs-s" (click)="deletePositionInKomm(i)" disabled>Delete</button>
-            </div></td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="mt-2 col-md-12"></div>
-      <div class="d-flex justify-content-center">
-        <button  id="zeigArtikel" class="btn btn-primary fs-s" (click)="showArtikelsinKomm()">Artikeln List verstecken</button>
+    <div class="divider"></div>
+        <div  class="dialogAct">
+          <div >
+              Total Gewicht: {{totalGewichtB}}
+          </div>
+          <div>
+            Stellpaltze: {{stellplattzeB }}
+          </div>
+          <div>
+          <button mat-raised-button matDialogClose color="primary">Close</button>
+          </div>
       </div>
-      <div class="mt-2 col-md-12"></div>
-    </div>
-    <div class="row " >
-      <div class="col-md-11">
-        <input type="search" class="form-control form-control-sm input-lg rounded" [ngModel]="searchModel" name="searchModel" placeholder = "write artikel name or id" id="" (ngModelChange)="onSearch($event)">
-        {{searchModel}}
-      </div>
-      <div class="col">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-        </svg>
-      </div>
-
-  </div>
-  <div class="mt-2 col-md-12"></div>
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover table-sortable">
-      <thead>
-        <tr>
-          <th scope="col" class="fs-s">Artikel id:</th>
-          <th scope="col" class="fs-s">Verfugbare Menge</th>
-          <th scope="col" class="fs-s">Name</th>
-          <th scope="col" class="fs-s">Rabat in %</th>
-          <th scope="col" class="fs-s">Verkauf Price</th>
-          <th scope="col" class="fs-s">Min Los Menge</th>
-          <th scope="col" class="fs-s">Gewicht</th>
-          <th scope="col" class="fs-s">Basis Einheit</th>
-          <th scope="col" class="fs-s">Liferant</th>
-          <th scope="col" class="fs-s">Logistic Beleg Nr</th>
-          <th scope="col" class="fs-s">Menge</th>
-          <th scope="col" class="fs-s">Artikel zufugen</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of (artikels ? artikels.slice(0,200):[]); let i=index; trackBy : artikelTrackBy;">
-          <td class="fs-s">{{item.artId}}</td>
-          <td class="fs-s">{{item.total}}</td>
-          <td class="fs-s">{{item.name}}</td>
-          <td class="fs-s">
-            <div>
-              <input type="number" class="form-control form-control-sm fs-s" name="rabat" id="rabat" [(ngModel)]="rabats[i]">
+      <div class="divider"></div>
+      <mat-tab-group mat-stretch-tabs="true" mat-align-tabs="start" dynamicHeight  (selectedTabChange)="showArtikelsinKomm()">
+      <mat-tab label="Artikels">
+                  <div class="row">
+                    <div>
+                      <mat-form-field>
+                        <mat-label>Gib Artikel name or nr ein</mat-label>
+                        <input type="search" matInput [ngModel]="searchModel" name="searchModel"  (ngModelChange)="onSearch($event)">
+                        {{searchModel}}
+                      </mat-form-field>
+                    </div>
+                    <div>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                      </svg>
+                    </div>
+                </div>
+        <!--<table mat-table [dataSource]="tabResArti" [trackBy]="artikelTrackBy" id="artikels" *ngIf="showArtikelsInKomm === 0">-->
+        <table mat-table [dataSource]="tabResArti" [trackBy]="artikelTrackBy" id="artikels">
+          <ng-container matColumnDef="aid">
+            <th mat-header-cell *matHeaderCellDef>Artikel Nr.</th>
+            <td mat-cell *matCellDef="let row; ">{{row.artId}}</td>
+          </ng-container>
+          <ng-container matColumnDef="menge">
+            <th mat-header-cell *matHeaderCellDef>Verfugbare Menge</th>
+            <td mat-cell *matCellDef="let row">{{row.total}}</td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let row">{{row.name}}</td>
+          </ng-container>
+          <ng-container matColumnDef="rabat">
+            <th mat-header-cell *matHeaderCellDef>Rabat in %</th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              <div class="my-form-field">
+                <input type="number" matInput [(ngModel)]="rabats[i]">
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef>Verkauf Price</th>
+            <td mat-cell *matCellDef="let row; let i = index">{{getCurrentPrice(i)}}</td>
+          </ng-container>
+          <ng-container matColumnDef="minMenge">
+            <th mat-header-cell *matHeaderCellDef>Min Los Menge</th>
+            <td mat-cell *matCellDef="let row">{{row.minLosMenge}}</td>
+          </ng-container>
+          <ng-container matColumnDef="gewicht">
+            <th mat-header-cell *matHeaderCellDef>Gewicht</th>
+            <td mat-cell *matCellDef="let row">{{row.gewicht}}</td>
+          </ng-container>
+          <ng-container matColumnDef="basis">
+            <th mat-header-cell *matHeaderCellDef>Basis Einheit</th>
+            <td mat-cell *matCellDef="let row">{{row.basisEinheit}}</td>
+          </ng-container>
+          <ng-container matColumnDef="liferant">
+            <th mat-header-cell *matHeaderCellDef>Liferant</th>
+            <td mat-cell *matCellDef="let row; let i = index">{{dispo[row.liferantId].name}}</td>
+          </ng-container>
+          <ng-container matColumnDef="lnumer">
+            <th mat-header-cell *matHeaderCellDef>Logistic Beleg Nr</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="my-form-field">
+                <select #lbn (change)="onChange(lbn.value)">
+                  <option *ngFor="let litem of logisticBelegNr" [value]="litem" [selected]="logisticBelegNr[logisticBelegNr.length -1]">{{litem}}</option>
+              </select>
             </div>
-          </td>
-          <td class="fs-s">{{getCurrentPrice(i)}}</td>
-          <td class="fs-s">{{item.minLosMenge}}</td>
-          <td class="fs-s">{{item.gewicht}}</td>
-          <td class="fs-s">{{item.basisEinheit}}</td>
-          <td class="fs-s">{{dispo[item.liferantId].name}}</td>
-          <td class="fs-s"><div class="mb-3">
-            <select class="form-select form-select-sm" name="lbn" id="lbn" #lbn (change)="onChange(lbn.value)">
-              <option selected *ngFor="let item of logisticBelegNr" [selected]="logisticBelegNr[logisticBelegNr.length -1]" [value]="item" >{{item}}</option>
-            </select>
-          </div></td>
-          <td class="fs-s"><div class="mb-3">
-            <input type="number" (click)="checkVerfurbarkeit(i)" [(ngModel)]="artikelMenge[i]"
-              class="form-control form-control-sm fs-s"  name="artikelMenge" id="artikelMenge" aria-describedby="helpId" placeholder="">
-            <small id="helpId" class="form-text text-muted fs-ss">Gibt Menge Ein, Einzeln!</small>
-          </div></td>
-          <td class="fs-s"><div class="d-grid gap-2">
-            <button type="button" name="" id="" class="btn btn-primary fs-s" (click)="addArtikelToKomm(i, false)" >Add Artikel</button>
-          </div></td>
-        </tr>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="addmenge">
+            <th mat-header-cell *matHeaderCellDef>Menge</th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              <div class="my-form-field">
+                <input type="number" matInput (click)="checkVerfurbarkeit(i)" [(ngModel)]="artikelMenge[i]">
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="add">
+            <th mat-header-cell *matHeaderCellDef>Artikel zufugen</th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              <button mat-raised-button (click)="addArtikelToKomm(i, false)" >Add Artikel</button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="artikelsColumnDef"></tr>
+          <tr mat-row *matRowDef="let row; columns: artikelsColumnDef"></tr>
+        </table>
 
-      </tbody>
-    </table>
-  </div>
-</div>
-  <div mat-dialog-actions align="end">
-    <div class="row col-md-12">
+    </mat-tab>
+      <mat-tab label="Artikels in Kommissionierung" >
+      <table mat-table [dataSource]="tabResForArtInKom" >
+            <ng-container matColumnDef="artidink">
+              <th mat-header-cell *matHeaderCellDef >Artikel Nr.</th>
+              <td mat-cell *matCellDef="let item; let i = index">{{item.artId}}</td>
+            </ng-container>
+            <ng-container matColumnDef="mengeink">
+              <th mat-header-cell *matHeaderCellDef >Menge in Kommisionierung</th>
+              <td mat-cell *matCellDef="let item; let i = index">{{item.total}}</td>
+            </ng-container>
+            <ng-container matColumnDef="nameink">
+              <th mat-header-cell *matHeaderCellDef >Name</th>
+              <td mat-cell *matCellDef="let item; let i = index">{{item.name }}</td>
+            </ng-container>
+            <ng-container matColumnDef="artSink">
+              <th mat-header-cell *matHeaderCellDef >Artikel Status</th>
+              <td mat-cell *matCellDef="let item; let i = index" >{{artikelStatus[i]}}</td>
+            </ng-container>
+            <ng-container matColumnDef="verkPink">
+              <th mat-header-cell *matHeaderCellDef >Verkauf Price</th>
+              <td mat-cell *matCellDef="let item; let i = index">{{item.verPrice}}</td>
+            </ng-container>
+            <ng-container matColumnDef="rabatink">
+              <th mat-header-cell *matHeaderCellDef >Rabatt: </th>
+              <td mat-cell *matCellDef="let item; let i = index">{{item.rabatt}}</td>
+            </ng-container>
+            <ng-container matColumnDef="totalGink">
+              <th mat-header-cell *matHeaderCellDef >Total Gewicht</th>
+              <td mat-cell *matCellDef="let item; let i = index">{{item.gewicht}}</td>
+            </ng-container>
+            <ng-container matColumnDef="liferantink">
+              <th mat-header-cell *matHeaderCellDef >Liferant</th>
+              <td mat-cell *matCellDef="let item; let i = index" >{{dispo[item.liferantId].name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="lbelegink">
+              <th mat-header-cell *matHeaderCellDef >Logistic Beleg Nr.</th>
+              <td mat-cell *matCellDef="let item; let i = index">{{item.logisticBelegNr}}</td>
+            </ng-container>
+            <ng-container matColumnDef="nMengeink">
+              <th mat-header-cell *matHeaderCellDef>Neue Menge</th>
+              <td mat-cell *matCellDef="let item; let i =index">
+                <div class="my-form-field">
+                  <input type="number"  value="artikelMenge" [(ngModel)]="artikelMengeEdit[i]"
+                  placeholder="Gib neue Menge an">
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="mengeAink">
+              <th mat-header-cell *matHeaderCellDef>Mengenänderung</th>
+              <td mat-cell *matCellDef="let item; let i=index" >
+                <button *ngIf="artikelStatus[i] === 'INPACKEN'" mat-raised-button (click)="addArtikelToKomm(i, true) ">Bestätigen</button>
+                <button *ngIf="artikelStatus[i] === 'GEPACKT' || artikelStatus[i] === 'TEILGEPACKT'" mat-raised-button (click)="addArtikelToKomm(i, true) " disabled>Bestätigen</button>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="removeink">
+              <th mat-header-cell *matHeaderCellDef>Remove Position</th>
+              <td mat-cell *matCellDef="let item; let i =index" >
+                <button *ngIf="artikelStatus[i] === 'INPACKEN'" mat-raised-button color="warn" (click)="deletePositionInKomm(i)">Delete</button>
+                <button *ngIf="artikelStatus[i] === 'GEPACKT' || artikelStatus[i] === 'TEILGEPACKT'" mat-raised-button color="warn" (click)="deletePositionInKomm(i)" disabled>Delete</button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="artInKomColumnDef"></tr>
+            <tr mat-row *matRowDef="let row; columns: artInKomColumnDef; let i = index" class="{{border[i]}}"></tr>
 
-      <div class="col-md-4 justify-content flex-start fs-s">
-          Total Gewicht: {{totalGewichtB}}
-      </div>
-      <div class="col-md-4 justify-content flex-start fs-s">
-        Stellpaltze: {{stellplattzeB }}
-    </div>
-    <div class="col-md-4 justify-content flex-end fs-s">
-      <button mat-raised-button matDialogClose color="primary">Close</button>
-  </div>
-</div>
+      </table>
 
+    </mat-tab>
+      </mat-tab-group>
   </div>
 </div>

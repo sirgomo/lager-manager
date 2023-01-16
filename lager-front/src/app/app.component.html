@@ -1,12 +1,15 @@
 <mat-toolbar color="primary">
       <mat-toolbar-row>
-        <div>
-          <span routerLink="/" style="cursor:pointer;" *ngIf="!kommissionier"> {{toolbarInfo}} </span>
-          <div *ngIf="kommissionier" class="fs-s mt-2">
-            <div style="line-height: 0.6em;">{{toolbarInfo}}</div>
-            <div>{{palNr}}</div>
-           </div>
+        <div style="display: flex; justify-content: flex-start; align-items: center;" >
+          <button mat-icon-button  aria-label="icon-button with menu icon" *ngIf="isLogged" (click)="toggle()">
+            <mat-icon>menu</mat-icon>
+          </button>
+            <span  *ngIf="!kommissionier" > {{toolbarInfo}} </span>
         </div>
+        <div *ngIf="kommissionier" class="fs-s">
+          <div style="line-height: 0.6em; margin-top: .5rem;">{{toolbarInfo}}</div>
+          <div>{{palNr}}</div>
+         </div>
         <span class="spacer"></span>
           <div *ngIf="isLogged">
             <button mat-icon-button class="example-icon" aria-label="logout button" (click)="logout()">

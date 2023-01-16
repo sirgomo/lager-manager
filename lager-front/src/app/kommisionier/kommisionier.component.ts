@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { ArtikelAufPaletteDto } from '../dto/artikelAufPalete.dto';
 import { ArtikelInfoDto } from '../dto/artikelinfo.dto';
@@ -26,6 +27,8 @@ export class KommisionierComponent implements OnInit {
   braucheIchMehr: boolean[] = [];
   uid = '';
   fullPaletteMenge = 0;
+  dataRes: MatTableDataSource<DataFurKomisDto> = new MatTableDataSource();
+  columnDef = ['platz', 'karton', 'id', 'name'];
   constructor(
     private kommServi: KommisionierService,
     private toastr: ToastrService,
@@ -55,6 +58,7 @@ export class KommisionierComponent implements OnInit {
           'Kommiss Nr: ' + this.kommid,
           'Palette Nr: ' + this.currentPalatte,
         ]);
+        this.dataRes = new MatTableDataSource(this.kommDetails);
       } else {
         this.toastr.error(Object(data).message);
       }
@@ -87,6 +91,7 @@ export class KommisionierComponent implements OnInit {
     tmpNPal.kommissionierId = Number(localStorage.getItem('myId'));
     tmpNPal.palTyp = PALETTENTYP.EU;
     conf.data = tmpNPal;
+
     await this.dial
       .open(NeupalComponent, conf)
       .afterClosed()
@@ -217,6 +222,9 @@ export class KommisionierComponent implements OnInit {
     }
   }
   private sendMengeToServer(i: number, data: DataFurKomisDto) {
+    if (data === undefined || data === null || data.menge <= 0) {
+      return;
+    }
     const tmpArt: ArtikelAufPaletteDto = new ArtikelAufPaletteDto();
     tmpArt.artid = this.kommDetails[i].artikelId;
     tmpArt.artikelMenge = data.menge;

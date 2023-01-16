@@ -68,6 +68,15 @@ export class VerkaufService {
     }
   }
   async createKommiss(komm: KomissDTO) {
+    //check if object entery is date and remove hours
+    for (const [key, value] of Object.entries(komm)) {
+      try {
+        const tmp = String(value).split('-');
+        if (tmp.length > 2) {
+          komm[key] = this.formatDate(value);
+        }
+      } catch (err) {}
+    }
     try {
       await this.repo.create(komm);
       return await this.repo.save(komm);
@@ -78,11 +87,19 @@ export class VerkaufService {
     }
   }
   async updateKommiss(komm: KomissDTO) {
+    //check if object entery is date and remove hours
+    for (const [key, value] of Object.entries(komm)) {
+      try {
+        const tmp = String(value).split('-');
+        if (tmp.length > 2) {
+          komm[key] = this.formatDate(value);
+        }
+      } catch (err) {}
+    }
     try {
       await this.repo.create(komm);
-      return await this.repo
-        .findOne({ where: { id: komm.id } })
-        .then((data) => {
+      return await this.repo.findOne({ where: { id: komm.id } }).then(
+        (data) => {
           for (const [key, value] of Object.entries(data)) {
             for (const [key1, value1] of Object.entries(komm)) {
               if (key === key1 && value !== value1) {
@@ -95,12 +112,19 @@ export class VerkaufService {
             { id: komm.id, verkauferId: komm.verkauferId },
             data,
           );
-        });
+        },
+        (err) => {
+          console.log(err);
+        },
+      );
     } catch (err) {
       throw new Error(
         'Etwas ist schiff gelaufen als ich wollte kommissionierung updaten',
       );
     }
+  }
+  formatDate(date: Date): Date {
+    return new Date(new Date(date).toDateString());
   }
   async addArtikelToKommiss(art: AddArtikelKommissDTO[]) {
     const kommArr: KommissionirungEntity[] = [];

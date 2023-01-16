@@ -29,6 +29,8 @@ export class LagerPlatzEntity{
     liferant:number;
     @Column({nullable: true})
     barcode: string;
+    @Column({nullable: false, type: 'tinyint'})
+    prufziffern: number;
 
   
 

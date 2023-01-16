@@ -28,6 +28,9 @@ export class AppComponent implements OnInit {
       this.kommissionier = true;
     });
   }
+  toggle() {
+    this.helper.toggleSideNav();
+  }
   logout() {
     this.isLogged = false;
     this.kommissionier = false;

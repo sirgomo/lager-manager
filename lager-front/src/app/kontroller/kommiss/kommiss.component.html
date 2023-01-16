@@ -25,7 +25,7 @@
 </mat-toolbar>
 <div matDialogContent class="matDialogContent">
   <div  [(ngModel)]="user" ngDefaultControl>
-
+    <div class="divider"></div>
     <div *ngIf="showPal === 1">
       <app-paletten [kommNr]="currentKomiss[0].kommissId"></app-paletten>
     </div>
@@ -60,8 +60,7 @@
 
 <mat-dialog-actions align="end">
   <div>
-    <button mat-button matDialogClose>Close dialog</button>
-    <button mat-button>Action</button>
+    <button mat-button matDialogClose>Schlissen</button>
   </div>
 </mat-dialog-actions>
 </div>

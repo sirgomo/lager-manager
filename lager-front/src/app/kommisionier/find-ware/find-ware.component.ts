@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { ArtikelInfoDto } from 'src/app/dto/artikelinfo.dto';
 
 @Component({
@@ -9,6 +10,9 @@ import { ArtikelInfoDto } from 'src/app/dto/artikelinfo.dto';
 })
 export class FindWareComponent implements OnInit {
   artikelinfo: ArtikelInfoDto[] = [];
+  dataRes: MatTableDataSource<ArtikelInfoDto> = new MatTableDataSource();
+  columnDef = ['lagerp', 'artmenge', 'mhd'];
+
   constructor(
     private dialRef: MatDialogRef<FindWareComponent>,
     @Inject(MAT_DIALOG_DATA) public data: [ArtikelInfoDto[], number, number],
@@ -17,6 +21,7 @@ export class FindWareComponent implements OnInit {
   ngOnInit(): void {
     if (this.data !== undefined || this.data !== null) {
       this.artikelinfo = this.data[0];
+      this.dataRes = new MatTableDataSource(this.artikelinfo);
     }
   }
   lagerPlatzNachfullen(index: number) {

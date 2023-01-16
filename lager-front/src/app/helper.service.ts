@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
 import { Subject } from 'rxjs';
 import { ArtikelDTO, ARTIKELFLAGE } from './dto/artikel.dto';
 import { ArtikelKommissDto } from './dto/artikelKommiss.dto';
@@ -9,6 +10,7 @@ import { LagerPlatztDto } from './dto/lagerPlatz.dto';
 })
 export class HelperService {
   public toolbarInfo: Subject<string[]>;
+  private sidenav: MatSidenav | undefined;
   constructor() {
     this.toolbarInfo = new Subject();
   }
@@ -40,7 +42,7 @@ export class HelperService {
         artikels.splice(o, 1);
       }
       if (isFinite(Number(text)) && o > 5) {
-        if (isFinite(Number(text)) && artikels[o].artikelId === Number(text)) {
+        if (isFinite(Number(text)) && artikels[o].artikelId == Number(text)) {
           tmpArrNew.push(artikels[o]);
           artikels.splice(o, 1);
         }
@@ -54,7 +56,7 @@ export class HelperService {
   }
 
   public onSearchK(text: string, artikels: ArtikelKommissDto[]) {
-    if (text === undefined || text.length === 0) {
+    if (text === undefined || text === null || text.length === 0) {
       return artikels;
     }
     const tmpArrNew: ArtikelKommissDto[] = [];
@@ -82,7 +84,7 @@ export class HelperService {
         artikels.splice(o, 1);
       }
       if (isFinite(Number(text)) && o > 5) {
-        if (isFinite(Number(text)) && artikels[o].artId === Number(text)) {
+        if (isFinite(Number(text)) && artikels[o].artId == Number(text)) {
           tmpArrNew.push(artikels[o]);
           artikels.splice(o, 1);
         }
@@ -176,7 +178,6 @@ export class HelperService {
   }
 
   getPaletsDeatails(artikels: ArtikelKommissDto[]) {
-    console.log(artikels);
     let totalGewicht = 0;
     let stellplattze = 0;
     let sussgewicht = 0;
@@ -194,7 +195,6 @@ export class HelperService {
 
     stellplattze = Number(Math.ceil(totalGewicht / 750));
     stellplattze += Number(Math.ceil(sussgewicht / 250));
-    console.log('data ' + totalGewicht + ' ' + sussgewicht);
     totalGewicht = totalGewicht + sussgewicht;
 
     return { stellplattze, totalGewicht };
@@ -206,5 +206,11 @@ export class HelperService {
   }
   public setToolbar(value: string[]) {
     this.toolbarInfo.next(value);
+  }
+  public setSideNav(nav: MatSidenav) {
+    this.sidenav = nav;
+  }
+  public toggleSideNav() {
+    if (this.sidenav !== undefined) this.sidenav.toggle();
   }
 }

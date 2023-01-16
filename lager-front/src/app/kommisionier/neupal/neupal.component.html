@@ -1,34 +1,38 @@
-<div class="container justify-content-center align-items-center">
-  <mat-toolbar color="primary">
+<div class="container">
+<mat-toolbar color="primary">
     <div class="fs-s" *ngIf="data === null">Neue Palette Erstellen</div>
     <div class="fs-s" *ngIf="data !== null">Gewicht für Palette eingeben</div>
 </mat-toolbar>
         <mat-dialog-content>
-          <form class="row g-3 needs-validation" novalidate [formGroup]="neuPalForm">
-            <div class="col-auto">
-              <label for="kommid" class="form-label fs-s">Kommissionierung Nr.: </label>
-              <input type="hidden" class="form-control form-control-sm fs-s" id="kommid" formControlName="kommId" >
-              <div class="fs-s">{{neuPalForm.get('kommId')?.getRawValue()}}</div>
+          <form novalidate [formGroup]="neuPalForm">
+            <div>
+                <label for="kommid" class="fs-s">Kommissionierung Nr.: {{neuPalForm.get('kommId')?.getRawValue()}}
+                <input type="hidden"  id="kommid" formControlName="kommId" ></label>
             </div>
-            <div class="col-auto">
-              <label for="palTyp" class="form-label fs-s">Paleten Typ.</label>
-              <div>
-                <select formControlName="palTyp" id="palTyp">
-                  <option *ngFor="let item of paletetyp" [selected]="item === 'EU'" [value]="item">{{item}}</option>
-                 </select>
-              </div>
+            <div class="divider"></div>
+            <div >
+              <mat-form-field>
+                <mat-label class="fs-s">Paleten Typ.</mat-label>
+                <mat-select formControlName="palTyp">
+                    <mat-option *ngFor="let item of paletetyp" [value]="item" class="fs-s">{{item}}</mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
-            <div class="col-auto">
-              <label for="gewicht" class="form-label fs-s">Palette Gewicht.: </label>
-              <input type="number" class="form-control form-control-sm fs-s" id="gewicht" formControlName="gewicht" >
+            <div class="divider"></div>
+            <div>
+              <mat-form-field>
+                <mat-label class="fs-s">Palette Gewicht.: </mat-label>
+                <input type="number" matInput formControlName="gewicht" class="fs-s">
+              </mat-form-field>
             </div>
+            <div class="divider"></div>
           </form>
         </mat-dialog-content>
         <mat-dialog-actions>
-      <div class="d-grid gap-2">
-        <button type="button" name="" id="" class="btn btn-success btn-sm fs-s" (click)="palSpeichern()">Speicher</button>
-        <button type="button" name="" id="" class="btn btn-primary btn-sm fs-s" (click)="abbruch()">Abbruch</button>
-      </div>
+            <div >
+              <button type="button" mat-raised-button color="primary" (click)="palSpeichern()">Speicher</button>
+              <button type="button" mat-raised-button color="secondary" (click)="abbruch()">Abbruch</button>
+            </div>
         </mat-dialog-actions>
 
 </div>
