@@ -1,15 +1,23 @@
-<div class="container  fluid">
-  <div class="mt-2 col-md-12"></div>
-  <div class="row clearfix justify-content-center"  *ngIf="show === 0">
-    <div class="col-md-auto">
-      <button mat-raised-button color="primary" [routerLink]="['/admin']" routerLinkActive="router-link-active" >Admin Panel</button>
-    </div>
-    <div class="col-md-auto">
-      <button mat-raised-button color="primary" (click)="getUsers()">Users</button>
-    </div>
-  </div>
-  <div *ngIf="show === 1">
-    <app-users [userss]="users" (show)="changeShow($event)"></app-users>
-  </div>
+<div class="container">
+  <mat-sidenav-container>
+      <mat-sidenav mode="side" align="start" opened #sidenav class="sidenav">
+        <div *ngIf="show === 1">
+          <button mat-raised-button color="primary" (click)="usersos.exit()">Admin Panel</button>
+          <button mat-raised-button color="primary" (click)="usersos.createUser()">Neue Benutzer</button>
+        </div >
+        <div *ngIf="show !== 1">
+        <button mat-raised-button color="primary" (click)="getUsers()">Users</button>
+        </div>
+      </mat-sidenav>
+      <!-- Body -->
+      <mat-sidenav-content>
+        <div *ngIf="show === 1">
+          <app-users [userss]="users" (show)="changeShow($event)" #usersos></app-users>
+        </div>
+      </mat-sidenav-content>
+
+  </mat-sidenav-container>
+
+
 </div>
 

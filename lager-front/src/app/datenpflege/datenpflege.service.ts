@@ -22,7 +22,7 @@ export class DatenpflegeService {
     this.http.patch<DispositorDto>(this.API_URL + '/' + id, dispo).subscribe();
   }
   deleteDispositor(id: number) {
-    this.http.delete(this.API_URL + '/' + id).subscribe();
+    return this.http.delete(this.API_URL + '/' + id);
   }
 
   getAllSpeditions(): Observable<SpeditionDto[]> {

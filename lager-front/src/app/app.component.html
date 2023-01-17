@@ -1,13 +1,13 @@
 <mat-toolbar color="primary">
       <mat-toolbar-row>
-        <div style="display: flex; justify-content: flex-start; align-items: center;" >
+        <div>
           <button mat-icon-button  aria-label="icon-button with menu icon" *ngIf="isLogged" (click)="toggle()">
             <mat-icon>menu</mat-icon>
           </button>
             <span  *ngIf="!kommissionier" > {{toolbarInfo}} </span>
         </div>
-        <div *ngIf="kommissionier" class="fs-s">
-          <div style="line-height: 0.6em; margin-top: .5rem;">{{toolbarInfo}}</div>
+        <div *ngIf="kommissionier">
+          <div style="line-height: 0.7em; margin-top: .5rem;">{{toolbarInfo}}</div>
           <div>{{palNr}}</div>
          </div>
         <span class="spacer"></span>

@@ -1,35 +1,32 @@
-<div class="container  !direction !spacing">
-  <div class="mt-2 col-md-12"></div>
- <div class="row clearfix justify-content-center">
-              <div class="col-md-auto">
-                <button type="button" class="btn btn-primary fs-s btn-sm" (click)="getAllspeditiors()"> Speditors</button>
-            </div>
-            <div class="col-md-auto"  (click)="getAllDispositors()">
-                <button type="button" class="btn btn-primary fs-s btn-sm"> Debitoren</button>
-            </div>
-            <div class="col-md-auto">
-              <button type="button" class="btn btn-primary fs-s btn-sm" [routerLink]="['/artikel']" routerLinkActive="router-link-active" >Artikels</button>
-            </div>
-            <div class="col-md-auto">
-             <button type="button" class="btn btn-primary fs-s btn-sm"  [routerLink]="['/warenbuch']" routerLinkActive="router-link-active"> Waren Buchung</button>
-          </div>
-          <div class="mt-2 col-md-12"></div>
-          <div class="col-md-auto">
-            <button type="button" class="btn btn-primary fs-s btn-sm"  (click)="newSpedi()" *ngIf="show === 3">Neu Spedition</button>
-          </div>
-          <div class="col-md-auto" *ngIf="show === 1">
-            <button type="button" class="btn btn-primary fs-s btn-sm"  (click)="newDispo()" > Neue Debitor</button>
-          </div>
- </div>
-</div>
-<div class="mt-2 col-md-12"></div>
-<div class="row justify-content-center align-items-center g-2">
-<div *ngIf="show === 1">
-  <app-debitors [dispositors]="dispositors"></app-debitors>
-</div>
-<div *ngIf="show === 3">
-  <app-speditors [spedi]="speditors"></app-speditors>
-</div>
+<div class="container">
+  <mat-sidenav-container id="sidenav">
+      <mat-sidenav mode="side" align="start" opened #sidenav >
+      <button type="button" mat-raised-button color="primary" (click)="getAllspeditiors()"> Speditors</button>
+      <button type="button" mat-raised-button (click)="newSpedi()" *ngIf="show === 3">Neu Spedition</button>
+      <button type="button" mat-raised-button color="primary" (click)="getAllDispositors()"> Debitoren</button>
+      <button type="button" mat-raised-button *ngIf="show === 1" (click)="newDispo()" > Neue Debitor</button>
+      <button type="button" mat-raised-button color="primary" (click)="showAretikel()" >Artikels</button>
+      <button mat-raised-button (click)="artikel.newArtikel()" *ngIf="show === 4">Artikel Hinzufügen</button>
+      <button type="button" mat-raised-button color="primary" (click)="showWarenBuchung()"> Waren Buchung</button>
+      <button mat-raised-button *ngIf="show === 5" (click)="waren.createBuchung()">Waren Buchen</button>
+      <button type="button" mat-raised-button *ngIf="waren?.show === 2 && show === 5" (click)="waren.showArtikleInBuchung()">Zeigt gebuchtes Artikels</button>
+      <button type="button" mat-raised-button  *ngIf="waren?.show === 3 && show === 5" (click)="waren.goBack()">Zurück</button>
+      </mat-sidenav>
+
+      <div *ngIf="show === 1">
+        <app-debitors></app-debitors>
+      </div>
+      <div *ngIf="show === 3">
+        <app-speditors></app-speditors>
+      </div>
+      <div *ngIf="show === 4">
+        <app-artikel #artikel id="artikel"></app-artikel>
+      </div>
+      <div *ngIf="show === 5">
+        <app-warenebuchung #waren id="waren"></app-warenebuchung>
+      </div>
+  </mat-sidenav-container>
+
 
 </div>
 

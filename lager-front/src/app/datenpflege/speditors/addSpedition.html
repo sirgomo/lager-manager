@@ -1,97 +1,78 @@
-<div class="container-fluid !direction !spacing">
-  <div matDialogContent>
+<div class="container">
+  <div matDialogContent class="matDialogContent">
 
    <!--Form to create  speditors-->
-  <form class="row g-2 needs-validation px-3" novalidate
+  <form novalidate
   [formGroup]="formSpedition" (ngSubmit)="closeDialog(formSpedition.value)">
   <input type="hidden" formControlName="id">
-  <div class="row justify-content-center align-items-center g-2">
-      <div class="col-md-4">
-          <label for="name" class="form-label fs-s">Spedition Name</label>
-          <input formControlName="name" type="text" class="form-control form-control-sm" id="name" value="name" required>
-          <div class="is-invalid" *ngIf="formSpedition.controls['name'].invalid && (formSpedition.controls['name'].touched || formSpedition.controls['name'].dirty)">
-            <p class="text-danger small fs-ss"> Diese Field ist required!</p>
+      <div class="row">
+          <div>
+            <mat-form-field>
+              <mat-label>Spedition Name</mat-label>
+              <input formControlName="name" type="text" matInput required>
+              <mat-hint *ngIf="formSpedition.controls['name'].invalid && (formSpedition.controls['name'].touched || formSpedition.controls['name'].dirty)"> Diese Field ist required!</mat-hint>
+            </mat-form-field>
           </div>
-          <div class="is-valid" *ngIf="formSpedition.controls['name'].valid || formSpedition.controls['name'].untouched">
-            <p class="text-danger small fs-ss"></p>
+          <div>
+            <mat-form-field>
+              <mat-label>Name 2</mat-label>
+              <input formControlName="name2" type="text" matInput>
+            </mat-form-field>
           </div>
-        </div>
-      <div class="col-md-4">
-          <label for="name2" class="form-label fs-s">Name 2</label>
-          <input formControlName="name2" type="text" class="form-control form-control-sm" id="name2" value="name2">
-          <div class="is-invalid" *ngIf="formSpedition.controls['name2'].invalid && (formSpedition.controls['name2'].touched || formSpedition.controls['name2'].dirty)">
-            <p class="text-danger small fs-ss"> Diese Field ist required!</p>
+          <div>
+            <mat-form-field>
+              <mat-label>Max Lade Gewicht :</mat-label>
+              <input formControlName="maxLadeGewicht" type="number" matInput required>
+            </mat-form-field>
           </div>
-          <div class="is-valid" *ngIf="formSpedition.controls['name2'].valid || formSpedition.controls['name2'].untouched">
-            <p class="text-danger small fs-ss"></p>
-          </div>
-        </div>
-      <div class="col-md-4">
-        <label for="maxLadeGewicht" class="form-label fs-s">Max Lade Gewicht : </label>
-        <input formControlName="maxLadeGewicht" type="number" class="form-control  form-control-sm" id="maxLadeGewicht" value="maxLadeGewicht" required>
       </div>
-  </div>
-  <div class="row justify-content-center align-items-center g-2">
-      <div class="col-md-4">
-        <label for="maxPalettenMenge" class="form-label fs-s">Max Paletten Menge</label>
-          <input formControlName="maxPalettenMenge" type="number" class="form-control  form-control-sm" id="maxPalettenMenge" value="maxPalettenMenge" required>
-        </div>
-      <div class="col-md-4">
-        <label for="stadt" class="form-label fs-s">Stadt</label>
-          <input formControlName="stadt" type="text" class="form-control  form-control-sm" id="stadt" value="stadt" required>
-          <div class="is-invalid" *ngIf="formSpedition.controls['stadt'].invalid && (formSpedition.controls['stadt'].touched || formSpedition.controls['stadt'].dirty)">
-            <p class="text-danger small fs-ss"> Diese Field ist required!</p>
+      <div class="row">
+          <div>
+            <mat-form-field>
+              <mat-label>Max Paletten Menge</mat-label>
+              <input formControlName="maxPalettenMenge" type="number" matInput required>
+            </mat-form-field>
           </div>
-          <div class="is-valid" *ngIf="formSpedition.controls['stadt'].valid || formSpedition.controls['stadt'].untouched">
-            <p class="text-danger small fs-ss"></p>
+          <div>
+            <mat-form-field>
+              <mat-label>Stadt</mat-label>
+              <input formControlName="stadt" type="text" matInput required>
+              <mat-hint *ngIf="formSpedition.controls['stadt'].invalid && (formSpedition.controls['stadt'].touched || formSpedition.controls['stadt'].dirty)"> Diese Field ist required!</mat-hint>
+            </mat-form-field>
           </div>
+          <div>
+            <mat-form-field>
+              <mat-label>Straße und Nr.</mat-label>
+              <input formControlName="strasseUndNr" type="text" matInput required>
+              <mat-hint *ngIf="formSpedition.controls['stadt'].invalid && (formSpedition.controls['stadt'].touched || formSpedition.controls['stadt'].dirty)"> Diese Field ist required!</mat-hint>
+            </mat-form-field>
+            </div>
+      </div>
+      <div class="row">
+        <div>
+          <mat-form-field>
+            <mat-label>Postleitzahl</mat-label>
+            <input formControlName="postleitzahl" type="number" matInput required>
+            <mat-hint *ngIf="formSpedition.controls['stadt'].invalid && (formSpedition.controls['stadt'].touched || formSpedition.controls['stadt'].dirty)"> Diese Field ist required!</mat-hint>
+          </mat-form-field>
         </div>
-      <div class="col-md-4">
-        <label for="strasseUndNr" class="form-label fs-s">Straße und Nr.</label>
-          <input formControlName="strasseUndNr" type="text" class="form-control  form-control-sm" id="strasseUndNr" value="strasseUndNr" required>
-          <div class="is-invalid" *ngIf="formSpedition.controls['strasseUndNr'].invalid && (formSpedition.controls['strasseUndNr'].touched || formSpedition.controls['strasseUndNr'].dirty)">
-            <p class="text-danger small fs-ss"> Diese Field ist required!</p>
-          </div>
-          <div class="is-valid" *ngIf="formSpedition.controls['strasseUndNr'].valid || formSpedition.controls['strasseUndNr'].untouched">
-            <p class="text-danger small fs-ss"></p>
-          </div>
-        </div>
-  </div>
-  <div class="row justify-content-center align-items-center g-2">
-    <div class="col-md-6">
-      <label for="postleitzahl" class="form-label fs-s">Postleitzahl</label>
-        <input formControlName="postleitzahl" type="number" class="form-control  form-control-sm" id="postleitzahl" value="postleitzahl" required>
-        <div class="is-invalid" *ngIf="formSpedition.controls['postleitzahl'].invalid && (formSpedition.controls['postleitzahl'].touched || formSpedition.controls['postleitzahl'].dirty)">
-          <p class="text-danger small fs-ss"> Diese Field ist required!</p>
-        </div>
-        <div class="is-valid" *ngIf="formSpedition.controls['postleitzahl'].valid || formSpedition.controls['postleitzahl'].untouched">
-          <p class="text-danger small fs-ss"></p>
+        <div>
+          <mat-form-field>
+            <mat-label>Umsatzsteuer-Identifikationsnummer</mat-label>
+            <input formControlName="uStIdentifikationsnummer" type="text" matInput required>
+            <mat-hint *ngIf="formSpedition.controls['stadt'].invalid && (formSpedition.controls['stadt'].touched || formSpedition.controls['stadt'].dirty)"> Diese Field ist required!</mat-hint>
+          </mat-form-field>
         </div>
       </div>
-    <div class="col-md-6">
-      <label for="uStIdentifikationsnummer" class="form-label fs-s">Umsatzsteuer-Identifikationsnummer</label>
-        <input formControlName="uStIdentifikationsnummer" type="text" class="form-control  form-control-sm" id="uStIdentifikationsnummer" value="uStIdentifikationsnummer" required>
-        <div class="is-invalid" *ngIf="formSpedition.controls['uStIdentifikationsnummer'].invalid && (formSpedition.controls['uStIdentifikationsnummer'].touched || formSpedition.controls['uStIdentifikationsnummer'].dirty)">
-          <p class="text-danger small fs-ss"> Diese Field ist required!</p>
+    <div class="row">
+        <div>
+          <button mat-raised-button color="primary" type="submit"  *ngIf="formSpedition.valid">Save</button>
+          <button mat-raised-button type="submit" disabled *ngIf="!formSpedition.valid">Save</button>
         </div>
-        <div class="is-valid" *ngIf="formSpedition.controls['uStIdentifikationsnummer'].valid || formSpedition.controls['uStIdentifikationsnummer'].untouched">
-          <p class="text-danger small fs-ss"></p>
+        <div >
+          <button mat-raised-button color="warn" type="button" [mat-dialog-close]>Abbruch</button>
         </div>
-      </div>
     </div>
-  <div class="row g-2 px-2">
-    <div class="col-md-6 d-flex justify-content-center">
-      <button class="btn btn-success btn-sm fs-s" type="submit"  *ngIf="formSpedition.valid">Save</button>
-      <button class="btn btn-success btn-sm fs-s" type="submit" disabled *ngIf="!formSpedition.valid">Save</button>
-    </div>
-    <div class="col-md-6 d-flex justify-content-center">
-      <button class="btn btn-danger btn-sm fs-s" type="button" [mat-dialog-close]>Abbruch</button>
-    </div>
-  </div>
-
   </form>
-  <div class="mt-2 col-md-12"></div>
-  <div class="row justify-content-center align-items-center g-10">
-
   </div>
 </div>

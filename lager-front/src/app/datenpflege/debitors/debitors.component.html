@@ -1,43 +1,28 @@
 <div class="container">
-  <table class="table table-bordered table-hover table-sortable px-3 fs-s" id="tab_logic" >
-    <thead>
-      <tr >
-        <th class="text-center">
-          Dispositor id
-        </th>
-        <th class="text-center">
-          Name
-        </th>
-        <th class="text-center">
-         Name 2
-        </th>
-        <th class="text-center">
-          Stadt
-         </th>
-        <th class="text-center">
-          Delete ?
-         </th>
-      </tr>
-    </thead>
-    <tbody>
-
-      <tr  *ngFor="let post of dispositors; let i = index" class="hidden">
-        <td >
-          {{ post.id }}
+  <table mat-table [dataSource]="dataTab">
+    <ng-container matColumnDef="dispoid">
+      <th mat-header-cell *matHeaderCellDef>Dispositor Nr.</th>
+      <td mat-cell *matCellDef="let item">{{item.id}}</td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let item; let i =index" (click)="editDispo(i)" style="cursor: pointer;">{{item.name}}</td>
+    </ng-container>
+    <ng-container matColumnDef="name2">
+      <th mat-header-cell *matHeaderCellDef>Name 2</th>
+      <td mat-cell *matCellDef="let item">{{item.name2}}</td>
+    </ng-container>
+    <ng-container matColumnDef="stadt">
+      <th mat-header-cell *matHeaderCellDef> Stadt</th>
+      <td mat-cell *matCellDef="let item">{{item.stadt}}</td>
+    </ng-container>
+    <ng-container matColumnDef="loschen">
+      <th mat-header-cell *matHeaderCellDef>Debitor Entfernen</th>
+      <td mat-cell *matCellDef="let item; let i = index">
+        <button mat-raised-button color="warn" (click)="deleteDispositor(i)" >Löschen</button>
       </td>
-      <td  (click)="editDispo(post.id)" style="cursor: pointer;">
-        {{ post.name }}
-      </td>
-      <td (click)="editDispo(post.id)" style="cursor: pointer;">
-        {{ post.name2 }}
-      </td>
-      <td   (click)="editDispo(post.id)" style="cursor: pointer;">
-        {{ post.stadt }}
-      </td>
-                  <td class="text-center">
-                      <button class="btn btn-danger btn-sm fs-s" (click)="deleteDispositor(post.id, i)" >Löschen</button>
-                  </td>
-      </tr>
-    </tbody>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columnDef"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnDef"></tr>
   </table>
 </div>

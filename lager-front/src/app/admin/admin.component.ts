@@ -1,34 +1,36 @@
-import { NumberFormatStyle } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
 import { RegisterUsersDto } from '../dto/regUsers.dto';
+import { HelperService } from '../helper.service';
 import { AdminService } from './admin.service';
+import { UsersComponent } from './users/users.component';
 
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.scss']
+  styleUrls: ['./admin.component.scss'],
 })
-export class AdminComponent implements OnInit{
-  users: RegisterUsersDto[] = new Array();
-  loaded :boolean = false;
-  show:number = 0;
+export class AdminComponent implements OnInit {
+  @ViewChild('sidenav', { static: true }) public sidenav!: MatSidenav;
+  @ViewChild('usersos') public usersos!: UsersComponent;
+  users: RegisterUsersDto[] = [];
+  loaded = false;
+  show = 0;
 
-  constructor(private serv : AdminService){
-
-  }
+  constructor(private serv: AdminService, private helper: HelperService) {}
   ngOnInit(): void {
-   this.show = 0;
+    this.show = 0;
+    this.helper.setSideNav(this.sidenav);
   }
-  async getUsers(){
-   return await this.serv.getUsers().subscribe(data=>{
-      for (let i = 0; i < data.length; i++){
+  async getUsers() {
+    return await this.serv.getUsers().subscribe((data) => {
+      for (let i = 0; i < data.length; i++) {
         this.users.push(data[i]);
       }
       this.show = 1;
     });
   }
-  changeShow(emit:number){
-    console.log('emit '+emit);
-    this.show = 0;
+  changeShow(emit: number) {
+    this.show = emit;
   }
 }

@@ -1,36 +1,31 @@
 <div class="container">
-  <div class="mt-2 col-md-12"></div>
-  <div class="row clearfix justify-content-center">
-    <div class="col-md-auto">
-      <button mat-raised-button color="primary" (click)="exit()">Admin Panel</button>
-    </div>
-    <div class="col-md-auto">
-      <button mat-raised-button color="primary" (click)="createUser()">Neue Benutzer</button>
-    </div>
-  </div>
-  <div class="mt-2 col-md-12"></div>
-  <div>
-    <table class="table table-bordered table-hover table-sortable table-striped">
-      <thead>
-        <tr>
-          <th scope="col">User Name</th>
-          <th scope="col">Name</th>
-          <th scope="col">Vorname</th>
-          <th scope="col">Role</th>
-          <th>Delete User</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="" *ngFor="let item of userss; let i = index" >
-          <td scope="row">{{item.username}}</td>
-          <td style="cursor: pointer;" (click)="editUser(i)">{{item.nachname}}</td>
-          <td style="cursor: pointer;" (click)="editUser(i)">{{item.vorname}}</td>
-          <td style="cursor: pointer;" (click)="editUser(i)">{{item.role}}</td>
-          <td align="center"><button mat-raised-button color="warn" (click)="delete(i)">Delete</button> </td>
-        </tr>
 
-      </tbody>
+    <table mat-table [dataSource]="tabDataSource">
+      <ng-container matColumnDef="uname">
+        <th mat-header-cell *matHeaderCellDef>User Name</th>
+        <td mat-cell *matCellDef="let item; let i = index" (click)="editUser(i)" style="cursor: pointer;">{{item.username}}</td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let item; let i = index" (click)="editUser(i)" style="cursor: pointer;">{{item.nachname}}</td>
+      </ng-container>
+      <ng-container matColumnDef="vorname">
+        <th mat-header-cell *matHeaderCellDef>Vorname</th>
+        <td mat-cell *matCellDef="let item">{{item.vorname}}</td>
+      </ng-container>
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef>Role</th>
+        <td mat-cell *matCellDef="let item">{{item.role}}</td>
+      </ng-container>
+      <ng-container matColumnDef="del">
+        <th mat-header-cell *matHeaderCellDef>Delete User</th>
+        <td mat-cell *matCellDef="let item; let i = index">
+          <button mat-raised-button color="warn" (click)="delete(i)">Delete</button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnDef"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnDef"></tr>
     </table>
-  </div>
+
 
 </div>

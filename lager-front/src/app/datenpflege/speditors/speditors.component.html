@@ -1,44 +1,29 @@
  <div class="container">
  <!-- Show speditors data-->
- <table class="table table-bordered table-hover table-sortable px-3" id="tab_logic">
-    <thead>
-      <tr >
-        <th class="text-center fs-s">
-          Speditors id
-        </th>
-        <th class="text-center fs-s">
-         Speditors Name
-        </th>
-        <th class="text-center fs-s">
-         Speditors max lade gewicht
-        </th>
-        <th class="text-center fs-s">
-          Speditors max paletten menge
-         </th>
-         <th class="text-center fs-s">
-          Delete ?
-         </th>
-      </tr>
-    </thead>
-    <tbody>
-
-      <tr  *ngFor="let post of spedi; let i = index;" class="hidden" (click)="editSpedi(i)" style="cursor: pointer;">
-        <td class="fs-s">
-          {{ post.id }}
-      </td>
-      <td class="fs-s">
-        {{ post.name }}
-      </td>
-      <td class="fs-s">
-        {{ post.maxLadeGewicht }}
-      </td>
-      <td class="fs-s">
-        {{ post.maxPalettenMenge }}
-      </td>
-                  <td class="text-center">
-                      <button  class="btn btn-danger glyphicon glyphicon-remove row-remove btn-sm fs-s" (click)="deleteSpeditor(post.id, i)"><span aria-hidden="true">Löschen</span></button>
-                  </td>
-      </tr>
-    </tbody>
+ <table mat-table [dataSource]="tabRes">
+  <ng-container matColumnDef="spedid">
+    <mat-header-cell *matHeaderCellDef> Speditors Id</mat-header-cell>
+    <mat-cell *matCellDef="let item">{{item.id}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="spedname">
+    <mat-header-cell *matHeaderCellDef> Speditors Name</mat-header-cell>
+    <mat-cell *matCellDef="let item; let i = index" (click)="editSpedi(i)" style="cursor: pointer;">{{item.name}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="gewicht">
+    <mat-header-cell *matHeaderCellDef>Speditors max lade gewicht</mat-header-cell>
+    <mat-cell *matCellDef="let item">{{item.maxLadeGewicht}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="palmen">
+    <mat-header-cell *matHeaderCellDef>Speditors max paletten menge</mat-header-cell>
+    <mat-cell *matCellDef="let item">{{item.maxPalettenMenge}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="delete">
+    <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
+    <mat-cell *matCellDef="let item; let i = index">
+      <button mat-raised-button color="warn" (click)="deleteSpeditor(i)">Löschen</button>
+    </mat-cell>
+  </ng-container>
+   <mat-header-row *matHeaderRowDef="columnDef"></mat-header-row>
+   <mat-row *matRowDef="let row; columns: columnDef;"></mat-row>
   </table>
 </div>
