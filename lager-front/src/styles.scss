@@ -97,9 +97,12 @@ h3 {
 
 .row {
   display: flex;
-  justify-content: flex-start;
+  justify-content:flex-start;
   column-gap: .4rem;
   align-items: baseline;
+  padding-left: 1rem;
+  flex-grow: 1;
+  flex-wrap: wrap;
 }
 .row1b {
   display: flex;
@@ -115,6 +118,13 @@ h3 {
 }
 .row .hidd legend {
   font-size: .8rem;
+}
+.rowsuch {
+  display: flex;
+  flex-grow: 2;
+  column-gap: .4rem;
+  align-items: baseline;
+  padding-left: 1rem;
 }
 .dialogAct{
   display: flex;

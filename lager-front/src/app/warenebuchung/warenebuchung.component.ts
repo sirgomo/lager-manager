@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { ArtikelService } from '../artikel/artikel.service';
 import { DatenpflegeService } from '../datenpflege/datenpflege.service';
@@ -19,6 +20,27 @@ import { WarenBuchungService } from './warenbuchung.service';
 export class WarenebuchungComponent implements OnInit {
   // eslint-disable-next-line @typescript-eslint/ban-types
   isNaN: Function = isNaN;
+  tabData: MatTableDataSource<ArtikelDTO> = new MatTableDataSource();
+  columnDef: string[] = [
+    'aid',
+    'name',
+    'besch',
+    'steuer',
+    'brut',
+    'brtto',
+    'liefer',
+    'menge',
+    'buchen',
+  ];
+  columnDefBuchungen: string[] = [
+    'buchid',
+    'tor',
+    'kreditor',
+    'bestnr',
+    'lifersch',
+    'del',
+  ];
+  tabDataBuchu: MatTableDataSource<WarenBuchungDto> = new MatTableDataSource();
   buchngen: WarenBuchungDto[] = [];
   buchung: WarenBuchungDto = new WarenBuchungDto();
   formBuchung: FormGroup;
@@ -32,6 +54,16 @@ export class WarenebuchungComponent implements OnInit {
   steuArr: number[] = new Array(this.artikels.length);
 
   buchungArtikelMenge: GebuchtesArtikelsDto[] = [];
+  columnGebuchtesArtikel: string[] = [
+    'bestid',
+    'artid',
+    'artname',
+    'liefer',
+    'menge',
+    'delete',
+  ];
+  tabBuchArtikel: MatTableDataSource<GebuchtesArtikelsDto> =
+    new MatTableDataSource();
 
   constructor(
     private buchServi: WarenBuchungService,
@@ -62,22 +94,27 @@ export class WarenebuchungComponent implements OnInit {
   }
   async getBuchungen() {
     this.buchngen.splice(0, this.buchngen.length);
-    await this.buchServi.getAllBuchungen().subscribe((data) => {
-      data.forEach((buchung) => {
-        if (!buchung.eingebucht) {
-          this.buchngen.push(buchung);
+    await this.buchServi.getAllBuchungen().subscribe((res) => {
+      if (res !== undefined && res !== null && res.length > 0) {
+        for (let i = 0; i < res.length; i++) {
+          this.buchngen.push(res[i]);
         }
-      });
-      this.show = 1;
+        this.tabDataBuchu = new MatTableDataSource(res);
+        this.show = 1;
+      }
     });
   }
   async getArtikels() {
     this.artikels.splice(0, this.artikels.length);
-    await this.artService.getAllArtikel().subscribe((data) => {
-      data.forEach((art) => {
-        this.artikels.push(art);
-      });
-      this.getBuchungen();
+    await this.artService.getAllArtikel().subscribe((res) => {
+      if (res !== undefined && res !== null && res.length > 0) {
+        for (let i = 0; i < res.length; i++) {
+          this.artikels.push(res[i]);
+        }
+        const tmpArt: ArtikelDTO[] = this.artikels.slice(0, 50);
+        this.tabData = new MatTableDataSource(tmpArt);
+        this.getBuchungen();
+      }
     });
   }
   getBrutto(i: number) {
@@ -120,7 +157,7 @@ export class WarenebuchungComponent implements OnInit {
       this.toastr.error('Das Buchung muss zuerst gespeichert werden !');
       return;
     }
-    if (!isFinite(this.steuArr[index]) && !isFinite(this.nettoArr[index])) {
+    if (!isFinite(this.steuArr[index]) || !isFinite(this.nettoArr[index])) {
       this.toastr.error('Du musst den Preise und Mehrwerhsteure eingeben');
       return;
     }
@@ -134,10 +171,11 @@ export class WarenebuchungComponent implements OnInit {
         this.nettoArr = new Array(this.artikels.length);
         this.steuArr.splice(0, this.steuArr.length);
         this.steuArr = new Array(this.artikels.length);
+        this.artikelMenge.splice(0, this.artikelMenge.length);
         return;
       }
     }
-    this.artikelMenge.splice(0, this.artikelMenge.length);
+
     const bucharti: BestArtikelMengeDto = new BestArtikelMengeDto();
     bucharti.artikelId = artikelid;
     bucharti.bestellungId = bestelungId;
@@ -151,6 +189,7 @@ export class WarenebuchungComponent implements OnInit {
         this.nettoArr = new Array(this.artikels.length);
         this.steuArr.splice(0, this.steuArr.length);
         this.steuArr = new Array(this.artikels.length);
+        this.artikelMenge.splice(0, this.artikelMenge.length);
         this.refreshArtikels(data, index);
         this.toastr.success('Artikel zugefugt', 'Artikel', { timeOut: 400 });
       } else {
@@ -158,6 +197,7 @@ export class WarenebuchungComponent implements OnInit {
         Object.assign(e, data);
         this.toastr.error(e.message);
         this.nettoArr.splice(0, this.nettoArr.length);
+        this.artikelMenge.splice(0, this.artikelMenge.length);
         this.nettoArr = new Array(this.artikels.length);
         this.steuArr.splice(0, this.steuArr.length);
         this.steuArr = new Array(this.artikels.length);
@@ -194,8 +234,10 @@ export class WarenebuchungComponent implements OnInit {
   }
   onSearch(text: string) {
     this.artikels = this.helper.onSearch(text, this.artikels);
+    const tmpArt: ArtikelDTO[] = this.artikels.slice(0, 50);
+    this.tabData = new MatTableDataSource(tmpArt);
   }
-  artikelTrackBy(index: number, artikel: ArtikelDTO) {
+  artikelTrackBy(index: number) {
     if (this.artikels === undefined) return;
     return this.artikels[index].artikelId;
   }
@@ -237,13 +279,13 @@ export class WarenebuchungComponent implements OnInit {
               gebuchteArtikel.preise = arti.priceNetto;
               gebuchteArtikel.merhwersteure = arti.mehrwertsteuer;
               gebuchteArtikel.liferantId = arti.liferantId;
-              console.log(gebuchteArtikel);
               this.buchungArtikelMenge.push(gebuchteArtikel);
               return false;
             }
             return true;
           });
         });
+        this.tabBuchArtikel = new MatTableDataSource(this.buchungArtikelMenge);
         this.show = 2;
       });
   }

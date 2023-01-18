@@ -1,205 +1,162 @@
 <div class="container">
-  <div class="mt-2 col-md-12"></div>
-  <div class="row clearfix justify-content-center">
-    <div class="col-md-auto">
-      <button type="button" class="btn btn-primary btn-sm fs-s" (click)="getLiferants()">Artikels</button>
-    </div>
-    <div class="col-md-auto">
-      <button type="button" class="btn btn-primary btn-sm fs-s" [routerLink]="['/datenpflege']"
-        routerLinkActive="router-link-active">Zurück zu Datenpfhlege</button>
-    </div>
-    <div class="col-md-auto">
-      <button type="button" class="btn btn-primary btn-sm fs-s" (click)="newArtikel()">Artikel hinzufügen</button>
-    </div>
-  </div>
-  <div class="mt-2 col-md-12"></div>
-  <div class="mt-2 col-md-12"></div>
-  <div class="row " *ngIf="show === 1">
-    <div class="col-md-11">
-      <input type="search" class="form-control input-lg rounded" [ngModel]="searchModel" name="searchModel"
+  <div class="divider"></div>
+  <div class="rowsuch" *ngIf="show === 1">
+    <div>
+      <mat-form-field>
+        <input type="search" matInput [ngModel]="searchModel" name="searchModel"
         placeholder="write artikel name or id" id="" (ngModelChange)="onSearch($event)">
+      </mat-form-field>
       {{searchModel}}
     </div>
-    <div class="col">
+    <div >
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search"
         viewBox="0 0 16 16">
         <path
           d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
       </svg>
     </div>
-
   </div>
-  <div class="mt-2 col-md-12"></div>
-  <table class="table table-bordered table-hover table-sortable fs-s" id="tab_logic" *ngIf="show === 1">
-    <thead>
-      <tr>
-        <th class="text-center">
-          ArtikelId
-        </th>
-        <th class="text-center">
-          Name
-        </th>
-        <th class="text-center">
-          Min. Los Menge
-        </th>
-        <th class="text-center">
-          Liferant Name
-        </th>
-        <th class="text-center">
-          Delete ?
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-
-      <tr *ngFor="let post of (artikels ? artikels.slice(0,200): []); let i = index; trackBy : artikelTrackBy; "
-        class="hidden">
-        <td data-name="artikel id">
-          {{ post?.artikelId }}
-        </td>
-        <td data-name="name" style="cursor: pointer;" (click)="getArtikelById(post.aid, i)">
-          {{ post?.name }}
-        </td>
-        <td data-name="minLosMenge"  style="cursor: pointer;" (click)="getArtikelById(post.aid, i)">
-
-          {{post?.minLosMenge}}
-
-        </td>
-        <td data-name="liferant"  style="cursor: pointer;" (click)="getArtikelById(post.aid, i)">
-         {{liferants[post.liferantId-1].name}}
-        </td>
-        <td class="text-center">
-          <button class="btn btn-danger btn-sm fs-s" (click)="deleteArtikel(post.aid, i)">Artikel Löschen</button>
-        </td>
-      </tr>
-    </tbody>
+  <div class="divider"></div>
+  <div class="row">
+  <table  *ngIf="show === 1" mat-table [dataSource]="tabData">
+    <ng-container matColumnDef="artId">
+      <th mat-header-cell *matHeaderCellDef>Artikel Nr.</th>
+      <td mat-cell *matCellDef="let item">{{item.artikelId}}</td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let item; let i = index"
+      (click)="getArtikelById(item.aid,i)" style="cursor: pointer;">{{item.name}}</td>
+    </ng-container>
+    <ng-container matColumnDef="minMenge">
+      <th mat-header-cell *matHeaderCellDef>Min. Los Menge</th>
+      <td mat-cell *matCellDef="let item">{{item.minLosMenge}}</td>
+    </ng-container>
+    <ng-container matColumnDef="lif">
+      <th mat-header-cell *matHeaderCellDef> Liferant Name</th>
+      <td mat-cell *matCellDef="let item">{{liferants[item.liferantId-1].name}}</td>
+    </ng-container>
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef>Delete ?</th>
+      <td mat-cell *matCellDef="let item; let i = index">
+        <button mat-raised-button color="warn"  (click)="deleteArtikel(item.aid, i)">Artikel Löschen</button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columnDef"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnDef"></tr>
   </table>
-
+</div>
   <!--Form to Edit, new Artikel-->
-  <form class="row g-3 needs-validation" novalidate *ngIf="show === 2" [formGroup]="formArtikel">
+  <form novalidate *ngIf="show === 2" [formGroup]="formArtikel">
     <input type="hidden" formControlName="aid">
-    <div class="row-cols-12 justify-content-center align-items-center g-2">
       <div class="row">
-              <div class="col-md-4">
-                <label for="aName" class="form-label fs-s">Artikel Name</label>
-                <input formControlName="name" type="text" class="form-control form-control-sm" id="aName" value="name" required>
-                <div class="valid-feedback fs-ss">
-                  Schein gut zu sein
-                </div>
+              <div>
+                <mat-form-field>
+                  <mat-label>Artikel Name</mat-label>
+                  <input formControlName="name" type="text" matInput required>
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field>
+                  <mat-label>Name 2</mat-label>
+                  <input formControlName="name2" type="text" matInput >
+                </mat-form-field>
               </div>
               <div class="col-md-4">
-                <label for="aName2" class="form-label fs-s">Artikel Name 2</label>
-                <input formControlName="name2" type="text" class="form-control form-control-sm" id="aName2" value="name2" >
-                <div class="valid-feedback fs-ss">
-                  Schein gut zu sein
-                </div>
-              </div>
-              <div class="col-md-4">
-                <label for="artikelId" class="form-label fs-s">Artikel Id Nr</label>
-                <input formControlName="artikelId" type="number" class="form-control form-control-sm" id="artikelId" value="artikelId" required>
-                <div class="valid-feedback fs-ss">
-                  Schein gut zu sein
-                </div>
-              </div>
+                <mat-form-field>
+                  <mat-label>Artikel Nr</mat-label>
+                  <input formControlName="artikelId" type="number" matInput required>
+                </mat-form-field>
+             </div>
+             <div>
+              <mat-form-field>
+                <mat-label>Artikel uid</mat-label>
+                <textarea formControlName="uids" matInput rows="1" required></textarea>
+                <mat-hint>
+                  Komma getrent!
+                </mat-hint>
+              </mat-form-field>
+            </div>
       </div>
       <div class="row">
-          <div class="col-md-6">
-            <label for="uids" class="form-label fs-s"> Artikel uid</label>
-            <textarea formControlName="uids" class="form-control form-control-sm" value="uids" id="uids" rows="3" required></textarea>
-            <p class="form-text text-muted small fs-s">
-              Komma getrent!
-            </p>
+          <div>
+            <mat-form-field>
+              <mat-label>Lange Beschriftung</mat-label>
+              <textarea formControlName="longBeschriftung" matInput rows="1"></textarea>
+            </mat-form-field>
           </div>
-          <div class="col-md-6">
-            <label for="longBeschriftung" class="form-label fs-s"> Lange Beschriftung</label>
-            <textarea formControlName="longBeschriftung" class="form-control form-control-sm" value="longBeschriftung" id="longBeschriftung" rows="3"></textarea>
-            <p class="form-text text-muted small fs-s">
-            </p>
-          </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <label for="gewicht" class="form-label fs-s">Artikel gewicht </label>
-      <input formControlName="gewicht" type="number" class="form-control form-control-sm" id="gewicht" value="gewicht"
-        required>
-      <div class="valid-feedback fs-ss">
-        Schein gut zu sein
-      </div>
-    </div>
-    <div class="col-md-4">
-      <label for="grosse" class="form-label fs-s">Artikel Größe (H x B x L) </label>
-      <input formControlName="grosse" placeholder="H x B x L" type="text" class="form-control form-control-sm" id="grosse"
-        value="grosse" required>
-      <div class="valid-feedback fs-ss">
-        Schein gut zu sein
-      </div>
-    </div>
-    <div class="col-md-4">
-      <label for="basisEinheit" class="form-label fs-s">Artikel Basis Einheit </label>
-      <input formControlName="basisEinheit" type="number" class="form-control form-control-sm" id="basisEinheit"
-        value="basisEinheit" required>
-      <div class="valid-feedback fs-ss">
-        Schein gut zu sein
-      </div>
-    </div>
-    <div class="col-md-4">
-      <label for="minLosMenge" class="form-label fs-s">Min los Menge </label>
-      <input formControlName="minLosMenge" type="number" class="form-control form-control-sm" id="minLosMenge"
-        value="minLosMenge" required>
-      <div class="valid-feedback fs-ss">
-        Schein gut zu sein
-      </div>
-    </div>
-    <div class="col-md-4">
-      <label for="bestand" class="form-label fs-s">Bestand </label>
-      <p type="number" class="form-control form-control-sm" id="bestand"
-        value="bestand" >{{formArtikel.get('bestand')?.getRawValue() }}</p>
-    </div>
-
-    <div class="col-md-4">
-        <div class="mb-3">
-          <label for="artikelFlage" class="form-label fs-s">Artikel Flage typ</label>
-          <select class="form-select form-select-sm" name="artikelFlage" id="artikelFlage" formControlName="artikelFlage">
-            <option *ngFor="let item of artikelFlags" [selected]="formArtikel.get('artikelFlage')?.value !== null ? item === formArtikel.get('artikelFlage')?.value : item">{{item}}</option>
-          </select>
+          <div>
+            <mat-form-field>
+              <mat-label>Artikel gewicht</mat-label>
+              <input formControlName="gewicht" type="number" matInput required>
+            </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <mat-label>Artikel Größe (H x B x L)</mat-label>
+                <input formControlName="grosse" placeholder="H x B x L" type="text" matInput required>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <mat-label>Artikel Basis Einheit </mat-label>
+                <input formControlName="basisEinheit" type="number" matInput required>
+              </mat-form-field>
+            </div>
         </div>
-      <div class="valid-feedback fs-ss">
-        Schein gut zu sein
+    <div class="row">
+            <div>
+              <mat-form-field>
+                <mat-label>Min los Menge </mat-label>
+                <input formControlName="minLosMenge" type="number" matInput required>
+              </mat-form-field>
+            </div>
+            <div>
+              <div class="hidd">
+                <legend>Bestand</legend>
+                <p type="number" class="form-control form-control-sm" id="bestand"
+                value="bestand" >{{formArtikel.get('bestand')?.getRawValue() }}</p>
+              </div>
+            </div>
+            <div>
+                <mat-form-field>
+                  <mat-label>Artikel Typ</mat-label>
+                  <mat-select formControlName="artikelFlage" placeholder="">
+                      <mat-option *ngFor="let item of artikelFlags" [value]="item">{{item}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <mat-label>Artikel Verkauf Preice </mat-label>
+                <input formControlName="verPrice" type="number" matInput required>
+              </mat-form-field>
+            </div>
       </div>
-    </div>
-    <div class="col-md-4">
-      <label for="verPrice" class="form-label fs-s">Artikel Verkauf Preice </label>
-      <input formControlName="verPrice" type="number" class="form-control form-control-sm" id="verPrice" value="verPrice" required>
-      <div class="valid-feedback fs-ss">
-        Schein gut zu sein
+      <div class="row">
+        <div>
+          <mat-form-field>
+            <mat-label>Artikel Lieferant</mat-label>
+            <mat-select formControlName="liferantId" >
+                <mat-option *ngFor="let item of liferants | filterNullItemPipe" [value]="item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Artikel Mehrwertsteuer in %</mat-label>
+            <input formControlName="mehrwertsteuer" type="number" matInput required>
+          </mat-form-field>
+        </div>
+      <div class="divider"></div>
+        <div class="row">
+          <div  *ngIf="artikel.aid === undefined">
+            <button type="button" mat-raised-button color="primary" (click)="createUpdateArtikel( formArtikel.value)" >Speichern</button>
+          </div>
+          <div  *ngIf="artikel.aid !== undefined">
+            <button type="button" mat-raised-button color="primary" (click)="updateArtikle( formArtikel.value)" >Aktualisieren</button>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="col-md-4">
-      <div class="mb-3">
-        <label for="lieferantId" class="form-label fs-s">Artikel lieferant</label>
-        <select class="form-select form-select-sm" formControlName="liferantId" name="lieferantId" id="lieferantId" >
-          <option *ngFor="let item of liferants | filterNullItemPipe" [ngValue]="item.id" [selected]="artikels[index] !== undefined ? item.id === artikels[index].liferantId : item.id" >{{item.name}}</option>
-        </select>
-      </div>
-      <div class="valid-feedback fs-ss">
-        Schein gut zu sein
-      </div>
-    </div>
-    <div class="col-md-4">
-      <label for="mehrwertsteuer" class="form-label fs-s">Artikel Mehrwertsteuer in %</label>
-      <input formControlName="mehrwertsteuer" type="number" class="form-control form-control-sm" id="mehrwertsteuer" value="mehrwertsteuer" required>
-      <div class="valid-feedback fs-ss">
-        Schein gut zu sein
-      </div>
-    </div>
-    <div class="mt-2 col-md-12"></div>
-    <div class="row ">
-      <div class="d-grid gap-2" *ngIf="artikel.aid === undefined">
-        <button type="button" name="" id="" class="btn btn-success btn-sm fs-s" (click)="createUpdateArtikel( formArtikel.value)" >Speichern</button>
-      </div>
-      <div class="d-grid gap-2" *ngIf="artikel.aid !== undefined">
-        <button type="button" name="" id="" class="btn btn-success btn-sm fs-s" (click)="updateArtikle( formArtikel.value)" >Aktualisieren</button>
-      </div>
-    </div>
   </form>
 </div>

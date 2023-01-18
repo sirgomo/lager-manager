@@ -1,7 +1,46 @@
-p, label {
-    font: 1rem 'Fira Sans', sans-serif;
+.prow{
+  display: flex;
+  justify-content: flex-start;
+  flex-grow: 2 1 auto;
+  flex-basis: 200px;
+  margin: 1rem 2rem;
 }
-
-input {
-    margin: .4rem;
+.divider {
+  margin-top: 1rem;
+}
+.mat-column-aid
+{
+  width: 5%;
+}
+.mat-column-name
+{
+  width: 10%;
+}
+.mat-column-besch
+{
+  width: 5%;
+}
+.mat-column-steuer
+{
+  width: 2%;
+}
+.mat-column-brtto
+{
+  width: 2%;
+}
+.mat-column-brut
+{
+  width: 2%;
+}
+.mat-column-liefer
+{
+  width: 5%;
+}
+.mat-column-menge
+{
+  width: 5%;
+}
+.mat-column-buchen
+{
+  width: 10%;
 }

@@ -1,4 +1,5 @@
 <div class="container">
+  <div class="row">
   <table mat-table [dataSource]="dataTab">
     <ng-container matColumnDef="dispoid">
       <th mat-header-cell *matHeaderCellDef>Dispositor Nr.</th>
@@ -25,4 +26,5 @@
     <tr mat-header-row *matHeaderRowDef="columnDef"></tr>
     <tr mat-row *matRowDef="let row; columns: columnDef"></tr>
   </table>
+</div>
 </div>

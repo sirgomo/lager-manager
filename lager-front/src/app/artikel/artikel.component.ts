@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { DatenpflegeService } from '../datenpflege/datenpflege.service';
 import { ArtikelDTO, ARTIKELFLAGE } from '../dto/artikel.dto';
@@ -18,6 +19,8 @@ export class ArtikelComponent implements OnInit {
   artikel: ArtikelDTO = new ArtikelDTO();
   liferants: DispositorDto[] = [];
   formArtikel: FormGroup;
+  tabData: MatTableDataSource<ArtikelDTO> = new MatTableDataSource();
+  columnDef: string[] = ['artId', 'name', 'minMenge', 'lif', 'delete'];
   //tmp array for uids of edited artikel
   uids: UidDTO[] = [];
   index: number;
@@ -59,11 +62,18 @@ export class ArtikelComponent implements OnInit {
   }
   async getArtikles() {
     this.artikels.splice(0, this.artikels.length);
-    return await this.servi.getAllArtikel().subscribe((d) => {
-      d.map((da) => {
-        this.artikels.push(da);
-      });
-      this.show = 1;
+    return await this.servi.getAllArtikel().subscribe((res) => {
+      if (res !== undefined && res !== null && res.length > 0) {
+        this.artikels.splice(0, this.artikels.length);
+        for (let i = 0; i < res.length; i++) {
+          this.artikels.push(res[i]);
+        }
+        this.show = 1;
+        const tmp: ArtikelDTO[] = this.artikels.slice(0, 50);
+        this.tabData = new MatTableDataSource(tmp);
+        return;
+      }
+      this.toaster.error('Etwas ist sichefgelaufen, keine artikels');
     });
   }
   async getLiferants() {
@@ -79,6 +89,7 @@ export class ArtikelComponent implements OnInit {
     });
   }
   async getArtikelById(id: number, index: number) {
+    console.log(this.liferants);
     this.index = index;
     await this.servi.getArtikelById(id).subscribe((d) => {
       this.artikel = d;
@@ -145,6 +156,8 @@ export class ArtikelComponent implements OnInit {
           { timeOut: 700 },
         );
         this.artikels[this.index] = art;
+        const tmp: ArtikelDTO[] = this.artikels.slice(0, 50);
+        this.tabData = new MatTableDataSource(tmp);
         this.show = 1;
       }
     });
@@ -174,7 +187,10 @@ export class ArtikelComponent implements OnInit {
           'Artikel zufugen',
           { timeOut: 700 },
         );
-        this.artikels.push(art);
+        this.artikels.unshift(data);
+        const tmp: ArtikelDTO[] = this.artikels.slice(0, 50);
+        this.tabData = new MatTableDataSource(tmp);
+        this.show = 1;
       }
     });
   }
@@ -182,11 +198,15 @@ export class ArtikelComponent implements OnInit {
     this.artikel = new ArtikelDTO();
     this.formArtikel.reset();
     this.formArtikel.get('bestand')?.setValue('0');
+    this.formArtikel.get('artikelFlage')?.setValue(ARTIKELFLAGE.SUSS);
+    this.formArtikel.get('liferantId')?.setValue(this.liferants[0].id);
     this.index = 0.1;
     this.show = 2;
   }
   onSearch(text: string) {
     this.artikels = this.helper.onSearch(text, this.artikels);
+    const tmp: ArtikelDTO[] = this.artikels.slice(0, 50);
+    this.tabData = new MatTableDataSource(tmp);
   }
   artikelTrackBy(index: number, artik: ArtikelDTO) {
     try {
@@ -196,10 +216,22 @@ export class ArtikelComponent implements OnInit {
     }
   }
   deleteArtikel(id: number, index: number) {
-    if (window.confirm('Bist du sicher dass du den Artikel löschen willst')) {
+    if (
+      window.confirm(
+        'Bist du sicher dass du  ' +
+          this.artikels[index].name +
+          '  löschen willst',
+      )
+    ) {
       this.servi.deleteArtikel(id).subscribe((d) => {
-        if (d) {
+        if (Object(d).affected === 1) {
           this.artikels.splice(index, 1);
+          const tmp: ArtikelDTO[] = this.artikels.slice(0, 50);
+          this.tabData = new MatTableDataSource(tmp);
+        } else {
+          this.toaster.error(
+            'Etwas ist schiefgelaufen, i kann der Artikel nicht löschen',
+          );
         }
       });
     }

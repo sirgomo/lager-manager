@@ -1,4 +1,5 @@
  <div class="container">
+  <div class="row">
  <!-- Show speditors data-->
  <table mat-table [dataSource]="tabRes">
   <ng-container matColumnDef="spedid">
@@ -26,4 +27,5 @@
    <mat-header-row *matHeaderRowDef="columnDef"></mat-header-row>
    <mat-row *matRowDef="let row; columns: columnDef;"></mat-row>
   </table>
+</div>
 </div>
