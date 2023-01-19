@@ -1,85 +1,97 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
+import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
-import { TruthyTypesOf } from 'rxjs';
 import { DatenpflegeService } from '../datenpflege/datenpflege.service';
 import { ArtikelMengeDto } from '../dto/artikelMenge.dto';
 import { DispositorDto } from '../dto/dispositor.dto';
 import { LagerPlatztDto, PALETTENTYP } from '../dto/lagerPlatz.dto';
 import { WarenBuchungDto } from '../dto/warenBuchung.dto';
 import { WarenEinArtikleDto } from '../dto/warenEinArtikle.dto';
+import { HelperService } from '../helper.service';
 import { WareningangService } from './wareningang.service';
-
 
 @Component({
   selector: 'app-wareneingang',
   templateUrl: './wareneingang.component.html',
-  styleUrls: ['./wareneingang.component.scss']
+  styleUrls: ['./wareneingang.component.scss'],
 })
 export class WareneingangComponent implements OnInit {
-  buchungen: WarenBuchungDto[] = new Array();
-  dispostors: DispositorDto[] = new Array();
-  artikles: WarenEinArtikleDto[] = new Array();
-  show : number = -1;
-  currentLiferung :number = -1;
-  currentArtikelMenge:number = 0;
-  palete: boolean = false;
+  @ViewChild('sidenav', { static: true }) sidenav!: MatSidenav;
+  tabBuchungen: MatTableDataSource<WarenBuchungDto> = new MatTableDataSource();
+  columnDef: string[] = ['liferant', 'tor', 'liferung'];
+  tabArtikel: MatTableDataSource<WarenEinArtikleDto> = new MatTableDataSource();
+  columnArtDef: string[] = ['aid', 'aname', 'menge', 'lifid'];
+  buchungen: WarenBuchungDto[] = [];
+  dispostors: DispositorDto[] = [];
+  artikles: WarenEinArtikleDto[] = [];
+  show = -1;
+  currentLiferung = -1;
+  currentArtikelMenge = 0;
+  palete = false;
   mhd: Date | undefined;
-  lagerPlatz : undefined | LagerPlatztDto;
-  artikelIndex :number = -1;
-  manualLagerPlatz: string = '';
-  role:string | null;
-  palettenTypEnum : typeof PALETTENTYP = PALETTENTYP;
-  paletteTyp : PALETTENTYP;
+  lagerPlatz: undefined | LagerPlatztDto;
+  artikelIndex = -1;
+  manualLagerPlatz = '';
+  role: string | null;
+  palettenTypEnum: typeof PALETTENTYP = PALETTENTYP;
+  paletteTyp: PALETTENTYP;
 
-
-  constructor(private dispoService : DatenpflegeService, private warenServi : WareningangService, private toaster: ToastrService) {
-    this.role =  localStorage.getItem('role');
+  constructor(
+    private dispoService: DatenpflegeService,
+    private warenServi: WareningangService,
+    private toaster: ToastrService,
+    private helper: HelperService,
+  ) {
+    this.role = localStorage.getItem('role');
     this.paletteTyp = PALETTENTYP.KEINPALETTE;
   }
 
   ngOnInit(): void {
     this.getBuchungen();
+    this.helper.setSideNav(this.sidenav);
   }
-  async getBuchungen(){
-   await this.getDispositors();
-     this.buchungen.splice(0, this.buchungen.length);
-    await this.warenServi.getAllLiferungen().subscribe(data=>{
-      for(let i = 0; i !== data.length; i++){
-        if(data[i].eingebucht && data[i].artikelsGebucht){
+  async getBuchungen() {
+    await this.getDispositors();
+    this.buchungen.splice(0, this.buchungen.length);
+    await this.warenServi.getAllLiferungen().subscribe((data) => {
+      for (let i = 0; i !== data.length; i++) {
+        if (data[i].eingebucht && data[i].artikelsGebucht) {
           this.buchungen.push(data[i]);
         }
+        this.tabBuchungen = new MatTableDataSource(this.buchungen);
       }
       this.currentLiferung = -1;
       this.show = 1;
     });
   }
-  async getDispositors(){
-    await this.dispoService.getAllDispositors().subscribe(data=>{
-      if(data !== undefined && data !== null){
+  async getDispositors() {
+    await this.dispoService.getAllDispositors().subscribe((data) => {
+      if (data !== undefined && data !== null) {
         this.dispostors.splice(0, this.dispostors.length);
-        data.forEach(dispo=>{
-        this.dispostors.push(dispo);
+        data.forEach((dispo) => {
+          this.dispostors.push(dispo);
         });
       }
     });
   }
-  async getAritkles(nr: number){
-     return await this.warenServi.getArtikles(nr).subscribe(data=>{
+  async getAritkles(nr: number) {
+    return await this.warenServi.getArtikles(nr).subscribe((data) => {
       this.artikles.splice(0, this.artikles.length);
-      if(data != undefined){
-        data.forEach(art=>{
+      if (data != undefined) {
+        data.forEach((art) => {
           this.artikles.push(art);
         });
       }
+      this.tabArtikel = new MatTableDataSource(this.artikles);
       this.show = 2;
       this.currentLiferung = nr;
       this.artikelIndex = -1;
       this.mhd = undefined;
       this.paletteTyp = PALETTENTYP.KEINPALETTE;
-     });
-
+    });
   }
-  showArtikel(index:number){
+  showArtikel(index: number) {
     this.currentArtikelMenge = 0;
     this.palete = false;
     this.show = 3;
@@ -87,119 +99,138 @@ export class WareneingangComponent implements OnInit {
     this.artikelIndex = index;
     this.manualLagerPlatz = '';
   }
-  async getPlatz(){
-    if(this.currentArtikelMenge === 0){
+  async getPlatz() {
+    if (this.currentArtikelMenge === 0) {
       this.toaster.error('Du musst artikel menge eingeben! ', 'Menge Error', {
-        timeOut: 800
+        timeOut: 800,
       });
       return;
-    } else if (this.currentArtikelMenge > this.artikles[this.artikelIndex].menge){
-      this.toaster.error(' Artikel menge darft nicht größe sein als menge in auftrag');
+    } else if (
+      this.currentArtikelMenge > this.artikles[this.artikelIndex].menge
+    ) {
+      this.toaster.error(
+        ' Artikel menge darft nicht größe sein als menge in auftrag',
+      );
       return;
     }
     this.lagerPlatz = new LagerPlatztDto();
-   let tmp : ArtikelMengeDto = new ArtikelMengeDto();
-   tmp.palete = this.paletteTyp;
-   tmp.menge = this.currentArtikelMenge;
-   tmp.artikelId = this.artikles[this.artikelIndex].artikelid;
-   if(this.mhd !== undefined){
-    tmp.mhd = this.mhd;
-   }
+    const tmp: ArtikelMengeDto = new ArtikelMengeDto();
+    tmp.palete = this.paletteTyp;
+    tmp.menge = this.currentArtikelMenge;
+    tmp.aid = this.artikles[this.artikelIndex].aid;
+    tmp.artikelId = this.artikles[this.artikelIndex].artikelid;
+    tmp.liferant = this.artikles[this.artikelIndex].kreditorId;
+    if (this.mhd !== undefined) {
+      tmp.mhd = this.mhd;
+    }
 
-
-   return await this.warenServi.getPlatz(tmp).subscribe(data=>{
-    console.log(data);
-      if(this.lagerPlatz !== undefined){
+    return await this.warenServi.getPlatz(tmp).subscribe((data) => {
+      console.log(data);
+      if (this.lagerPlatz !== undefined) {
         this.lagerPlatz.id = data.id;
         this.lagerPlatz.lagerplatz = data.lagerplatz;
-        if(data.artikelMenge === null){
+        if (data.artikelMenge === null) {
           this.lagerPlatz.artikelMenge = 0;
-        }else if( data.artikelMenge > 0){
+        } else if (data.artikelMenge > 0) {
           this.lagerPlatz.artikelMenge = data.artikelMenge;
         }
       }
 
-      console.log('lager przed '+ JSON.stringify(this.lagerPlatz));
-      if(this.lagerPlatz !== undefined){
-
+      console.log('lager przed ' + JSON.stringify(this.lagerPlatz));
+      if (this.lagerPlatz !== undefined) {
         this.lagerPlatz.artikelMenge += this.currentArtikelMenge;
 
         this.lagerPlatz.palettenTyp = this.paletteTyp;
-        if(this.mhd !== undefined){
+        if (this.mhd !== undefined) {
           this.lagerPlatz.mhd = this.mhd;
-         }
-         this.lagerPlatz.artId = this.artikles[this.artikelIndex].artikelid;
-         console.log('lagerplatz aft ' + JSON.stringify(this.lagerPlatz));
+        }
+        this.lagerPlatz.liferant = this.artikles[this.artikelIndex].kreditorId;
+        this.lagerPlatz.artId = this.artikles[this.artikelIndex].artikelid;
+        console.log('lagerplatz aft ' + JSON.stringify(this.lagerPlatz));
       }
-
     });
   }
-  createPlatz(){
-    if(this.currentArtikelMenge === 0){
+  createPlatz() {
+    if (this.currentArtikelMenge === 0) {
       this.toaster.error('Du musst artikel menge eingeben! ', 'Menge Error', {
-        timeOut: 800
+        timeOut: 800,
       });
       return;
-    }  else if (this.currentArtikelMenge > this.artikles[this.artikelIndex].menge){
-      this.toaster.error(' Artikel menge darft nicht größe sein als menge in auftrag');
+    } else if (
+      this.currentArtikelMenge > this.artikles[this.artikelIndex].menge
+    ) {
+      this.toaster.error(
+        ' Artikel menge darft nicht größe sein als menge in auftrag',
+      );
       return;
     }
     this.lagerPlatz = new LagerPlatztDto();
-    this.manualLagerPlatz = 'gib ein lagerpaltz oder beschreibe es, zb. and der wand'
-    let tmp : LagerPlatztDto = new LagerPlatztDto();
+    this.manualLagerPlatz =
+      'gib ein lagerpaltz oder beschreibe es, zb. and der wand';
+    const tmp: LagerPlatztDto = new LagerPlatztDto();
     tmp.artId = this.artikles[this.artikelIndex].artikelid;
     tmp.artikelMenge = this.artikles[this.artikelIndex].menge;
-    if(this.mhd !== undefined) tmp.mhd = this.mhd;
+    if (this.mhd !== undefined) tmp.mhd = this.mhd;
     tmp.lagerplatz = this.manualLagerPlatz;
     tmp.palettenTyp = this.paletteTyp;
+    tmp.liferant = this.artikles[this.artikelIndex].kreditorId;
     tmp.static = true;
     this.lagerPlatz = tmp;
 
     console.log(tmp);
   }
-  async lageEsEin(){
-    if(this.lagerPlatz !== undefined){
-       await this.warenServi.legeEs(this.lagerPlatz).subscribe(data=>{
-        if(data.artId == this.artikles[this.artikelIndex].artikelid){
-          if(this.lagerPlatz !== undefined)
-          if(this.currentArtikelMenge === this.artikles[this.artikelIndex].menge){
-            this.delArtikel(data);
-          }else{
-            let tmp: WarenEinArtikleDto = new WarenEinArtikleDto();
-            tmp.artikelid = this.artikles[this.artikelIndex].artikelid;
-            tmp.bestellungId = this.artikles[this.artikelIndex].bestellungId;
-            tmp.menge = this.currentArtikelMenge;
-            this.artikles[this.artikelIndex].menge -= this.currentArtikelMenge;
-            this.warenServi.updateArtikel(tmp).subscribe(data=>{
-              console.log(data);
-            })
-            this.show = 2;
-            this.artikelIndex = -1;
-            this.mhd = undefined;
-            this.paletteTyp = PALETTENTYP.KEINPALETTE;
-            this.currentArtikelMenge = 0;
-          }
-
+  setManualLagerPlatz(platz: any) {
+    if (this.lagerPlatz !== undefined)
+      this.lagerPlatz.lagerplatz = platz.target.value;
+  }
+  async lageEsEin() {
+    if (this.lagerPlatz !== undefined) {
+      await this.warenServi.legeEs(this.lagerPlatz).subscribe((data) => {
+        if (data.artId == this.artikles[this.artikelIndex].artikelid) {
+          if (this.lagerPlatz !== undefined)
+            if (
+              this.currentArtikelMenge ===
+              this.artikles[this.artikelIndex].menge
+            ) {
+              this.delArtikel(data);
+            } else {
+              const tmp: WarenEinArtikleDto = new WarenEinArtikleDto();
+              tmp.artikelid = this.artikles[this.artikelIndex].artikelid;
+              tmp.bestellungId = this.artikles[this.artikelIndex].bestellungId;
+              tmp.aid = this.artikles[this.artikelIndex].aid;
+              tmp.kreditorId = this.artikles[this.artikelIndex].kreditorId;
+              tmp.menge = this.currentArtikelMenge;
+              this.artikles[this.artikelIndex].menge -=
+                this.currentArtikelMenge;
+              this.warenServi.updateArtikel(tmp).subscribe((data) => {
+                console.log(data);
+              });
+              this.show = 2;
+              this.artikelIndex = -1;
+              this.mhd = undefined;
+              this.paletteTyp = PALETTENTYP.KEINPALETTE;
+              this.currentArtikelMenge = 0;
+            }
         }
       });
     }
-
   }
-  async delArtikel(data: LagerPlatztDto){
-
-    await  this.warenServi.delArtikel(this.artikles[this.artikelIndex].artikelid, this.artikles[this.artikelIndex].bestellungId)
-     .subscribe(data=>{
-       this.artikles.splice(this.artikelIndex, 1);
-       if(this.artikles.length === 0){
-        this.getBuchungen();
-       }
-       this.show = 2;
-       this.artikelIndex = -1;
-       this.mhd = undefined;
-       this.paletteTyp = PALETTENTYP.KEINPALETTE;
-       this.currentArtikelMenge = 0;
-     });
-
-   }
-
+  async delArtikel(data: LagerPlatztDto) {
+    await this.warenServi
+      .delArtikel(
+        this.artikles[this.artikelIndex].artikelid,
+        this.artikles[this.artikelIndex].bestellungId,
+      )
+      .subscribe((data) => {
+        this.artikles.splice(this.artikelIndex, 1);
+        if (this.artikles.length === 0) {
+          this.getBuchungen();
+        }
+        this.show = 2;
+        this.artikelIndex = -1;
+        this.mhd = undefined;
+        this.paletteTyp = PALETTENTYP.KEINPALETTE;
+        this.currentArtikelMenge = 0;
+      });
+  }
 }

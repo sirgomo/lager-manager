@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
 import { RoleGuard } from 'src/auth/RoleGuard';
@@ -10,29 +19,27 @@ import { LagerService } from './lager.service';
 @Controller('lager')
 @UseGuards(AuthGuard(), RoleGuard)
 export class LagerController {
-    constructor(private lagerServ: LagerService){}
+  constructor(private lagerServ: LagerService) {}
 
-    @Get()
-    getAllStellplatze(){
-        return this.lagerServ.getStellpletze();
-    }
-   
-   @Post('/art')
-   getPlatzFurArtikel(@Body(ValidationPipe) artMen : ArtikelMengeDTO){
-    return  this.lagerServ.getPlatzFurArtikel(artMen);
-   }
- 
+  @Get()
+  getAllStellplatze() {
+    return this.lagerServ.getStellpletze();
+  }
 
-  
-   @Post()
-   @ROLES(ROLE.LAGERVERWALTUNG)
-   createStellplatz(@Body(ValidationPipe) data: LagerPlatztDTO){
+  @Post('/art')
+  getPlatzFurArtikel(@Body(ValidationPipe) artMen: ArtikelMengeDTO) {
+    return this.lagerServ.getPlatzFurArtikel(artMen);
+  }
+
+  @Post()
+  @ROLES(ROLE.LAGERVERWALTUNG)
+  createStellplatz(@Body(ValidationPipe) data: LagerPlatztDTO) {
     return this.lagerServ.createLagerPlatz(data);
-   }
+  }
 
-   @Delete(':id')
-   @ROLES(ROLE.LAGERVERWALTUNG)
-   deleteLageplatzt(@Param('id') id:number){
-   return this.lagerServ.deleteLageplatzt(id);
-   }
+  @Delete(':id')
+  @ROLES(ROLE.LAGERVERWALTUNG)
+  deleteLageplatzt(@Param('id') id: number) {
+    return this.lagerServ.deleteLageplatzt(id);
+  }
 }

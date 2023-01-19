@@ -50,22 +50,24 @@ export class LagerService {
       if (this.helper.fullLageraus) {
         await this.lagerArtikels();
       }
-      const lagerPlatz: LagerPlatztDTO[] = [];
+      //const lagerPlatz: LagerPlatztDTO[] = [];
 
       if (!this.helper.generateLager && !this.helper.fullLageraus) {
-        await this.repo
+        return await this.repo
           .query(
-            `SELECT lagerplatz.*, artikel.name FROM lagerplatz LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId ORDER BY ISNULL(artId) ASC`,
+            `SELECT lagerplatz.*, artikel.name, dispositor.name as lifer FROM lagerplatz LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId
+            LEFT JOIN dispositor ON lagerplatz.liferant = dispositor.id ORDER BY ISNULL(artId) ASC`,
           )
           .then((data) => {
-            data.forEach((element) => {
+            return data;
+            /*  for (let i = 0; i < data.length; i++) {
               const tmp: LagerPlatztDTO = new LagerPlatztDTO();
-              Object.assign(tmp, element);
+              Object.assign(tmp, data[i]);
               lagerPlatz.push(tmp);
-            });
+            }*/
           });
       }
-      return lagerPlatz;
+      //return lagerPlatz;
     } catch (err) {
       throw new Error(
         'problem mit lager service, lagerservice kann nicht lagerplatz machen',
@@ -76,14 +78,17 @@ export class LagerService {
     lagerplatz: LagerPlatztDTO,
   ): Promise<LagerPlatzEntity> {
     try {
-      if (lagerplatz.artId !== null && isFinite(lagerplatz.artId)) {
+      lagerplatz.mhd = this.formatDate(lagerplatz.mhd);
+
+      /* if (lagerplatz.artId !== null && isFinite(lagerplatz.artId)) {
         let tmpArt: ArtikelDTO = new ArtikelDTO();
         tmpArt = await this.artServ.getArtikelFurLager(lagerplatz.artId);
         lagerplatz.einheit = tmpArt.basisEinheit;
         lagerplatz.liferant = tmpArt.liferantId;
-        if (lagerplatz.palettenTyp === PALETTENTYP.KEINPALETTE) {
-          lagerplatz.palettenTyp = PALETTENTYP.EU;
-        }
+        
+      }*/
+      if (lagerplatz.palettenTyp === PALETTENTYP.KEINPALETTE) {
+        lagerplatz.palettenTyp = PALETTENTYP.EU;
       }
       await this.repo.create(lagerplatz);
       return await this.repo.save(lagerplatz).then(
@@ -101,6 +106,9 @@ export class LagerService {
         'problem mit lager service, lagerservice kann nicht lagerplatz erstellen',
       );
     }
+  }
+  formatDate(date: Date): Date {
+    return new Date(new Date(date).toDateString());
   }
   async deleteLageplatzt(id: number) {
     try {
@@ -186,12 +194,6 @@ export class LagerService {
                 artId: artMen.artikelId,
                 static: true,
               });
-              console.log(
-                ' laczna objetosc ' +
-                  this.helper.getVolumenNeueUndAlt(artikel, artMen) +
-                  ' lagerplazt vol ' +
-                  tmp.lagerPlatzVolumen,
-              );
               if (
                 (this.helper.getVolumenNeueUndAlt(artikel, artMen) <
                   tmp.lagerPlatzVolumen &&
@@ -321,9 +323,6 @@ export class LagerService {
             ' cont ' +
             cont,
         );
-        // await this.repo.create(lagerPlatze);
-        // await this.repo.save(lagerPlatze);
-        //await console.log(JSON.stringify(lagerPlatze));
       }
     }
   }

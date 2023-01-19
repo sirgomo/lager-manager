@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-inferrable-types */
+/* eslint-disable prettier/prettier */
 import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('warenEingang')

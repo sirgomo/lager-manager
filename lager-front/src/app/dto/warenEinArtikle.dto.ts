@@ -1,10 +1,8 @@
-export class WarenEinArtikleDto{
-
+export class WarenEinArtikleDto {
+  aid!: number;
   bestellungId!: number;
-
-  artikelid! : number;
-
-  menge! : number;
-
-  name!:string;
+  artikelid!: number;
+  menge!: number;
+  name!: string;
+  kreditorId!: number;
 }

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { IsNotEmpty, IsOptional } from "class-validator";
 import { PALETTENTYP } from "src/entity/LagerPlatzEntity";
 
@@ -20,6 +21,7 @@ export class LagerPlatztDTO{
     lagerPlatzVolumen : number;
     @IsOptional()
     mengeProPalete : number;
+    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
     @IsNotEmpty()
     static : boolean = false;
     @IsOptional()

@@ -1,8 +1,10 @@
-import { PALETTENTYP } from "./lagerPlatz.dto";
+import { PALETTENTYP } from './lagerPlatz.dto';
 
-export class ArtikelMengeDto{
-  artikelId!:number;
+export class ArtikelMengeDto {
+  aid!: number;
+  artikelId!: number;
   menge!: number;
   mhd!: Date;
-  palete!:PALETTENTYP;
+  palete!: PALETTENTYP;
+  liferant!: number;
 }

@@ -323,6 +323,8 @@ export class WarenebuchungComponent implements OnInit {
           timeOut: 300,
         });
         this.buchungArtikelMenge.splice(id, 1);
+        this.tabBuchArtikel = new MatTableDataSource(this.buchungArtikelMenge);
+        //TODO sort on liferants
       });
   }
   getLiferungNetto(): number {

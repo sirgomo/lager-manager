@@ -1,24 +1,22 @@
-export class LagerPlatztDto{
+export class LagerPlatztDto {
+  id!: number;
 
-    id! : number;
-
-    lagerplatz! : string;
-    artId! : number;
-    artikelMenge! : number;
-    name!: string;
-    einheit! : number;
-    palettenTyp! : PALETTENTYP;
-    mhd! : Date;
-    lagerPlatzVolumen! : number;
-    static : boolean = false;
-    liferant!:number;
-    mengeProPalete! : number;
-    barcode!:number;
-
+  lagerplatz!: string;
+  artId!: number;
+  artikelMenge!: number;
+  name!: string;
+  einheit!: number;
+  palettenTyp!: PALETTENTYP;
+  mhd!: Date;
+  lagerPlatzVolumen!: number;
+  static = false;
+  liferant!: number;
+  mengeProPalete!: number;
+  barcode!: number;
 }
-export enum PALETTENTYP{
+export enum PALETTENTYP {
   EU = 'EU',
   INDU = 'INDU',
   EINWEG = 'EINWEG',
-  KEINPALETTE = 'KEINPALETTE'
+  KEINPALETTE = 'KEINPALETTE',
 }
