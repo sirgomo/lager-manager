@@ -1,10 +1,28 @@
-.prow{
+.rowl {
   display: flex;
-  justify-content: flex-start;
+  justify-content:space-between;
+  column-gap: .8rem;
+  align-items: baseline;
+  padding-left: 1rem;
   flex-grow: 2 1 auto;
-  flex-basis: 200px;
-  margin: 1rem 2rem;
+  flex-wrap: wrap;
+
 }
+.rowl :last-child {
+  margin-left: auto;
+}
+.rowl .lifer {
+  text-align: right;
+  float: right;
+}
+
+.item {
+  border: .1rem solid rgb(220, 217, 223);
+  border-radius: .3rem;
+  padding: .1rem .2rem;
+  width: 15%;
+}
+
 .divider {
   margin-top: 1rem;
 }

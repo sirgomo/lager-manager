@@ -14,7 +14,7 @@
             <div>
               <mat-form-field>
                 <mat-label>Kreditor</mat-label>
-                <mat-select formControlName="kreditorId" placeholder="">
+                <mat-select formControlName="kreditorId" placeholder="" (selectionChange)="sortArtikles($event.value)">
                     <mat-option *ngFor="let disp of dispositors | filterNullItemPipe" [value]="disp.id">{{disp.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -36,7 +36,7 @@
             </div>
     </div>
     <div class="row">
-        <div>
+        <div class="my-form-field">
           <mat-label>Ware eingebucht und berait zum Lagern? </mat-label>
           <mat-checkbox
           [checked]=""
@@ -59,19 +59,15 @@
 <div class="divider"></div>
 
 <div *ngIf="show === 2">
-  <div class="row prow">
-    <div>Total Position: {{buchungArtikelMenge.length}}</div>
-    <div>Total Netto: {{getLiferungNetto()}}</div>
-    <div>Total MwSt: {{getLieferungMstw()}}</div>
-    <div>Total Brutto: {{getLiferungBrutto()}}</div>
-  </div>
-  <div class="divider"></div>
-  <div class="row">
-  <div class="rowsuch">
-    <mat-form-field>
-      <input type="search" matInput [ngModel]="searchModel" (ngModelChange)="onSearch($event)">
-    </mat-form-field>
-    {{searchModel}}
+  <div class="rowl">
+    <div class="item">Total Position: <span class="lifer">{{buchungArtikelMenge.length}}</span> </div>
+    <div class="item">Total Netto: <span class="lifer">{{getLiferungNetto()}}</span> </div>
+    <div class="item">Total MwSt: <span class="lifer">{{getLieferungMstw()}}</span> </div>
+    <div class="item">Total Brutto: <span class="lifer">{{getLiferungBrutto()}}</span> </div>
+    <div class="rowsuch">
+      <div class="my-form-field">
+        <input type="search" matInput [ngModel]="searchModel" (ngModelChange)="onSearch($event)">
+      </div>
   <div>
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
       <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>

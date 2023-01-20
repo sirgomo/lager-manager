@@ -50,6 +50,7 @@ export class WarenebuchungComponent implements OnInit {
   artikelMenge: number[] = new Array(this.artikels.length);
   dispositors: DispositorDto[] = [];
   dispo = false;
+  currentLiferantId = -1;
   nettoArr: number[] = new Array(this.artikels.length);
   steuArr: number[] = new Array(this.artikels.length);
 
@@ -101,6 +102,7 @@ export class WarenebuchungComponent implements OnInit {
         }
         this.tabDataBuchu = new MatTableDataSource(res);
         this.show = 1;
+        this.currentLiferantId = -1;
       }
     });
   }
@@ -144,7 +146,18 @@ export class WarenebuchungComponent implements OnInit {
   bearbeiteBuchung(id: number) {
     this.formBuchung.reset();
     this.formBuchung.setValue(this.buchngen[id]);
+    this.currentLiferantId = this.buchngen[id].kreditorId;
+    this.sortArtikles(this.buchngen[id].kreditorId);
     this.getArtikelsInBuchung();
+  }
+  sortArtikles(kreditorid: number) {
+    for (let i = 0; i < this.artikels.length; i++) {
+      if (this.artikels[i].liferantId === kreditorid) {
+        this.artikels.unshift(this.artikels.splice(i, 1)[0]);
+      }
+    }
+    const tmpArt: ArtikelDTO[] = this.artikels.slice(0, 50);
+    this.tabData = new MatTableDataSource(tmpArt);
   }
   addArtikel(artikelid: number, menge: number, index: number) {
     const bestelungId: number = this.formBuchung
@@ -234,8 +247,7 @@ export class WarenebuchungComponent implements OnInit {
   }
   onSearch(text: string) {
     this.artikels = this.helper.onSearch(text, this.artikels);
-    const tmpArt: ArtikelDTO[] = this.artikels.slice(0, 50);
-    this.tabData = new MatTableDataSource(tmpArt);
+    this.sortArtikles(this.currentLiferantId);
   }
   artikelTrackBy(index: number) {
     if (this.artikels === undefined) return;

@@ -37,8 +37,8 @@ min-height: 30px;
 max-height: 60px;
 }
 .container{
-  width: 100%;
-  min-width: 100vw;
+  width: 100;
+  min-width: calc( 98vw - 200px);
   height: 95%;
   min-height: 95vh;
   overflow: auto;
@@ -121,10 +121,19 @@ h3 {
 }
 .rowsuch {
   display: flex;
-  flex-grow: 2;
   column-gap: .4rem;
   align-items: baseline;
   padding-left: 1rem;
+  justify-content: flex-start;
+  min-height: fit-content;
+
+}
+.rowsuch :first-child {
+  min-width: 70%;
+}
+.rowsuch input {
+  width: 100%;
+  size: 100%;
 }
 .dialogAct{
   display: flex;
