@@ -1,0 +1,31 @@
+
+mat-table {
+  width: min-content;
+}
+.mat-column-id {
+  width: min-content;
+}
+.mat-column-name {
+  width: min-content;
+}
+.mat-column-kommid {
+  width: min-content;
+}
+.mat-column-menge {
+  width: min-content;
+}
+.mat-column-gepackt {
+  width: min-content;
+}
+.mat-column-gdate {
+  width: min-content;
+}
+.center {
+  margin-left: 50%;
+  justify-content: center;
+  transform: translateX(-30%);
+}
+.center p {
+  text-align: center;
+  transform: translateX(-30%);
+}

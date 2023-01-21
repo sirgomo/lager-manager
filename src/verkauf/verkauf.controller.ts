@@ -14,6 +14,7 @@ import { ROLES } from 'src/auth/roleDecorator';
 import { RoleGuard } from 'src/auth/RoleGuard';
 import { AddArtikelKommissDTO } from 'src/DTO/addArtikelKommissDTO';
 import { ArtikelKommissDTO } from 'src/DTO/artikelKommissDTO';
+import { ArtikelSchiebenDTO } from 'src/DTO/artikelSchiebenDTO';
 import { KomissDTO } from 'src/DTO/KomissDTO';
 import { KommissionirungEntity } from 'src/entity/KommissionirungEntity';
 import { ROLE } from 'src/entity/UserEntity';
@@ -91,5 +92,18 @@ export class VerkaufController {
   @ROLES(ROLE.VERKAUF)
   getKommById(@Param('id') id: number) {
     return this.verkService.getKommById(id);
+  }
+  @Get('artkom/:aid/:lid')
+  @ROLES(ROLE.VERKAUF || ROLE.LAGERVERWALTUNG)
+  getKommissWithArtikels(
+    @Param('aid') artid: number,
+    @Param('lid') liferid: number,
+  ) {
+    return this.verkService.getKommissWithArtikel(artid, liferid);
+  }
+  @Post('schib')
+  @ROLES(ROLE.VERKAUF)
+  artikelSchieben(@Body(ValidationPipe) art: ArtikelSchiebenDTO) {
+    return this.verkService.artkielSchieben(art);
   }
 }

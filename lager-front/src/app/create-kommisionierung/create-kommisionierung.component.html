@@ -17,6 +17,14 @@
                   <span>{{verkauferData.username}}</span>
               </fieldset>
             </div>
+            <div *ngIf="currentKomm.id !== undefined">
+              <fieldset class="hidd">
+                <legend>Kommissionierung Nr. :</legend>
+                <input type="hidden"
+                formControlName="verkauferId" (ngValue)="verkaufer">
+                  <span>{{currentKomm.id}}</span>
+              </fieldset>
+            </div>
             <div>
               <mat-form-field>
                 <mat-label>Maximale Palettenhöhe</mat-label>
@@ -144,6 +152,7 @@
       <div class="divider"></div>
       <mat-tab-group mat-stretch-tabs="true" mat-align-tabs="start" dynamicHeight  (selectedTabChange)="showArtikelsinKomm()">
       <mat-tab label="Artikels">
+        <div class="divider"></div>
                   <div class="row">
                     <div>
                       <mat-form-field>
@@ -165,8 +174,13 @@
             <td mat-cell *matCellDef="let row; ">{{row.artId}}</td>
           </ng-container>
           <ng-container matColumnDef="menge">
-            <th mat-header-cell *matHeaderCellDef>Verfugbare Menge</th>
-            <td mat-cell *matCellDef="let row">{{row.total}}</td>
+            <th mat-header-cell *matHeaderCellDef>
+             <div>Verfugbare Menge</div>
+             <mat-hint class="fs-ss">(artikel schiben)</mat-hint>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <button mat-raised-button color="accent" (click)="findArtikels(currentKomm.id, row.artId, row.liferantId)"> {{row.total}}</button>
+              </td>
           </ng-container>
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef>Name</th>

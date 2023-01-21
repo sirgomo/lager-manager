@@ -2,8 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AddArtikelKommissDTO } from 'src/DTO/addArtikelKommissDTO';
 import { ArtikelKommissDTO } from 'src/DTO/artikelKommissDTO';
+import { ArtikelSchiebenDTO } from 'src/DTO/artikelSchiebenDTO';
 import { KomissDTO } from 'src/DTO/KomissDTO';
 import { PalettenMengeVorausDTO } from 'src/DTO/palettenMengeVorausDTO';
+import { ArtikelEntity } from 'src/entity/ArtikelEntity';
 import {
   ARTIKELSTATUS,
   KommisioDetailsEntity,
@@ -334,6 +336,107 @@ export class VerkaufService {
           kommDetails: true,
         },
       });
+    } catch (err) {
+      return err;
+    }
+  }
+  async getKommissWithArtikel(artid: number, liferant: number) {
+    try {
+      return await this.repoDetails
+        .createQueryBuilder('deta')
+        .select([
+          'deta.id, deta.kommissId, deta.menge, deta.gepackt, kom.gewunschtesLieferDatum, art.name',
+        ])
+        .leftJoin(
+          KommissionirungEntity,
+          'kom',
+          'deta.kommissId = kom.id AND kom.kommissStatus!="FERTIG"',
+        )
+        .addSelect('kom.gewunschtesLieferDatum')
+        .leftJoin(
+          ArtikelEntity,
+          'art',
+          'art.artikelId = :aid AND art.liferantId = :lid',
+          { aid: artid, lid: liferant },
+        )
+        .addSelect('art.name')
+        .where('deta.artikelId = :artid AND deta.kreditorId = :lid', {
+          artid: artid,
+          lid: liferant,
+        })
+        .andWhere('deta.inBestellung=0')
+        .andWhere('kom.gewunschtesLieferDatum IS NOT NULL')
+        .orderBy('kom.gewunschtesLieferDatum', 'DESC')
+        .getRawMany()
+        .then(
+          (data) => {
+            //  console.log(data.length);
+            type tmparts = {
+              id: number;
+              name: string;
+              kommissId: number;
+              menge: number;
+              gepackt: string;
+              gewunschtesLieferDatum: Date;
+            };
+            const tmp: tmparts[] = [];
+            for (let i = 0; i < data.length; i++) {
+              const ar: tmparts = {
+                id: data[i].id,
+                name: data[i].name,
+                gepackt: data[i].gepackt,
+                gewunschtesLieferDatum: data[i].gewunschtesLieferDatum,
+                kommissId: data[i].kommissId,
+                menge: data[i].menge,
+              };
+              tmp.push(ar);
+            }
+            return tmp;
+          },
+          (err) => {
+            console.log(err);
+          },
+        );
+    } catch (err) {
+      return err;
+    }
+  }
+  async artkielSchieben(data: ArtikelSchiebenDTO) {
+    try {
+      const tmpDetailsEnt: KommisioDetailsEntity =
+        await this.repoDetails.findOne({ where: { id: data.kommDetailsid } });
+      if (tmpDetailsEnt.menge === data.menge) {
+        tmpDetailsEnt.kommissId = data.kommid;
+        await this.repoDetails.delete({ id: tmpDetailsEnt.id });
+        tmpDetailsEnt.id = null;
+
+        return this.repo
+          .findOne({
+            where: { id: data.kommid },
+            relations: { kommDetails: true },
+          })
+          .then((d) => {
+            d.kommDetails.push(tmpDetailsEnt);
+            return this.repo.save(d);
+          });
+      } else if (tmpDetailsEnt.menge > data.menge) {
+        tmpDetailsEnt.menge -= data.menge;
+        await this.repoDetails.save(tmpDetailsEnt);
+        tmpDetailsEnt.menge = data.menge;
+        tmpDetailsEnt.kommissId = data.kommid;
+        tmpDetailsEnt.id = null;
+        return this.repo
+          .findOne({
+            where: { id: data.kommid },
+            relations: { kommDetails: true },
+          })
+          .then((d) => {
+            d.kommDetails.push(tmpDetailsEnt);
+            return this.repo.save(d);
+          });
+      } else {
+        throw new HttpException('Menge ist falsch', HttpStatus.BAD_REQUEST);
+      }
     } catch (err) {
       return err;
     }

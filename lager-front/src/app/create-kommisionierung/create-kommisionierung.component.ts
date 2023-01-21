@@ -6,18 +6,26 @@ import {
   Optional,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogConfig,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { DataDilerService } from '../data-diler.service';
 import { AddArtikelKommissDto } from '../dto/addArtikelKommiss.dto';
 import { ArtikelKommissDto } from '../dto/artikelKommiss.dto';
+import { ArtikelSchiebenDto } from '../dto/artikelSchieben.dto';
 import { DispositorDto } from '../dto/dispositor.dto';
+import { FindArtikelInKommissDto } from '../dto/findArtikelinKom.dto';
 import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
 import { ARTIKELSTATUS, KommissDetailsDto } from '../dto/kommissDetails.dto';
 import { SpeditionDto } from '../dto/spedition.dto';
 import { UserDataDto } from '../dto/userData.dto';
+import { FindArtikelComponent } from '../find-artikel/find-artikel.component';
 import { HelperService } from '../helper.service';
 import { VerkaufService } from '../verkauf/verkauf.service';
 
@@ -90,6 +98,7 @@ export class CreateKommisionierungComponent implements OnInit {
     private dialogRef: MatDialogRef<CreateKommisionierungComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: KomissDTO,
     private changeDetector: ChangeDetectorRef,
+    private dialogMod: MatDialog,
   ) {
     this.kommissForm = this.fb.group({
       id: Number,
@@ -641,5 +650,36 @@ export class CreateKommisionierungComponent implements OnInit {
   }
   getPriceMitRabat(price: number, rabatt: number) {
     return Number((price - (price * rabatt) / 100).toFixed(2));
+  }
+  findArtikels(kommNr: number, artikelnr: number, liferant: number) {
+    const conf: MatDialogConfig = new MatDialogConfig();
+    conf.width = '100vw';
+    conf.height = '100vh';
+    conf.maxHeight = '100vh';
+    conf.maxWidth = '100vw';
+    conf.panelClass = 'full-screen-modal';
+    conf.data = [kommNr, artikelnr, liferant];
+    this.dialogMod
+      .open(FindArtikelComponent, conf)
+      .afterClosed()
+      .subscribe((data) => {
+        if (data === undefined || data === null || data.id === undefined) {
+          return;
+        }
+        const artToSchieben: ArtikelSchiebenDto = new ArtikelSchiebenDto();
+        artToSchieben.kommid = this.currentKomm.id;
+        artToSchieben.kommDetailsid = data.id;
+        artToSchieben.menge = data.menge;
+        this.kommServ.sendArtikelToSchieben(artToSchieben).subscribe((res) => {
+          if (res !== null && res.id === this.currentKomm.id) {
+            this.currentKomm = res;
+            this.reasignKomm();
+          } else {
+            const tmp: Error = new Error();
+            Object.assign(tmp, res);
+            this.toastr.error(tmp.message);
+          }
+        });
+      });
   }
 }

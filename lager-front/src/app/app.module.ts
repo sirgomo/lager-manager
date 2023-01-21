@@ -28,6 +28,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -52,6 +53,7 @@ import { AddartikelComponent } from './kommisionier/addartikel/addartikel.compon
 import { FindWareComponent } from './kommisionier/find-ware/find-ware.component';
 import { KommissComponent } from './kontroller/kommiss/kommiss.component';
 import { PalettenComponent } from './kontroller/paletten/paletten.component';
+import { FindArtikelComponent } from './find-artikel/find-artikel.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +83,7 @@ import { PalettenComponent } from './kontroller/paletten/paletten.component';
     FindWareComponent,
     KommissComponent,
     PalettenComponent,
+    FindArtikelComponent,
   ],
   imports: [
     BrowserModule,
@@ -93,6 +96,7 @@ import { PalettenComponent } from './kontroller/paletten/paletten.component';
     MatButtonModule,
     MatFormFieldModule,
     MatDatepickerModule,
+    MatSnackBarModule,
     MatNativeDateModule,
     MatCheckboxModule,
     MatSidenavModule,

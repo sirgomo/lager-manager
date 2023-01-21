@@ -47,8 +47,8 @@ max-height: 60px;
 .matDialogContent {
   width: 97%;
   min-width: 97vw;
-  height: 85%;
-  min-height: 85vh;
+  height: 84%;
+  min-height: 84vh;
   margin-top: 0.1rem;
 }
 
@@ -156,11 +156,12 @@ h3 {
   border: 2px solid rgb(93, 37, 167);
   box-shadow: inset;
 }
-.gepackt, .gepackt tr, .gepackt td, td mat-cell{
+.gepackt, .gepackt tr, .gepackt td, td mat-cell, mat-row {
   border-top-color:rgb(121, 104, 161);
   border-bottom-color:rgb(121, 104, 161);
   background-color: rgb(121, 104, 161);
 }
+
 
 .inBestellung, .inBestellung tr, .inBestellung td, td mat-cell {
   border-top-color: red;

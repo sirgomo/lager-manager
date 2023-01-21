@@ -1,0 +1,63 @@
+<div class="container">
+  <mat-toolbar color="primary">
+      <span>Kommissionierung: {{currentkommid}}</span>
+  </mat-toolbar>
+  <mat-dialog-content class="matDialogContent" *ngIf="show === 1">
+    <mat-table [dataSource]="tabData">
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef>Id</mat-header-cell>
+        <mat-cell *matCellDef="let item">{{item.id}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>Artikel Name</mat-header-cell>
+        <mat-cell *matCellDef="let item">{{item.name}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="kommid">
+        <mat-header-cell *matHeaderCellDef>Kommissionierung Nr.</mat-header-cell>
+        <mat-cell *matCellDef="let item">{{item.kommissId}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="menge">
+        <mat-header-cell *matHeaderCellDef>Artikel Menge:</mat-header-cell>
+        <mat-cell *matCellDef="let item">{{item.menge}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="gepackt">
+        <mat-header-cell *matHeaderCellDef>Artikel Status</mat-header-cell>
+        <mat-cell *matCellDef="let item">{{item.gepackt}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="gdate">
+        <mat-header-cell *matHeaderCellDef>Gewünschtes Lieferdatum</mat-header-cell>
+        <mat-cell *matCellDef="let item">{{item.gewunschtesLieferDatum | date: 'shortDate'}}</mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="columnDef"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columnDef; let i = index;" style="{{getBorder(i)}}" (click)="schibenActive(i)"></mat-row>
+    </mat-table>
+  </mat-dialog-content>
+  <mat-dialog-content *ngIf="show === 2">
+    <div class="center">
+     <p>Artikel Schieben!</p>
+     <div class="diviver"></div>
+     <div class="diviver"></div>
+     <div class="row">
+          <div>
+            <mat-form-field>
+            <mat-label>Menge (max: {{maxmenge}})</mat-label>
+            <input type="number" matInput  [(ngModel)]="menge">
+          </mat-form-field>
+        </div>
+        <div>
+          <button mat-raised-button color="warn" *ngIf="menge <= 0" (click)="artSchieben()" disabled>Artikel Schiben</button>
+          <button mat-raised-button color="warn" *ngIf="menge > 0" (click)="artSchieben()">Artikel Schiben</button>
+        </div>
+     </div>
+     <div class="divider"></div>
+     <div class="row">
+      <button mat-raised-button (click)="abbrechen()">Abbrechen</button>
+     </div>
+    </div>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" *ngIf="show === 1">
+      <button mat-button matDialogClose>Schließen</button>
+  </mat-dialog-actions>
+</div>

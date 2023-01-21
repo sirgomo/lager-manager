@@ -202,6 +202,7 @@ export class VerkaufComponent implements OnInit {
         .subscribe((data) => {
           if (data === 1) {
             this.komiss.splice(index, 1);
+            this.dataRes = new MatTableDataSource(this.komiss);
           } else {
             this.toaster.error(
               'Etwas ist schieff gegangen, kommmissionierung ' +

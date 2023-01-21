@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AddArtikelKommissDto } from '../dto/addArtikelKommiss.dto';
 import { ArtikelKommissDto } from '../dto/artikelKommiss.dto';
+import { ArtikelSchiebenDto } from '../dto/artikelSchieben.dto';
 import { KomissDTO } from '../dto/komiss.dto';
 import { UserDataDto } from '../dto/userData.dto';
 
@@ -67,5 +68,13 @@ export class VerkaufService {
   }
   getKommissById(id: number) {
     return this.http.get<KomissDTO>(this.API_URL + '/kommid/' + id);
+  }
+  getArtikelInKommiss(artid: number, liferant: number) {
+    return this.http.get<any>(
+      this.API_URL + '/artkom/' + artid + '/' + liferant,
+    );
+  }
+  sendArtikelToSchieben(art: ArtikelSchiebenDto) {
+    return this.http.post<KomissDTO>(this.API_URL + '/schib', art);
   }
 }
