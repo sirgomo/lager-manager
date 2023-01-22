@@ -140,20 +140,26 @@ export class WarenebuchungComponent implements OnInit {
     return '';
   }
   createBuchung() {
-    this.formBuchung.reset();
+    this.reset();
     this.show = 2;
   }
-  bearbeiteBuchung(id: number) {
+  private reset() {
     this.formBuchung.reset();
+    this.artikelMenge.splice(0, this.artikelMenge.length);
+    this.steuArr.splice(0, this.steuArr.length);
+    this.nettoArr.splice(0, this.nettoArr.length);
+  }
+  bearbeiteBuchung(id: number) {
+    this.reset();
     this.formBuchung.setValue(this.buchngen[id]);
     this.currentLiferantId = this.buchngen[id].kreditorId;
     this.sortArtikles(this.buchngen[id].kreditorId);
     this.getArtikelsInBuchung();
   }
   sortArtikles(kreditorid: number) {
-    for (let i = 0; i < this.artikels.length; i++) {
-      if (this.artikels[i].liferantId === kreditorid) {
-        this.artikels.unshift(this.artikels.splice(i, 1)[0]);
+    for (let i = 0; i < 60; i++) {
+      if (this.artikels[i].liferantId !== kreditorid) {
+        this.artikels.push(this.artikels.splice(i, 1)[0]);
       }
     }
     const tmpArt: ArtikelDTO[] = this.artikels.slice(0, 50);
