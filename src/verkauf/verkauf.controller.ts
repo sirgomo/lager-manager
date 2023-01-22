@@ -94,7 +94,7 @@ export class VerkaufController {
     return this.verkService.getKommById(id);
   }
   @Get('artkom/:aid/:lid')
-  @ROLES(ROLE.VERKAUF || ROLE.LAGERVERWALTUNG)
+  @ROLES(ROLE.VERKAUF, ROLE.LAGERVERWALTUNG)
   getKommissWithArtikels(
     @Param('aid') artid: number,
     @Param('lid') liferid: number,

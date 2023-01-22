@@ -13,6 +13,7 @@ export class LagerPlatztDto {
   liferant!: number;
   mengeProPalete!: number;
   barcode!: number;
+  prufziffern!: number;
 }
 export enum PALETTENTYP {
   EU = 'EU',

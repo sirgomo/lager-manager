@@ -41,7 +41,8 @@
        </ng-container>
        <ng-container matColumnDef="lifer">
         <th mat-header-cell *matHeaderCellDef>Liferant</th>
-        <td mat-cell *matCellDef="let post; let i = index " (click)="createUpdateLagerPlatz(i)" style="cursor: pointer;"> {{ post.lifer }}</td>
+        <!--<td mat-cell *matCellDef="let post; let i = index " (click)="createUpdateLagerPlatz(i)" style="cursor: pointer;"> {{ post.lifer}}</td>-->
+        <td mat-cell *matCellDef="let post; let i = index " (click)="createUpdateLagerPlatz(i)" style="cursor: pointer;"> {{ getLiferName(i)}}</td>
        </ng-container>
        <ng-container matColumnDef="amenge">
         <th mat-header-cell *matHeaderCellDef> Atikel Menge</th>
@@ -75,6 +76,8 @@
     </table>
 
   <div *ngIf="show === 2" class="row">
+    <div class="divider"></div>
+  <div class="row">
     <form [formGroup]="lagerPlatztForm" novalidate>
       <div class="row">
               <div>
@@ -151,13 +154,19 @@
             <mat-form-field>
               <mat-label>Artikel Liferant</mat-label>
              <!-- <input type="text" matInput value="{{lagerPlatztForm.controls['liferant'].getRawValue()}}" disabled>-->
-             <input type="text" matInput value="{{getLiferName()}}" disabled>
+             <input type="text" matInput value="{{getLiferName(-1)}}" disabled>
             </mat-form-field>
           </div>
           <div>
             <mat-form-field>
               <mat-label>Artikel Einheit</mat-label>
               <input disabled matInput value="{{lagerPlatztForm.controls['einheit'].getRawValue()}}">
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <mat-label>Prüfziffern</mat-label>
+              <input type="number" matInput formControlName="prufziffern">
             </mat-form-field>
           </div>
      </div>
@@ -178,6 +187,20 @@
         >Spiecher lagerplatz</button>
       </div>
     </form>
+  </div>
+    <div class="divider"></div>
+    <div class="row">
+      <mat-tab-group [disableRipple]="false" mat-align-tabs="start" mat-stretch-tabs="true">
+        <mat-tab label="Stellpletze">
+         <app-stellplazte [artIdandLifId]="artIdLifer"></app-stellplazte>
+        </mat-tab>
+        <mat-tab label="Bestellungen">
+          <ng-template matTabContent>
+          <app-artinbest [artIdandLifId]="artIdLifer"></app-artinbest>
+          </ng-template>
+       </mat-tab>
+    </mat-tab-group>
+    </div>
   </div>
   </mat-sidenav-container>
   </div>

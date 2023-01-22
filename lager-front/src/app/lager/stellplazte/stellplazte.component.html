@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="row">
+    <mat-table [dataSource]="tabData">
+      <ng-container matColumnDef="lpl">
+        <mat-header-cell *matHeaderCellDef>Stellplatz: </mat-header-cell>
+        <mat-cell *matCellDef="let item">{{item.lagerplatz}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>Artikel Name</mat-header-cell>
+        <mat-cell *matCellDef="let item">{{item.art_name}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="men">
+        <mat-header-cell *matHeaderCellDef>Menge:</mat-header-cell>
+        <mat-cell *matCellDef="let item">{{item.artikelMenge}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="mhd">
+        <mat-header-cell *matHeaderCellDef>MHD:</mat-header-cell>
+        <mat-cell *matCellDef="let item">{{item.mhd | date: 'shortDate'}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="paltyp">
+        <mat-header-cell *matHeaderCellDef>Paletten Typ</mat-header-cell>
+        <mat-cell *matCellDef="let item">{{item.palettenTyp}}</mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="columnDef"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columnDef"></mat-row>
+    </mat-table>
+  </div>
+</div>

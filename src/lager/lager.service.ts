@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ArtService } from 'src/artikel/art.service';
 import { ArtikelDTO } from 'src/DTO/ArtikelDTO';
 import { ArtikelMengeDTO } from 'src/DTO/artikelMengeDTO';
 import { LagerPlatztDTO } from 'src/DTO/lagerPlatztDTO';
+import { ArtikelEntity } from 'src/entity/ArtikelEntity';
 import { LagerPlatzEntity, PALETTENTYP } from 'src/entity/LagerPlatzEntity';
 import { Helper } from 'src/helper';
 import { LagerPlatzGenerator } from 'src/lagerPlatzGen';
@@ -366,5 +367,39 @@ export class LagerService {
           console.log(err);
         },
       );
+  }
+  async getPlattzeMitArtikel(artnr: number, liferne: number) {
+    try {
+      /*  return await this.repo
+        .find({ where: { artId: artnr, liferant: liferne } })
+        .catch(() => {
+          throw new HttpException(
+            'Ich hab kein Platz gefunden wo artikelnr : ' +
+              artnr +
+              'and liferantnr ' +
+              liferne,
+            HttpStatus.BAD_REQUEST,
+          );
+        });*/
+      return this.repo
+        .createQueryBuilder('lag')
+        .select(
+          'lag.lagerplatz, lag.artikelMenge, lag.palettenTyp, lag.mhd, art.name',
+        )
+        .leftJoin(
+          ArtikelEntity,
+          'art',
+          'art.artikelId=' + artnr + ' AND art.liferantId=' + liferne,
+        )
+        .addSelect('art.name')
+        .where('lag.artId =' + artnr + ' AND lag.liferant=' + liferne)
+        .orderBy('lag.mhd')
+        .getRawMany()
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      return err;
+    }
   }
 }

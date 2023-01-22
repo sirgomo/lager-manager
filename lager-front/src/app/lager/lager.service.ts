@@ -22,4 +22,9 @@ export class LagerService {
   deletePlatz(id: number) {
     return this.http.delete(this.API_URL + '/' + id);
   }
+  getStellplaztenWithArt(artId: number, artLiferant: number) {
+    return this.http.get<LagerPlatztDto[]>(
+      this.API_URL + '/platz' + '/' + artId + '/' + artLiferant,
+    );
+  }
 }

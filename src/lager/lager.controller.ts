@@ -42,4 +42,12 @@ export class LagerController {
   deleteLageplatzt(@Param('id') id: number) {
     return this.lagerServ.deleteLageplatzt(id);
   }
+  @Get('platz/:artid/:lifid')
+  @ROLES(ROLE.LAGERVERWALTUNG)
+  getPlatzeMitArtikel(
+    @Param('artid') artid: number,
+    @Param('lifid') lifid: number,
+  ) {
+    return this.lagerServ.getPlattzeMitArtikel(artid, lifid);
+  }
 }

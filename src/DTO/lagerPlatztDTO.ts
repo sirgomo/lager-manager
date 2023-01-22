@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsNotEmpty, IsOptional } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional } from "class-validator";
 import { PALETTENTYP } from "src/entity/LagerPlatzEntity";
 
 export class LagerPlatztDTO{
@@ -28,5 +28,8 @@ export class LagerPlatztDTO{
     liferant:number;
     @IsOptional()
     barcode:string;
+    @IsNotEmpty()
+    @IsNumber()
+    prufziffern:number;
 
 }

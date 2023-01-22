@@ -42,9 +42,7 @@ export class VerkaufService {
   getCurrentVerfugbareMenge(artId: number): Observable<ArtikelKommissDto> {
     return this.http.get<ArtikelKommissDto>(this.API_URL + '/art/' + artId);
   }
-  addArtikelToKomm(
-    art: AddArtikelKommissDto[],
-  ): Observable<AddArtikelKommissDto[]> {
+  addArtikelToKomm(art: AddArtikelKommissDto[]) {
     return this.http.post<AddArtikelKommissDto[]>(
       this.API_URL + '/addart',
       art,

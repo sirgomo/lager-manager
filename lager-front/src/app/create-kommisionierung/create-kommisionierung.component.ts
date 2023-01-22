@@ -5,7 +5,7 @@ import {
   OnInit,
   Optional,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   MatDialog,
   MatDialogConfig,
@@ -20,7 +20,6 @@ import { AddArtikelKommissDto } from '../dto/addArtikelKommiss.dto';
 import { ArtikelKommissDto } from '../dto/artikelKommiss.dto';
 import { ArtikelSchiebenDto } from '../dto/artikelSchieben.dto';
 import { DispositorDto } from '../dto/dispositor.dto';
-import { FindArtikelInKommissDto } from '../dto/findArtikelinKom.dto';
 import { KomissDTO, KOMMISIONSTATUS } from '../dto/komiss.dto';
 import { ARTIKELSTATUS, KommissDetailsDto } from '../dto/kommissDetails.dto';
 import { SpeditionDto } from '../dto/spedition.dto';
@@ -103,16 +102,16 @@ export class CreateKommisionierungComponent implements OnInit {
     this.kommissForm = this.fb.group({
       id: Number,
       verkauferId: Number,
-      maxPalettenHoher: Number,
-      gewunschtesLieferDatum: Date,
-      dispositorId: Number,
-      buchungsDatum: Date,
-      falligkeitDatum: Date,
-      skonto: Number,
-      skontoFrist: Number,
+      maxPalettenHoher: [Number, Validators.required],
+      gewunschtesLieferDatum: [Date, Validators.required],
+      dispositorId: [Number, Validators.required],
+      buchungsDatum: [Date, Validators.required],
+      falligkeitDatum: [Date, Validators.required],
+      skonto: [Number, Validators.required],
+      skontoFrist: [Number, Validators.required],
       kommissStatus: KOMMISIONSTATUS,
-      spedition: Number,
-      versorgungId: [''],
+      spedition: [Number, Validators.required],
+      versorgungId: ['', Validators.required],
       kommDetails: KommissDetailsDto,
     });
     this.kommStatus = KOMMISIONSTATUS;
@@ -220,6 +219,13 @@ export class CreateKommisionierungComponent implements OnInit {
       });
   }
   async saveKommissionierung(komm: KomissDTO) {
+    if (!this.kommissForm.valid) {
+      this.toastr.error('Nicht alle felder sind ausgefullt!', '', {
+        timeOut: 900,
+      });
+      return;
+    }
+    console.log(this.kommissForm.valid);
     return await this.kommServ
       .createKommissionierung(komm)
       .subscribe((data) => {
@@ -633,6 +639,7 @@ export class CreateKommisionierungComponent implements OnInit {
             }
           }
           this.currentKomm.kommDetails.splice(index, 1);
+          this.tabResForArtInKom = new MatTableDataSource(this.artikelsInKomm);
           this.reasignKomm();
         }
       });

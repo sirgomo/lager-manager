@@ -54,6 +54,8 @@ import { FindWareComponent } from './kommisionier/find-ware/find-ware.component'
 import { KommissComponent } from './kontroller/kommiss/kommiss.component';
 import { PalettenComponent } from './kontroller/paletten/paletten.component';
 import { FindArtikelComponent } from './find-artikel/find-artikel.component';
+import { StellplazteComponent } from './lager/stellplazte/stellplazte.component';
+import { ArtinbestComponent } from './lager/artinbest/artinbest.component';
 
 @NgModule({
   declarations: [
@@ -84,6 +86,8 @@ import { FindArtikelComponent } from './find-artikel/find-artikel.component';
     KommissComponent,
     PalettenComponent,
     FindArtikelComponent,
+    StellplazteComponent,
+    ArtinbestComponent,
   ],
   imports: [
     BrowserModule,

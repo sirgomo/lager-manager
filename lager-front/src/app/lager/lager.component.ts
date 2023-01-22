@@ -15,6 +15,7 @@ import { MatTableDataSource } from '@angular/material/table';
   providers: [DatePipe],
 })
 export class LagerComponent implements OnInit {
+  artIdLifer: number[] = [];
   @ViewChild('sidenav', { static: true }) sidenav!: MatSidenav;
   show = 1;
   lagerPlatze: LagerPlatztDto[] = [];
@@ -57,6 +58,7 @@ export class LagerComponent implements OnInit {
       liferant: [Number],
       mengeProPalete: [Number],
       barcode: [''],
+      prufziffern: [Number],
     });
   }
 
@@ -78,9 +80,12 @@ export class LagerComponent implements OnInit {
       this.downloadKomplet = true;
     });
   }
-  getLiferName() {
+  getLiferName(i: number) {
     // eslint-disable-next-line prettier/prettier
+    if(i === -1)
     return this.lifer[this.index];
+
+    return this.lifer[i];
   }
   artikelTrackBy(index: number) {
     try {
@@ -91,10 +96,13 @@ export class LagerComponent implements OnInit {
   }
 
   createUpdateLagerPlatz(index: number) {
+    this.artIdLifer.splice(0, this.artIdLifer.length);
     if (index === -1) this.lagerPlatztForm.reset();
     if (index !== -1) {
       this.lagerPlatztForm.patchValue(this.lagerPlatze[index]);
     }
+    this.artIdLifer.push(this.lagerPlatze[index].artId);
+    this.artIdLifer.push(this.lagerPlatze[index].liferant);
     this.show = 2;
     this.index = index;
   }
@@ -122,11 +130,14 @@ export class LagerComponent implements OnInit {
         this.lagerPlatze[this.index] = data;
         this.showFront();
       } else {
-        console.log(data);
+        this.toastr.error(
+          'Etwas ist schiefgegangen als ich wollte den Stellplatz speichern',
+        );
       }
     });
   }
   showFront() {
+    this.artIdLifer.splice(0, this.artIdLifer.length);
     this.lagerPlatztForm.reset();
     const tmpTab: LagerPlatztDto[] = this.lagerPlatze.slice(0, 50);
     this.tabRes = new MatTableDataSource(tmpTab);
