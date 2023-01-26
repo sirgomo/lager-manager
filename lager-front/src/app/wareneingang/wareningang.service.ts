@@ -30,4 +30,15 @@ export class WareningangService {
   updateArtikel(art: WarenEinArtikleDto) {
     return this.http.post<WarenBuchungDto>(this.API_URL + '/art', art);
   }
+  getPlatzeImGang(nr: number) {
+    return this.http.get<any[]>(this.API_URL + '/gang/' + nr);
+  }
+  getCountOfPlatze() {
+    return this.http.get<any[]>(this.API_URL + '/count/1');
+  }
+  getStaticPlatzMitWaren(artid: number, liferantId: number) {
+    return this.http.get<any[]>(
+      this.API_URL + '/art/' + artid + '/' + liferantId,
+    );
+  }
 }

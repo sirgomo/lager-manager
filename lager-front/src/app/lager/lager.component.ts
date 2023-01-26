@@ -96,13 +96,14 @@ export class LagerComponent implements OnInit {
   }
 
   createUpdateLagerPlatz(index: number) {
-    this.artIdLifer.splice(0, this.artIdLifer.length);
     if (index === -1) this.lagerPlatztForm.reset();
     if (index !== -1) {
+      this.artIdLifer.splice(0, this.artIdLifer.length);
       this.lagerPlatztForm.patchValue(this.lagerPlatze[index]);
+      this.artIdLifer.push(this.lagerPlatze[index].artId);
+      this.artIdLifer.push(this.lagerPlatze[index].liferant);
     }
-    this.artIdLifer.push(this.lagerPlatze[index].artId);
-    this.artIdLifer.push(this.lagerPlatze[index].liferant);
+
     this.show = 2;
     this.index = index;
   }

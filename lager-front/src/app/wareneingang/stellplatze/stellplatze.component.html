@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="divider"></div>
+  <mat-tab-group dynamicHeight [disableRipple]="false" (selectedTabChange)="showStatik($event.index)">
+        <mat-tab label="Stellplattze">
+          <div>
+            <mat-accordion multi="false">
+              <mat-expansion-panel *ngFor="let item of lagerPlatzData; let i = index" >
+                <mat-expansion-panel-header (click)="showGang(i+1)">
+                  <mat-panel-title>
+                  Gang {{lagerPlatzData[i].gang}}
+                  </mat-panel-title>
+                  <div>
+                  <span class="spacer"></span>
+                  <div class="row accordion">
+                    <div>Frei: {{lagerPlatzData[i].total - lagerPlatzData[i].bezetz}} </div>
+                    <div>Frei Static: {{lagerPlatzData[i].freestatic}}</div>
+                    <div>Bezetz: {{lagerPlatzData[i].bezetz}}</div>
+                    <div>Total : {{lagerPlatzData[i].total}}</div>
+                  </div>
+                </div>
+                </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <mat-table [dataSource]="freiePlatze">
+              <ng-container matColumnDef="platz">
+                <mat-header-cell *matHeaderCellDef>Stellplatz</mat-header-cell>
+                <mat-cell *matCellDef="let item">{{item.lagerplatz}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="static">
+                <mat-header-cell *matHeaderCellDef>Static Platz ?</mat-header-cell>
+                <mat-cell *matCellDef="let item" >{{item.static !== 0 ? 'Ja' : 'Nein'}}</mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="columnDef"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: columnDef; let i = index" (click)="usePlatz(i)" style="cursor: pointer;"></mat-row>
+            </mat-table>
+          </ng-template>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </mat-tab>
+        <mat-tab label="Statik Plattze">
+          <mat-table [dataSource]="staticArtikelPlatz">
+            <ng-container matColumnDef="platz">
+              <mat-header-cell *matHeaderCellDef>Stellplatz: </mat-header-cell>
+              <mat-cell *matCellDef="let item">{{item.lagerplatz}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="menge">
+              <mat-header-cell *matHeaderCellDef>Artikel Menge: </mat-header-cell>
+              <mat-cell *matCellDef="let item">{{item.artikelMenge}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="mhd">
+              <mat-header-cell *matHeaderCellDef>MHD:</mat-header-cell>
+              <mat-cell *matCellDef="let item">{{item.mhd | date: 'shortDate'}}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="staticColumnDef"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: staticColumnDef; let i = index" (click)="useStaticPlatz(i)"></mat-row>
+          </mat-table>
+        </mat-tab>
+  </mat-tab-group>
+
+</div>

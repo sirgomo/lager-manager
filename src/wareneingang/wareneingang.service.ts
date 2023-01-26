@@ -89,4 +89,13 @@ export class WareneingangService {
       );
     }
   }
+  async getPlatzeInGanges(nr: number) {
+    return await this.lagerSerr.getPlattzeImGangs(nr);
+  }
+  async getPlatzeCount() {
+    return await this.lagerSerr.getCountOfPlatze();
+  }
+  async getStaticPlatzeMitArtikel(artid: number, liferant: number) {
+    return await this.lagerSerr.getStaticPlatzeMitWare(artid, liferant);
+  }
 }

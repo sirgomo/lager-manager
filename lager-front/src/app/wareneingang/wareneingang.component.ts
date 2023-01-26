@@ -9,6 +9,7 @@ import { LagerPlatztDto, PALETTENTYP } from '../dto/lagerPlatz.dto';
 import { WarenBuchungDto } from '../dto/warenBuchung.dto';
 import { WarenEinArtikleDto } from '../dto/warenEinArtikle.dto';
 import { HelperService } from '../helper.service';
+import { LagerPlatzMitId } from './stellplatze/stellplatze.component';
 import { WareningangService } from './wareningang.service';
 
 @Component({
@@ -36,6 +37,8 @@ export class WareneingangComponent implements OnInit {
   role: string | null;
   palettenTypEnum: typeof PALETTENTYP = PALETTENTYP;
   paletteTyp: PALETTENTYP;
+  prufziffern: number | undefined;
+  artData: number[] = [];
 
   constructor(
     private dispoService: DatenpflegeService,
@@ -92,13 +95,17 @@ export class WareneingangComponent implements OnInit {
     });
   }
   showArtikel(index: number) {
+    this.artData.splice(0, this.artData.length);
     this.currentArtikelMenge = 0;
     this.palete = false;
     this.show = 3;
     this.lagerPlatz = undefined;
     this.artikelIndex = index;
     this.manualLagerPlatz = '';
+    this.artData.push(this.artikles[index].artikelid);
+    this.artData.push(this.artikles[index].kreditorId);
   }
+  //return platz nach artikel volumen
   async getPlatz() {
     if (this.currentArtikelMenge === 0) {
       this.toaster.error('Du musst artikel menge eingeben! ', 'Menge Error', {
@@ -125,10 +132,7 @@ export class WareneingangComponent implements OnInit {
     }
 
     return await this.warenServi.getPlatz(tmp).subscribe((data) => {
-      console.log(data);
       if (this.lagerPlatz !== undefined) {
-        this.lagerPlatz.id = data.id;
-        this.lagerPlatz.lagerplatz = data.lagerplatz;
         if (data.artikelMenge === null) {
           this.lagerPlatz.artikelMenge = 0;
         } else if (data.artikelMenge > 0) {
@@ -136,7 +140,6 @@ export class WareneingangComponent implements OnInit {
         }
       }
 
-      console.log('lager przed ' + JSON.stringify(this.lagerPlatz));
       if (this.lagerPlatz !== undefined) {
         this.lagerPlatz.artikelMenge += this.currentArtikelMenge;
 
@@ -146,9 +149,38 @@ export class WareneingangComponent implements OnInit {
         }
         this.lagerPlatz.liferant = this.artikles[this.artikelIndex].kreditorId;
         this.lagerPlatz.artId = this.artikles[this.artikelIndex].artikelid;
-        console.log('lagerplatz aft ' + JSON.stringify(this.lagerPlatz));
       }
     });
+  }
+  fillPlatz(data: LagerPlatzMitId) {
+    if (this.currentArtikelMenge === 0) {
+      this.toaster.error('Du musst artikel menge eingeben! ', 'Menge Error', {
+        timeOut: 800,
+      });
+      return;
+    } else if (
+      this.currentArtikelMenge > this.artikles[this.artikelIndex].menge
+    ) {
+      this.toaster.error(
+        ' Artikel menge darft nicht größe sein als menge in auftrag',
+      );
+      return;
+    }
+    if (data === undefined || data === null) {
+      //TODO;
+    }
+    this.lagerPlatz = new LagerPlatztDto();
+    this.lagerPlatz.id = data.id;
+    this.lagerPlatz.lagerplatz = data.lagerplatz;
+    this.lagerPlatz.prufziffern = data.prufziffern;
+    this.lagerPlatz.artId = this.artikles[this.artikelIndex].artikelid;
+    this.lagerPlatz.palettenTyp = this.paletteTyp;
+    this.lagerPlatz.liferant = this.artikles[this.artikelIndex].kreditorId;
+    this.lagerPlatz.artikelMenge = 0;
+    this.lagerPlatz.artikelMenge = this.currentArtikelMenge;
+    if (this.mhd !== undefined) {
+      this.lagerPlatz.mhd = this.mhd;
+    }
   }
   createPlatz() {
     if (this.currentArtikelMenge === 0) {
@@ -176,8 +208,6 @@ export class WareneingangComponent implements OnInit {
     tmp.liferant = this.artikles[this.artikelIndex].kreditorId;
     tmp.static = true;
     this.lagerPlatz = tmp;
-
-    console.log(tmp);
   }
   setManualLagerPlatz(platz: any) {
     if (this.lagerPlatz !== undefined)
@@ -185,43 +215,72 @@ export class WareneingangComponent implements OnInit {
   }
   async lageEsEin() {
     if (this.lagerPlatz !== undefined) {
+      if (
+        this.prufziffern === undefined ||
+        this.prufziffern !== this.lagerPlatz.prufziffern
+      ) {
+        this.toaster.error('Pruffzifern ist falsch!', 'Der Pruffzifern', {
+          timeOut: 1000,
+        });
+        return;
+      }
+      //console.log(this.lagerPlatz);
+
       await this.warenServi.legeEs(this.lagerPlatz).subscribe((data) => {
-        if (data.artId == this.artikles[this.artikelIndex].artikelid) {
-          if (this.lagerPlatz !== undefined)
-            if (
-              this.currentArtikelMenge ===
-              this.artikles[this.artikelIndex].menge
-            ) {
-              this.delArtikel(data);
-            } else {
-              const tmp: WarenEinArtikleDto = new WarenEinArtikleDto();
-              tmp.artikelid = this.artikles[this.artikelIndex].artikelid;
-              tmp.bestellungId = this.artikles[this.artikelIndex].bestellungId;
-              tmp.aid = this.artikles[this.artikelIndex].aid;
-              tmp.kreditorId = this.artikles[this.artikelIndex].kreditorId;
-              tmp.menge = this.currentArtikelMenge;
-              this.artikles[this.artikelIndex].menge -=
-                this.currentArtikelMenge;
-              this.warenServi.updateArtikel(tmp).subscribe((data) => {
-                console.log(data);
-              });
-              this.show = 2;
-              this.artikelIndex = -1;
-              this.mhd = undefined;
-              this.paletteTyp = PALETTENTYP.KEINPALETTE;
-              this.currentArtikelMenge = 0;
-            }
+        if (
+          data !== null &&
+          this.lagerPlatz !== undefined &&
+          this.lagerPlatz.id === data.id
+        ) {
+          if (
+            this.currentArtikelMenge === this.artikles[this.artikelIndex].menge
+          ) {
+            this.delArtikel();
+            this.toaster.success('Ware gebucht', 'Warenbuchung', {
+              timeOut: 600,
+            });
+          } else {
+            const tmp: WarenEinArtikleDto = new WarenEinArtikleDto();
+            tmp.artikelid = this.artikles[this.artikelIndex].artikelid;
+            tmp.bestellungId = this.artikles[this.artikelIndex].bestellungId;
+            tmp.aid = this.artikles[this.artikelIndex].aid;
+            tmp.kreditorId = this.artikles[this.artikelIndex].kreditorId;
+            tmp.menge = this.currentArtikelMenge;
+            this.artikles[this.artikelIndex].menge -= this.currentArtikelMenge;
+            this.warenServi.updateArtikel(tmp).subscribe((res) => {
+              if (res === undefined || res === null) {
+                this.toaster.error(
+                  'etwas ist scheifgegangen als ich artikel editiren wollte',
+                );
+              }
+            });
+            this.toaster.success('Ware gebucht', 'Warenbuchung', {
+              timeOut: 600,
+            });
+            this.show = 2;
+            this.artikelIndex = -1;
+            this.mhd = undefined;
+            this.paletteTyp = PALETTENTYP.KEINPALETTE;
+            this.currentArtikelMenge = 0;
+            this.prufziffern = undefined;
+          }
+        } else {
+          const err = new Error();
+          Object.assign(err, data);
+          this.toaster.error(err.message, 'Artikel Spiechern', {
+            timeOut: 900,
+          });
         }
       });
     }
   }
-  async delArtikel(data: LagerPlatztDto) {
+  async delArtikel() {
     await this.warenServi
       .delArtikel(
         this.artikles[this.artikelIndex].artikelid,
         this.artikles[this.artikelIndex].bestellungId,
       )
-      .subscribe((data) => {
+      .subscribe(() => {
         this.artikles.splice(this.artikelIndex, 1);
         if (this.artikles.length === 0) {
           this.getBuchungen();
@@ -231,6 +290,7 @@ export class WareneingangComponent implements OnInit {
         this.mhd = undefined;
         this.paletteTyp = PALETTENTYP.KEINPALETTE;
         this.currentArtikelMenge = 0;
+        this.prufziffern = undefined;
       });
   }
 }

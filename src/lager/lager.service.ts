@@ -61,11 +61,6 @@ export class LagerService {
           )
           .then((data) => {
             return data;
-            /*  for (let i = 0; i < data.length; i++) {
-              const tmp: LagerPlatztDTO = new LagerPlatztDTO();
-              Object.assign(tmp, data[i]);
-              lagerPlatz.push(tmp);
-            }*/
           });
       }
       //return lagerPlatz;
@@ -91,10 +86,50 @@ export class LagerService {
       if (lagerplatz.palettenTyp === PALETTENTYP.KEINPALETTE) {
         lagerplatz.palettenTyp = PALETTENTYP.EU;
       }
+      if (lagerplatz.id !== undefined && lagerplatz.id !== null) {
+        await this.repo
+          .findOne({ where: { id: lagerplatz.id } })
+          .then((res) => {
+            if (res === null) {
+              throw new HttpException(
+                'Lagerplatz nicht gefunden!',
+                HttpStatus.BAD_REQUEST,
+              );
+            }
+            if (res.prufziffern !== lagerplatz.prufziffern) {
+              throw new HttpException(
+                'Pruffcifern stimmt nicht!',
+                HttpStatus.BAD_REQUEST,
+              );
+            }
+            if (
+              res.artId !== null &&
+              res.artikelMenge !== null &&
+              res.id === lagerplatz.id
+            ) {
+              if (
+                res.mhd !== null &&
+                lagerplatz.mhd !== null &&
+                new Date(res.mhd).getTime() < new Date(lagerplatz.mhd).getTime()
+              ) {
+                console.log('error data');
+                throw new HttpException(
+                  'Mhd ist andre als das alte, stelle neue lagerplatz ein!',
+                  HttpStatus.CONFLICT,
+                );
+              }
+              console.log('pryzpisanie lagerpaltz = res');
+              res.artikelMenge += lagerplatz.artikelMenge;
+              lagerplatz = res;
+            }
+          });
+      }
+
       await this.repo.create(lagerplatz);
       return await this.repo.save(lagerplatz).then(
         (data) => {
-          return (lagerplatz = data);
+          console.log(data);
+          return data;
         },
         (err) => {
           console.log(err);
@@ -102,14 +137,15 @@ export class LagerService {
         },
       );
     } catch (err) {
-      console.log(err);
-      throw new Error(
-        'problem mit lager service, lagerservice kann nicht lagerplatz erstellen',
-      );
+      return err;
     }
   }
   formatDate(date: Date): Date {
-    return new Date(new Date(date).toDateString());
+    try {
+      return new Date(new Date(date).toDateString());
+    } catch (err) {}
+
+    return null;
   }
   async deleteLageplatzt(id: number) {
     try {
@@ -397,6 +433,88 @@ export class LagerService {
         .getRawMany()
         .catch((err) => {
           console.log(err);
+        });
+    } catch (err) {
+      return err;
+    }
+  }
+  async getCountOfPlatze() {
+    try {
+      {
+        return await this.repo
+          .createQueryBuilder('lag')
+          .select('LEFT(lag.lagerplatz, 2)+0', 'gang')
+          .addSelect('COUNT(lag.artId)', 'bezetz')
+          .addSelect('COUNT(lag.lagerplatz)', 'total')
+          .leftJoin(
+            LagerPlatzEntity,
+            'lag2',
+            'lag.id=lag2.id AND lag2.static=1 AND lag2.artId IS NULL',
+          )
+          .addSelect('COUNT(lag2.static)', 'freestatic')
+          .groupBy('LEFT(lag.lagerplatz, 2)+0')
+          .getRawMany()
+          .then(
+            (data) => {
+              return data;
+            },
+            (err) => {
+              console.log(err);
+              throw new HttpException(
+                'Ich kann die Platze nicht zehlen!',
+                HttpStatus.BAD_REQUEST,
+              );
+            },
+          );
+      }
+    } catch (err) {
+      return err;
+    }
+  }
+  async getPlattzeImGangs(nr: number): Promise<any[]> {
+    try {
+      return await this.repo
+        .createQueryBuilder('lag')
+        .select('id,lagerplatz, static, prufziffern')
+        .where('LEFT(lag.lagerplatz,2) +0 = :nr', { nr: nr })
+        .andWhere('lag.artId IS NULL')
+        .orderBy('lag.lagerplatz')
+        .getRawMany()
+        .then(
+          (data) => {
+            return data;
+          },
+          (err) => {
+            console.log(err);
+            throw new HttpException(
+              'Keine freie Stellplatze gefunden',
+              HttpStatus.BAD_REQUEST,
+            );
+          },
+        );
+    } catch (err) {
+      return err;
+    }
+  }
+  async getStaticPlatzeMitWare(id: number, liferantId: number): Promise<any[]> {
+    try {
+      return await this.repo
+        .createQueryBuilder('lag')
+        .select('id,lagerplatz,artikelMenge,prufziffern, mhd')
+        .where(
+          'lag.artId =' +
+            id +
+            ' AND lag.liferant=' +
+            liferantId +
+            ' AND lag.static = 1',
+        )
+        .getRawMany()
+        .catch((err) => {
+          console.log(err);
+          throw new HttpException(
+            'Keine Artikel gefunden',
+            HttpStatus.NOT_FOUND,
+          );
         });
     } catch (err) {
       return err;
