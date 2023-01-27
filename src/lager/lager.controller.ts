@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   UseGuards,
   ValidationPipe,
@@ -49,5 +50,15 @@ export class LagerController {
     @Param('lifid') lifid: number,
   ) {
     return this.lagerServ.getPlattzeMitArtikel(artid, lifid);
+  }
+  @Patch()
+  @ROLES(ROLE.LAGERVERWALTUNG)
+  lagerPlatzUpdate(@Body(ValidationPipe) platz: LagerPlatztDTO) {
+    return this.lagerServ.patchLagerplatz(platz);
+  }
+  @Get(':id')
+  @ROLES(ROLE.LAGERVERWALTUNG)
+  getPlatzById(@Param('id') id: number) {
+    return this.lagerServ.getPlatzById(id);
   }
 }

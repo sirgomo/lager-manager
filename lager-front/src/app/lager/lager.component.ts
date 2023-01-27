@@ -7,6 +7,7 @@ import { LagerService } from './lager.service';
 import { DatePipe } from '@angular/common';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MatTableDataSource } from '@angular/material/table';
+import { LagerPlatzDtoArtNameDto } from '../dto/lagerPlatzDtoArtName.dto';
 
 @Component({
   selector: 'app-lager',
@@ -18,14 +19,15 @@ export class LagerComponent implements OnInit {
   artIdLifer: number[] = [];
   @ViewChild('sidenav', { static: true }) sidenav!: MatSidenav;
   show = 1;
-  lagerPlatze: LagerPlatztDto[] = [];
+  lagerPlatze: LagerPlatzDtoArtNameDto[] = [];
   pltzGrosse = '';
   searchModel = '';
   index = -1;
   downloadKomplet = false;
-  lifer: string[] = [];
+
   public readonly palettenTyp: typeof PALETTENTYP = PALETTENTYP;
-  tabRes: MatTableDataSource<LagerPlatztDto> = new MatTableDataSource();
+  tabRes: MatTableDataSource<LagerPlatzDtoArtNameDto> =
+    new MatTableDataSource();
   columnDef: string[] = [
     'lplatz',
     'artid',
@@ -59,6 +61,7 @@ export class LagerComponent implements OnInit {
       mengeProPalete: [Number],
       barcode: [''],
       prufziffern: [Number],
+      lifer: [''],
     });
   }
 
@@ -72,20 +75,12 @@ export class LagerComponent implements OnInit {
     await this.lagerServ.getAllStellpletze().subscribe((data) => {
       for (let i = 0; i !== data.length; i++) {
         this.lagerPlatze.push(data[i]);
-        this.lifer.push(data[i].lifer);
       }
-      const tmpTab: LagerPlatztDto[] = this.lagerPlatze.slice(0, 50);
+      const tmpTab: LagerPlatzDtoArtNameDto[] = this.lagerPlatze.slice(0, 50);
       this.tabRes = new MatTableDataSource(tmpTab);
       this.show = 1;
       this.downloadKomplet = true;
     });
-  }
-  getLiferName(i: number) {
-    // eslint-disable-next-line prettier/prettier
-    if(i === -1)
-    return this.lifer[this.index];
-
-    return this.lifer[i];
   }
   artikelTrackBy(index: number) {
     try {
@@ -95,19 +90,26 @@ export class LagerComponent implements OnInit {
     }
   }
 
-  createUpdateLagerPlatz(index: number) {
+  async createUpdateLagerPlatz(index: number) {
     if (index === -1) this.lagerPlatztForm.reset();
     if (index !== -1) {
-      this.artIdLifer.splice(0, this.artIdLifer.length);
-      this.lagerPlatztForm.patchValue(this.lagerPlatze[index]);
-      this.artIdLifer.push(this.lagerPlatze[index].artId);
-      this.artIdLifer.push(this.lagerPlatze[index].liferant);
+      await this.lagerServ
+        .getPlatzById(this.lagerPlatze[index].id)
+        .subscribe((res) => {
+          this.artIdLifer.splice(0, this.artIdLifer.length);
+          this.lagerPlatztForm.patchValue(res[0]);
+          this.lagerPlatze[index] = res[0];
+          this.artIdLifer.push(res[0].artId);
+          this.artIdLifer.push(res[0].liferant);
+        });
+      this.show = 2;
+      this.index = index;
+    } else {
+      this.show = 2;
+      this.index = index;
     }
-
-    this.show = 2;
-    this.index = index;
   }
-  savePlatz(platz: LagerPlatztDto) {
+  savePlatz(platz: LagerPlatzDtoArtNameDto) {
     if (platz.id === undefined || platz.id === null) {
       let großearra: string[] = [];
       const rawVal: string = this.lagerPlatztForm
@@ -118,29 +120,36 @@ export class LagerComponent implements OnInit {
       }
       platz.lagerPlatzVolumen =
         Number(großearra[0]) * Number(großearra[1]) * Number(großearra[2]);
-      console.log(platz.palettenTyp);
     } else {
       platz.artId = this.lagerPlatze[this.index].artId;
       platz.artikelMenge = this.lagerPlatze[this.index].artikelMenge;
       platz.einheit = this.lagerPlatze[this.index].einheit;
       platz.name = this.lagerPlatze[this.index].name;
     }
-
-    return this.lagerServ.createPlatz(platz).subscribe((data) => {
-      if (data) {
-        this.lagerPlatze[this.index] = data;
+    if (platz.id === null || platz.id === undefined) {
+      return this.lagerServ.createPlatz(platz).subscribe((data) => {
+        if (data) {
+          this.lagerPlatze.unshift(data);
+          this.showFront();
+        } else {
+          this.toastr.error(
+            'Etwas ist schiefgegangen als ich wollte den Stellplatz speichern',
+          );
+        }
+      });
+    } else {
+      return this.lagerServ.lagerPlatzUpdate(platz).subscribe((res) => {
+        if (Object(res).affected === 1)
+          this.toastr.success('Platz wurde geändert!', '', { timeOut: 800 });
+        this.lagerPlatze[this.index] = platz;
         this.showFront();
-      } else {
-        this.toastr.error(
-          'Etwas ist schiefgegangen als ich wollte den Stellplatz speichern',
-        );
-      }
-    });
+      });
+    }
   }
   showFront() {
     this.artIdLifer.splice(0, this.artIdLifer.length);
     this.lagerPlatztForm.reset();
-    const tmpTab: LagerPlatztDto[] = this.lagerPlatze.slice(0, 50);
+    const tmpTab: LagerPlatzDtoArtNameDto[] = this.lagerPlatze.slice(0, 50);
     this.tabRes = new MatTableDataSource(tmpTab);
     this.show = 1;
     this.index = -1;
@@ -148,7 +157,7 @@ export class LagerComponent implements OnInit {
   async onSearch(was: string) {
     if (this.downloadKomplet) {
       this.lagerPlatze = await this.helper.onSearchPlatz(was, this.lagerPlatze);
-      const tmpTab: LagerPlatztDto[] = this.lagerPlatze.slice(0, 50);
+      const tmpTab: LagerPlatzDtoArtNameDto[] = this.lagerPlatze.slice(0, 50);
       this.tabRes = new MatTableDataSource(tmpTab);
     }
   }

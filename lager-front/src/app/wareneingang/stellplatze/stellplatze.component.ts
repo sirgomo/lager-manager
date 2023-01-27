@@ -13,6 +13,7 @@ export class StellplatzeComponent implements OnInit {
   freiePlatze: MatTableDataSource<any> = new MatTableDataSource();
   columnDef: string[] = ['platz', 'static'];
   staticColumnDef: string[] = ['platz', 'menge', 'mhd'];
+  barCode = '';
   @Input() artikelData: number[] = [];
   @Output() platzData = new EventEmitter<LagerPlatzMitId>();
   staticArtikelPlatz: MatTableDataSource<StaticPlatzMitArtikel> =
@@ -84,6 +85,21 @@ export class StellplatzeComponent implements OnInit {
           this.staticArtikelPlatz = new MatTableDataSource(res);
         });
     }
+  }
+  async platzBarcodeScanen() {
+    if (this.barCode.length < 3) {
+      return;
+    }
+    await this.warenService.getPlatzByScan(this.barCode).subscribe((data) => {
+      console.log(data);
+      if (data.lagerplatz !== undefined && data.lagerplatz !== null) {
+        this.platzData.emit(data);
+      } else {
+        const err = new Error();
+        Object.assign(err, data);
+        this.toaster.error(err.message, '', { timeOut: 800 });
+      }
+    });
   }
 }
 

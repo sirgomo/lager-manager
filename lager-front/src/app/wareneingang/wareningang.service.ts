@@ -41,4 +41,7 @@ export class WareningangService {
       this.API_URL + '/art/' + artid + '/' + liferantId,
     );
   }
+  getPlatzByScan(barCode: string) {
+    return this.http.get<any>(this.API_URL + '/platz/' + barCode);
+  }
 }

@@ -1,4 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { LagerService } from '../lager.service';
@@ -13,10 +19,12 @@ export class StellplazteComponent implements OnInit {
   columnDef: string[] = ['lpl', 'name', 'men', 'mhd', 'paltyp'];
   tabData: MatTableDataSource<any> = new MatTableDataSource();
   constructor(private lagerService: LagerService, private snack: MatSnackBar) {}
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.getPlattze();
   }
   async getPlattze() {
+    if (this.artIdandLifId[0] === null || this.artIdandLifId[0] === undefined)
+      return;
     await this.lagerService
       .getStellplaztenWithArt(this.artIdandLifId[0], this.artIdandLifId[1])
       .subscribe((data) => {

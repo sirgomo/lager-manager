@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { ArtikelDTO, ARTIKELFLAGE } from './dto/artikel.dto';
 import { ArtikelKommissDto } from './dto/artikelKommiss.dto';
 import { LagerPlatztDto } from './dto/lagerPlatz.dto';
+import { LagerPlatzDtoArtNameDto } from './dto/lagerPlatzDtoArtName.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -96,13 +97,13 @@ export class HelperService {
     });
     return artikels;
   }
-  public onSearchPlatz(text: string, platze: LagerPlatztDto[]) {
-    const tmpArrNew: LagerPlatztDto[] = [];
+  public onSearchPlatz(text: string, platze: LagerPlatzDtoArtNameDto[]) {
+    const tmpArrNew: LagerPlatzDtoArtNameDto[] = [];
     if (text === undefined || text.length === 0) {
       return platze;
     }
 
-    for (let o = 0; o !== platze.length; o++) {
+    for (let o = 0; o < platze.length; o++) {
       let tmpArr1: string[] = [];
       let tmpArr2: string[] = [];
       const tmpArr: string[] = Array.from(text.toString());
@@ -124,15 +125,16 @@ export class HelperService {
       let atmp = 0;
       let atmp2 = 0;
 
-      for (let i = 0; i !== tmpArr.length; i++) {
+      for (let i = 0; i < tmpArr.length; i++) {
         if (
           tmpArr1[i] !== undefined &&
           platze[o].name !== undefined &&
           platze[o].name !== null
         ) {
           if (
+            tmpArr1[i] !== undefined &&
             tmpArr[i].toLocaleLowerCase().trim() ===
-            tmpArr1[i].toLocaleLowerCase().trim()
+              tmpArr1[i].toLocaleLowerCase().trim()
           ) {
             atmp += 1;
           }
@@ -150,12 +152,10 @@ export class HelperService {
       if (atmp == tmpArr.length && atmp > atmp2) {
         tmpArrNew.push(platze[o]);
         platze.splice(o, 1);
-        console.log('atmp');
       }
       if (atmp2 == tmpArr.length && atmp2 > atmp && !isFinite(Number(text))) {
         tmpArrNew.push(platze[o]);
         platze.splice(o, 1);
-        console.log('atmp2');
       }
 
       if (
@@ -171,9 +171,10 @@ export class HelperService {
         }
       }
     }
-    tmpArrNew.forEach((d) => {
-      platze.unshift(d);
-    });
+    for (let fi = 0; fi < tmpArrNew.length; fi++) {
+      platze.unshift(tmpArrNew[fi]);
+    }
+
     return platze;
   }
 

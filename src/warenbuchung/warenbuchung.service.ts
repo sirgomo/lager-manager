@@ -126,9 +126,21 @@ export class WarenbuchungService {
       return err;
     }
   }
-  async deleteArtikel(artid: number, bestid: number) {
+  async deleteArtikel(id: number, bestid: number) {
     try {
-      return await this.repo.delete({ artikelid: artid, bestellungId: bestid });
+      await this.repo
+        .findOne({ where: { bestellungId: bestid } })
+        .then((res) => {
+          if (res.eingebucht) {
+            throw new HttpException(
+              'Du kannst nichts änder wenn die Buchung eingebucht ist!',
+              HttpStatus.BAD_REQUEST,
+            );
+          }
+        });
+      return await this.repo.delete({ id: id }).then((data) => {
+        return data;
+      });
     } catch (err) {
       return err;
     }
@@ -142,6 +154,7 @@ export class WarenbuchungService {
           (datas) => {
             datas.forEach((data) => {
               const a: BestArtikelMengeDTO = new BestArtikelMengeDTO();
+              a.id = data.id;
               a.artikelId = data.artikelid;
               a.bestellungId = data.bestellungId;
               a.menge = data.menge;
@@ -163,6 +176,14 @@ export class WarenbuchungService {
   }
   async deletBuchung(id: number) {
     try {
+      await this.repo.findOne({ where: { bestellungId: id } }).then((res) => {
+        if (res.eingebucht) {
+          throw new HttpException(
+            'Du kannst nichts änder wenn die Buchung eingebucht ist!',
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+      });
       return await this.repo.delete({ bestellungId: id });
     } catch (err) {
       return err;

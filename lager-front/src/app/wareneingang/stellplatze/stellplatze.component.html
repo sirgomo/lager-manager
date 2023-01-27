@@ -2,6 +2,26 @@
   <div class="divider"></div>
   <mat-tab-group dynamicHeight [disableRipple]="false" (selectedTabChange)="showStatik($event.index)">
         <mat-tab label="Stellplattze">
+          <div class="divider"></div>
+          <div class="rowsuch">
+            <div>
+              <mat-form-field>
+                <mat-label>Stellplatz Einscannen</mat-label>
+                <input type="search" [(ngModel)]="barCode" matInput>
+              </mat-form-field>
+            </div>
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search"
+              viewBox="0 0 16 16">
+              <path
+                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+            </svg>
+            </div>
+            <div>
+              <button mat-raised-button (click)="platzBarcodeScanen()">Suche</button>
+            </div>
+          </div>
+          <div class="divider"></div>
           <div>
             <mat-accordion multi="false">
               <mat-expansion-panel *ngFor="let item of lagerPlatzData; let i = index" >

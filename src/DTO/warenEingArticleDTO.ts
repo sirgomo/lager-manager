@@ -3,7 +3,7 @@ import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 export class WarenEingArticleDTO {
   @IsNotEmpty()
   @IsNumber()
-  bestellungId: number;
+  bestellungid: number;
   @IsNotEmpty()
   @IsNumber()
   artikelid: number;
@@ -18,4 +18,7 @@ export class WarenEingArticleDTO {
   @IsNotEmpty()
   @IsNumber()
   kreditorId: number;
+  @IsNotEmpty()
+  @IsNumber()
+  id: number;
 }

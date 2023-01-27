@@ -10,15 +10,15 @@ export class LagerPlatzEntity{
     @Column()
     lagerplatz : string;
     @Column({nullable: true})
-    artId : number;
+    artId : number = null;
     @Column({nullable: true})
-    artikelMenge : number;
+    artikelMenge : number = null;
     @Column({nullable: true})
-    einheit : number;
+    einheit : number=null;
     @Column({nullable: true})
     palettenTyp : PALETTENTYP;
     @Column({nullable: true,  type: 'date' })
-    mhd : Date; 
+    mhd : Date = null; 
     @Column()
     lagerPlatzVolumen : number;
     @Column({nullable: true})
@@ -27,7 +27,7 @@ export class LagerPlatzEntity{
     static : boolean = false;
     @Column({nullable: true})
     liferant:number;
-    @Column({nullable: true})
+    @Column({nullable: true, type: 'tinytext', unique: true})
     barcode: string;
     @Column({nullable: false, type: 'tinyint'})
     prufziffern: number;

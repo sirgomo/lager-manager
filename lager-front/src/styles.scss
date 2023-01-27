@@ -135,13 +135,11 @@ h3 {
   display: flex;
   column-gap: .4rem;
   align-items: baseline;
-  padding-left: 1rem;
   justify-content: flex-start;
   min-height: fit-content;
-
 }
 .rowsuch :first-child {
-  min-width: 70%;
+  width: 100%;
 }
 .rowsuch input {
   width: 100%;

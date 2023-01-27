@@ -235,6 +235,7 @@ export class WarenebuchungComponent implements OnInit {
     tmpArt.artikelName = this.artikels[index].name;
     tmpArt.bestellungId = bestelungId;
     tmpArt.liferantId = Object(art).kreditorId;
+    tmpArt.id = art.id;
 
     this.buchungArtikelMenge.push(tmpArt);
     this.getLieferungMstw();
@@ -290,6 +291,7 @@ export class WarenebuchungComponent implements OnInit {
             if (arti.artikelId == artikel.artikelId) {
               const gebuchteArtikel: GebuchtesArtikelsDto =
                 new GebuchtesArtikelsDto();
+              gebuchteArtikel.id = arti.id;
               gebuchteArtikel.bestellungId = arti.bestellungId;
               gebuchteArtikel.artikelid = arti.artikelId;
               gebuchteArtikel.artikelName = artikel.name;
@@ -327,22 +329,30 @@ export class WarenebuchungComponent implements OnInit {
         .deleteBestellung(this.buchngen[id].bestellungId)
         .subscribe();
       this.buchngen.splice(id, 1);
+      this.tabDataBuchu = new MatTableDataSource(this.buchngen);
     }
   }
   deleteArtikel(id: number) {
+    console.log(this.buchungArtikelMenge);
     this.buchServi
       .deleteArtikel(
-        this.buchungArtikelMenge[id].artikelid,
+        this.buchungArtikelMenge[id].id,
         this.buchungArtikelMenge[id].bestellungId,
       )
       .subscribe((data) => {
-        console.log('resposne when artikel are delete from buchung ? ' + data);
-        this.toastr.success('Artikel wurde entfernt', 'Entfernen', {
-          timeOut: 300,
-        });
-        this.buchungArtikelMenge.splice(id, 1);
-        this.tabBuchArtikel = new MatTableDataSource(this.buchungArtikelMenge);
-        //TODO sort on liferants
+        if (Object(data).affected === 1) {
+          this.toastr.success('Artikel wurde entfernt', 'Entfernen', {
+            timeOut: 300,
+          });
+          this.buchungArtikelMenge.splice(id, 1);
+          this.tabBuchArtikel = new MatTableDataSource(
+            this.buchungArtikelMenge,
+          );
+        } else {
+          const err = new Error();
+          Object.assign(err, data);
+          this.toastr.error(err.message, '', { timeOut: 1000 });
+        }
       });
   }
   getLiferungNetto(): number {

@@ -32,7 +32,7 @@ export class WareneingangService {
     try {
       await this.serv
         .query(
-          `SELECT wareneingang.bestellungId, wareneingang.artikelid, wareneingang.menge,wareneingang.kreditorId, artikel.name, artikel.aid, artikel.liferantId 
+          `SELECT wareneingang.id,wareneingang.bestellungid, wareneingang.artikelid, wareneingang.menge,wareneingang.kreditorId, artikel.name, artikel.aid, artikel.liferantId 
          FROM wareneingang LEFT JOIN artikel ON wareneingang.artikelid = artikel.artikelId AND wareneingang.kreditorId = artikel.liferantId WHERE wareneingang.bestellungid = '${bestellungid}' 
          AND wareneingang.artikelid IS NOT NULL`,
         )
@@ -54,7 +54,7 @@ export class WareneingangService {
   }
   async delArtikel(artikelid: number, bestellid: number) {
     try {
-      await this.serv.delete({ artikelid: artikelid, bestellungId: bestellid });
+      await this.serv.delete({ id: artikelid, bestellungId: bestellid });
       await this.serv
         .findAndCountBy({ bestellungId: bestellid })
         .then((data) => {
@@ -72,17 +72,22 @@ export class WareneingangService {
     return await this.lagerSerr.getPlatzFurArtikel(art);
   }
   async lageEs(art: LagerPlatztDTO) {
-    return await this.lagerSerr.createLagerPlatz(art);
+    return await this.lagerSerr.patchLagerplatz(art);
   }
   async updateArtikel(art: WarenEingArticleDTO) {
     try {
       return await this.serv
-        .findOneBy({ artikelid: art.artikelid, bestellungId: art.bestellungId })
-        .then((data) => {
-          data.menge -= art.menge;
-          this.serv.save(data);
-          return data;
-        });
+        .findOneBy({ id: art.id, bestellungId: art.bestellungid })
+        .then(
+          (data) => {
+            data.menge -= art.menge;
+            this.serv.save(data);
+            return data;
+          },
+          (err) => {
+            console.log(err);
+          },
+        );
     } catch (err) {
       throw new Error(
         'Etwas ist schieff gegangen, ich kann der artikel nicht ändern',
@@ -97,5 +102,8 @@ export class WareneingangService {
   }
   async getStaticPlatzeMitArtikel(artid: number, liferant: number) {
     return await this.lagerSerr.getStaticPlatzeMitWare(artid, liferant);
+  }
+  async getPlatzOnScan(bar: string) {
+    return await this.lagerSerr.getPlattzOnBarScan(bar);
   }
 }

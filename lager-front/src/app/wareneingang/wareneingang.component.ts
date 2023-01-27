@@ -71,10 +71,10 @@ export class WareneingangComponent implements OnInit {
   async getDispositors() {
     await this.dispoService.getAllDispositors().subscribe((data) => {
       if (data !== undefined && data !== null) {
-        this.dispostors.splice(0, this.dispostors.length);
-        data.forEach((dispo) => {
-          this.dispostors.push(dispo);
-        });
+        this.dispostors = new Array(data.length);
+        for (let i = 0; i < data.length; i++) {
+          this.dispostors.splice(data[i].id, 1, data[i]);
+        }
       }
     });
   }
@@ -227,11 +227,7 @@ export class WareneingangComponent implements OnInit {
       //console.log(this.lagerPlatz);
 
       await this.warenServi.legeEs(this.lagerPlatz).subscribe((data) => {
-        if (
-          data !== null &&
-          this.lagerPlatz !== undefined &&
-          this.lagerPlatz.id === data.id
-        ) {
+        if (data !== null && Object(data).affected === 1) {
           if (
             this.currentArtikelMenge === this.artikles[this.artikelIndex].menge
           ) {
@@ -242,10 +238,11 @@ export class WareneingangComponent implements OnInit {
           } else {
             const tmp: WarenEinArtikleDto = new WarenEinArtikleDto();
             tmp.artikelid = this.artikles[this.artikelIndex].artikelid;
-            tmp.bestellungId = this.artikles[this.artikelIndex].bestellungId;
+            tmp.bestellungid = this.artikles[this.artikelIndex].bestellungid;
             tmp.aid = this.artikles[this.artikelIndex].aid;
             tmp.kreditorId = this.artikles[this.artikelIndex].kreditorId;
             tmp.menge = this.currentArtikelMenge;
+            tmp.id = this.artikles[this.artikelIndex].id;
             this.artikles[this.artikelIndex].menge -= this.currentArtikelMenge;
             this.warenServi.updateArtikel(tmp).subscribe((res) => {
               if (res === undefined || res === null) {
@@ -277,8 +274,8 @@ export class WareneingangComponent implements OnInit {
   async delArtikel() {
     await this.warenServi
       .delArtikel(
-        this.artikles[this.artikelIndex].artikelid,
-        this.artikles[this.artikelIndex].bestellungId,
+        this.artikles[this.artikelIndex].id,
+        this.artikles[this.artikelIndex].bestellungid,
       )
       .subscribe(() => {
         this.artikles.splice(this.artikelIndex, 1);

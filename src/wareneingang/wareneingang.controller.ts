@@ -40,6 +40,11 @@ export class WareneingangController {
   ): Promise<LagerPlatzEntity> {
     return this.serv.getPlatz(art);
   }
+  @Get('platz/:barcode')
+  @ROLES(ROLE.LAGERVERWALTUNG, ROLE.WARENEINGANG)
+  getPlatzOnScan(@Param('barcode') bar: string) {
+    return this.serv.getPlatzOnScan(bar);
+  }
   @Post()
   @ROLES(ROLE.WARENEINGANG, ROLE.LAGERVERWALTUNG)
   lageEs(@Body(ValidationPipe) body: LagerPlatztDTO) {

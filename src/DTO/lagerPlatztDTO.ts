@@ -13,7 +13,7 @@ export class LagerPlatztDTO{
     artikelMenge : number;
     @IsOptional()
     einheit : number;
-    @IsNotEmpty()
+    @IsOptional()
     palettenTyp : PALETTENTYP;
     @IsOptional()
     mhd : Date; 

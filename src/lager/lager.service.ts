@@ -70,6 +70,26 @@ export class LagerService {
       );
     }
   }
+  async getPlatzById(lagerplatzid: number) {
+    try {
+      return await this.repo
+        .query(
+          `SELECT lagerplatz.*, artikel.name, dispositor.name as lifer FROM lagerplatz LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId
+            LEFT JOIN dispositor ON lagerplatz.liferant = dispositor.id WHERE lagerplatz.id=` +
+            lagerplatzid,
+        )
+        .then(
+          (data) => {
+            return data;
+          },
+          (err) => {
+            console.log(err);
+          },
+        );
+    } catch (err) {
+      return err;
+    }
+  }
   async createLagerPlatz(
     lagerplatz: LagerPlatztDTO,
   ): Promise<LagerPlatzEntity> {
@@ -87,42 +107,7 @@ export class LagerService {
         lagerplatz.palettenTyp = PALETTENTYP.EU;
       }
       if (lagerplatz.id !== undefined && lagerplatz.id !== null) {
-        await this.repo
-          .findOne({ where: { id: lagerplatz.id } })
-          .then((res) => {
-            if (res === null) {
-              throw new HttpException(
-                'Lagerplatz nicht gefunden!',
-                HttpStatus.BAD_REQUEST,
-              );
-            }
-            if (res.prufziffern !== lagerplatz.prufziffern) {
-              throw new HttpException(
-                'Pruffcifern stimmt nicht!',
-                HttpStatus.BAD_REQUEST,
-              );
-            }
-            if (
-              res.artId !== null &&
-              res.artikelMenge !== null &&
-              res.id === lagerplatz.id
-            ) {
-              if (
-                res.mhd !== null &&
-                lagerplatz.mhd !== null &&
-                new Date(res.mhd).getTime() < new Date(lagerplatz.mhd).getTime()
-              ) {
-                console.log('error data');
-                throw new HttpException(
-                  'Mhd ist andre als das alte, stelle neue lagerplatz ein!',
-                  HttpStatus.CONFLICT,
-                );
-              }
-              console.log('pryzpisanie lagerpaltz = res');
-              res.artikelMenge += lagerplatz.artikelMenge;
-              lagerplatz = res;
-            }
-          });
+        return;
       }
 
       await this.repo.create(lagerplatz);
@@ -134,6 +119,59 @@ export class LagerService {
         (err) => {
           console.log(err);
           return err;
+        },
+      );
+    } catch (err) {
+      return err;
+    }
+  }
+  async patchLagerplatz(lagerplatz: LagerPlatztDTO) {
+    if (lagerplatz.id === undefined) {
+      return;
+    }
+    console.log(lagerplatz);
+    try {
+      if (lagerplatz.mhd !== undefined && lagerplatz.mhd !== null)
+        lagerplatz.mhd = this.formatDate(lagerplatz.mhd);
+
+      await this.repo.findOne({ where: { id: lagerplatz.id } }).then((res) => {
+        if (res === null) {
+          throw new HttpException(
+            'Lagerplatz nicht gefunden!',
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+        if (
+          res.prufziffern !== lagerplatz.prufziffern ||
+          res.id !== lagerplatz.id
+        ) {
+          throw new HttpException(
+            'Pruffcifern stimmt nicht!',
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+        if (res.artId !== null && res.artikelMenge !== null) {
+          if (
+            res.mhd !== null &&
+            lagerplatz.mhd !== null &&
+            new Date(res.mhd).getTime() < new Date(lagerplatz.mhd).getTime()
+          ) {
+            throw new HttpException(
+              'Mhd ist andre als das alte, stelle neue lagerplatz ein!',
+              HttpStatus.CONFLICT,
+            );
+          }
+          lagerplatz.artikelMenge += res.artikelMenge;
+        }
+      });
+      lagerplatz = this.repo.create(lagerplatz);
+      console.log(lagerplatz);
+      return await this.repo.update({ id: lagerplatz.id }, lagerplatz).then(
+        (dat) => {
+          return dat;
+        },
+        (err) => {
+          console.log(err);
         },
       );
     } catch (err) {
@@ -405,18 +443,11 @@ export class LagerService {
       );
   }
   async getPlattzeMitArtikel(artnr: number, liferne: number) {
+    console.log(artnr + ' lifer ' + liferne);
     try {
-      /*  return await this.repo
-        .find({ where: { artId: artnr, liferant: liferne } })
-        .catch(() => {
-          throw new HttpException(
-            'Ich hab kein Platz gefunden wo artikelnr : ' +
-              artnr +
-              'and liferantnr ' +
-              liferne,
-            HttpStatus.BAD_REQUEST,
-          );
-        });*/
+      if (artnr === undefined || artnr === null) {
+        return;
+      }
       return this.repo
         .createQueryBuilder('lag')
         .select(
@@ -497,6 +528,9 @@ export class LagerService {
     }
   }
   async getStaticPlatzeMitWare(id: number, liferantId: number): Promise<any[]> {
+    if (id === undefined || id === null) {
+      return;
+    }
     try {
       return await this.repo
         .createQueryBuilder('lag')
@@ -516,6 +550,46 @@ export class LagerService {
             HttpStatus.NOT_FOUND,
           );
         });
+    } catch (err) {
+      return err;
+    }
+  }
+  async getPlattzOnBarScan(barcode: string): Promise<any> {
+    try {
+      /*return await this.repo
+        .createQueryBuilder('lag')
+        .select('id,lagerplatz, static, prufziffern')
+        .where('lag.barcode= :bar', { bar: barcode })
+        .andWhere('lag.artikelMenge=0 OR lag.artikelMenge IS NULL')
+        .getRawMany()*/
+      return this.repo
+        .findOne({
+          select: {
+            id: true,
+            lagerplatz: true,
+            static: true,
+            prufziffern: true,
+          },
+          where: { barcode: barcode },
+        })
+        .then(
+          (data) => {
+            if (data === null) {
+              throw new HttpException(
+                'Keien Stellplatz gefunden',
+                HttpStatus.NOT_FOUND,
+              );
+            }
+            return data;
+          },
+          (err) => {
+            console.log(err);
+            throw new HttpException(
+              'Keine freie Stellplatze gefunden oder der platz ist bezetz',
+              HttpStatus.BAD_REQUEST,
+            );
+          },
+        );
     } catch (err) {
       return err;
     }
