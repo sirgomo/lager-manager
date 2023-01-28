@@ -173,32 +173,29 @@ export class KommisionierComponent implements OnInit {
   findbyuidorArtId(uid: string) {
     if (this.kommDetails === undefined || this.kommDetails.length === 0) return;
     for (let i = 0; i < this.kommDetails.length; i++) {
-      if (uid.length > 1 && isFinite(Number(uid))) {
-        if (Number(uid) === this.kommDetails[i].artikelId) {
-          const conf: MatDialogConfig = new MatDialogConfig();
-          conf.minHeight = '100vh';
-          conf.minWidth = '100vw';
-          conf.panelClass = 'full-screen-modal';
-          const tmpData: DataFurKomisDto = new DataFurKomisDto();
-          Object.assign(tmpData, this.kommDetails[i]);
-          conf.data = tmpData;
-          this.dial
-            .open(AddartikelComponent, conf)
-            .afterClosed()
-            .subscribe((data) => {
-              this.uid = '';
-              if (typeof data === 'string' || data === 0) {
-                this.toastr.error('Vorgang wurde abgebrochen');
-                return;
-              }
-              this.sendMengeToServer(i, data);
-            });
-          break;
-        }
-      }
-      if (uid.length > 1) {
+      if (Number(uid) === this.kommDetails[i].artikelId) {
+        const conf: MatDialogConfig = new MatDialogConfig();
+        conf.minHeight = '100vh';
+        conf.minWidth = '100vw';
+        conf.panelClass = 'full-screen-modal';
+        const tmpData: DataFurKomisDto = new DataFurKomisDto();
+        Object.assign(tmpData, this.kommDetails[i]);
+        conf.data = tmpData;
+        this.dial
+          .open(AddartikelComponent, conf)
+          .afterClosed()
+          .subscribe((data) => {
+            this.uid = '';
+            if (typeof data === 'string' || data === 0) {
+              this.toastr.error('Vorgang wurde abgebrochen');
+              return;
+            }
+            this.sendMengeToServer(i, data);
+          });
+        break;
+      } else {
         for (let y = 0; y < this.kommDetails[i].uids.length; y++) {
-          if (this.kommDetails[i].uids[y] === uid) {
+          if (this.kommDetails[i].uids[y].trim() === uid.trim()) {
             const conf: MatDialogConfig = new MatDialogConfig();
             conf.minHeight = '100vh';
             conf.minWidth = '100vw';
@@ -233,11 +230,10 @@ export class KommisionierComponent implements OnInit {
     tmpArt.palTyp = this.currentPaletteTyp;
     tmpArt.paletteid = this.currentPalatte;
     tmpArt.platzid = data.platzid;
-    console.log(
-      'tmpMenge ' + this.kommDetails[i].menge + ' datamenge ' + data.menge,
-    );
+    console.log(tmpArt);
     this.kommServi.addArtikelAufPalette(tmpArt).subscribe((data) => {
-      if (data === 1) {
+      console.log(data);
+      if (Number(data) === 1) {
         this.toastr.success('Artikel erfasst', 'Artikel Erfassen', {
           timeOut: 600,
         });

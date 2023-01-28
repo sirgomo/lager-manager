@@ -11,6 +11,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ArtikelAufPaletteDto } from 'lager-front/src/app/dto/artikelAufPalete.dto';
 import { ROLES } from 'src/auth/roleDecorator';
 import { RoleGuard } from 'src/auth/RoleGuard';
+import { ArtikelAufPaletteDTO } from 'src/DTO/artikelAufPaletteDTO';
 import { NeuePaletteDTO } from 'src/DTO/neuePaletteDTO';
 import { ROLE } from 'src/entity/UserEntity';
 import { KommissionierService } from './komissionier.service';
@@ -43,7 +44,10 @@ export class KomissionierController {
   }
   @Post('/art')
   @ROLES(ROLE.KOMMISIONIER)
-  artikelAufPalette(@Body(ValidationPipe) art: ArtikelAufPaletteDto) {
+  artikelAufPalette(
+    @Body(ValidationPipe)
+    art: ArtikelAufPaletteDTO,
+  ) {
     return this.komSercive.addAdrtikelToPalete(art);
   }
   @Get('/artikel/:aid/:lid')

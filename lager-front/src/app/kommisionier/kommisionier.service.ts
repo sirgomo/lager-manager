@@ -26,8 +26,10 @@ export class KommisionierService {
       responseType: 'text',
     });
   }
-  addArtikelAufPalette(art: ArtikelAufPaletteDto): Observable<number> {
-    return this.http.post<number>(this.API_URL + '/art', art);
+  addArtikelAufPalette(
+    art: ArtikelAufPaletteDto,
+  ): Observable<ArtikelAufPaletteDto> {
+    return this.http.post<ArtikelAufPaletteDto>(this.API_URL + '/art', art);
   }
   getPlatzMitArtikels(artid: number, liferid: number): Observable<any> {
     return this.http.get<any>(

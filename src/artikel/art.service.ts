@@ -152,7 +152,7 @@ export class ArtService {
 
   async getArtikelnachUid(uid: string) {
     return await this.uidRepo
-      .find({ where: { uid: uid }, relations: { artikelId: true } })
+      .find({ where: { uid: uid }, relations: { arikels: true } })
       .then((data) => {
         return data;
       });

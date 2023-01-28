@@ -53,28 +53,14 @@ export class KommissionierService {
         .then(
           (data) => {
             const tmpData: DataFurKomissDTO[] = [];
-
             Object.assign(tmpData, data);
             for (let y = 0; y < tmpData.length; y++) {
-              const tmparr: string[] = [];
-              let tmps = '';
-              for (let i = 0; i < tmpData[y].uids.length; i++) {
-                if (tmpData[y].uids[i] !== ' ') {
-                  if (tmpData[y].uids[i] === ',') {
-                    tmps.replace(/^\s+|\s+$/g, '');
-                    tmparr.push(tmps);
-                    tmps = '';
-                  } else {
-                    tmps += tmpData[y].uids[i];
-                  }
-                }
-              }
-              tmps.replace(/^\s+|\s+$/g, '');
-              tmparr.push(tmps);
-
+              const tmparr: string[] = tmpData[y].uids
+                .toString()
+                .trim()
+                .split(',');
               tmpData[y].uids = tmparr;
             }
-
             return tmpData;
           },
           () => {
