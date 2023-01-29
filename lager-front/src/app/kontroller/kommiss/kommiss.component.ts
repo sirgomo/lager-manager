@@ -19,8 +19,6 @@ export class KommissComponent implements OnInit {
   stellPlat = 0;
   gewicht = 0;
   user = '';
-  showPal = 0;
-  showFront = 0;
   columnName = [
     'artId',
     'artName',
@@ -51,9 +49,7 @@ export class KommissComponent implements OnInit {
     this.stellPlat = stellplattze;
     this.gewicht = totalGewicht;
     this.checkName();
-    this.showFront = 1;
     this.dataSource = new MatTableDataSource(this.data);
-    console.log(this.data);
   }
 
   async checkName() {
@@ -79,15 +75,6 @@ export class KommissComponent implements OnInit {
       if (!gefunden && i === this.data.length - 1) {
         this.currentKomiss = this.data;
       }
-    }
-  }
-  showPaleten() {
-    if (this.showPal === 0) {
-      this.showPal = 1;
-      this.showFront = 0;
-    } else {
-      this.showPal = 0;
-      this.showFront = 1;
     }
   }
 }
