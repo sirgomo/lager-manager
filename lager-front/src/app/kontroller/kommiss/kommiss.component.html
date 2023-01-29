@@ -43,6 +43,10 @@
         <th mat-header-cell *matHeaderCellDef>Artikel Menge</th>
         <td mat-cell *matCellDef="let item">{{item.menge}}</td>
       </ng-container>
+      <ng-container matColumnDef="currge">
+        <th mat-header-cell *matHeaderCellDef>Kurrent gepackt</th>
+          <td mat-cell *matCellDef="let item">{{item.currentGepackt}}</td>
+      </ng-container>
       <ng-container matColumnDef="artGepackt">
       <th mat-header-cell *matHeaderCellDef>Artikel Gepackt ?</th>
       <td mat-cell *matCellDef="let item">{{item.gepackt}}</td>

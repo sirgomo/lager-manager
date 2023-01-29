@@ -8,7 +8,6 @@ import {
   Param,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ArtikelAufPaletteDto } from 'lager-front/src/app/dto/artikelAufPalete.dto';
 import { ROLES } from 'src/auth/roleDecorator';
 import { RoleGuard } from 'src/auth/RoleGuard';
 import { ArtikelAufPaletteDTO } from 'src/DTO/artikelAufPaletteDTO';

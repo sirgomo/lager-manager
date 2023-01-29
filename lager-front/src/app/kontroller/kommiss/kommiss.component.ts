@@ -21,7 +21,14 @@ export class KommissComponent implements OnInit {
   user = '';
   showPal = 0;
   showFront = 0;
-  columnName = ['artId', 'artName', 'artMenge', 'artGepackt', 'kommissionier'];
+  columnName = [
+    'artId',
+    'artName',
+    'artMenge',
+    'currge',
+    'artGepackt',
+    'kommissionier',
+  ];
   constructor(
     private dialRef: MatDialogRef<KommissComponent>,
     @Optional()
@@ -46,6 +53,7 @@ export class KommissComponent implements OnInit {
     this.checkName();
     this.showFront = 1;
     this.dataSource = new MatTableDataSource(this.data);
+    console.log(this.data);
   }
 
   async checkName() {

@@ -1,14 +1,22 @@
 <div class="container">
     <div class="gewicht">
+      <div>
         <div>
             <div>
             <button  mat-raised-button  color="primary"  (click)="neuePalete(null, null)" *ngIf="currentPalatte === 0 && kommDetails !== undefined && kommDetails.length > 0"> Neue Palette</button>
             </div>
-            <div >
+            <div class="row">
+              <div>
                 <button *ngIf="currentPalatte !== 0"  mat-raised-button  color="primary" (click)="gewichtErfassen()">Gewicht Erfassen</button>
+              </div>
+              <div *ngIf="currentPalatte !== 0">
+                <button mat-raised-button (click)="kommVerlassen()" >Kommissionierung verlassen</button>
+              </div>
             </div>
         </div>
-        <div  *ngIf="kommDetails !== undefined && kommDetails.length < 1">
+
+      </div>
+        <div  *ngIf=" (kommid === 0 || isNaN()) && currentPalatte === 0 && kommDetails !== undefined && kommDetails.length < 1">
           <div class="divider"></div>
             <div>
                     <div>
@@ -21,8 +29,8 @@
                     </div>
             </div>
         </div>
-        <div>
-          <div  *ngIf="currentPalatte !== 0">
+     <div>
+          <div  *ngIf="currentPalatte !== 0 && kommDetails !== undefined && kommDetails.length > 0">
             <div >
               <mat-form-field>
                 <input matInput type="text" name="search" id="search" placeholder="Artikel scannen oder eingeben" [(ngModel)]="uid" (ngModelChange)="findbyuidorArtId(uid)">
@@ -34,7 +42,7 @@
           </div>
       </div>
     </div>
-  <div *ngIf="kommDetails !== undefined && kommDetails.length > 1">
+  <div *ngIf="kommDetails !== undefined && kommDetails.length > 0">
     <div class="tabs">
  <!--   <table mat-table [dataSource]="dataRes">
       <ng-container matColumnDef="platz">

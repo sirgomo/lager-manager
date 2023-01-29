@@ -3,6 +3,7 @@ export class ControllerKomissDataDto {
   aid!: number;
   kommissId!: number;
   menge!: number;
+  currentGepackt!: number;
   kreditorId!: number;
   gepackt!: number;
   name!: string;

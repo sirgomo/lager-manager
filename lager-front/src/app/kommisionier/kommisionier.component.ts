@@ -1,3 +1,4 @@
+import { NumberSymbol } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -39,6 +40,7 @@ export class KommisionierComponent implements OnInit {
   ngOnInit(): void {
     this.getLastKomm();
   }
+
   async getKomm() {
     await this.kommServi.getKommissionierung(this.kommid).subscribe((data) => {
       if (data[0] !== undefined && data[0] !== null) {
@@ -370,5 +372,12 @@ export class KommisionierComponent implements OnInit {
             }
           });
       });
+  }
+  isNaN() {
+    return !Number.isFinite(this.kommid);
+  }
+  kommVerlassen() {
+    //TODO what ?
+    console.log('kommissionierung verlassen');
   }
 }

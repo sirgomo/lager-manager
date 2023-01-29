@@ -46,7 +46,7 @@ export class WarenKontrolleService {
       return await this.komDetailsRepo
         .query(
           `
-      SELECT id, kommDetails.artikelId as aid,kommissId, menge, kreditorId, gepackt,palettennr, artikel.name, SUM(kommDetails.menge * artikel.gewicht / artikel.minLosMenge) as gewicht, artikel.artikelFlage as ARTIKELFLAGE
+      SELECT id, kommDetails.artikelId as aid,kommissId, menge, currentGepackt, kreditorId, gepackt,palettennr, artikel.name, SUM(kommDetails.menge * artikel.gewicht / artikel.minLosMenge) as gewicht, artikel.artikelFlage as ARTIKELFLAGE
       FROM kommDetails LEFT JOIN artikel ON artikel.artikelId=kommDetails.artikelId AND artikel.liferantId=kommDetails.kreditorId 
       WHERE inBestellung=0 AND kommissId=${id} GROUP BY kommDetails.id `,
         )

@@ -54,14 +54,14 @@ export class KommissionierService {
           (data) => {
             const tmpData: DataFurKomissDTO[] = [];
             Object.assign(tmpData, data);
-            for (let y = 0; y < tmpData.length; y++) {
-              const tmparr: string[] = tmpData[y].uids
+            for (let y = 0; y < data.length; y++) {
+              const tmparr: string[] = data[y].uids
                 .toString()
                 .trim()
                 .split(',');
-              tmpData[y].uids = tmparr;
+              data[y].uids = tmparr;
             }
-            return tmpData;
+            return data;
           },
           () => {
             throw new HttpException(
