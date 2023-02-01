@@ -1,0 +1,41 @@
+<div class="container">
+  <mat-toolbar color="primary">
+      <span>Pallete Kontrolliren</span>
+  </mat-toolbar>
+
+
+  <div matDialogContent class="matDialogContent">
+      <table mat-table [dataSource]="tabData">
+        <ng-container matColumnDef="menge">
+          <th mat-header-cell *matHeaderCellDef>Menge:</th>
+          <td mat-cell *matCellDef="let item">{{item.artikelMenge}}</td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name:</th>
+          <td mat-cell *matCellDef="let item; let i = index">{{item.name}}</td>
+        </ng-container>
+        <ng-container matColumnDef="kontro">
+          <th mat-header-cell *matHeaderCellDef><span>Geprüft</span></th>
+          <td mat-cell *matCellDef="let item; let i = index">
+            <div class="my-form-field">
+              <mat-checkbox (click)="controlled(i)"  [(ngModel)]="tabData.filteredData[i].kontrolliert" value="" color="primary"><span class="fs-s">Geprüft</span></mat-checkbox>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="aid">
+          <th mat-header-cell *matHeaderCellDef>Artikel Nr.</th>
+          <td mat-cell *matCellDef="let item">{{item.artikelId}}</td>
+        </ng-container>
+        <ng-container matColumnDef="liferant">
+          <th mat-header-cell *matHeaderCellDef>Liferant:</th>
+          <td mat-cell *matCellDef="let item">{{item.liferantId}}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnDef"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnDef"></tr>
+      </table>
+  </div>
+
+  <mat-dialog-actions align="end">
+    <button mat-raised-button matDialogClose>Schließen</button>
+  </mat-dialog-actions>
+</div>

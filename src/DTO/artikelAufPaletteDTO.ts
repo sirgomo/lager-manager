@@ -22,4 +22,7 @@ export class ArtikelAufPaletteDTO {
   @IsNotEmpty()
   @IsNumber()
   platzid: number;
+  @IsNotEmpty()
+  @IsNumber()
+  liferantId: number;
 }

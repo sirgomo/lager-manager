@@ -58,6 +58,7 @@ import { FindArtikelComponent } from './find-artikel/find-artikel.component';
 import { StellplazteComponent } from './lager/stellplazte/stellplazte.component';
 import { ArtinbestComponent } from './lager/artinbest/artinbest.component';
 import { StellplatzeComponent } from './wareneingang/stellplatze/stellplatze.component';
+import { PalControlComponent } from './kontroller/pal-control/pal-control.component';
 
 @NgModule({
   declarations: [
@@ -91,6 +92,7 @@ import { StellplatzeComponent } from './wareneingang/stellplatze/stellplatze.com
     StellplazteComponent,
     ArtinbestComponent,
     StellplatzeComponent,
+    PalControlComponent,
   ],
   imports: [
     BrowserModule,

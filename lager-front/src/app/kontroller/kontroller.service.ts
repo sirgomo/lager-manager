@@ -27,4 +27,7 @@ export class KontrollerService {
   setKommissStatus(kommid: number, status: any) {
     return this.http.patch(this.API_URL + '/komm/' + kommid, status);
   }
+  getPalForControleByNr(palnr: number) {
+    return this.http.get<any>(this.API_URL + '/contnr/' + palnr);
+  }
 }

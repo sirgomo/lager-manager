@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ArtikelEntity } from 'src/entity/ArtikelEntity';
 import { InKomissPalletenEntity } from 'src/entity/InKomissPalletenEntity';
 import { KommisioDetailsEntity } from 'src/entity/KommisioDetailsEntity';
 import { KommissionirungEntity } from 'src/entity/KommissionirungEntity';
@@ -133,6 +134,34 @@ export class WarenKontrolleService {
             },
           );
         });
+    } catch (err) {
+      return err;
+    }
+  }
+  async getPaleteByIdForControle(palnr: number) {
+    try {
+      return this.palRepo
+        .createQueryBuilder('pal')
+        .select(
+          'pal.autoid, pal.id, pal.artikelId, pal.artikelMenge,pal.liferantId, pal.kontrolliert',
+        )
+        .leftJoin(
+          ArtikelEntity,
+          'art',
+          'art.artikelId=pal.artikelId AND art.liferantId=pal.liferantId',
+        )
+        .addSelect('art.name', 'name')
+        .where('pal.id = :id', { id: palnr })
+        .andWhere('pal.artikelId != 0')
+        .getRawMany()
+        .then(
+          (data) => {
+            return data;
+          },
+          (err) => {
+            console.log(err);
+          },
+        );
     } catch (err) {
       return err;
     }

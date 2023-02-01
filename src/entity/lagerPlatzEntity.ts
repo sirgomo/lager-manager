@@ -39,5 +39,6 @@ export enum PALETTENTYP{
     EU = 'EU',
     INDU = 'INDU',
     EINWEG = 'EINWEG',
-    KEINPALETTE = 'KEINPALETTE'
+    KEINPALETTE = 'KEINPALETTE',
+    KARTON = 'KARTON'
 }

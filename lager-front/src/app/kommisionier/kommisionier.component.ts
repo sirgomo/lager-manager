@@ -231,6 +231,7 @@ export class KommisionierComponent implements OnInit {
     tmpArt.kommissionierId = Number(localStorage.getItem('myId'));
     tmpArt.palTyp = this.currentPaletteTyp;
     tmpArt.paletteid = this.currentPalatte;
+    tmpArt.liferantId = this.kommDetails[i].kreditorId;
     tmpArt.platzid = data.platzid;
     console.log(tmpArt);
     this.kommServi.addArtikelAufPalette(tmpArt).subscribe((data) => {

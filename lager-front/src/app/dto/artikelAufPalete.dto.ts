@@ -8,4 +8,5 @@ export class ArtikelAufPaletteDto {
   palTyp!: PALETTENTYP;
   kommissionierId!: number;
   platzid!: number;
+  liferantId!: number;
 }

@@ -126,6 +126,7 @@ export class KommissionierService {
             pal.id = art.paletteid;
             pal.userId = art.kommissionierId;
             pal.palettenTyp = art.palTyp;
+            pal.liferantId = art.liferantId;
             //TODO
             //es sollte noch erwartete gewicht hier sein
             if (data.currentGepackt === data.menge) {

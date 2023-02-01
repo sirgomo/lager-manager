@@ -13,8 +13,8 @@ export class InKomissPalletenEntity {
   artikelId:number = 0;
   @Column()
   artikelMenge:number=0;
-  @Column()
-  artikelName:string='';
+  @Column({nullable: false})
+  liferantId:number;
   @Column()
   palettenTyp : PALETTENTYP
   @Column()

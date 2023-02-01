@@ -35,4 +35,9 @@ export class WarenKontrolleController {
   setKommStatus(@Body() body: any, @Param('id') kommid: number) {
     return this.service.setNewStatus(kommid, body);
   }
+  @Get('contnr/:nr')
+  @ROLES(ROLE.KONTROLLER)
+  getPaleteByNrForControlle(@Param('nr') palnr: number) {
+    return this.service.getPaleteByIdForControle(palnr);
+  }
 }
