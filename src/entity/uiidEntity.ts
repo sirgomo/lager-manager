@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn  } from "typeorm";
-import { ArtikelEntity } from "./ArtikelEntity";
+import { ArtikelEntity } from "./artikelEntity";
 
 @Entity('uiids')
 export class UiidEntity{

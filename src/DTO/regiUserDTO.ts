@@ -1,5 +1,5 @@
 import {  IsNotEmpty, Length, IsOptional, IsNumber } from 'class-validator';
-import { ROLE } from 'src/entity/UserEntity';
+import { ROLE } from 'src/entity/userEntity';
 export class RegiUserDTO{
     @IsOptional()
     id:number;

@@ -3,9 +3,9 @@ import { WarenKontrolleService } from './waren-kontrolle.service';
 import { WarenKontrolleController } from './waren-kontrolle.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
-import { InKomissPalletenEntity } from 'src/entity/InKomissPalletenEntity';
-import { KommisioDetailsEntity } from 'src/entity/KommisioDetailsEntity';
-import { KommissionirungEntity } from 'src/entity/KommissionirungEntity';
+import { InKomissPalletenEntity } from 'src/entity/inKomissPalletenEntity';
+import { KommisioDetailsEntity } from 'src/entity/kommisioDetailsEntity';
+import { KommissionirungEntity } from 'src/entity/kommissionirungEntity';
 
 @Module({
   imports: [

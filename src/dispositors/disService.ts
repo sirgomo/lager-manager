@@ -1,8 +1,7 @@
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { DispositorsDTO } from "src/DTO/DispositorsDTO";
+import { DispositorsDTO } from "src/DTO/dispositorsDTO";
 import { DispositorEntity } from "src/entity/dispositorEntity";
-import { ROLE, UserEntity } from "src/entity/UserEntity";
 import { Repository } from "typeorm";
 @Injectable()
 export class DisServiceService {

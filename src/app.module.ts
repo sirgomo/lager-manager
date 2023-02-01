@@ -8,22 +8,19 @@ import { DispositorsModule } from './dispositors/dispositors.module';
 import { VerkaufModule } from './verkauf/verkauf.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DispositorEntity } from './entity/dispositorEntity';
-import { ArtikelEntity } from './entity/ArtikelEntity';
+import { ArtikelEntity } from './entity/artikelEntity';
 import { ArtikelModule } from './artikel/artikel.module';
 import { AuthModule } from './auth/auth.module';
-import { UserEntity } from './entity/UserEntity';
-import { RoleGuard } from './auth/RoleGuard';
-import { FehlendArtikelEntity } from './entity/FehlendArtikelEntity';
-import { InKomissPalletenEntity } from './entity/InKomissPalletenEntity';
-import { KommissionirungEntity } from './entity/KommissionirungEntity';
-import { LagerPlatzEntity } from './entity/LagerPlatzEntity';
+import { UserEntity } from './entity/userEntity';
+import { RoleGuard } from './auth/roleGuard';
+import { InKomissPalletenEntity } from './entity/inKomissPalletenEntity';
+import { KommissionirungEntity } from './entity/kommissionirungEntity';
+import { LagerPlatzEntity } from './entity/lagerPlatzEntity';
 import { PalettenEnttity } from './entity/palettenEntity';
-import { SpeditionEntity } from './entity/SpeditionEntity';
-import { WarenBestellungEntity } from './entity/WarenBestellungEntity';
-import { WarenEingangEntity } from './entity/WarenEingangEntity';
-import { KommisioDetailsEntity } from './entity/KommisioDetailsEntity';
+import { WarenEingangEntity } from './entity/warenEingangEntity';
+import { KommisioDetailsEntity } from './entity/kommisioDetailsEntity';
 import { SpeditionModule } from './spedition/spedition.module';
-import { UiidEntity } from './entity/UiidEntity';
+import { UiidEntity } from './entity/uiidEntity';
 import { WarenEingStat } from './entity/warenEingStat';
 import { WarenAusgStat } from './entity/warenAusgStat';
 import { EinkaufModule } from './einkauf/einkauf.module';
@@ -32,6 +29,10 @@ import { KreditorsEntity } from './entity/kreditorsEntity';
 import { UserModule } from './user/user.module';
 import { WarenKontrolleModule } from './waren-kontrolle/waren-kontrolle.module';
 import { VorschlagEntity } from './entity/vorschlagEntitiy';
+import { FehlendArtikelEntity } from './entity/fehlendArtikelEntity';
+import { WarenBestellungEntity } from './entity/warenBestellungEntity';
+import { SpeditionEntity } from './entity/speditionEntity';
+
 
 @Module({
   imports: [

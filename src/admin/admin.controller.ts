@@ -11,9 +11,9 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
-import { RoleGuard } from 'src/auth/RoleGuard';
+import { RoleGuard } from 'src/auth/roleGuard';
 import { RegiUserDTO } from 'src/DTO/regiUserDTO';
-import { ROLE } from 'src/entity/UserEntity';
+import { ROLE } from 'src/entity/userEntity';
 import { AdminService } from './admin.service';
 
 @Controller('/admin')

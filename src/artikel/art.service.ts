@@ -1,10 +1,10 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { ArtLoader } from 'src/ArtLoader';
-import { ArtikelDTO } from 'src/DTO/ArtikelDTO';
-import { ArtikelEntity } from 'src/entity/ArtikelEntity';
-import { UiidEntity } from 'src/entity/UiidEntity';
+import { ArtLoader } from 'src/artLoader';
+import { ArtikelDTO } from 'src/DTO/artikelDTO';
+import { ArtikelEntity } from 'src/entity/artikelEntity';
+import { UiidEntity } from 'src/entity/uiidEntity';
 import { Repository } from 'typeorm';
 
 @Injectable()

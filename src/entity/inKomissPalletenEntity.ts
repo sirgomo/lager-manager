@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
-import { PALETTENTYP } from './LagerPlatzEntity';
+import { PALETTENTYP } from './lagerPlatzEntity';
 
 @Entity('inKomissPal')
 export class InKomissPalletenEntity {

@@ -1,9 +1,9 @@
 import { Controller, UseGuards, Get, Post, Delete, Body, ValidationPipe, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
-import { RoleGuard } from 'src/auth/RoleGuard';
-import { SpeditionDTO } from 'src/DTO/SpeditionDTO';
-import { ROLE } from 'src/entity/UserEntity';
+import { RoleGuard } from 'src/auth/roleGuard';
+import { SpeditionDTO } from 'src/DTO/speditionDTO';
+import { ROLE } from 'src/entity/userEntity';
 import { SpeditionService } from './spedition.service';
 
 @Controller('sped')

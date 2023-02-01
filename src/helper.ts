@@ -1,8 +1,9 @@
-import { ArtikelDTO } from './DTO/ArtikelDTO';
+
+import { ArtikelDTO } from './DTO/artikelDTO';
 import { ArtikelMengeDTO } from './DTO/artikelMengeDTO';
 import { PalettenMengeVorausDTO } from './DTO/palettenMengeVorausDTO';
-import { ARTIKELFLAGE } from './entity/ArtikelEntity';
-import { InKomissPalletenEntity } from './entity/InKomissPalletenEntity';
+import { ARTIKELFLAGE } from './entity/artikelEntity';
+import { InKomissPalletenEntity } from './entity/inKomissPalletenEntity';
 
 export class Helper {
   //1

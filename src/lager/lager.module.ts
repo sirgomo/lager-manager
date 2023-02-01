@@ -3,9 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ArtService } from 'src/artikel/art.service';
 import { UidService } from 'src/artikel/uid/uid.service';
 import { AuthModule } from 'src/auth/auth.module';
-import { ArtikelEntity } from 'src/entity/ArtikelEntity';
-import { LagerPlatzEntity } from 'src/entity/LagerPlatzEntity';
-import { UiidEntity } from 'src/entity/UiidEntity';
+import { ArtikelEntity } from 'src/entity/artikelEntity';
+import { LagerPlatzEntity } from 'src/entity/lagerPlatzEntity';
+import { UiidEntity } from 'src/entity/uiidEntity';
 import { LagerController } from './lager.controller';
 import { LagerService } from './lager.service';
 

@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { KommissionirungEntity } from './KommissionirungEntity';
+import { KommissionirungEntity } from './kommissionirungEntity';
 
 @Entity('kommDetails')
 export class KommisioDetailsEntity {

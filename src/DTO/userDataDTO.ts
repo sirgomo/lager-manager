@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsNumber } from "class-validator";
-import { ROLE } from "src/entity/UserEntity";
+import { ROLE } from "src/entity/userEntity";
 
 export class UserDataDTO{
     @IsNotEmpty()

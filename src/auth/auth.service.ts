@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegiUserDTO } from 'src/DTO/regiUserDTO';
-import { ROLE, UserEntity } from 'src/entity/UserEntity';
+import { ROLE, UserEntity } from 'src/entity/userEntity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';

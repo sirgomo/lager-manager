@@ -9,10 +9,10 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
-import { RoleGuard } from 'src/auth/RoleGuard';
+import { RoleGuard } from 'src/auth/roleGuard';
 import { ArtikelAufPaletteDTO } from 'src/DTO/artikelAufPaletteDTO';
 import { NeuePaletteDTO } from 'src/DTO/neuePaletteDTO';
-import { ROLE } from 'src/entity/UserEntity';
+import { ROLE } from 'src/entity/userEntity';
 import { KommissionierService } from './komissionier.service';
 
 @Controller('komi')

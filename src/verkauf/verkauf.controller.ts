@@ -11,13 +11,13 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
-import { RoleGuard } from 'src/auth/RoleGuard';
+import { RoleGuard } from 'src/auth/roleGuard';
 import { AddArtikelKommissDTO } from 'src/DTO/addArtikelKommissDTO';
 import { ArtikelKommissDTO } from 'src/DTO/artikelKommissDTO';
 import { ArtikelSchiebenDTO } from 'src/DTO/artikelSchiebenDTO';
-import { KomissDTO } from 'src/DTO/KomissDTO';
-import { KommissionirungEntity } from 'src/entity/KommissionirungEntity';
-import { ROLE } from 'src/entity/UserEntity';
+import { KomissDTO } from 'src/DTO/komissDTO';
+import { KommissionirungEntity } from 'src/entity/kommissionirungEntity';
+import { ROLE } from 'src/entity/userEntity';
 import { VerkaufService } from './verkauf.service';
 
 @Controller('verkauf')

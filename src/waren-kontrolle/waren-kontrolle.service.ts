@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ArtikelEntity } from 'src/entity/ArtikelEntity';
-import { InKomissPalletenEntity } from 'src/entity/InKomissPalletenEntity';
-import { KommisioDetailsEntity } from 'src/entity/KommisioDetailsEntity';
-import { KommissionirungEntity } from 'src/entity/KommissionirungEntity';
+import { ArtikelEntity } from 'src/entity/artikelEntity';
+import { InKomissPalletenEntity } from 'src/entity/inKomissPalletenEntity';
+import { KommisioDetailsEntity } from 'src/entity/kommisioDetailsEntity';
+import { KommissionirungEntity } from 'src/entity/kommissionirungEntity';
 import { Repository } from 'typeorm';
 
 @Injectable()

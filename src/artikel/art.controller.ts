@@ -12,9 +12,9 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
-import { RoleGuard } from 'src/auth/RoleGuard';
-import { ArtikelDTO } from 'src/DTO/ArtikelDTO';
-import { ROLE } from 'src/entity/UserEntity';
+import { RoleGuard } from 'src/auth/roleGuard';
+import { ArtikelDTO } from 'src/DTO/artikelDTO';
+import { ROLE } from 'src/entity/userEntity';
 import { ArtikelflagsPipers } from 'src/pipes/artikelFlagspipes';
 import { ArtService } from './art.service';
 

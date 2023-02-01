@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { IsNotEmpty, IsNumber, IsOptional } from "class-validator";
-import { PALETTENTYP } from "src/entity/LagerPlatzEntity";
+import { PALETTENTYP } from "src/entity/lagerPlatzEntity";
 
 export class LagerPlatztDTO{
     @IsOptional()

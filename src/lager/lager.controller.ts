@@ -11,10 +11,10 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
-import { RoleGuard } from 'src/auth/RoleGuard';
+import { RoleGuard } from 'src/auth/roleGuard';
 import { ArtikelMengeDTO } from 'src/DTO/artikelMengeDTO';
 import { LagerPlatztDTO } from 'src/DTO/lagerPlatztDTO';
-import { ROLE } from 'src/entity/UserEntity';
+import { ROLE } from 'src/entity/userEntity';
 import { LagerService } from './lager.service';
 
 @Controller('lager')

@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 import { WarenbuchungService } from './warenbuchung.service';
 import { WarenbuchungController } from './warenbuchung.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { WarenEingangEntity } from 'src/entity/WarenEingangEntity';
+import { WarenEingangEntity } from 'src/entity/warenEingangEntity';
 import { AuthModule } from 'src/auth/auth.module';
-import { ArtikelEntity } from 'src/entity/ArtikelEntity';
+import { ArtikelEntity } from 'src/entity/artikelEntity';
 import { ArtService } from 'src/artikel/art.service';
 import { UidService } from 'src/artikel/uid/uid.service';
-import { UiidEntity } from 'src/entity/UiidEntity';
+import { UiidEntity } from 'src/entity/uiidEntity';
 import { WarenEingStat } from 'src/entity/warenEingStat';
 
 @Module({

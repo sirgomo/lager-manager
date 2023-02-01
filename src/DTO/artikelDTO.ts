@@ -1,6 +1,6 @@
 import { IsNotEmpty, Length, IsOptional, IsNumber } from 'class-validator';
-import { ARTIKELFLAGE } from 'src/entity/ArtikelEntity';
-import { UiidEntity } from 'src/entity/UiidEntity';
+import { ARTIKELFLAGE } from 'src/entity/artikelEntity';
+import { UiidEntity } from 'src/entity/uiidEntity';
 export class ArtikelDTO {
   @IsOptional()
   @IsNumber()

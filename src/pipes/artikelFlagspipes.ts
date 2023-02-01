@@ -1,6 +1,6 @@
 import { ArgumentMetadata, BadRequestException, PipeTransform } from "@nestjs/common";
-import { ArtikelDTO } from "src/DTO/ArtikelDTO";
-import { ARTIKELFLAGE } from "src/entity/ArtikelEntity";
+import { ArtikelDTO } from "src/DTO/artikelDTO";
+import { ARTIKELFLAGE } from "src/entity/artikelEntity";
 
 export class ArtikelflagsPipers implements PipeTransform{
   

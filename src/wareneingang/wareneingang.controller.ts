@@ -10,13 +10,13 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
-import { RoleGuard } from 'src/auth/RoleGuard';
+import { RoleGuard } from 'src/auth/roleGuard';
 import { ArtikelMengeDTO } from 'src/DTO/artikelMengeDTO';
 import { LagerPlatztDTO } from 'src/DTO/lagerPlatztDTO';
 import { WarenBuchungDto } from 'src/DTO/warenBuchungDTO';
 import { WarenEingArticleDTO } from 'src/DTO/warenEingArticleDTO';
-import { LagerPlatzEntity } from 'src/entity/LagerPlatzEntity';
-import { ROLE } from 'src/entity/UserEntity';
+import { LagerPlatzEntity } from 'src/entity/lagerPlatzEntity';
+import { ROLE } from 'src/entity/userEntity';
 import { WareneingangService } from './wareneingang.service';
 
 @Controller('wareneingang')

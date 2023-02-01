@@ -2,8 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BestArtikelMengeDTO } from 'src/DTO/bestArtikelMengeDTO';
 import { WarenBuchungDto } from 'src/DTO/warenBuchungDTO';
-import { ArtikelEntity } from 'src/entity/ArtikelEntity';
-import { WarenEingangEntity } from 'src/entity/WarenEingangEntity';
+import { ArtikelEntity } from 'src/entity/artikelEntity';
+import { WarenEingangEntity } from 'src/entity/warenEingangEntity';
 import { WarenEingStat } from 'src/entity/warenEingStat';
 import { IsNull, Not, Repository } from 'typeorm';
 

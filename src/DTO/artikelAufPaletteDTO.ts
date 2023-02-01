@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsNumber } from 'class-validator';
-import { PALETTENTYP } from 'src/entity/LagerPlatzEntity';
+import { PALETTENTYP } from 'src/entity/lagerPlatzEntity';
 
 export class ArtikelAufPaletteDTO {
   @IsNotEmpty()

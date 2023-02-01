@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { UiidEntity } from './UiidEntity';
+import { UiidEntity } from './uiidEntity';
 
 
 @Entity('artikel')

@@ -5,7 +5,7 @@ import {
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { KommisioDetailsEntity } from './KommisioDetailsEntity';
+import { KommisioDetailsEntity } from './kommisioDetailsEntity';
 
 @Entity('kommissionierung')
 export class KommissionirungEntity {

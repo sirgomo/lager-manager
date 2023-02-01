@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ArtService } from 'src/artikel/art.service';
-import { ArtikelDTO } from 'src/DTO/ArtikelDTO';
+import { ArtikelDTO } from 'src/DTO/artikelDTO';
 import { ArtikelMengeDTO } from 'src/DTO/artikelMengeDTO';
 import { LagerPlatztDTO } from 'src/DTO/lagerPlatztDTO';
-import { ArtikelEntity } from 'src/entity/ArtikelEntity';
-import { LagerPlatzEntity, PALETTENTYP } from 'src/entity/LagerPlatzEntity';
+import { ArtikelEntity } from 'src/entity/artikelEntity';
+import { LagerPlatzEntity, PALETTENTYP } from 'src/entity/lagerPlatzEntity';
 import { Helper } from 'src/helper';
 import { LagerPlatzGenerator } from 'src/lagerPlatzGen';
 import { IsNull, MoreThanOrEqual, Repository } from 'typeorm';

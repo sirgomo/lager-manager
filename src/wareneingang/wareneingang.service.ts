@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ArtikelMengeDTO } from 'src/DTO/artikelMengeDTO';
 import { LagerPlatztDTO } from 'src/DTO/lagerPlatztDTO';
 import { WarenEingArticleDTO } from 'src/DTO/warenEingArticleDTO';
-import { LagerPlatzEntity } from 'src/entity/LagerPlatzEntity';
-import { WarenEingangEntity } from 'src/entity/WarenEingangEntity';
+import { LagerPlatzEntity } from 'src/entity/lagerPlatzEntity';
+import { WarenEingangEntity } from 'src/entity/warenEingangEntity';
 import { LagerService } from 'src/lager/lager.service';
 import { Repository } from 'typeorm';
 

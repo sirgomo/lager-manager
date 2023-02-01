@@ -3,15 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ArtikelAufPaletteDTO } from 'src/DTO/artikelAufPaletteDTO';
 import { DataFurKomissDTO } from 'src/DTO/dataFurKomissDTO';
 import { NeuePaletteDTO } from 'src/DTO/neuePaletteDTO';
-import { InKomissPalletenEntity } from 'src/entity/InKomissPalletenEntity';
+import { InKomissPalletenEntity } from 'src/entity/inKomissPalletenEntity';
 import {
   ARTIKELSTATUS,
   KommisioDetailsEntity,
-} from 'src/entity/KommisioDetailsEntity';
+} from 'src/entity/kommisioDetailsEntity';
 import {
   KOMMISIONSTATUS,
   KommissionirungEntity,
-} from 'src/entity/KommissionirungEntity';
+} from 'src/entity/kommissionirungEntity';
 import { Helper } from 'src/helper';
 import { Repository } from 'typeorm';
 

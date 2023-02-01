@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
-import { KommisioDetailsEntity } from 'src/entity/KommisioDetailsEntity';
-import { KOMMISIONSTATUS } from 'src/entity/KommissionirungEntity';
+import { KommisioDetailsEntity } from 'src/entity/kommisioDetailsEntity';
+import { KOMMISIONSTATUS } from 'src/entity/kommissionirungEntity';
 
 export class KomissDTO {
   @IsOptional()

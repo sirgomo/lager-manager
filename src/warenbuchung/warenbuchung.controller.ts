@@ -10,10 +10,10 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
-import { RoleGuard } from 'src/auth/RoleGuard';
+import { RoleGuard } from 'src/auth/roleGuard';
 import { BestArtikelMengeDTO } from 'src/DTO/bestArtikelMengeDTO';
 import { WarenBuchungDto } from 'src/DTO/warenBuchungDTO';
-import { ROLE } from 'src/entity/UserEntity';
+import { ROLE } from 'src/entity/userEntity';
 import { WarenbuchungService } from './warenbuchung.service';
 
 @Controller('warenbuchung')

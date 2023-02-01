@@ -3,14 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AddArtikelKommissDTO } from 'src/DTO/addArtikelKommissDTO';
 import { ArtikelKommissDTO } from 'src/DTO/artikelKommissDTO';
 import { ArtikelSchiebenDTO } from 'src/DTO/artikelSchiebenDTO';
-import { KomissDTO } from 'src/DTO/KomissDTO';
+import { KomissDTO } from 'src/DTO/komissDTO';
 import { PalettenMengeVorausDTO } from 'src/DTO/palettenMengeVorausDTO';
-import { ArtikelEntity } from 'src/entity/ArtikelEntity';
+import { ArtikelEntity } from 'src/entity/artikelEntity';
 import {
   ARTIKELSTATUS,
   KommisioDetailsEntity,
-} from 'src/entity/KommisioDetailsEntity';
-import { KommissionirungEntity } from 'src/entity/KommissionirungEntity';
+} from 'src/entity/kommisioDetailsEntity';
+import { KommissionirungEntity } from 'src/entity/kommissionirungEntity';
 import { Helper } from 'src/helper';
 import { LagerService } from 'src/lager/lager.service';
 import { Repository } from 'typeorm';

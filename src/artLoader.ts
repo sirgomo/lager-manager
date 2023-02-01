@@ -1,6 +1,6 @@
 import { ArtService } from './artikel/art.service';
-import { ArtikelEntity, ARTIKELFLAGE } from './entity/ArtikelEntity';
-import { UiidEntity } from './entity/UiidEntity';
+import { ArtikelEntity, ARTIKELFLAGE } from './entity/artikelEntity';
+import { UiidEntity } from './entity/uiidEntity';
 
 export class ArtLoader {
   public gener = false;

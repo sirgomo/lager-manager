@@ -1,6 +1,6 @@
-import { ARTIKELFLAGE } from "src/entity/ArtikelEntity";
-import { ARTIKELSTATUS } from "src/entity/KommisioDetailsEntity";
-import { PALETTENTYP } from "src/entity/LagerPlatzEntity";
+import { ARTIKELFLAGE } from "src/entity/artikelEntity";
+import { ARTIKELSTATUS } from "src/entity/kommisioDetailsEntity";
+import { PALETTENTYP } from "src/entity/lagerPlatzEntity";
 
 export class PalettenMengeVorausDTO{
     artikelId:number; 

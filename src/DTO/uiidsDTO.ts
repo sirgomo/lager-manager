@@ -1,4 +1,4 @@
-import { ArtikelEntity } from "src/entity/ArtikelEntity";
+import { ArtikelEntity } from "src/entity/artikelEntity";
 
 export class UiidsDTO{
     id : number;
