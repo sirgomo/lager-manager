@@ -98,10 +98,14 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "lager-front:build:production"
+              "browserTarget": "lager-front:build:production",
+              "host": "localhost",
+              "port": 5000
             },
             "development": {
-              "browserTarget": "lager-front:build:development"
+              "browserTarget": "lager-front:build:development",
+              "host": "localhost",
+              "port": 5000
             }
           },
           "defaultConfiguration": "development"
