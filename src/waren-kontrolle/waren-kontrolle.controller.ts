@@ -2,7 +2,7 @@ import { Body, Controller, Patch, UseGuards } from '@nestjs/common';
 import { Get, Param } from '@nestjs/common/decorators';
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
-import { RoleGuard } from 'src/auth/roleGuard';
+import { RoleGuard } from 'src/auth/roleGuard'
 import { ROLE } from 'src/entity/userEntity';
 import { WarenKontrolleService } from './waren-kontrolle.service';
 

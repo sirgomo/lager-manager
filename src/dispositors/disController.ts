@@ -3,7 +3,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@n
 import { AuthGuard } from "@nestjs/passport";
 import { ROLES } from "src/auth/roleDecorator";
 import { RoleGuard } from "src/auth/roleGuard";
-import { DispositorsDTO } from "src/DTO/dispositorsDTO";
+import { DispositorsDTO } from "src/DTO/dispositorsDTO"
 import { ROLE } from "src/entity/userEntity";
 import { DisServiceService } from "./disService";
 @Controller('dispo')
