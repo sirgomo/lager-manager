@@ -40,8 +40,8 @@ import { SpeditionEntity } from './entity/speditionEntity';
       type: 'mysql',
       host: 'localhost',
       port: 3306,
-      username: 'root',
-      password: 'beta1243',
+      username: 'admin',
+      password: 'beta*1243*',
       database: 'lager',
       entities: [
         DispositorEntity,
