@@ -2,7 +2,7 @@
 /* eslint-disable prettier/prettier */
 import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity('warenEingang')
+@Entity('wareneingang')
 export class WarenEingangEntity{
     @PrimaryGeneratedColumn()
     id : number

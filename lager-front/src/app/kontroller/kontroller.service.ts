@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { ControllerKomissDataDto } from '../dto/controllerKomissData.dto';
 import { PaleteForControlleDto } from '../dto/paleteForControlle.dto';
 
@@ -8,7 +9,7 @@ import { PaleteForControlleDto } from '../dto/paleteForControlle.dto';
   providedIn: 'root',
 })
 export class KontrollerService {
-  private API_URL = 'http://localhost:3000/kontrolle';
+  private API_URL = environment.APII_URL + 'kontrolle';
   constructor(private http: HttpClient) {}
   getKommissionierungen(): Observable<any[]> {
     return this.http.get<any[]>(this.API_URL);

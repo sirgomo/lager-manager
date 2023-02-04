@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UserDTO } from '../dto/user.dto';
 import jwt_decode from 'jwt-decode';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,7 @@ export class ApiService {
   private jwtToken$: BehaviorSubject<string> = new BehaviorSubject<string>(
     this.token,
   );
-  private API_URL = 'http://localhost:3000/';
+  private API_URL = environment.APII_URL;
   constructor(
     private readonly http: HttpClient,
     private router: Router,

@@ -47,8 +47,8 @@ export class WarenKontrolleService {
       return await this.komDetailsRepo
         .query(
           `
-      SELECT id, kommDetails.artikelId as aid,kommissId, menge, currentGepackt, kreditorId, gepackt,palettennr, artikel.name, SUM(kommDetails.menge * artikel.gewicht / artikel.minLosMenge) as gewicht, artikel.artikelFlage as ARTIKELFLAGE
-      FROM kommDetails LEFT JOIN artikel ON artikel.artikelId=kommDetails.artikelId AND artikel.liferantId=kommDetails.kreditorId 
+      SELECT id, kommdetails.artikelId as aid,kommissId, menge, currentGepackt, kreditorId, gepackt,palettennr, artikel.name, SUM(kommdetails.menge * artikel.gewicht / artikel.minLosMenge) as gewicht, artikel.artikelFlage as ARTIKELFLAGE
+      FROM kommdetails LEFT JOIN artikel ON artikel.artikelId=kommdetails.artikelId AND artikel.liferantId=kommdetails.kreditorId 
       WHERE inBestellung=0 AND kommissId=${id} GROUP BY kommDetails.id `,
         )
         .catch((err) => {
@@ -101,8 +101,8 @@ export class WarenKontrolleService {
       return await this.komDetailsRepo
         .query(
           `
-      SELECT inKomissPal.id as iid, userId, users.vorname, users.nachname FROM inKomissPal
-      LEFT JOIN users ON users.id=userId WHERE inKomissPal.id=${palid} LIMIT 1
+      SELECT inkomisspal.id as iid, userId, users.vorname, users.nachname FROM inkomisspal
+      LEFT JOIN users ON users.id=userId WHERE inkomisspal.id=${palid} LIMIT 1
       `,
         )
         .catch((err) => {

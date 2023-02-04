@@ -283,10 +283,10 @@ export class VerkaufService {
 
     return await this.repoDetails
       .query(
-        `SELECT kommDetails.artikelId, menge, gepackt, statlagerplatz,proPalete, paleteTyp,artikel.artikelId, artikel.name, artikel.minLosMenge,
-      artikel.grosse, artikel.gewicht, artikel.basisEinheit, artikel.artikelFlage FROM kommDetails 
-      LEFT JOIN artikel ON artikel.artikelId = kommDetails.artikelId
-      LEFT JOIN (SELECT artId, lagerplatz AS statlagerplatz, mengeProPalete AS proPalete, palettenTyp AS paleteTyp FROM lagerplatz WHERE static = true ) lagerplatz ON lagerplatz.artId = kommDetails.artikelId
+        `SELECT kommdetails.artikelId, menge, gepackt, statlagerplatz,proPalete, paleteTyp,artikel.artikelId, artikel.name, artikel.minLosMenge,
+      artikel.grosse, artikel.gewicht, artikel.basisEinheit, artikel.artikelFlage FROM kommdetails 
+      LEFT JOIN artikel ON artikel.artikelId = kommdetails.artikelId
+      LEFT JOIN (SELECT artId, lagerplatz AS statlagerplatz, mengeProPalete AS proPalete, palettenTyp AS paleteTyp FROM lagerplatz WHERE static = true ) lagerplatz ON lagerplatz.artId = kommdetails.artikelId
       WHERE kommissId = '${komissId}' AND inBestellung = false ORDER BY statlagerplatz ASC`,
       )
       .then((data) => {

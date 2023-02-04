@@ -2,12 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ArtikelDTO } from '../dto/artikel.dto';
-
+import { environment } from '../../environments/environment'; 
 @Injectable({
   providedIn: 'root',
 })
 export class ArtikelService {
-  private API_URL = 'http://localhost:3000/artikel';
+  private API_URL = environment.APII_URL + 'artikel';
   constructor(private http: HttpClient) {}
 
   getAllArtikel(): Observable<ArtikelDTO[]> {

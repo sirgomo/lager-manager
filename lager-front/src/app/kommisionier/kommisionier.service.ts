@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { ArtikelAufPaletteDto } from '../dto/artikelAufPalete.dto';
 import { DataFurKomisDto } from '../dto/dataFurKomis.dto';
 import { NeuePaletteDto } from '../dto/neuePalette.dto';
@@ -9,7 +10,7 @@ import { NeuePaletteDto } from '../dto/neuePalette.dto';
   providedIn: 'root',
 })
 export class KommisionierService {
-  private API_URL = 'http://localhost:3000/komi';
+  private API_URL = environment.APII_URL+ 'komi';
   constructor(private http: HttpClient) {}
 
   getKommissionierung(kommid: number): Observable<DataFurKomisDto[]> {

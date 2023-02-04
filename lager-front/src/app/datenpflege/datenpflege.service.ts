@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { DispositorDto } from '../dto/dispositor.dto';
 import { SpeditionDto } from '../dto/spedition.dto';
 
@@ -8,8 +9,8 @@ import { SpeditionDto } from '../dto/spedition.dto';
   providedIn: 'root',
 })
 export class DatenpflegeService {
-  private API_URL = 'http://localhost:3000/dispo';
-  private API_URLS = 'http://localhost:3000/sped';
+  private API_URL =  environment.APII_URL +  'dispo';
+  private API_URLS = environment.APII_URL + 'sped';
   constructor(private http: HttpClient) {}
 
   getAllDispositors(): Observable<DispositorDto[]> {

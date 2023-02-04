@@ -3,7 +3,7 @@
 import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { PALETTENTYP } from './lagerPlatzEntity';
 
-@Entity('inKomissPal')
+@Entity('inkomisspal')
 export class InKomissPalletenEntity {
   @PrimaryGeneratedColumn()
   autoid:number;

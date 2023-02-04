@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { BestArtikelMengeDto } from '../dto/bestArtikelMenge.dto';
 import { WarenBuchungDto } from '../dto/warenBuchung.dto';
 
@@ -8,7 +9,7 @@ import { WarenBuchungDto } from '../dto/warenBuchung.dto';
   providedIn: 'root',
 })
 export class WarenBuchungService {
-  private API_URL = 'http://localhost:3000/warenbuchung';
+  private API_URL = environment.APII_URL + 'warenbuchung';
   constructor(private http: HttpClient) {}
 
   createBestellung(best: WarenBuchungDto): Observable<WarenBuchungDto> {

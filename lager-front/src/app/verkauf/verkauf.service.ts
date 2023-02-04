@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { AddArtikelKommissDto } from '../dto/addArtikelKommiss.dto';
 import { ArtikelKommissDto } from '../dto/artikelKommiss.dto';
 import { ArtikelSchiebenDto } from '../dto/artikelSchieben.dto';
@@ -12,7 +13,7 @@ import { UserDataDto } from '../dto/userData.dto';
 })
 export class VerkaufService {
   constructor(private http: HttpClient) {}
-  private API_URL = 'http://localhost:3000/verkauf';
+  private API_URL = environment.APII_URL + 'verkauf';
 
   getAll(): Observable<KomissDTO[]> {
     return this.http.get<KomissDTO[]>(this.API_URL);

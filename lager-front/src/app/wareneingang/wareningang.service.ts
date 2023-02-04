@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { ArtikelMengeDto } from '../dto/artikelMenge.dto';
 import { LagerPlatztDto } from '../dto/lagerPlatz.dto';
 import { WarenBuchungDto } from '../dto/warenBuchung.dto';
@@ -10,7 +11,7 @@ import { WarenEinArtikleDto } from '../dto/warenEinArtikle.dto';
   providedIn: 'root',
 })
 export class WareningangService {
-  private API_URL = 'http://localhost:3000/wareneingang';
+  private API_URL = environment.APII_URL + 'wareneingang';
   constructor(private http: HttpClient) {}
   getAllLiferungen(): Observable<WarenBuchungDto[]> {
     return this.http.get<WarenBuchungDto[]>(this.API_URL);

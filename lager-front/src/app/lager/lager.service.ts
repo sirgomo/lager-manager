@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { ArtikelMengeDto } from '../dto/artikelMenge.dto';
 import { LagerPlatztDto } from '../dto/lagerPlatz.dto';
 import { LagerPlatzDtoArtNameDto } from '../dto/lagerPlatzDtoArtName.dto';
@@ -8,7 +9,7 @@ import { LagerPlatzDtoArtNameDto } from '../dto/lagerPlatzDtoArtName.dto';
   providedIn: 'root',
 })
 export class LagerService {
-  private API_URL = 'http://localhost:3000/lager';
+  private API_URL = environment.APII_URL + 'lager';
   constructor(private http: HttpClient) {}
 
   getAllStellpletze() {

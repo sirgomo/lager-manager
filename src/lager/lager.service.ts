@@ -409,7 +409,7 @@ export class LagerService {
        artikel.name, artikel.verPrice, artikel.minLosMenge, artikel.gewicht, artikel.basisEinheit, artikel.ARTIKELFLAGE, artikel.liferantId FROM lagerplatz
        LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId
        LEFT JOIN (SELECT artikelid AS fehlArtikelId, menge AS fehlArtikelMenge FROM artfehlend) artfehlend ON lagerplatz.artId = fehlArtikelId
-       LEFT JOIN (SELECT artikelId as a_id, SUM(menge) AS resMenge FROM kommDetails group by a_id) artreservation ON lagerplatz.artId = a_id 
+       LEFT JOIN (SELECT artikelId as a_id, SUM(menge) AS resMenge FROM kommdetails group by a_id) artreservation ON lagerplatz.artId = a_id 
         WHERE lagerplatz.artId IS NOT NULL group by lagerplatz.artId `,
       )
       .then(
@@ -428,7 +428,7 @@ export class LagerService {
         artikel.name, artikel.verPrice, artikel.minLosMenge, artikel.gewicht, artikel.basisEinheit, artikel.ARTIKELFLAGE,artikel.liferantId FROM lagerplatz
         LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId
         LEFT JOIN (SELECT artikelid AS fehlArtikelId, menge AS fehlArtikelMenge FROM artfehlend) artfehlend ON lagerplatz.artId = fehlArtikelId
-        LEFT JOIN (SELECT artikelId as a_id, SUM(menge) AS resMenge FROM kommDetails group by a_id) artreservation ON lagerplatz.artId = a_id 
+        LEFT JOIN (SELECT artikelId as a_id, SUM(menge) AS resMenge FROM kommdetails group by a_id) artreservation ON lagerplatz.artId = a_id 
         WHERE lagerplatz.artId = '${artid}' group by lagerplatz.artId 
         `,
       )
