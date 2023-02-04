@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { HelperService } from './helper.service';
 import { ApiService } from './services/api.service';
+import { VorschlagComponent } from './vorschlag/vorschlag.component';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +15,7 @@ export class AppComponent implements OnInit {
   toolbarInfo = 'Lager Manger';
   kommissionier = false;
   palNr = '';
-  constructor(private api: ApiService, private helper: HelperService) {}
+  constructor(private api: ApiService, private helper: HelperService, private dialog: MatDialog) {}
   ngOnInit(): void {
     this.api.getJwtUserToken().subscribe((token: string) => {
       if (token) {
@@ -36,5 +38,12 @@ export class AppComponent implements OnInit {
     this.kommissionier = false;
     this.toolbarInfo = 'Lager Manger';
     this.api.logut();
+  }
+  gibVorschlag() {
+    const conf: MatDialogConfig = new MatDialogConfig();
+    conf.height = '60vh';
+    conf.width = '60vw';
+
+    this.dialog.open(VorschlagComponent, conf);
   }
 }

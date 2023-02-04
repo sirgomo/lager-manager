@@ -32,13 +32,14 @@ import { VorschlagEntity } from './entity/vorschlagEntitiy';
 import { FehlendArtikelEntity } from './entity/fehlendArtikelEntity';
 import { WarenBestellungEntity } from './entity/warenBestellungEntity';
 import { SpeditionEntity } from './entity/speditionEntity';
+import { VorschlagModule } from './vorschlag/vorschlag.module';
 
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: '0.0.0.0',
       port: 3306,
       username: 'admin',
       password: 'beta*1243*',
@@ -77,6 +78,7 @@ import { SpeditionEntity } from './entity/speditionEntity';
     AdminModule,
     UserModule,
     WarenKontrolleModule,
+    VorschlagModule,
   ],
   controllers: [AppController],
   providers: [RoleGuard],

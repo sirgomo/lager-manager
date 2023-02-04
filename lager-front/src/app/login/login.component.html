@@ -1,20 +1,36 @@
 <div class="container">
   <div class="login">
-    <form [formGroup]="formLogin" (ngSubmit)="loginUser()">
-      <!-- User input -->
-      <p><mat-form-field>
-        <mat-label>Benutzer</mat-label>
-        <input type="text" matInput autocomplete="off" formControlName="username" name="username" required/>
-      </mat-form-field></p>
-      <!-- Password input -->
-      <p>
-      <mat-form-field>
-        <mat-label>Password</mat-label>
-        <input type="text" matInput autocomplete="off" formControlName="password" name="username" required/>
-      </mat-form-field></p>
-      <!-- Submit button -->
-      <button mat-raised-button type="submit" color="primary" (ngSubmit)="loginUser()">Sign in</button>
-    </form>
+    <div>
+      <form [formGroup]="formLogin" (ngSubmit)="loginUser()">
+        <!-- User input -->
+        <p><mat-form-field>
+          <mat-label>Benutzer</mat-label>
+          <input type="text" matInput autocomplete="off" formControlName="username" name="username" required/>
+        </mat-form-field></p>
+        <!-- Password input -->
+        <p>
+        <mat-form-field>
+          <mat-label>Password</mat-label>
+          <input type="text" matInput autocomplete="off" formControlName="password" name="username" required/>
+        </mat-form-field></p>
+        <!-- Submit button -->
+        <button mat-raised-button type="submit" color="primary" (ngSubmit)="loginUser()">Sign in</button>
+      </form>
+    </div>
+    <div class="divider"></div>
+    <div class="logform">
+      <label>User list : (userid : password)</label>
+      <div>
+        <div>verkauf : verkauf</div>
+        <div>verkauf2 : verkauf2 </div>
+        <div>komiss : komiss</div>
+        <div>control: control</div>
+        <div>lager: llager</div>
+        <div>datap: ddatap (new Artikel, new Dispositor uzw.)</div>
+        <div>weingang: weingang</div>
+        <div></div>
+      </div>
+    </div>
   </div>
 </div>
 

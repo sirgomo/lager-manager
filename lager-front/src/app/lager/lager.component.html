@@ -46,7 +46,7 @@
        </ng-container>
        <ng-container matColumnDef="amenge">
         <th mat-header-cell *matHeaderCellDef> Atikel Menge</th>
-        <td mat-cell *matCellDef="let post">{{post.artikelMenge}}</td>
+        <td mat-cell *matCellDef="let post">{{post.artikelMenge < 0 ? 0 : post.artikelMenge}}</td>
        </ng-container>
        <ng-container matColumnDef="einheit">
         <th mat-header-cell *matHeaderCellDef>Einheit</th>

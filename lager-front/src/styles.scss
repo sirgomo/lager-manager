@@ -19,22 +19,31 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;  font-weigh
 
 .login{
   position: absolute;
-  top: 30%;
+  top: 40%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  /*place-items: center; it should make items on center no matter what hmm*/
+  transform: translate(-50%, -40%);
+  .logform {
+    margin-left: 30%;
+    transform: translate(-30%, 10%);
+  }
+  button {
+    margin-left: 25%;
+  }
 }
-.login button {
- left: 50%;
- transform: translateX(-50%);
+.vorschlag {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  padding-top: .5rem;
 }
 
 
 .mat-toolbar {
 display: flex;
+flex-wrap:wrap;
 align-items: baseline;
 min-height: 30px;
-max-height: 60px;
+max-height: 100px;
 }
 .container{
   width: 100;

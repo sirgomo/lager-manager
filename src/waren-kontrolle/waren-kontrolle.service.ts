@@ -49,7 +49,7 @@ export class WarenKontrolleService {
           `
       SELECT id, kommdetails.artikelId as aid,kommissId, menge, currentGepackt, kreditorId, gepackt,palettennr, artikel.name, SUM(kommdetails.menge * artikel.gewicht / artikel.minLosMenge) as gewicht, artikel.artikelFlage as ARTIKELFLAGE
       FROM kommdetails LEFT JOIN artikel ON artikel.artikelId=kommdetails.artikelId AND artikel.liferantId=kommdetails.kreditorId 
-      WHERE inBestellung=0 AND kommissId=${id} GROUP BY kommDetails.id `,
+      WHERE inBestellung=0 AND kommissId=${id} GROUP BY kommdetails.id `,
         )
         .catch((err) => {
           console.log(err);

@@ -11,7 +11,7 @@
       </ng-container>
       <ng-container matColumnDef="men">
         <mat-header-cell *matHeaderCellDef>Menge:</mat-header-cell>
-        <mat-cell *matCellDef="let item">{{item.artikelMenge}}</mat-cell>
+        <mat-cell *matCellDef="let item">{{item.artikelMenge < 0 ? 0 : item.artikelMenge}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="mhd">
         <mat-header-cell *matHeaderCellDef>MHD:</mat-header-cell>

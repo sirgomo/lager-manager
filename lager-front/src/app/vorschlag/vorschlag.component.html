@@ -1,0 +1,30 @@
+<div class="container">
+    <mat-toolbar color="primary">
+        <span>Schreib bitte einen vernünftigen Vorschlag</span>
+    </mat-toolbar>
+  
+    
+    <mat-dialog-content class="locmatDialogContent">
+        <div class="row">
+            <mat-form-field>
+                <mat-label>Name :</mat-label>
+                <input type="text" matInput [(ngModel)]="name" required>
+            </mat-form-field>
+            <div class="divider"></div>
+            <mat-form-field floatPlaceholder="auto"
+            dividerColor="primary">
+                <mat-label>Vorschlag :</mat-label>
+               
+                    <textarea matInput [(ngModel)]="vorschlag" required  rows="10"
+                              placeholder=""></textarea>
+                           
+            </mat-form-field>
+        </div>
+    </mat-dialog-content>
+    
+    <mat-dialog-actions>
+        <button mat-raised-button color="warn" matDialogClose>Abbrechen</button>
+        <button mat-raised-button (click)="create()" color="primary" >Vorschlag speichern</button>
+        
+    </mat-dialog-actions>
+</div>

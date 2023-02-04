@@ -33,4 +33,7 @@ export class AdminComponent implements OnInit {
   changeShow(emit: number) {
     this.show = emit;
   }
+  showVorschlag() {
+    this.show = 2;
+  }
 }
