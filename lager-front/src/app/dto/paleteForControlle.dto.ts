@@ -4,6 +4,7 @@ export class PaleteForControlleDto {
   autoid!: number;
   id!: number;
   palettenTyp!: PALETTENTYP;
-  kontrolliert!: boolean;
+  kontrolliert!: number;
   paletteRealGewicht!: number;
+  lkwNummer!: number;
 }

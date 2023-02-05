@@ -23,12 +23,12 @@ export class KontrollerComponent implements OnInit {
   namen: string[] = [];
   helper: HelperService = new HelperService();
   tabeleCoumns = [
-    'id',
-    'versorgung',
-    'paletH',
     'lieferD',
-    'dispo',
+    'versorgung',
+    'id',
     'komStatus',
+    'dispo',
+    'paletH',
     'sped',
     'verk',
   ];

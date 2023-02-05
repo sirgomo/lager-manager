@@ -18,7 +18,7 @@
           <th mat-header-cell *matHeaderCellDef><span>Geprüft</span></th>
           <td mat-cell *matCellDef="let item; let i = index">
             <div class="my-form-field">
-              <mat-checkbox (click)="controlled(i)"  [(ngModel)]="tabData.filteredData[i].kontrolliert" value="" color="primary"><span class="fs-s">Geprüft</span></mat-checkbox>
+              <mat-checkbox (click)="controlled(i)"  [(ngModel)]="tabData.filteredData[i].kontrolliert" color="primary"><span class="fs-s">Geprüft</span></mat-checkbox>
             </div>
           </td>
         </ng-container>
@@ -36,6 +36,6 @@
   </div>
 
   <mat-dialog-actions align="end">
-    <button mat-raised-button matDialogClose>Schließen</button>
+    <button mat-raised-button matDialogClose [mat-dialog-close]="isPaleteContrliret" >Schließen</button>
   </mat-dialog-actions>
 </div>

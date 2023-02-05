@@ -22,7 +22,7 @@ export class InKomissPalletenEntity {
   @PrimaryColumn()
   kommId : number=-1;
   @Column()
-  lkwNummer : number=-1;
+  lkwNummer : number=1;
   @Column()
   inPaken : boolean = false;
   @Column()

@@ -31,4 +31,7 @@ export class KontrollerService {
   getPalForControleByNr(palnr: number) {
     return this.http.get<any>(this.API_URL + '/contnr/' + palnr);
   }
+  setArtikelControled(artnr: number) {
+    return this.http.get<number>(this.API_URL + '/art/' + artnr);
+  }
 }

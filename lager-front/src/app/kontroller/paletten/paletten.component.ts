@@ -16,15 +16,18 @@ export class PalettenComponent implements OnInit {
   @Input() kommNr = 0;
   paletten: PaleteForControlleDto[] = [];
   dataRes: MatTableDataSource<PaleteForControlleDto> = new MatTableDataSource();
-  columnDef = ['palid', 'palTyp', 'kontro', 'relGewi'];
+  columnDef = ['palid', 'palTyp', 'kontro', 'relGewi', 'lkw'];
   pal = Object.values(PALETTENTYP);
   palcheck = true;
   paleten = new Array(this.pal.length);
+  lkwNumbers : number[] = [20];
   constructor(
     private service: KontrollerService,
     private toaster: ToastrService,
     private dialog: MatDialog,
-  ) {}
+  ) {
+    this.lkwNumbers = Array(20).fill(Number).map((x,i) => i);
+  }
 
   public ngOnInit(): void {
     this.service.getPalattenByKommId(this.kommNr).subscribe((res) => {
@@ -75,8 +78,24 @@ export class PalettenComponent implements OnInit {
   getPaleteForControlle(index: number) {
     const config = new MatDialogConfig();
     config.data = this.paletten[index].id;
+    config.disableClose = true;
     config.minWidth = '95vw';
     config.minHeight = '95vh';
-    this.dialog.open(PalControlComponent, config);
+    this.dialog.open(PalControlComponent, config).beforeClosed().subscribe((data) => {
+      if(data === undefined) return;
+      
+      if (data === 0) {
+        this.dataRes.filteredData[index].kontrolliert = 1;
+        this.paletten[index].kontrolliert = 1;
+        this.dataRes = new MatTableDataSource(this.dataRes.filteredData);
+      }else if (data !== 0) {
+        this.paletten[index].kontrolliert = 0;
+        this.dataRes.filteredData[index].kontrolliert = 0;
+        this.dataRes = new MatTableDataSource(this.dataRes.filteredData);
+      }
+    });
+  }
+  async changeLkwNumber(index: number) { 
+
   }
 }

@@ -40,4 +40,10 @@ export class WarenKontrolleController {
   getPaleteByNrForControlle(@Param('nr') palnr: number) {
     return this.service.getPaleteByIdForControle(palnr);
   }
+
+  @Get('art/:nr')
+  @ROLES(ROLE.KONTROLLER)
+  setArtikelControlret(@Param('nr') artnr: number) {
+    return this.service.setWareControled(artnr);
+  }
 }

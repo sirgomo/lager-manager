@@ -4,7 +4,7 @@ import { ArtikelEntity } from 'src/entity/artikelEntity';
 import { InKomissPalletenEntity } from 'src/entity/inKomissPalletenEntity';
 import { KommisioDetailsEntity } from 'src/entity/kommisioDetailsEntity';
 import { KommissionirungEntity } from 'src/entity/kommissionirungEntity';
-import { Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 
 @Injectable()
 export class WarenKontrolleService {
@@ -70,6 +70,7 @@ export class WarenKontrolleService {
           'autoid',
           'id',
           'palettenTyp',
+          'lkwNummer',
           'kontrolliert',
           'paletteRealGewicht',
         ])
@@ -96,7 +97,6 @@ export class WarenKontrolleService {
     }
   }
   async getKommissionier(palid: number) {
-    console.log('palid ' + palid);
     try {
       return await this.komDetailsRepo
         .query(
@@ -162,6 +162,35 @@ export class WarenKontrolleService {
             console.log(err);
           },
         );
+    } catch (err) {
+      return err;
+    }
+  }
+  async setWareControled(artid: number) {
+  
+    try {
+      const tmpEn: InKomissPalletenEntity = await this.palRepo.findOneBy({autoid: artid});
+      if(tmpEn === null) {
+        throw new HttpException('Etwas ist schiefgegangen, artikel nicht gefunden', HttpStatus.NOT_FOUND);
+      }
+     
+      if(tmpEn.kontrolliert === false) {
+        tmpEn.kontrolliert = true;
+      }else {
+        tmpEn.kontrolliert = false;
+      }
+      const update: number = await (await this.palRepo.update({'autoid': artid}, tmpEn)).affected;
+     
+      const palKontrolFertig: number = await (await (await this.palRepo.find({where: {id: tmpEn.id, artikelId : Not(0), kontrolliert: false}})).length);
+      const palWithArtNull: InKomissPalletenEntity = await  this.palRepo.findOne({where: {id: tmpEn.id, artikelId: 0}});
+      if (palKontrolFertig !== 0 && palWithArtNull.kontrolliert === true) {
+        palWithArtNull.kontrolliert = false;
+        await this.palRepo.update({'autoid': palWithArtNull.autoid}, palWithArtNull);
+      } else if (palKontrolFertig === 0) {
+        palWithArtNull.kontrolliert = true;
+        await this.palRepo.update({'autoid': palWithArtNull.autoid}, palWithArtNull);
+      }
+      return update;
     } catch (err) {
       return err;
     }
