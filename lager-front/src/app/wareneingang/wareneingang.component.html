@@ -41,7 +41,7 @@
     </ng-container>
     <ng-container matColumnDef="lifid">
       <mat-header-cell *matHeaderCellDef>Liferung Nr.</mat-header-cell>
-      <mat-cell *matCellDef="let item">{{item.bestellungId}}</mat-cell>
+      <mat-cell *matCellDef="let item">{{item.bestellungid}}</mat-cell>
     </ng-container>
     <mat-header-row *matHeaderRowDef="columnArtDef"></mat-header-row>
     <mat-row *matRowDef="let row; columns: columnArtDef; let i=index" (click)="showArtikel(i)" style="cursor: pointer;"></mat-row>

@@ -56,7 +56,7 @@ export class VerkaufService {
     return this.http.get<any>(this.API_URL + '/total/' + kommnr);
   }
   getUserById(id: number) {
-    return this.http.get<UserDataDto>('http://localhost:3000/user/' + id);
+    return this.http.get<UserDataDto>(environment.APII_URL + 'user/' + id);
   }
   changeStatus(kommId: number, status: any) {
     return this.http.patch(this.API_URL + '/komm/' + kommId, status, {

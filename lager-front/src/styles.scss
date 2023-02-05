@@ -31,11 +31,17 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;  font-weigh
   }
 }
 .vorschlag {
-  display: flex;
-  justify-content: center;
-  gap: 0.4rem;
-  padding-top: .5rem;
+  display: none;
 }
+@media screen and (min-width: 600px) {
+  .vorschlag {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    padding-top: .5rem;
+  }
+}
+
 
 
 .mat-toolbar {
