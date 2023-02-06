@@ -96,6 +96,13 @@ export class PalettenComponent implements OnInit {
     });
   }
   async changeLkwNumber(index: number) { 
-
+    await this.service.setLkwNr(this.dataRes.filteredData[index].autoid, this.dataRes.filteredData[index].lkwNummer).subscribe((res) => {
+      if (res !== 1) {
+        const err = new Error();
+        this.toaster.error(err.message, 'Ups...', {timeOut: 900});
+        return;
+      }
+      this.toaster.success('Lkw nr wurde geandert!', 'LKW', {timeOut: 600});
+    })
   }
 }

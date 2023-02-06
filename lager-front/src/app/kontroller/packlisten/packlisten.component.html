@@ -1,0 +1,36 @@
+<div class="row">
+    <table mat-table [dataSource]="palData">
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>Paletten Nr:</th>
+            <td mat-cell *matCellDef="let item">{{item.id}}</td>
+            <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <ng-container matColumnDef="palettenTyp">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let item">{{item.palettenTyp}}</td>
+            <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <ng-container matColumnDef="kontrolliert">
+            <th mat-header-cell *matHeaderCellDef>Kontrolliert ?</th>
+            <td mat-cell *matCellDef="let item">{{item.kontrolliert}}</td>
+            <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <ng-container matColumnDef="lkwNummer">
+            <th mat-header-cell *matHeaderCellDef>Lkw</th>
+            <td mat-cell *matCellDef="let item">{{item.lkwNummer}}</td>
+            <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <ng-container matColumnDef="print">
+            <th mat-header-cell *matHeaderCellDef>Packliste Ausdrücken</th>
+            <td mat-cell *matCellDef="let item;">
+                <button mat-raised-button (click)="getPaletteToDruck(item.id)">Drücken</button>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+                <button mat-raised-button color="primary">Alle Drücken</button>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnDef"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnDef"></tr>
+        <tr mat-footer-row *matFooterRowDef="columnDef"></tr>
+    </table>
+</div>

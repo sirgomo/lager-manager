@@ -46,4 +46,9 @@ export class WarenKontrolleController {
   setArtikelControlret(@Param('nr') artnr: number) {
     return this.service.setWareControled(artnr);
   }
+  @Get('lkw/:pid/:lkwnr')
+  @ROLES(ROLE.KONTROLLER)
+  setLkwNr(@Param('pid') palid: number, @Param('lkwnr') lkwnr: number) {
+    return this.service.setLkwNr(palid, lkwnr);
+  }
 }

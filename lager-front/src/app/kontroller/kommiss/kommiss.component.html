@@ -15,7 +15,7 @@
 </mat-toolbar>
 <div matDialogContent class="matDialogContent">
   <mat-tab-group [disableRipple]="false" dynamicHeight>
-      <mat-tab label="Kommissionierung Zeigen">
+      <mat-tab label="Palleten Kontrolliren">
         <table mat-table [dataSource]="dataSource">
           <ng-container matColumnDef="artId">
             <th mat-header-cell *matHeaderCellDef>Artikel Nr:</th>
@@ -50,6 +50,11 @@
     <app-paletten [kommNr]="currentKomiss[0].kommissId"></app-paletten>
   </ng-template>
     </mat-tab>
+    <mat-tab label="Packlisten Erstellen">
+      <ng-template matTabContent>
+        <app-packlisten [kommNr]="currentKomiss[0].kommissId"></app-packlisten>
+      </ng-template>
+        </mat-tab>
   </mat-tab-group>
 </div>
 

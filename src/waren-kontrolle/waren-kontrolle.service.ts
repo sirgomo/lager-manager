@@ -195,4 +195,16 @@ export class WarenKontrolleService {
       return err;
     }
   }
+ async setLkwNr(palnr: number, lkwnr: number) { 
+    try {
+      const tympPal: InKomissPalletenEntity = await this.palRepo.findOne({where: {autoid: palnr}});
+        if(tympPal === null) {
+          throw new HttpException('Keine palette gefunden!', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+      tympPal.lkwNummer = lkwnr;
+      return await (await this.palRepo.update({'autoid': palnr}, tympPal)).affected;
+    } catch (err) {
+      return err;
+    }
+  }
 }

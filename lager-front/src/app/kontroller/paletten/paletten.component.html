@@ -30,7 +30,7 @@
     <th mat-header-cell *matHeaderCellDef>LKW NR</th>
     <td mat-cell *matCellDef="let item; let i = index">
       <div class="my-form-filed">
-        <mat-select [(ngModel)]="dataRes.filteredData[i].lkwNummer" placeholder="" >
+        <mat-select [(ngModel)]="dataRes.filteredData[i].lkwNummer" placeholder="" (selectionChange)="changeLkwNumber(i)" >
             <mat-option *ngFor="let item of lkwNumbers" [value]="item">{{item}}</mat-option>
         </mat-select>
       </div>

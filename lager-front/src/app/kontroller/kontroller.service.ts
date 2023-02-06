@@ -20,7 +20,7 @@ export class KontrollerService {
   getPalattenByKommId(kommid: number): Observable<PaleteForControlleDto[]> {
     return this.http.get<PaleteForControlleDto[]>(
       this.API_URL + '/palette/' + kommid,
-    );
+  );
   }
   getKommissionierbyPalId(palid: number) {
     return this.http.get<any>(this.API_URL + '/kommissionier/' + palid);
@@ -33,5 +33,8 @@ export class KontrollerService {
   }
   setArtikelControled(artnr: number) {
     return this.http.get<number>(this.API_URL + '/art/' + artnr);
+  }
+  setLkwNr(palid: number, lkwnr: number) {
+    return this.http.get<number>(this.API_URL + '/lkw/'+palid+'/'+lkwnr);
   }
 }

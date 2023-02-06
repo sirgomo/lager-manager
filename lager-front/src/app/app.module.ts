@@ -61,6 +61,7 @@ import { StellplatzeComponent } from './wareneingang/stellplatze/stellplatze.com
 import { PalControlComponent } from './kontroller/pal-control/pal-control.component';
 import { VorschlagComponent } from './vorschlag/vorschlag.component';
 import { VorZeigenComponent } from './vorschlag/vor-zeigen/vor-zeigen.component';
+import { PacklistenComponent } from './kontroller/packlisten/packlisten.component';
 
 @NgModule({
   declarations: [
@@ -97,6 +98,7 @@ import { VorZeigenComponent } from './vorschlag/vor-zeigen/vor-zeigen.component'
     PalControlComponent,
     VorschlagComponent,
     VorZeigenComponent,
+    PacklistenComponent,
   ],
   imports: [
     BrowserModule,
