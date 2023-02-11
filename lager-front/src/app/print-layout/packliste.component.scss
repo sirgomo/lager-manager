@@ -1,0 +1,39 @@
+
+  .druck {
+    .head {
+      border: .1rem solid;
+      border-radius: .4rem;
+      display: flex;
+      padding: .4rem .4rem;
+      margin: 0;
+      height: 30mm;
+      width: 90%;
+      flex-wrap: wrap;
+      column-count: 2;
+      gap: .4rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+    margin: 16mm 16mm;
+    width: 90%;
+    min-height: 281mm;
+    overflow: hidden;
+  }
+  .druckbutt {
+    display: flex;
+    justify-content: center;
+    gap: .4rem;
+    visibility: initial;
+  }
+  .todruck {
+      width: 210mm; 
+      min-width: 210mm;
+      min-height: 297mm;
+      
+  }
+  .palnr {
+    display: flex;
+    flex-wrap: wrap;
+    width: 50%;
+  }
+  

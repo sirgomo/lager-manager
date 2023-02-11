@@ -82,7 +82,14 @@ export class KommissionierService {
       pal.palettenTyp = neuPal.palTyp;
       pal.userId = neuPal.kommissionierId;
       pal.erwartetPaletteGewicht = neuPal.gewicht;
-      return (await this.pal.save(pal)).id;
+      pal.liferantId = neuPal.liferant;
+      return await this.pal.save(pal).then((data) => {
+       return data.id;
+      }, (err) => {
+        console.log(err);
+        throw new HttpException('Palete konnte nicht erstellt werden', HttpStatus.INTERNAL_SERVER_ERROR);
+      });
+    
     } catch (err) {
       return err;
     }

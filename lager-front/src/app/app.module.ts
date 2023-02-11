@@ -62,6 +62,8 @@ import { PalControlComponent } from './kontroller/pal-control/pal-control.compon
 import { VorschlagComponent } from './vorschlag/vorschlag.component';
 import { VorZeigenComponent } from './vorschlag/vor-zeigen/vor-zeigen.component';
 import { PacklistenComponent } from './kontroller/packlisten/packlisten.component';
+import { PacklisteComponent } from './print-layout/packliste.component';
+
 
 @NgModule({
   declarations: [
@@ -99,6 +101,7 @@ import { PacklistenComponent } from './kontroller/packlisten/packlisten.componen
     VorschlagComponent,
     VorZeigenComponent,
     PacklistenComponent,
+    PacklisteComponent,
   ],
   imports: [
     BrowserModule,

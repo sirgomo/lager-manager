@@ -33,6 +33,7 @@ export class NeupalComponent implements OnInit {
     const tmpData: NeuePaletteDto = new NeuePaletteDto();
     Object.assign(tmpData, this.neuPalForm.value);
     tmpData.kommId = Number(this.neuPalForm.get('kommId')?.getRawValue());
+    tmpData.liferant = this.data.liferant;
     this.dialRef.close(tmpData);
   }
   abbruch() {

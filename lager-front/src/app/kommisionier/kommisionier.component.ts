@@ -2,6 +2,7 @@ import { NumberSymbol } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ArtikelAufPaletteDto } from '../dto/artikelAufPalete.dto';
 import { ArtikelInfoDto } from '../dto/artikelinfo.dto';
@@ -35,6 +36,7 @@ export class KommisionierComponent implements OnInit {
     private toastr: ToastrService,
     private dial: MatDialog,
     private helper: HelperService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -92,6 +94,7 @@ export class KommisionierComponent implements OnInit {
     tmpNPal.kommId = this.kommid;
     tmpNPal.kommissionierId = Number(localStorage.getItem('myId'));
     tmpNPal.palTyp = PALETTENTYP.EU;
+    tmpNPal.liferant = this.kommDetails[0].kreditorId;
     conf.data = tmpNPal;
 
     await this.dial
@@ -117,6 +120,8 @@ export class KommisionierComponent implements OnInit {
               tmpData.menge = art.artikelMenge;
               this.sendMengeToServer(index, tmpData);
             }
+          } else {
+            this.toastr.error('Etwas ist sichefgegangen, neue Palete wurde nicht erstellt');
           }
         });
       });
@@ -131,6 +136,7 @@ export class KommisionierComponent implements OnInit {
     tmpNPal.kommissionierId = Number(localStorage.getItem('myId'));
     tmpNPal.palTyp = PALETTENTYP.EU;
     tmpNPal.palid = this.currentPalatte;
+    tmpNPal.liferant = 1;
     conf.data = tmpNPal;
     await this.dial
       .open(NeupalComponent, conf)
@@ -142,6 +148,11 @@ export class KommisionierComponent implements OnInit {
             Object.assign(tmp, data);
             if (res === tmp.gewicht) {
               this.currentPalatte = 0;
+              if(this.kommDetails.length === 0) {
+                this.toastr.success('Gewicht gespeichert');
+                this.kommid = 0;
+                return;
+              }
               return this.toastr.success('Gewicht gespeichert');
             }
             return this.toastr.error(

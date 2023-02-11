@@ -16,4 +16,7 @@ export class NeuePaletteDTO {
   @IsNotEmpty()
   @IsNumber()
   gewicht: number;
+  @IsNotEmpty()
+  @IsNumber()
+  liferant: number;
 }

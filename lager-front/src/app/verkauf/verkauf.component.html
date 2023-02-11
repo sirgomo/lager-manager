@@ -34,11 +34,11 @@
         </ng-container>
         <ng-container matColumnDef="dispo">
           <mat-header-cell *matHeaderCellDef>Dispositor</mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ dispo[item.dispositorId].name  }}</mat-cell>
+          <mat-cell *matCellDef="let item"><span *ngIf="item !== undefined && item !== null"> {{ dispo[item.dispositorId].name  }}</span></mat-cell>
         </ng-container>
         <ng-container matColumnDef="spedi">
           <mat-header-cell *matHeaderCellDef>Spedition</mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ spedi[item.spedition].name }}</mat-cell>
+          <mat-cell *matCellDef="let item"><span *ngIf="item.spedition !== undefined && spedi[item.spedition].name !== undefined"> {{ spedi[item.spedition].name }}</span></mat-cell>
         </ng-container>
         <ng-container matColumnDef="versorgid">
           <mat-header-cell *matHeaderCellDef>Versorgungs id</mat-header-cell>

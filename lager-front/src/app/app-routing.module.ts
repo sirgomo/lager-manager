@@ -13,6 +13,8 @@ import { CreateKommisionierungComponent } from './create-kommisionierung/create-
 import { DatenpflegeComponent } from './datenpflege/datenpflege.component';
 import { AdminComponent } from './admin/admin.component';
 
+
+
 const routes: Routes = [
   {
     path: 'auth',

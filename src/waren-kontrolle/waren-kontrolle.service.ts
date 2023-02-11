@@ -4,7 +4,8 @@ import { ArtikelEntity } from 'src/entity/artikelEntity';
 import { InKomissPalletenEntity } from 'src/entity/inKomissPalletenEntity';
 import { KommisioDetailsEntity } from 'src/entity/kommisioDetailsEntity';
 import { KommissionirungEntity } from 'src/entity/kommissionirungEntity';
-import { IsNull, Not, Repository } from 'typeorm';
+import { DispositorEntity } from 'src/entity/dispositorEntity'
+import { Not, Repository } from 'typeorm';
 
 @Injectable()
 export class WarenKontrolleService {
@@ -166,6 +167,79 @@ export class WarenKontrolleService {
       return err;
     }
   }
+  async getPaleteToDruck(palnr: number, kommid: number) { 
+    try {
+      const gewicht = await (await this.palRepo.findOne({where: {id: palnr, artikelId: 0}})).paletteRealGewicht;
+      return await this.palRepo
+        .createQueryBuilder('pal')
+        .select(
+          'pal.artikelId, pal.artikelMenge, pal.liferantId,pal.kommId, pal.lkwNummer, pal.paletteRealGewicht',
+        )
+        .leftJoin(
+          ArtikelEntity,
+          'art',
+          'art.artikelId=pal.artikelId AND art.liferantId=pal.liferantId',
+        )
+        .addSelect('art.name', 'name')
+        .leftJoin(KommissionirungEntity, 'kom', 'kom.id=' + kommid)
+        .addSelect('kom.dispositorId, kom.gewunschtesLieferDatum, kom.versorgungId')
+        .leftJoin(DispositorEntity, 'dispo', 'dispo.id=kom.dispositorId')
+        .addSelect('dispo.name')
+        .where('pal.id = :id', { id: palnr })
+        .andWhere('pal.artikelId != 0')
+        .getRawMany()
+        .then(
+          (data) => {
+          
+            for( let i = 0; i < data.length; i++) {
+              data[i].paletteRealGewicht = gewicht;
+            }
+            return data;
+          },
+          (err) => {
+            console.log(err);
+          },
+        );
+    } catch (err) {
+      return err;
+    }
+
+  }
+  async getPalettenToDruck(kommid: number) {
+    try {
+      const gewicht = await (await this.palRepo.findOne({where: {kommId: kommid, artikelId: 0}})).paletteRealGewicht;
+      return this.komDetailsRepo.createQueryBuilder('det')
+      .select('det.id, det.kommissId')
+      .leftJoin(InKomissPalletenEntity, 'pal', 'pal.kommId=det.id AND pal.artikelId != 0')
+      .addSelect('pal.artikelId, pal.artikelMenge, pal.liferantId,pal.id, pal.lkwNummer, pal.paletteRealGewicht')
+      .leftJoin(
+        ArtikelEntity,
+        'art',
+        'art.artikelId=pal.artikelId AND art.liferantId=pal.liferantId',
+      )
+      .addSelect('art.name', 'name')
+      .leftJoin(KommissionirungEntity, 'kom', 'kom.id=' + kommid)
+      .addSelect('kom.dispositorId, kom.gewunschtesLieferDatum, kom.versorgungId')
+      .leftJoin(DispositorEntity, 'dispo', 'dispo.id=kom.dispositorId')
+      .addSelect('dispo.name')
+      .where('det.kommissId = :id', { id: kommid })
+      .getRawMany()
+      .then(
+        (data) => {
+          for( let i = 0; i < data.length; i++) {
+            data[i].paletteRealGewicht = gewicht;
+          }
+         
+          return data;
+        },
+        (err) => {
+          console.log(err);
+        },
+      );
+    } catch (err) {
+      return err;
+    }
+  }
   async setWareControled(artid: number) {
   
     try {
@@ -202,6 +276,15 @@ export class WarenKontrolleService {
           throw new HttpException('Keine palette gefunden!', HttpStatus.INTERNAL_SERVER_ERROR);
         }
       tympPal.lkwNummer = lkwnr;
+      await this.palRepo.createQueryBuilder('pal')
+      .update('inkomisspal', {'lkwNummer': lkwnr})
+     
+      .where('id= :id', {id: tympPal.id})
+      .execute().then( (data) => {
+      }, (err) => {
+        console.log(err);
+      });
+      
       return await (await this.palRepo.update({'autoid': palnr}, tympPal)).affected;
     } catch (err) {
       return err;

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ControllerKomissDataDto } from '../dto/controllerKomissData.dto';
 import { PaleteForControlleDto } from '../dto/paleteForControlle.dto';
+import { PaleteToDruckDto } from '../dto/paleteToDruck.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -36,5 +37,11 @@ export class KontrollerService {
   }
   setLkwNr(palid: number, lkwnr: number) {
     return this.http.get<number>(this.API_URL + '/lkw/'+palid+'/'+lkwnr);
+  }
+  getPaleteToDruck(palid: number, kommId: number) {
+    return this.http.get<PaleteToDruckDto[]>(this.API_URL + '/druck/'+palid + '/' + kommId);
+  }
+  getPalettenToDruck(kommId: number) { 
+    return this.http.get<PaleteToDruckDto[]>(this.API_URL + '/druckall/' + kommId);
   }
 }

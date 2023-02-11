@@ -7,9 +7,9 @@
   </ng-container>
   <ng-container matColumnDef="palTyp">
     <th mat-header-cell *matHeaderCellDef>Paletten Typ</th>
-    <td mat-cell *matCellDef="let item; let i = index"  (click)="getPaleteForControlle(i)">{{item.palettenTyp}}</td>
+    <td mat-cell *matCellDef="let item; let i = index"  (click)="paleteTypAndern(i)">{{item.palettenTyp}}</td>
     <td mat-footer-cell *matFooterCellDef>
-      <div class="row" *ngIf="paleten.length !== undefined && paleten[0] !== undefined && paleten[1] !== undefined">
+      <div class="row" *ngIf="paleten.length !== undefined && paleten[0] !== undefined && paleten[0] !== undefined">
         <div *ngFor="let item of paleten">
           {{item[0]}}: {{item[1]}}
         </div>
@@ -23,7 +23,7 @@
   </ng-container>
   <ng-container matColumnDef="relGewi">
     <th mat-header-cell *matHeaderCellDef>Palette Gewicht</th>
-    <td mat-cell *matCellDef="let item; let i = in index"  (click)="getPaleteForControlle(i)">{{item.paletteRealGewicht}}</td>
+    <td mat-cell *matCellDef="let item; let i = index"  (click)="paleteGewichtAndern(i)">{{item.paletteRealGewicht}}</td>
     <td mat-footer-cell *matFooterCellDef>Gewicht: {{getTotalGewicht()}}</td>
   </ng-container>
   <ng-container matColumnDef="lkw">

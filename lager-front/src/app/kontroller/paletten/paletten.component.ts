@@ -95,6 +95,12 @@ export class PalettenComponent implements OnInit {
       }
     });
   }
+  paleteGewichtAndern(index: number) {
+    //TODO
+  }
+  paleteTypAndern(index: number) {
+    //TODO
+  }
   async changeLkwNumber(index: number) { 
     await this.service.setLkwNr(this.dataRes.filteredData[index].autoid, this.dataRes.filteredData[index].lkwNummer).subscribe((res) => {
       if (res !== 1) {

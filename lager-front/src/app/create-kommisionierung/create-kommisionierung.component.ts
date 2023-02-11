@@ -109,7 +109,7 @@ export class CreateKommisionierungComponent implements OnInit {
       falligkeitDatum: [Date, Validators.required],
       skonto: [Number, Validators.required],
       skontoFrist: [Number, Validators.required],
-      kommissStatus: KOMMISIONSTATUS,
+      kommissStatus: [KOMMISIONSTATUS, Validators.required],
       spedition: [Number, Validators.required],
       versorgungId: ['', Validators.required],
       kommDetails: KommissDetailsDto,

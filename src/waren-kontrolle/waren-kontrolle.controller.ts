@@ -51,4 +51,14 @@ export class WarenKontrolleController {
   setLkwNr(@Param('pid') palid: number, @Param('lkwnr') lkwnr: number) {
     return this.service.setLkwNr(palid, lkwnr);
   }
+  @Get('druck/:pid/:kommid')
+  @ROLES(ROLE.KONTROLLER)
+  getPaleteToDruck(@Param('pid') pid: number, @Param('kommid') kommid: number) {
+    return this.service.getPaleteToDruck(pid, kommid);
+  }
+  @Get('druckall/:kid')
+  @ROLES(ROLE.KONTROLLER)
+  getPalettenToDruck(@Param('kid') kid:number) {
+    return this.service.getPalettenToDruck(kid);
+  }
 }

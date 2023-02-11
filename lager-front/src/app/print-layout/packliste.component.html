@@ -1,0 +1,41 @@
+<div>
+    <div class="divider"></div>
+        <div class="druckbutt"><button mat-raised-button color="primary" (click)="print()">Drucken</button>
+        <button type="button" mat-dialog-close mat-raised-button color="warn">Abbrechen</button>
+    </div>
+  
+    <div class="divider"></div>
+<div name="todruck" id="todruck" class="todruck">
+    <div class="druck" id="druck"  *ngFor="let item of tmpPalets; let i = index">
+        <div class="head">
+            <div>
+                <div><div class="palnr">{{this.palnr[i]}}</div> </div>
+                <div *ngIf="this.dataTab[i].filteredData[i] !== undefined">Empfänger: {{this.dataTab[i].filteredData[i].dispo_name}}</div>
+                <div *ngIf="this.dataTab[i].filteredData[i] !== undefined">Gewünschte Lieferdatum: {{this.dataTab[i].filteredData[i].gewunschtesLieferDatum | date: 'shortDate'}}</div>
+            </div>
+            <div>
+                <div *ngIf="this.dataTab[i].filteredData[i] !== undefined">Kommissionierung Nr: {{this.dataTab[i].filteredData[i].kommId}}</div>
+                <div *ngIf="this.dataTab[i].filteredData[i] !== undefined">LKW NR: {{this.dataTab[i].filteredData[i].lkwNummer}}</div>
+                <div *ngIf="this.dataTab[i].filteredData[i] !== undefined">Gewicht: {{this.dataTab[i].filteredData[i].paletteRealGewicht}}</div>
+                <div *ngIf="this.dataTab[i].filteredData[i] !== undefined">Versorgung Id: {{this.dataTab[i].filteredData[i].versorgungId}}</div>
+            </div>
+        </div>
+        <table mat-table [dataSource]="dataTab[i]">
+            <ng-container matColumnDef="artiid">
+                <th mat-header-cell *matHeaderCellDef>Art Nr.</th>
+                <td mat-cell *matCellDef="let item">{{item.artikelId}}</td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Artikel Name</th>
+                <td mat-cell *matCellDef="let item">{{item.name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="stuck">
+                <th mat-header-cell *matHeaderCellDef>Menge :</th>
+                <td mat-cell *matCellDef="let item">{{item.artikelMenge}}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="columnDef"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnDef"></tr>
+        </table>
+    </div>
+</div>
+</div>

@@ -6,4 +6,5 @@ export class NeuePaletteDto {
   palTyp!: PALETTENTYP;
   kommissionierId!: number;
   gewicht!: number;
+  liferant!: number;
 }

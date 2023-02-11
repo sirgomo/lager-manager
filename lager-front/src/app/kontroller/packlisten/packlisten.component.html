@@ -26,7 +26,7 @@
                 <button mat-raised-button (click)="getPaletteToDruck(item.id)">Drücken</button>
             </td>
             <td mat-footer-cell *matFooterCellDef>
-                <button mat-raised-button color="primary">Alle Drücken</button>
+                <button mat-raised-button color="primary" (click)="getPalettenToDruck()">Alle Drücken</button>
             </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="columnDef"></tr>
@@ -34,3 +34,4 @@
         <tr mat-footer-row *matFooterRowDef="columnDef"></tr>
     </table>
 </div>
+

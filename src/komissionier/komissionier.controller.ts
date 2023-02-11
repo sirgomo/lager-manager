@@ -28,7 +28,6 @@ export class KomissionierController {
   @Post('/neupal')
   @ROLES(ROLE.KOMMISIONIER)
   neuePaletteErstellen(@Body(ValidationPipe) data: NeuePaletteDTO) {
-    console.log(data);
     return this.komSercive.neuePalete(data);
   }
   @Post('/gerf')

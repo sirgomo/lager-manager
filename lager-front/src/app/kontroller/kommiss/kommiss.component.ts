@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ArtikelKommissDto } from 'src/app/dto/artikelKommiss.dto';
 import { ControllerKomissDataDto } from 'src/app/dto/controllerKomissData.dto';
@@ -35,6 +37,7 @@ export class KommissComponent implements OnInit {
     private toaster: ToastrService,
     private helper: HelperService,
     private servis: KontrollerService,
+    private router: Router
   ) {}
   public ngOnInit(): void {
     if (this.data === null) {
@@ -77,4 +80,5 @@ export class KommissComponent implements OnInit {
       }
     }
   }
+
 }
