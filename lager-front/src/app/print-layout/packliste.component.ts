@@ -69,7 +69,94 @@ export class PacklisteComponent implements OnInit{
    
    //this.dataTab[0].filteredData[0].gewunschtesLieferDatum
   }
+   print2() {
+    const input = document.getElementById('todruck');
+    
+    const imgWidth = 210;
+    let pageHeight = 297;
+    const margin = [16, 16];
+    const innerPageWidth = imgWidth - margin[0] * 2;
+    const innerPageHeight = pageHeight - margin[1] * 2;
+    console.log('high ' + input?.offsetHeight) ;
+    if(input !== null) {
+      let pxFullHeight = input.offsetHeight;
+
+      //const pxPageHeight = Math.floor(canvas.width * (pageHeight / imgWidth));
+      const pxPageHeight = Math.floor(input.offsetWidth * (pageHeight / imgWidth));
+      
+      const nPages = Math.ceil(pxFullHeight / pxPageHeight);
+     // pxFullHeight += (nPages * 298);
+      //console.log('pxfullheig '+ pxFullHeight + ' px page hi ' + pxPageHeight);
+      // Define pageHeight separately so it can be trimmed on the final page.
+      pageHeight = innerPageHeight;
+      console.log('ilosc ' + nPages);
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      let printContents, popupWin;
+      printContents = input.innerHTML;
+      popupWin = window.open('', 'my_print', 'top=0,left=0,height=100%,width=auto');
+      if(popupWin !== null) {
+        popupWin.document.write(`
+        <html>
+        <head>
+        <title>o</title>
+        <style>
+        .druck {
+          .head {
+            border: .1rem solid;
+            border-radius: .4rem;
+            display: flex;
+            padding: .4rem .4rem;
+            margin: 0;
+            height: 30mm;
+            width: 90%;
+            flex-wrap: wrap;
+            column-count: 2;
+            gap: .4rem;
+            justify-content: space-between;
+            align-items: center;
+          }
+          margin: 16mm 16mm;
+          width: 90%;
+          min-height: 281mm;
+          overflow: hidden;
+        }
+        .druckbutt {
+          display: flex;
+          justify-content: center;
+          gap: .4rem;
+          visibility: initial;
+        }
+        .todruck {
+            width: 210mm; 
+            min-width: 210mm;
+            min-height: 297mm;
+            
+        }
+        .palnr {
+          display: flex;
+          flex-wrap: wrap;
+          width: 50%;
+        }
+        </style>
+        </head>
+        <body>
+        ${printContents}
+        </body>
+        </html>
+        `);
+        popupWin.print();
+        popupWin.close();
+      }
   
+
+      for (let page = 0; page < nPages; page++) {
+        if (page > 0) pdf.addPage();
+
+       
+      }
+    }
+    
+   }
   
   print() {
     const input = document.getElementById('todruck');
@@ -81,7 +168,8 @@ export class PacklisteComponent implements OnInit{
       scrollY: 0,
       scale: 2,
     }).then((canvas) => {
-      const image = { type: 'jpg', quality: 0.95 };
+     // const image = { type: 'png', quality: 0.3 };
+     const image = { type: 'png' };
       const margin = [16, 16];
       const filename = 'myfile.pdf';
 
@@ -112,7 +200,8 @@ export class PacklisteComponent implements OnInit{
       pageCanvas.height = pxPageHeight;
 
       // Initialize the PDF.
-      const pdf = new jsPDF('p', 'mm', 'a4');
+      //orginal was  const pdf = new jsPDF('p', 'mm', 'a4'); but image was to big
+      const pdf = new jsPDF('p', 'mm', 'a4', true);
 
       for (let page = 0; page < nPages; page++) {
         // Trim the final page to reduce file size.
@@ -125,7 +214,7 @@ export class PacklisteComponent implements OnInit{
         const w = pageCanvas.width;
         const h = pageCanvas.height;
         if (pageCtx !== null) {
-          pageCtx.fillStyle = 'white';
+         // pageCtx.fillStyle = 'white';
           pageCtx.fillRect(0, 0, w, h);
           pageCtx.drawImage(canvas, 0, page * pxPageHeight , w, h, 0, 0, w, h);
         }
@@ -134,8 +223,8 @@ export class PacklisteComponent implements OnInit{
         if (page > 0) pdf.addPage();
         // debugger;
         const imgData = pageCanvas.toDataURL(
-          'image/' + image.type,
-          image.quality,
+          'image/' + image.type//,
+        //  image.quality,
         );
         pdf.addImage(
           imgData,
@@ -144,6 +233,7 @@ export class PacklisteComponent implements OnInit{
           margin[0],
           innerPageWidth,
           pageHeight,
+          'FAST' //orginal without but this is needed to small images!
         );
        
         }
