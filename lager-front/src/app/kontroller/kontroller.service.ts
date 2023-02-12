@@ -36,7 +36,7 @@ export class KontrollerService {
     return this.http.get<number>(this.API_URL + '/art/' + artnr);
   }
   setLkwNr(palid: number, lkwnr: number) {
-    return this.http.get<number>(this.API_URL + '/lkw/'+palid+'/'+lkwnr);
+    return this.http.patch<number>(this.API_URL + '/lkw/'+palid+'/'+lkwnr, '');
   }
   getPaleteToDruck(palid: number, kommId: number) {
     return this.http.get<PaleteToDruckDto[]>(this.API_URL + '/druck/'+palid + '/' + kommId);
@@ -44,4 +44,11 @@ export class KontrollerService {
   getPalettenToDruck(kommId: number) { 
     return this.http.get<PaleteToDruckDto[]>(this.API_URL + '/druckall/' + kommId);
   }
+  setPaleteTyp(palid: number, paltyp: string) {
+    return this.http.patch<any>(this.API_URL + '/palt/' + palid + '/' + paltyp, '');
+  }
+  setPaleteGewicht(palid: number, palge: number) {
+    return this.http.patch<any>(this.API_URL + '/palg/' + palid + '/' + palge, '');
+  }
+ 
 }

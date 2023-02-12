@@ -10,14 +10,14 @@
         <div class="head">
             <div>
                 <div><div class="palnr">{{this.palnr[i]}}</div> </div>
-                <div *ngIf="this.dataTab[i].filteredData[i] !== undefined">Empfänger: {{this.dataTab[i].filteredData[i].dispo_name}}</div>
-                <div *ngIf="this.dataTab[i].filteredData[i] !== undefined">Gewünschte Lieferdatum: {{this.dataTab[i].filteredData[i].gewunschtesLieferDatum | date: 'shortDate'}}</div>
+                <div *ngIf="dataTab[i].filteredData[0] !== undefined">Empfänger: {{dataTab[i].filteredData[0].dispo_name}}</div>
+                <div *ngIf="dataTab[i].filteredData[0] !== undefined">Gewünschte Lieferdatum: {{dataTab[i].filteredData[0].gewunschtesLieferDatum | date: 'shortDate'}}</div>
             </div>
             <div>
-                <div *ngIf="this.dataTab[i].filteredData[i] !== undefined">Kommissionierung Nr: {{this.dataTab[i].filteredData[i].kommId}}</div>
-                <div *ngIf="this.dataTab[i].filteredData[i] !== undefined">LKW NR: {{this.dataTab[i].filteredData[i].lkwNummer}}</div>
-                <div *ngIf="this.dataTab[i].filteredData[i] !== undefined">Gewicht: {{this.dataTab[i].filteredData[i].paletteRealGewicht}}</div>
-                <div *ngIf="this.dataTab[i].filteredData[i] !== undefined">Versorgung Id: {{this.dataTab[i].filteredData[i].versorgungId}}</div>
+                <div *ngIf="dataTab[i].filteredData[0] !== undefined">Kommissionierung Nr: {{dataTab[i].filteredData[0].kommId}}</div>
+                <div *ngIf="dataTab[i].filteredData[0] !== undefined">LKW NR: {{dataTab[i].filteredData[0].lkwNummer}}</div>
+                <div *ngIf="dataTab[i].filteredData[0] !== undefined">Gewicht: {{dataTab[i].filteredData[0].paletteRealGewicht}}</div>
+                <div *ngIf="dataTab[i].filteredData[0] !== undefined">Versorgung Id: {{dataTab[i].filteredData[0].versorgungId}}</div>
             </div>
         </div>
         <table mat-table [dataSource]="dataTab[i]">

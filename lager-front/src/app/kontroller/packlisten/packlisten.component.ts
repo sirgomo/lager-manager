@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { PaleteForControlleDto } from 'src/app/dto/paleteForControlle.dto';
 import { PaleteToDruckDto } from 'src/app/dto/paleteToDruck.dto';
 import { PacklisteComponent } from 'src/app/print-layout/packliste.component';
@@ -12,12 +13,21 @@ import { KontrollerService } from '../kontroller.service'
   templateUrl: './packlisten.component.html',
   styleUrls: ['./packlisten.component.scss']
 })
-export class PacklistenComponent implements OnInit{
+export class PacklistenComponent implements OnInit, OnDestroy{
   @Input() kommNr: number | undefined;
   palData: MatTableDataSource<PaleteForControlleDto> = new MatTableDataSource();
   columnDef : string[] = ['id', 'palettenTyp', 'kontrolliert', 'lkwNummer', 'print'];
   paletsForDruck: PaleteToDruckDto[][] = [];
+  subs : Subscription[] = [];
   constructor(private service: KontrollerService, private toaster: ToastrService, private dialog: MatDialog) {}
+  ngOnDestroy(): void {
+    if (this.subs.length > 0 ) {
+      for (let i = 0; i < this.subs.length; i++) {
+        if(this.subs[i] !== undefined)
+        this.subs[i].unsubscribe();
+      }
+    }
+  }
   ngOnInit(): void {
    this.getPaleten();
   }
@@ -26,16 +36,16 @@ export class PacklistenComponent implements OnInit{
       this.toaster.error('Etwas ist schiefgegangen, ich Kommiessionierung number');
       return;
      }
-   await this.service.getPalattenByKommId(this.kommNr).subscribe((res) => {
+  this.subs.push(  await this.service.getPalattenByKommId(this.kommNr).subscribe((res) => {
     if(res === null) {
       this.toaster.error('ich konnte keine Paletten finden');
     }
     this.palData = new MatTableDataSource(res);
-   });
+   }));
   }
   async getPaletteToDruck(palid: number) {
     if(this.kommNr === undefined) return;
-  await this.service.getPaleteToDruck(palid, this.kommNr).subscribe((res) => {
+  this.subs.push( await this.service.getPaleteToDruck(palid, this.kommNr).subscribe((res) => {
     if(res === null) {
       this.toaster.error('ich konnte keine Palette finden');
     }
@@ -48,11 +58,11 @@ export class PacklistenComponent implements OnInit{
     conf.height = '100%';
     conf.width = '210mm';
     this.dialog.open(PacklisteComponent, conf);
-  });
+  }));
   }
   async getPalettenToDruck() {
     if(this.kommNr === undefined) return;
-    await this.service.getPalettenToDruck(this.kommNr).subscribe((res) => {
+   this.subs.push(  await this.service.getPalettenToDruck(this.kommNr).subscribe((res) => {
       if(res === null) {
         this.toaster.error('ich konnte keine Palette finden');
       }
@@ -80,8 +90,7 @@ export class PacklistenComponent implements OnInit{
       conf.height = '100%';
       conf.width = '210mm';
       this.dialog.open(PacklisteComponent, conf);
-    }); 
-  
+    })); 
   }
 
 }

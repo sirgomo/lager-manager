@@ -63,6 +63,7 @@ import { VorschlagComponent } from './vorschlag/vorschlag.component';
 import { VorZeigenComponent } from './vorschlag/vor-zeigen/vor-zeigen.component';
 import { PacklistenComponent } from './kontroller/packlisten/packlisten.component';
 import { PacklisteComponent } from './print-layout/packliste.component';
+import { PalgewichtComponent } from './kontroller/palgewicht/palgewicht.component';
 
 
 @NgModule({
@@ -102,6 +103,7 @@ import { PacklisteComponent } from './print-layout/packliste.component';
     VorZeigenComponent,
     PacklistenComponent,
     PacklisteComponent,
+    PalgewichtComponent,
   ],
   imports: [
     BrowserModule,

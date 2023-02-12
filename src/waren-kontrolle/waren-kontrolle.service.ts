@@ -207,8 +207,8 @@ export class WarenKontrolleService {
   }
   async getPalettenToDruck(kommid: number) {
     try {
-      const gewicht = await (await this.palRepo.findOne({where: {kommId: kommid, artikelId: 0}})).paletteRealGewicht;
-      return this.komDetailsRepo.createQueryBuilder('det')
+     const gewicht =  await this.palRepo.find({where: {kommId: kommid, artikelId: 0}});
+      return await this.komDetailsRepo.createQueryBuilder('det')
       .select('det.id, det.kommissId')
       .leftJoin(InKomissPalletenEntity, 'pal', 'pal.kommId=det.id AND pal.artikelId != 0')
       .addSelect('pal.artikelId, pal.artikelMenge, pal.liferantId,pal.id, pal.lkwNummer, pal.paletteRealGewicht')
@@ -226,8 +226,12 @@ export class WarenKontrolleService {
       .getRawMany()
       .then(
         (data) => {
-          for( let i = 0; i < data.length; i++) {
-            data[i].paletteRealGewicht = gewicht;
+          for( let i = 0; i < gewicht.length; i++) {
+            for(let y = 0; y < data.length; y++) {
+              if(gewicht[i].id === data[y].id) {
+                data[y].paletteRealGewicht = gewicht[i].paletteRealGewicht;
+              }
+            }
           }
          
           return data;
@@ -269,6 +273,33 @@ export class WarenKontrolleService {
       return err;
     }
   }
+  async changePaletteTyp(artid: number, typ:string)
+   {
+    try {
+    return await this.palRepo.createQueryBuilder('pal')
+      .update('inkomisspal', {'palettenTyp': typ.toString()})
+      .where('autoid= :id', {id : artid})
+      .execute()
+      .then((data) => {
+       return data.affected;
+      })
+    } catch (err) {
+      return err;
+    }
+   }
+   async changePalGewicht(artid: number, gewicht: number) {
+    try {
+        return await this.palRepo.createQueryBuilder('pal')
+        .update('inkomisspal', {'paletteRealGewicht': gewicht})
+        .where('autoid = :id', {id: artid})
+        .execute()
+        .then((data) => {
+         return data.affected;
+        });
+    } catch (err) {
+      return err;
+    }
+   }
  async setLkwNr(palnr: number, lkwnr: number) { 
     try {
       const tympPal: InKomissPalletenEntity = await this.palRepo.findOne({where: {autoid: palnr}});

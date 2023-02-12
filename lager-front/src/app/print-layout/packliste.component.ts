@@ -62,7 +62,6 @@ export class PacklisteComponent implements OnInit{
        }
      
     }
-    console.log(this.tmpPalets);
     for (let i = 0; i < this.tmpPalets.length; i++ ) {
     this.dataTab[i] =  new MatTableDataSource(this.tmpPalets[i]);
    

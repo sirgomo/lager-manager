@@ -1,0 +1,14 @@
+<mat-toolbar color="primary">
+    <span>Gewicht Abändren</span>
+</mat-toolbar>
+<mat-dialog-content>
+    <mat-form-field>
+        <mat-label>Neu Gewicht</mat-label>
+        <input type="number" matInput [(ngModel)]="gewicht">
+    </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions >
+    <button mat-raised-button color="primary" (click)="neueGewicht()">Speichern</button>
+    <button mat-raised-button color="warn" matDialogClose>Abbrechen</button> 
+</mat-dialog-actions>

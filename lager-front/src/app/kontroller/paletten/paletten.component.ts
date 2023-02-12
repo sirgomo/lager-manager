@@ -1,18 +1,20 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { PALETTENTYP } from 'src/app/dto/lagerPlatz.dto';
 import { PaleteForControlleDto } from 'src/app/dto/paleteForControlle.dto';
 import { KontrollerService } from '../kontroller.service';
 import { PalControlComponent } from '../pal-control/pal-control.component';
+import { PalgewichtComponent } from '../palgewicht/palgewicht.component';
 
 @Component({
   selector: 'app-paletten',
   templateUrl: './paletten.component.html',
   styleUrls: ['./paletten.component.scss'],
 })
-export class PalettenComponent implements OnInit {
+export class PalettenComponent implements OnInit, OnDestroy {
   @Input() kommNr = 0;
   paletten: PaleteForControlleDto[] = [];
   dataRes: MatTableDataSource<PaleteForControlleDto> = new MatTableDataSource();
@@ -21,6 +23,7 @@ export class PalettenComponent implements OnInit {
   palcheck = true;
   paleten = new Array(this.pal.length);
   lkwNumbers : number[] = [20];
+  subs: Subscription[] = [];
   constructor(
     private service: KontrollerService,
     private toaster: ToastrService,
@@ -28,9 +31,20 @@ export class PalettenComponent implements OnInit {
   ) {
     this.lkwNumbers = Array(20).fill(Number).map((x,i) => i);
   }
+  ngOnDestroy(): void {
+    if (this.subs.length > 0) {
+      for (let i = 0; i< this.subs.length; i++) { 
+        if(this.subs[i] !== undefined)
+          this.subs[i].unsubscribe();
+      }
+    }
+  }
 
   public ngOnInit(): void {
-    this.service.getPalattenByKommId(this.kommNr).subscribe((res) => {
+    this.getPalettenByKommId();
+  }
+  private async getPalettenByKommId() {
+    this.subs.push( await this.service.getPalattenByKommId(this.kommNr).subscribe((res) => {
       if (res.length > 0) {
         for (let i = 0; i < res.length; i++) {
           this.paletten.push(res[i]);
@@ -42,8 +56,9 @@ export class PalettenComponent implements OnInit {
       const err = new Error();
       Object.assign(err, res);
       return this.toaster.error(err.message);
-    });
+    }));
   }
+
   getTotalGewicht() {
     let gewicht = 0;
     for (let i = 0; i < this.dataRes.filteredData.length; i++) {
@@ -78,7 +93,6 @@ export class PalettenComponent implements OnInit {
   getPaleteForControlle(index: number) {
     const config = new MatDialogConfig();
     config.data = this.paletten[index].id;
-    config.disableClose = true;
     config.minWidth = '95vw';
     config.minHeight = '95vh';
     this.dialog.open(PalControlComponent, config).beforeClosed().subscribe((data) => {
@@ -95,20 +109,49 @@ export class PalettenComponent implements OnInit {
       }
     });
   }
-  paleteGewichtAndern(index: number) {
-    //TODO
+  async paleteGewichtAndern(index: number) {
+    let conf : MatDialogConfig = new MatDialogConfig();
+    conf.width = '40vw';
+    conf.height = '40vh';
+    conf.data = this.dataRes.filteredData[index].paletteRealGewicht;
+   this.subs.push( this.dialog.open(PalgewichtComponent, conf).afterClosed().subscribe((data) => { 
+    if(data === this.dataRes.filteredData[index].paletteRealGewicht || data === undefined || data.length < 1) {
+      this.toaster.info('Vorgagng wurde abgebrochen', '', {timeOut: 700});
+      return;
+    }
+    if(!isFinite(data) || data < 0) {
+      this.toaster.error('Gewicht ist falsch, abgebrochen', '', {timeOut: 1000});
+      return;
+    }
+     this.subs.push(  this.service.setPaleteGewicht(this.dataRes.filteredData[index].autoid, data).subscribe((res) => {
+      if(res !== 1) {
+        this.toaster.error('Etwas ist schiefgegangen beim spiechern, neue gewicht wurde nicht gespeichert!', '', {timeOut: 1000});
+        return;
+      }
+      this.dataRes.filteredData[index].paletteRealGewicht = data;
+      this.toaster.success('gewicht wurde geändert!', '', {timeOut: 800});
+    }));
+   }));
   }
-  paleteTypAndern(index: number) {
-    //TODO
+  async paleteTypAndern(index: number) {
+    this.subs.push(
+      await this.service.setPaleteTyp(this.dataRes.filteredData[index].autoid ,this.dataRes.filteredData[index].palettenTyp).subscribe((res) => {
+       if(res !== 1) {
+        this.toaster.error('Etwas ist schiefgegangen, Paleten typ wurde nicht geändert!', '', {timeOut: 800});
+        return;
+       } 
+       this.toaster.success('Palete wurde geändert!', '', {timeOut: 700});
+      })
+    );
   }
   async changeLkwNumber(index: number) { 
-    await this.service.setLkwNr(this.dataRes.filteredData[index].autoid, this.dataRes.filteredData[index].lkwNummer).subscribe((res) => {
+    this.subs.push(  await this.service.setLkwNr(this.dataRes.filteredData[index].autoid, this.dataRes.filteredData[index].lkwNummer).subscribe((res) => {
       if (res !== 1) {
         const err = new Error();
         this.toaster.error(err.message, 'Ups...', {timeOut: 900});
         return;
       }
       this.toaster.success('Lkw nr wurde geandert!', 'LKW', {timeOut: 600});
-    })
+    }));
   }
 }

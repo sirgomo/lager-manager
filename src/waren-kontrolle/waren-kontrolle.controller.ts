@@ -46,7 +46,7 @@ export class WarenKontrolleController {
   setArtikelControlret(@Param('nr') artnr: number) {
     return this.service.setWareControled(artnr);
   }
-  @Get('lkw/:pid/:lkwnr')
+  @Patch('lkw/:pid/:lkwnr')
   @ROLES(ROLE.KONTROLLER)
   setLkwNr(@Param('pid') palid: number, @Param('lkwnr') lkwnr: number) {
     return this.service.setLkwNr(palid, lkwnr);
@@ -60,5 +60,13 @@ export class WarenKontrolleController {
   @ROLES(ROLE.KONTROLLER)
   getPalettenToDruck(@Param('kid') kid:number) {
     return this.service.getPalettenToDruck(kid);
+  }
+  @Patch('palt/:palid/:typ')
+  setPaleteTyp(@Param('palid') palid: number, @Param('typ') typ: string) {
+    return this.service.changePaletteTyp(palid, typ);
+  }
+  @Patch('palg/:palid/:gw')
+  setPaleteGewicht(@Param('palid') palid: number, @Param('gw') gw: number) {
+    return this.service.changePalGewicht(palid, gw);
   }
 }
