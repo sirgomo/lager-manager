@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ArtikelEntity } from 'src/entity/artikelEntity';
 import { InKomissPalletenEntity } from 'src/entity/inKomissPalletenEntity';
 import { KommisioDetailsEntity } from 'src/entity/kommisioDetailsEntity';
-import { KommissionirungEntity } from 'src/entity/kommissionirungEntity';
+import { KOMMISIONSTATUS, KommissionirungEntity } from 'src/entity/kommissionirungEntity';
 import { DispositorEntity } from 'src/entity/dispositorEntity'
 import { Not, Repository } from 'typeorm';
 
@@ -119,6 +119,14 @@ export class WarenKontrolleService {
   }
   async setNewStatus(kommid: number, status: any) {
     try {
+      await this.palRepo.find({where: {kommId: kommid, kontrolliert: false}}).then((data) => {
+        if(data.length !== 0 && status.KOMMISIONSTATUS === KOMMISIONSTATUS.FERTIG) {
+         throw new HttpException('Noch nicht alle palleten sind kontrolliret!', HttpStatus.BAD_REQUEST);
+        }
+      })
+      if(status.KOMMISIONSTATUS === KOMMISIONSTATUS.INBEARBEITUNG || status.KOMMISIONSTATUS === KOMMISIONSTATUS.FREIGEGEBEN) {
+        throw new HttpException('Das kannst du nicht tun', HttpStatus.FORBIDDEN);
+      }
       return await this.komRepo
         .findOne({ where: { id: kommid } })
         .then((data) => {

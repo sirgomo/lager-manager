@@ -130,6 +130,8 @@ export class KontrollerComponent implements OnInit {
           });
           return;
         }
+        this.kommiss[index].kommissStatus = KOMMISIONSTATUS.INKOMMISSIONIRUNG;
+        this.dataSource.filteredData[index].kommissStatus = KOMMISIONSTATUS.INKOMMISSIONIRUNG;
         const err: Error = new Error();
         Object.assign(err, res);
         this.toaster.error(err.message);
