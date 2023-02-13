@@ -12,7 +12,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;  font-weigh
 .icons mat-icon, .icons div {
   cursor: pointer;
 }
-
+.mat-icon {
+  padding-right: .4rem;
+}
 .spacer{
  flex: 1 1 auto;
 }
