@@ -1,48 +1,56 @@
-
- <table mat-table [dataSource]="dataRes" enableStickyHeader="true" enableStickyFooter="true">
-  <ng-container matColumnDef="palid">
-    <th mat-header-cell *matHeaderCellDef>Paletten Nr.</th>
-    <td mat-cell *matCellDef="let item; let i = index "  (click)="getPaleteForControlle(i)">{{item.id}}</td>
-    <td mat-footer-cell *matFooterCellDef>Total Paleten: {{getPaletenMenge()}}</td>
-  </ng-container>
-  <ng-container matColumnDef="palTyp">
-    <th mat-header-cell *matHeaderCellDef>Paletten Typ</th>
-    <td mat-cell *matCellDef="let item; let i = index">
-        <mat-select [(ngModel)]="dataRes.filteredData[i].palettenTyp" (selectionChange)="paleteTypAndern(i)">
-            <mat-option *ngFor="let item of pal" [value]="item">{{item}}</mat-option>
-        </mat-select>
-    </td>
-    <td mat-footer-cell *matFooterCellDef>
-      <div class="row" *ngIf="paleten.length !== undefined && paleten[0] !== undefined && paleten[0] !== undefined">
-        <div *ngFor="let item of paleten">
-          {{item[0]}}: {{item[1]}}
-        </div>
-      </div>
-    </td>
-  </ng-container>
-  <ng-container matColumnDef="kontro">
-    <th mat-header-cell *matHeaderCellDef>Palette Kontrolliert ?</th>
-    <td mat-cell *matCellDef="let item; let i = index"  (click)="getPaleteForControlle(i)">{{item.kontrolliert === 0 ? 'Nein' : 'Ja'}}</td>
-    <td mat-footer-cell *matFooterCellDef></td>
-  </ng-container>
-  <ng-container matColumnDef="relGewi">
-    <th mat-header-cell *matHeaderCellDef>Palette Gewicht</th>
-    <td mat-cell *matCellDef="let item; let i = index"  (click)="paleteGewichtAndern(i)">{{item.paletteRealGewicht}}</td>
-    <td mat-footer-cell *matFooterCellDef>Gewicht: {{getTotalGewicht()}}</td>
-  </ng-container>
-  <ng-container matColumnDef="lkw">
-    <th mat-header-cell *matHeaderCellDef>LKW NR</th>
-    <td mat-cell *matCellDef="let item; let i = index">
-      <div class="my-form-filed">
-        <mat-select [(ngModel)]="dataRes.filteredData[i].lkwNummer" (selectionChange)="changeLkwNumber(i)" >
-            <mat-option *ngFor="let item of lkwNumbers" [value]="item">{{item}}</mat-option>
-        </mat-select>
-      </div>
-    </td>
-    <td mat-footer-cell *matFooterCellDef></td>
-  </ng-container>
-  <tr mat-header-row *matHeaderRowDef="columnDef"></tr>
-  <tr mat-row *matRowDef="let row; columns: columnDef;"></tr>
-  <tr mat-footer-row *matFooterRowDef="columnDef"></tr>
- </table>
-
+<mat-tab-group animationDuration="500ms" dynamicHeight (selectedTabChange)="matTabChange($event.index)">
+  <mat-tab *ngFor="let tab of paletten let y = index">
+    <ng-template mat-tab-label >
+      <mat-icon class="mat-icon">local_shipping</mat-icon>
+     <span *ngIf="tab[0] !== undefined"> Lkw {{tab[0].lkwNummer}}</span> 
+    </ng-template>
+    <ng-template matTabContent>
+      <table mat-table [dataSource]="dataRes" enableStickyHeader="true" enableStickyFooter="true">
+      <ng-container matColumnDef="palid">
+        <th mat-header-cell *matHeaderCellDef>Paletten Nr.</th>
+        <td mat-cell *matCellDef="let item; let i = index "  (click)="getPaleteForControlle(i,y)">{{item.id}}</td>
+        <td mat-footer-cell *matFooterCellDef>Total Paleten: {{getPaletenMenge()}}</td>
+      </ng-container>
+      <ng-container matColumnDef="palTyp">
+        <th mat-header-cell *matHeaderCellDef>Paletten Typ</th>
+        <td mat-cell *matCellDef="let item; let i = index">
+            <mat-select [(ngModel)]="dataRes.filteredData[i].palettenTyp" (selectionChange)="paleteTypAndern(i)">
+                <mat-option *ngFor="let item of pal" [value]="item">{{item}}</mat-option>
+            </mat-select>
+        </td>
+        <td mat-footer-cell *matFooterCellDef>
+          <div class="row" *ngIf="paleten.length !== undefined && paleten[0] !== undefined && paleten[0] !== undefined">
+            <div *ngFor="let item of paleten">
+              {{item[0]}}: {{item[1]}}
+            </div>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="kontro">
+        <th mat-header-cell *matHeaderCellDef>Palette Kontrolliert ?</th>
+        <td mat-cell *matCellDef="let item; let i = index"  (click)="getPaleteForControlle(i,y)">{{item.kontrolliert === 0 ? 'Nein' : 'Ja'}}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+      <ng-container matColumnDef="relGewi">
+        <th mat-header-cell *matHeaderCellDef>Palette Gewicht</th>
+        <td mat-cell *matCellDef="let item; let i = index"  (click)="paleteGewichtAndern(i)">{{item.paletteRealGewicht}}</td>
+        <td mat-footer-cell *matFooterCellDef>Gewicht: {{getTotalGewicht()}}</td>
+      </ng-container>
+      <ng-container matColumnDef="lkw">
+        <th mat-header-cell *matHeaderCellDef>LKW NR</th>
+        <td mat-cell *matCellDef="let item; let i = index">
+          <div class="my-form-filed">
+            <mat-select [(ngModel)]="dataRes.filteredData[i].lkwNummer" (selectionChange)="changeLkwNumber(i,y)" >
+                <mat-option *ngFor="let item of lkwNumbers" [value]="item">{{item}}</mat-option>
+            </mat-select>
+          </div>
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnDef"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnDef;"></tr>
+      <tr mat-footer-row *matFooterRowDef="columnDef"></tr>
+    </table>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>

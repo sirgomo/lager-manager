@@ -16,7 +16,7 @@ import { PalgewichtComponent } from '../palgewicht/palgewicht.component';
 })
 export class PalettenComponent implements OnInit, OnDestroy {
   @Input() kommNr = 0;
-  paletten: PaleteForControlleDto[] = [];
+  paletten: PaleteForControlleDto[][] = [];
   dataRes: MatTableDataSource<PaleteForControlleDto> = new MatTableDataSource();
   columnDef = ['palid', 'palTyp', 'kontro', 'relGewi', 'lkw'];
   pal = Object.values(PALETTENTYP);
@@ -24,6 +24,7 @@ export class PalettenComponent implements OnInit, OnDestroy {
   paleten = new Array(this.pal.length);
   lkwNumbers : number[] = [20];
   subs: Subscription[] = [];
+ 
   constructor(
     private service: KontrollerService,
     private toaster: ToastrService,
@@ -47,9 +48,14 @@ export class PalettenComponent implements OnInit, OnDestroy {
     this.subs.push( await this.service.getPalattenByKommId(this.kommNr).subscribe((res) => {
       if (res.length > 0) {
         for (let i = 0; i < res.length; i++) {
-          this.paletten.push(res[i]);
+          if(this.paletten[res[i].lkwNummer] === undefined) {
+            this.paletten[res[i].lkwNummer] = [];
+          }
+          this.paletten[res[i].lkwNummer].push(res[i]);
         }
-        this.dataRes = new MatTableDataSource(this.paletten);
+        this.paletten = this.paletten.filter(e => e);
+        this.dataRes = new MatTableDataSource(this.paletten[2]);
+        console.log(this.dataRes.filteredData);
         this.getPaltenMengeOfTyp();
         return;
       }
@@ -90,9 +96,9 @@ export class PalettenComponent implements OnInit, OnDestroy {
     });
     return this.paleten;
   }
-  getPaleteForControlle(index: number) {
+  getPaleteForControlle(index: number, lkwnr :number) {
     const config = new MatDialogConfig();
-    config.data = this.paletten[index].id;
+    config.data = this.paletten[lkwnr][index].id;
     config.minWidth = '95vw';
     config.minHeight = '95vh';
     this.dialog.open(PalControlComponent, config).beforeClosed().subscribe((data) => {
@@ -100,10 +106,10 @@ export class PalettenComponent implements OnInit, OnDestroy {
       
       if (data === 0) {
         this.dataRes.filteredData[index].kontrolliert = 1;
-        this.paletten[index].kontrolliert = 1;
+        this.paletten[lkwnr][index].kontrolliert = 1;
         this.dataRes = new MatTableDataSource(this.dataRes.filteredData);
       }else if (data !== 0) {
-        this.paletten[index].kontrolliert = 0;
+        this.paletten[lkwnr][index].kontrolliert = 0;
         this.dataRes.filteredData[index].kontrolliert = 0;
         this.dataRes = new MatTableDataSource(this.dataRes.filteredData);
       }
@@ -144,14 +150,55 @@ export class PalettenComponent implements OnInit, OnDestroy {
       })
     );
   }
-  async changeLkwNumber(index: number) { 
+  async changeLkwNumber(index: number,tabnr: number) { 
     this.subs.push(  await this.service.setLkwNr(this.dataRes.filteredData[index].autoid, this.dataRes.filteredData[index].lkwNummer).subscribe((res) => {
       if (res !== 1) {
         const err = new Error();
         this.toaster.error(err.message, 'Ups...', {timeOut: 900});
         return;
       }
+      let tmpdone: boolean = false;
+    for(let i = 0; i < this.paletten.length; i++ ) {
+      if ((this.paletten[i][0] !== undefined && this.paletten[i][0].lkwNummer !== undefined && 
+        this.paletten[i][this.paletten[i].length-1] !== undefined && this.paletten[i][this.paletten[i].length-1].lkwNummer !== undefined ) &&
+        this.paletten[i][this.paletten[i].length-1].lkwNummer === this.dataRes.filteredData[index].lkwNummer ) {
+        this.paletten[i].push(this.paletten[tabnr].splice(index,1)[0]);
+        if(this.paletten[tabnr].length > 0){
+          this.dataRes = new MatTableDataSource(this.paletten[tabnr]);
+        } else {
+          for(let y = 0; y < this.paletten.length; y++ ) {
+            if(this.paletten[y].length > 0){ 
+              this.dataRes = new MatTableDataSource(this.paletten[tabnr]);
+              this.paletten.splice(tabnr,1);
+              break;
+            }
+          }
+        }
+        
+        tmpdone = true;
+      }
+    }
+    if(!tmpdone) {
+      this.paletten[this.paletten.length] = [];
+      this.paletten[this.paletten.length-1].push(this.paletten[tabnr].splice(index,1)[0]);
+      if(this.paletten[tabnr].length > 0){
+        this.dataRes = new MatTableDataSource(this.paletten[tabnr]);
+      } else {
+        for(let y = 0; y < this.paletten.length; y++ ) {
+          if(this.paletten[y].length > 0){ 
+            this.dataRes = new MatTableDataSource(this.paletten[tabnr]);
+            break;
+          }
+        }
+      }
+      
+      tmpdone = true;
+    }
       this.toaster.success('Lkw nr wurde geandert!', 'LKW', {timeOut: 600});
     }));
+  }
+  matTabChange(index: number) {
+  
+   this.dataRes = new MatTableDataSource(this.paletten[index]);
   }
 }
