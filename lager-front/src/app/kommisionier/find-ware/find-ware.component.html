@@ -22,12 +22,12 @@
           {{item.artikelMenge}}
         </div>
         <div *ngIf="istEsWenigerAufDemLagerPlatz()" class="buttons">
-          <button type="button" mat-raised-button (click)="artikelKommissioniren(i)">Neue Palette</button>
+          <button type="button" mat-raised-button (click)="artikelKommissioniren(i)">Neue Ladeträger</button>
         </div>
       </td>
     </ng-container>
     <ng-container matColumnDef="mhd">
-      <th mat-header-cell *matHeaderCellDef>Artikel Mhd</th>
+      <th mat-header-cell *matHeaderCellDef>Artikel Mhd: </th>
       <td mat-cell *matCellDef="let item;">
           <div  *ngIf="item.mhd === undefined">...</div>
           <div  *ngIf="item.mhd !== undefined">{{item.mhd | date: 'shortDate'}}</div>

@@ -17,7 +17,7 @@
         <ng-container matColumnDef="kommid">
           <mat-header-cell *matHeaderCellDef>Kommissionierung Nr.</mat-header-cell>
          <mat-cell *matCellDef="let item; let i =index">
-          <button  mat-raised-button color="accent" (click)="updateKommissionierung(i)">{{ item.id }}</button>
+          <button  mat-raised-button color="primary" (click)="updateKommissionierung(i)">{{ item.id }}</button>
         </mat-cell>
         </ng-container>
         <ng-container matColumnDef="verkauferid">
@@ -55,13 +55,23 @@
         <ng-container matColumnDef="entfernen">
           <mat-header-cell *matHeaderCellDef>Entfernen!</mat-header-cell>
           <mat-cell *matCellDef="let item; let i = index">
-            <button mat-raised-button  (click)="deleteKomm(i)" color="warn">Entfernen</button>
+            <button mat-raised-button  (click)="deleteKomm(i)" color="warn">
+              <mat-icon class="mat-icon"><span>
+                delete
+                </span></mat-icon>
+              Entfernen</button>
           </mat-cell>
         </ng-container>
         <ng-container matColumnDef="ausdrucken">
           <mat-header-cell *matHeaderCellDef>Ausdrucken</mat-header-cell>
           <mat-cell *matCellDef="let item; let i = index">
-            <button  mat-raised-button (click)="getKommToDruck(i)">Kommiss PDF</button>
+            <button  mat-raised-button (click)="getKommToDruck(i)">
+              <mat-icon class="mat-icon">
+                <span>
+                  print
+                  </span>
+              </mat-icon>
+              Kommiss PDF</button>
           </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="columnDef"></mat-header-row>

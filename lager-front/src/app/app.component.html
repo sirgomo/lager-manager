@@ -13,7 +13,12 @@
          </div>
         <span class="spacer">
           <div *ngIf="isLogged" class="vorschlag">
-            <span>Verbesserung vorschlagen</span> <button mat-raised-button (click)="gibVorschlag()">Click!</button>
+            <span> Verbesserung vorschlagen</span> <button mat-raised-button (click)="gibVorschlag()">
+              <mat-icon class="mat-icon"> 
+                <span>
+                  note_add
+                  </span>
+                </mat-icon> Click!</button>
           </div>
         </span>
           <div *ngIf="isLogged">

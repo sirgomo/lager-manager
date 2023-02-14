@@ -1,7 +1,7 @@
 <div class="container">
 <mat-toolbar color="primary">
-    <div class="fs-s" *ngIf="data === null">Neue Palette Erstellen</div>
-    <div class="fs-s" *ngIf="data !== null">Gewicht für Palette eingeben</div>
+    <div class="fs-s" *ngIf="data === null">Neuer Ladeträger Erstellen</div>
+    <div class="fs-s" *ngIf="data !== null">Gewicht für Ladeträger eingeben</div>
 </mat-toolbar>
         <mat-dialog-content>
           <form novalidate [formGroup]="neuPalForm">
@@ -12,7 +12,7 @@
             <div class="divider"></div>
             <div >
               <mat-form-field>
-                <mat-label class="fs-s">Paleten Typ.</mat-label>
+                <mat-label class="fs-s">Ladeträger Typ.</mat-label>
                 <mat-select formControlName="palTyp">
                     <mat-option *ngFor="let item of paletetyp" [value]="item" class="fs-s">{{item}}</mat-option>
                 </mat-select>
@@ -21,7 +21,7 @@
             <div class="divider"></div>
             <div>
               <mat-form-field>
-                <mat-label class="fs-s">Palette Gewicht.: </mat-label>
+                <mat-label class="fs-s">Ladeträger Gewicht.: </mat-label>
                 <input type="number" matInput formControlName="gewicht" class="fs-s">
               </mat-form-field>
             </div>

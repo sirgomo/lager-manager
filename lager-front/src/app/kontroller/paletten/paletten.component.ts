@@ -54,8 +54,7 @@ export class PalettenComponent implements OnInit, OnDestroy {
           this.paletten[res[i].lkwNummer].push(res[i]);
         }
         this.paletten = this.paletten.filter(e => e);
-        this.dataRes = new MatTableDataSource(this.paletten[2]);
-        console.log(this.dataRes.filteredData);
+        this.dataRes = new MatTableDataSource(this.paletten[0]);
         this.getPaltenMengeOfTyp();
         return;
       }

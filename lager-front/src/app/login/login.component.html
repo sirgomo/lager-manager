@@ -14,7 +14,13 @@
           <input type="text" matInput autocomplete="off" formControlName="password" name="username" required/>
         </mat-form-field></p>
         <!-- Submit button -->
-        <button mat-raised-button type="submit" color="primary" (ngSubmit)="loginUser()">Sign in</button>
+        <button mat-raised-button type="submit" color="primary" (ngSubmit)="loginUser()">
+          <mat-icon class="mat-icon">
+            <span class="material-symbols-sharp">
+              login
+              </span>
+          </mat-icon>
+          Sign in</button>
       </form>
     </div>
     <div class="divider"></div>

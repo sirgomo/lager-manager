@@ -7,12 +7,12 @@
     <ng-template matTabContent>
       <table mat-table [dataSource]="dataRes" enableStickyHeader="true" enableStickyFooter="true">
       <ng-container matColumnDef="palid">
-        <th mat-header-cell *matHeaderCellDef>Paletten Nr.</th>
+        <th mat-header-cell *matHeaderCellDef>Ladeträger Nr.</th>
         <td mat-cell *matCellDef="let item; let i = index "  (click)="getPaleteForControlle(i,y)">{{item.id}}</td>
-        <td mat-footer-cell *matFooterCellDef>Total Paleten: {{getPaletenMenge()}}</td>
+        <td mat-footer-cell *matFooterCellDef>Total Paletten: {{getPaletenMenge()}}</td>
       </ng-container>
       <ng-container matColumnDef="palTyp">
-        <th mat-header-cell *matHeaderCellDef>Paletten Typ</th>
+        <th mat-header-cell *matHeaderCellDef>Ladeträger : </th>
         <td mat-cell *matCellDef="let item; let i = index">
             <mat-select [(ngModel)]="dataRes.filteredData[i].palettenTyp" (selectionChange)="paleteTypAndern(i)">
                 <mat-option *ngFor="let item of pal" [value]="item">{{item}}</mat-option>
@@ -27,12 +27,12 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="kontro">
-        <th mat-header-cell *matHeaderCellDef>Palette Kontrolliert ?</th>
+        <th mat-header-cell *matHeaderCellDef>Ladeträger Kontrolliert ?</th>
         <td mat-cell *matCellDef="let item; let i = index"  (click)="getPaleteForControlle(i,y)">{{item.kontrolliert === 0 ? 'Nein' : 'Ja'}}</td>
         <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
       <ng-container matColumnDef="relGewi">
-        <th mat-header-cell *matHeaderCellDef>Palette Gewicht</th>
+        <th mat-header-cell *matHeaderCellDef>Ladeträger Gewicht</th>
         <td mat-cell *matCellDef="let item; let i = index"  (click)="paleteGewichtAndern(i)">{{item.paletteRealGewicht}}</td>
         <td mat-footer-cell *matFooterCellDef>Gewicht: {{getTotalGewicht()}}</td>
       </ng-container>

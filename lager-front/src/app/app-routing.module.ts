@@ -71,6 +71,10 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: '',
+    component: LoginComponent,
+  },
+  {
     path: '**',
     pathMatch: 'full',
     redirectTo: 'auth',
