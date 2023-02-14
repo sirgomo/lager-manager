@@ -17,10 +17,6 @@ import { AdminComponent } from './admin/admin.component';
 
 const routes: Routes = [
   {
-    path: 'auth',
-    component: LoginComponent,
-  },
-  {
     path: 'kontroller',
     component: KontrollerComponent,
     canActivate: [AuthGuard],
@@ -69,6 +65,10 @@ const routes: Routes = [
     path: 'admin',
     component: AdminComponent,
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'auth',
+    component: LoginComponent,
   },
   {
     path: '',

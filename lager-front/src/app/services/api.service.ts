@@ -23,7 +23,7 @@ export class ApiService {
   ) {
     const fetchedToken: string | null = localStorage.getItem('act');
     if (fetchedToken) {
-      this.token = atob(fetchedToken);
+      this.token = Buffer.from(fetchedToken, 'base64').toString();// atob(fetchedToken);
       this.jwtToken$.next(this.token);
     }
   }
@@ -94,6 +94,8 @@ export class ApiService {
       });
   }
   public getRole() {
+    if(this.token.length < 1) return false;
+
     const jwtPayload: { username: string; role: string; id: number } =
       jwt_decode(this.token);
     localStorage.setItem('myId', jwtPayload.id.toString());

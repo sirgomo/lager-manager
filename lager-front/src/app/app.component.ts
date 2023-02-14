@@ -33,7 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.isLogged = true;
       }
     }));
-    this.kommissionier = false;
+  this.kommissionier = false;
    this.subs.push( this.helper.toolbarInfo.subscribe((d) => {
       if (d.length < 1) return;
       this.toolbarInfo = d[0];
