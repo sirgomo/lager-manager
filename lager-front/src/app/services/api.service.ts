@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { UserDTO } from '../dto/user.dto';
 import jwt_decode from 'jwt-decode';
 import { environment } from 'src/environments/environment';
+import { Buffer } from "buffer";
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,7 @@ export class ApiService {
   private jwtToken$: BehaviorSubject<string> = new BehaviorSubject<string>(
     this.token,
   );
+  Buffer = window.Buffer || Buffer;
   private API_URL = environment.APII_URL;
   constructor(
     private readonly http: HttpClient,
@@ -22,8 +24,9 @@ export class ApiService {
     private toast: ToastrService,
   ) {
     const fetchedToken: string | null = localStorage.getItem('act');
+   // console.log(fetchedToken);
     if (fetchedToken) {
-      this.token = Buffer.from(fetchedToken, 'base64').toString();// atob(fetchedToken);
+      this.token = Buffer.from(fetchedToken, 'base64').toString('ascii');// atob(fetchedToken);
       this.jwtToken$.next(this.token);
     }
   }
@@ -44,7 +47,9 @@ export class ApiService {
           })
           .onHidden.subscribe(() => {
             this.jwtToken$.next(this.token);
-            localStorage.setItem('act', btoa(this.token));
+          //  localStorage.setItem('act', btoa(this.token));
+          
+            localStorage.setItem('act',  Buffer.from(this.token, 'base64').toString('ascii'));
             localStorage.setItem('role', this.getRole().toString());
 
             switch (this.getRole()) {
