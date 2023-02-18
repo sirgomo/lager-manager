@@ -36,4 +36,7 @@ export class AdminComponent implements OnInit {
   showVorschlag() {
     this.show = 2;
   }
+  showFirm() {
+    this.show = 3;
+  }
 }

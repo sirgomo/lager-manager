@@ -5,10 +5,12 @@
           <button mat-raised-button color="primary" (click)="usersos.exit()">Admin Panel</button>
           <button mat-raised-button color="primary" (click)="usersos.createUser()">Neue Benutzer</button>
           <button mat-raised-button color="primary" (click)="showVorschlag()">Verbeserung Vorschlage</button>
+          <button mat-raised-button color="primary" (click)="showFirm()">Firmenmanagement</button>
         </div >
         <div *ngIf="show !== 1">
         <button mat-raised-button color="primary" (click)="getUsers()">Users</button>
         <button mat-raised-button color="primary" (click)="showVorschlag()">Verbeserung Vorschlage</button>
+        <button mat-raised-button color="primary" (click)="showFirm()">Firmenmanagement</button>
         </div>
       </mat-sidenav>
       <!-- Body -->
@@ -18,6 +20,9 @@
         </div>
         <div *ngIf="show === 2">
           <app-vor-zeigen></app-vor-zeigen>
+        </div>
+        <div *ngIf="show === 3">
+          <app-firma></app-firma>
         </div>
       </mat-sidenav-content>
 

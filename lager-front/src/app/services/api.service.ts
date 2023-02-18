@@ -36,6 +36,14 @@ export class ApiService {
   }
 
   login(user: UserDTO) {
+    const fetchedToken: string | null = localStorage.getItem('act');
+ 
+    if (fetchedToken !== undefined && fetchedToken !== null) {
+      this.jwtToken$.next('');
+      localStorage.removeItem('act');
+      localStorage.removeItem('role');
+      localStorage.removeItem('myId');
+    }
     //TODO fix subscribe
     this.http.post<any>(`${this.API_URL}auth`, user).subscribe((res) => {
       if (res.token.length > 5) {
@@ -51,38 +59,41 @@ export class ApiService {
           
             localStorage.setItem('act',  Buffer.from(this.token, 'base64').toString('ascii'));
             localStorage.setItem('role', this.getRole().toString());
-
-            switch (this.getRole()) {
-              case 'VERKAUF':
-                this.router.navigateByUrl('verkauf').then();
-                break;
-              case 'DATAPFHLEGE':
-                this.router.navigateByUrl('datenpflege').then();
-                break;
-              case 'LAGERVERWALTUNG':
-                this.router.navigateByUrl('lager').then();
-                break;
-              case 'WARENEINGANG':
-                this.router.navigateByUrl('warenein').then();
-                break;
-              case 'ADMIN':
-                this.router.navigateByUrl('admin').then();
-                break;
-              case 'KOMMISIONIER':
-                this.router.navigateByUrl('kommisionier').then();
-                break;
-              case 'KONTROLLER':
-                this.router.navigateByUrl('kontroller').then();
-                break;
-
-              default:
-                this.router.navigateByUrl('auth').then();
-                break;
-            }
+            this.redirect();
           });
       }
     });
   }
+  private redirect() {
+    switch (this.getRole()) {
+      case 'VERKAUF':
+        this.router.navigateByUrl('verkauf').then();
+        break;
+      case 'DATAPFHLEGE':
+        this.router.navigateByUrl('datenpflege').then();
+        break;
+      case 'LAGERVERWALTUNG':
+        this.router.navigateByUrl('lager').then();
+        break;
+      case 'WARENEINGANG':
+        this.router.navigateByUrl('warenein').then();
+        break;
+      case 'ADMIN':
+        this.router.navigateByUrl('admin').then();
+        break;
+      case 'KOMMISIONIER':
+        this.router.navigateByUrl('kommisionier').then();
+        break;
+      case 'KONTROLLER':
+        this.router.navigateByUrl('kontroller').then();
+        break;
+
+      default:
+        this.router.navigateByUrl('auth').then();
+        break;
+    }
+  }
+
   logut() {
     this.token = '';
     this.jwtToken$.next(this.token);

@@ -31,6 +31,8 @@ export class LagerPlatzEntity{
     barcode: string;
     @Column({nullable: false, type: 'tinyint'})
     prufziffern: number;
+    @Column({nullable: false, type: 'tinyint'})
+    gesperrt: boolean;
 
   
 

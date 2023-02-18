@@ -33,6 +33,8 @@ import { FehlendArtikelEntity } from './entity/fehlendArtikelEntity';
 import { WarenBestellungEntity } from './entity/warenBestellungEntity';
 import { SpeditionEntity } from './entity/speditionEntity';
 import { VorschlagModule } from './vorschlag/vorschlag.module';
+import { FirmSettingsEntity } from './entity/firmSettingsEntity';
+import { FirmsettingsModule } from './firmsettings/firmsettings.module';
 
 
 @Module({
@@ -62,7 +64,8 @@ import { VorschlagModule } from './vorschlag/vorschlag.module';
         WarenAusgStat,
         KreditorsEntity,
         VorschlagEntity,
-      ],
+        FirmSettingsEntity,
+        ],
       synchronize: false,
     }),
     WareneingangModule,
@@ -79,6 +82,7 @@ import { VorschlagModule } from './vorschlag/vorschlag.module';
     UserModule,
     WarenKontrolleModule,
     VorschlagModule,
+    FirmsettingsModule,
   ],
   controllers: [AppController],
   providers: [RoleGuard],

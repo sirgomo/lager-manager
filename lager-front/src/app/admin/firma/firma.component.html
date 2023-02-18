@@ -1,0 +1,86 @@
+<div class="container">
+    <div class="divider"></div>
+    <div class="row">
+        <form action="" [formGroup]="formFirma" (submit)="saveData()">
+            <input type="hidden" formControlName="id">
+            <div class="row">
+                <mat-form-field>
+                    <mat-label>Name des Unternehmens</mat-label>
+                    <input type="text" matInput formControlName="rfirmname" required>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Name 2</mat-label>
+                    <input type="text" matInput formControlName="rname">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Straße</mat-label>
+                    <input type="text" matInput formControlName="rstrasse" required>
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <mat-form-field>
+                    <mat-label>Hausnummer:</mat-label>
+                    <input type="number" matInput formControlName="rhausnr" required>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Stadt:</mat-label>
+                    <input type="text" matInput formControlName="rstadt" required>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Postleitzahl:</mat-label>
+                    <input type="number" matInput formControlName="rpostleitzahl" required>
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <mat-form-field>
+                    <mat-label>Steuer-ID-Nummer:</mat-label>
+                    <input type="text" matInput formControlName="steuernummer" required>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>USt-IdNr:</mat-label>
+                    <input type="text" matInput formControlName="ustid" required>
+                </mat-form-field>
+            </div>
+          
+                <mat-expansion-panel [hideToggle]="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>Lieferanschrift </mat-panel-title>
+                        <mat-panel-description>Wenn andres als Rechung Anschrift</mat-panel-description>
+                    </mat-expansion-panel-header>
+                  <div class="row">
+                    <mat-form-field>
+                        <mat-label>Name des Unternehmens</mat-label>
+                        <input type="text" matInput formControlName="lfirmname">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Name 2</mat-label>
+                        <input type="text" matInput formControlName="lname">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Straße</mat-label>
+                        <input type="text" matInput formControlName="lstrasse">
+                    </mat-form-field>
+                  </div>
+                  <div class="row">
+                    <mat-form-field>
+                        <mat-label>Hausnummer:</mat-label>
+                        <input type="number" matInput formControlName="lhausnr">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Stadt</mat-label>
+                        <input type="text" matInput formControlName="lstadt">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Postleitzahl :</mat-label>
+                        <input type="number" matInput formControlName="lpostleitzahl">
+                    </mat-form-field>
+                  </div>
+                </mat-expansion-panel>
+          
+            <div class="divider"></div>
+            <div class="row1b">
+                <button type="submit" mat-raised-button color="primary"><mat-icon class="mat-icon"> save_as</mat-icon> Speicher</button>
+            </div>
+        </form>
+    </div>
+</div>
