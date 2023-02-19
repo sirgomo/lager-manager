@@ -1,3 +1,5 @@
+import { ARTIKELSTATUS } from "./kommissDetails.dto";
+
 export class ControllerKomissDataDto {
   id!: number;
   aid!: number;
@@ -5,7 +7,7 @@ export class ControllerKomissDataDto {
   menge!: number;
   currentGepackt!: number;
   kreditorId!: number;
-  gepackt!: number;
+  gepackt!: ARTIKELSTATUS;
   name!: string;
   gewicht!: number;
   artikelFlage!: string;

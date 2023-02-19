@@ -7,8 +7,9 @@
   <div matDialogContent class="matDialogContent">
       <table mat-table [dataSource]="tabData">
         <ng-container matColumnDef="menge">
-          <th mat-header-cell *matHeaderCellDef>Menge:</th>
-          <td mat-cell *matCellDef="let item">{{item.artikelMenge}}</td>
+          <th mat-header-cell *matHeaderCellDef>Menge: (Soll / Gepackt(Total))</th>
+          <td mat-cell *matCellDef="let item; let i = index">
+           <button mat-raised-button color="primary" (click)="changeArtikelMenge(i)">{{item.artikelMenge}} : ({{item. det_menge}}/{{item. det_currentGepackt}})</button> </td>
         </ng-container>
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>Name:</th>

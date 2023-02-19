@@ -25,7 +25,7 @@ export class ApiService {
   ) {
     const fetchedToken: string | null = localStorage.getItem('act');
    // console.log(fetchedToken);
-    if (fetchedToken) {
+    if (fetchedToken !== null) {
       this.token = Buffer.from(fetchedToken, 'base64').toString('ascii');// atob(fetchedToken);
       this.jwtToken$.next(this.token);
     }
@@ -48,6 +48,7 @@ export class ApiService {
     this.http.post<any>(`${this.API_URL}auth`, user).subscribe((res) => {
       if (res.token.length > 5) {
         this.token = res.token;
+       
         this.toast
           .success('login success', 'redirect now....', {
             timeOut: 600,
@@ -55,9 +56,8 @@ export class ApiService {
           })
           .onHidden.subscribe(() => {
             this.jwtToken$.next(this.token);
-          //  localStorage.setItem('act', btoa(this.token));
-          
-            localStorage.setItem('act',  Buffer.from(this.token, 'base64').toString('ascii'));
+          //  localStorage.setItem('act', btoa(this.token));     // encode and save token in localstorage
+            localStorage.setItem('act',  Buffer.from(this.token).toString('base64'));
             localStorage.setItem('role', this.getRole().toString());
             this.redirect();
           });
@@ -110,10 +110,14 @@ export class ApiService {
       });
   }
   public getRole() {
+    const tok = localStorage.getItem('act');
+    if(tok === null) return '';
+    this.token = Buffer.from(tok, 'base64').toString('ascii');
     if(this.token.length < 1) return false;
-
     const jwtPayload: { username: string; role: string; id: number } =
-      jwt_decode(this.token);
+
+      jwt_decode( this.token);
+    
     localStorage.setItem('myId', jwtPayload.id.toString());
     return jwtPayload.role;
   }

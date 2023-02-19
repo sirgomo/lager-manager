@@ -17,15 +17,16 @@ export class FirmsettingsService {
           }
           return tmpEntity;
         } catch (err) {
-            if(err.message === "Table 'lager.firmsettings' doesn't exist") {
+            if(err.message == "Table 'lager.firmSettings' doesn't exist") {
+                console.log('create');
                this.createFirm();
             }
-            console.log(err);
+            console.log(err.message);
             return err;
         }
     }
     async createFirm() {
-        const tmpEntity: FirmSettingsEntity = new FirmSettingsEntity();
+        
         await this.repo.query(`CREATE TABLE IF NOT EXISTS firmSettings (
             id INT AUTO_INCREMENT PRIMARY KEY,
             rfirmname VARCHAR(255) NOT NULL,

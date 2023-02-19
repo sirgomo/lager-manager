@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ArtikelKommissDto } from 'src/app/dto/artikelKommiss.dto';
 import { ControllerKomissDataDto } from 'src/app/dto/controllerKomissData.dto';
+import { ARTIKELSTATUS } from 'src/app/dto/kommissDetails.dto';
 import { HelperService } from 'src/app/helper.service';
 import { KontrollerService } from '../kontroller.service';
 
@@ -29,6 +30,8 @@ export class KommissComponent implements OnInit {
     'artGepackt',
     'kommissionier',
   ];
+
+  artikelPackStatus = Object.values(ARTIKELSTATUS);
   constructor(
     private dialRef: MatDialogRef<KommissComponent>,
     @Optional()
@@ -80,5 +83,21 @@ export class KommissComponent implements OnInit {
       }
     }
   }
+getClass(i: number) {
+  if( this.dataSource.filteredData[i].menge !== this.dataSource.filteredData[i].currentGepackt) 
+  return ' background-color: rgba(133, 103, 124, 0.219);';
 
+  return '';
+}
+async changePackStatus(i: number) {
+  const tmps = {ARTIKELSTATUS:this.dataSource.filteredData[i].gepackt};
+  const tmp =  await this.servis.setNewArtikelStatus(this.dataSource.filteredData[i].id, tmps).subscribe((res) => {
+   if(res === 1) {
+    this.toaster.success('Status wurde geändert', 'Status Änderung', {timeOut: 800, positionClass: 'toast-top-center'});
+    tmp.unsubscribe();
+    return;
+   }
+   this.toaster.error('Etwas ist schiefgegangen, Status wurde nicht geändert', 'Status Änderung', {timeOut: 800, positionClass: 'toast-top-center'});
+  });
+}
 }

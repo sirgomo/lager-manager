@@ -35,6 +35,7 @@ import { SpeditionEntity } from './entity/speditionEntity';
 import { VorschlagModule } from './vorschlag/vorschlag.module';
 import { FirmSettingsEntity } from './entity/firmSettingsEntity';
 import { FirmsettingsModule } from './firmsettings/firmsettings.module';
+import { WareausgangModule } from './wareausgang/wareausgang.module';
 
 
 @Module({
@@ -83,6 +84,7 @@ import { FirmsettingsModule } from './firmsettings/firmsettings.module';
     WarenKontrolleModule,
     VorschlagModule,
     FirmsettingsModule,
+    WareausgangModule,
   ],
   controllers: [AppController],
   providers: [RoleGuard],

@@ -13,21 +13,14 @@ import { KontrollerService } from '../kontroller.service'
   templateUrl: './packlisten.component.html',
   styleUrls: ['./packlisten.component.scss']
 })
-export class PacklistenComponent implements OnInit, OnDestroy{
+export class PacklistenComponent implements OnInit {
   @Input() kommNr: number | undefined;
   palData: MatTableDataSource<PaleteForControlleDto> = new MatTableDataSource();
   columnDef : string[] = ['id', 'palettenTyp', 'kontrolliert', 'lkwNummer', 'print'];
   paletsForDruck: PaleteToDruckDto[][] = [];
-  subs : Subscription[] = [];
+ 
   constructor(private service: KontrollerService, private toaster: ToastrService, private dialog: MatDialog) {}
-  ngOnDestroy(): void {
-    if (this.subs.length > 0 ) {
-      for (let i = 0; i < this.subs.length; i++) {
-        if(this.subs[i] !== undefined)
-        this.subs[i].unsubscribe();
-      }
-    }
-  }
+
   ngOnInit(): void {
    this.getPaleten();
   }
@@ -36,16 +29,17 @@ export class PacklistenComponent implements OnInit, OnDestroy{
       this.toaster.error('Etwas ist schiefgegangen, ich Kommiessionierung number');
       return;
      }
-  this.subs.push(  await this.service.getPalattenByKommId(this.kommNr).subscribe((res) => {
+    const tmp: Subscription = await this.service.getPalattenByKommId(this.kommNr).subscribe((res) => {
     if(res === null) {
       this.toaster.error('ich konnte keine Paletten finden');
     }
     this.palData = new MatTableDataSource(res);
-   }));
+    tmp.unsubscribe();
+   });
   }
   async getPaletteToDruck(palid: number) {
     if(this.kommNr === undefined) return;
-  this.subs.push( await this.service.getPaleteToDruck(palid, this.kommNr).subscribe((res) => {
+    const tmp: Subscription = await this.service.getPaleteToDruck(palid, this.kommNr).subscribe((res) => {
     if(res === null) {
       this.toaster.error('ich konnte keine Palette finden');
     }
@@ -58,11 +52,12 @@ export class PacklistenComponent implements OnInit, OnDestroy{
     conf.height = '100%';
     conf.width = '210mm';
     this.dialog.open(PacklisteComponent, conf);
-  }));
+    tmp.unsubscribe();
+  });
   }
   async getPalettenToDruck() {
     if(this.kommNr === undefined) return;
-   this.subs.push(  await this.service.getPalettenToDruck(this.kommNr).subscribe((res) => {
+    const tmp: Subscription = await this.service.getPalettenToDruck(this.kommNr).subscribe((res) => {
       if(res === null) {
         this.toaster.error('ich konnte keine Palette finden');
       }
@@ -90,7 +85,9 @@ export class PacklistenComponent implements OnInit, OnDestroy{
       conf.height = '100%';
       conf.width = '210mm';
       this.dialog.open(PacklisteComponent, conf);
-    })); 
+      tmp.unsubscribe();
+    });
+     
   }
 
 }

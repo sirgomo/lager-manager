@@ -1,9 +1,9 @@
 <mat-toolbar color="primary">
-    <span>Gewicht Abändren</span>
+    <span>{{data[1]}}</span>
 </mat-toolbar>
 <mat-dialog-content>
     <mat-form-field>
-        <mat-label>Neu Gewicht</mat-label>
+        <mat-label>{{data[1]}}</mat-label>
         <input type="number" matInput [(ngModel)]="gewicht">
     </mat-form-field>
 </mat-dialog-content>

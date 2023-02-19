@@ -14,16 +14,15 @@ import { PalgewichtComponent } from '../palgewicht/palgewicht.component';
   templateUrl: './paletten.component.html',
   styleUrls: ['./paletten.component.scss'],
 })
-export class PalettenComponent implements OnInit, OnDestroy {
+export class PalettenComponent implements OnInit {
   @Input() kommNr = 0;
   paletten: PaleteForControlleDto[][] = [];
   dataRes: MatTableDataSource<PaleteForControlleDto> = new MatTableDataSource();
   columnDef = ['palid', 'palTyp', 'kontro', 'relGewi', 'lkw'];
   pal = Object.values(PALETTENTYP);
-  palcheck = true;
   paleten = new Array(this.pal.length);
   lkwNumbers : number[] = [20];
-  subs: Subscription[] = [];
+  
  
   constructor(
     private service: KontrollerService,
@@ -32,20 +31,13 @@ export class PalettenComponent implements OnInit, OnDestroy {
   ) {
     this.lkwNumbers = Array(20).fill(Number).map((x,i) => i);
   }
-  ngOnDestroy(): void {
-    if (this.subs.length > 0) {
-      for (let i = 0; i< this.subs.length; i++) { 
-        if(this.subs[i] !== undefined)
-          this.subs[i].unsubscribe();
-      }
-    }
-  }
+
 
   public ngOnInit(): void {
     this.getPalettenByKommId();
   }
   private async getPalettenByKommId() {
-    this.subs.push( await this.service.getPalattenByKommId(this.kommNr).subscribe((res) => {
+    const tmp: Subscription = await this.service.getPalattenByKommId(this.kommNr).subscribe((res) => {
       if (res.length > 0) {
         for (let i = 0; i < res.length; i++) {
           if(this.paletten[res[i].lkwNummer] === undefined) {
@@ -56,12 +48,14 @@ export class PalettenComponent implements OnInit, OnDestroy {
         this.paletten = this.paletten.filter(e => e);
         this.dataRes = new MatTableDataSource(this.paletten[0]);
         this.getPaltenMengeOfTyp();
+        tmp.unsubscribe();
         return;
       }
       const err = new Error();
       Object.assign(err, res);
+      tmp.unsubscribe();
       return this.toaster.error(err.message);
-    }));
+    });
   }
 
   getTotalGewicht() {
@@ -75,9 +69,7 @@ export class PalettenComponent implements OnInit, OnDestroy {
     return this.dataRes.filteredData.length;
   }
   getPaltenMengeOfTyp() {
-    if (!this.palcheck) return;
-    this.palcheck = false;
-
+    this.paleten = [];
     for (let y = 0; y < this.pal.length; y++) {
       for (let i = 0; i < this.dataRes.filteredData.length; i++) {
         if (this.dataRes.filteredData[i].palettenTyp === this.pal[y]) {
@@ -99,7 +91,7 @@ export class PalettenComponent implements OnInit, OnDestroy {
     const config = new MatDialogConfig();
     config.data = this.paletten[lkwnr][index].id;
     config.minWidth = '95vw';
-    config.minHeight = '95vh';
+    config.minHeight = '90vh';
     this.dialog.open(PalControlComponent, config).beforeClosed().subscribe((data) => {
       if(data === undefined) return;
       
@@ -118,42 +110,50 @@ export class PalettenComponent implements OnInit, OnDestroy {
     let conf : MatDialogConfig = new MatDialogConfig();
     conf.width = '40vw';
     conf.height = '40vh';
-    conf.data = this.dataRes.filteredData[index].paletteRealGewicht;
-   this.subs.push( this.dialog.open(PalgewichtComponent, conf).afterClosed().subscribe((data) => { 
+    conf.data = [this.dataRes.filteredData[index].paletteRealGewicht, 'Gewicht Abändren'];
+    const tmp: Subscription = this.dialog.open(PalgewichtComponent, conf).afterClosed().subscribe((data) => { 
     if(data === this.dataRes.filteredData[index].paletteRealGewicht || data === undefined || data.length < 1) {
-      this.toaster.info('Vorgagng wurde abgebrochen', '', {timeOut: 700});
+      this.toaster.info('Vorgagng wurde abgebrochen', '', {timeOut: 700, positionClass: 'toast-top-center'});
+      tmp.unsubscribe();
       return;
     }
     if(!isFinite(data) || data < 0) {
-      this.toaster.error('Gewicht ist falsch, abgebrochen', '', {timeOut: 1000});
+      this.toaster.error('Gewicht ist falsch, abgebrochen', '', {timeOut: 1000, positionClass: 'toast-top-center'});
+      tmp.unsubscribe();
       return;
     }
-     this.subs.push(  this.service.setPaleteGewicht(this.dataRes.filteredData[index].autoid, data).subscribe((res) => {
+    const tmp2: Subscription = this.service.setPaleteGewicht(this.dataRes.filteredData[index].autoid, data).subscribe((res) => {
       if(res !== 1) {
-        this.toaster.error('Etwas ist schiefgegangen beim spiechern, neue gewicht wurde nicht gespeichert!', '', {timeOut: 1000});
+        this.toaster.error('Etwas ist schiefgegangen beim spiechern, neue gewicht wurde nicht gespeichert!', '', {timeOut: 1000, positionClass: 'toast-top-center'});
+        tmp2.unsubscribe();
+        tmp.unsubscribe();
         return;
       }
       this.dataRes.filteredData[index].paletteRealGewicht = data;
-      this.toaster.success('gewicht wurde geändert!', '', {timeOut: 800});
-    }));
-   }));
+      tmp2.unsubscribe();
+      tmp.unsubscribe();
+      this.toaster.success('gewicht wurde geändert!', '', {timeOut: 800, positionClass: 'toast-top-center'});
+    });
+   });
   }
   async paleteTypAndern(index: number) {
-    this.subs.push(
+    const tmp: Subscription =
       await this.service.setPaleteTyp(this.dataRes.filteredData[index].autoid ,this.dataRes.filteredData[index].palettenTyp).subscribe((res) => {
        if(res !== 1) {
-        this.toaster.error('Etwas ist schiefgegangen, Paleten typ wurde nicht geändert!', '', {timeOut: 800});
+        this.toaster.error('Etwas ist schiefgegangen, Paleten typ wurde nicht geändert!', '', {timeOut: 800, positionClass: 'toast-top-center'});
+        tmp.unsubscribe();
         return;
        } 
-       this.toaster.success('Palete wurde geändert!', '', {timeOut: 700});
-      })
-    );
+       tmp.unsubscribe();
+       this.toaster.success('Palete wurde geändert!', '', {timeOut: 700, positionClass: 'toast-top-center'});
+      });
   }
   async changeLkwNumber(index: number,tabnr: number) { 
-    this.subs.push(  await this.service.setLkwNr(this.dataRes.filteredData[index].autoid, this.dataRes.filteredData[index].lkwNummer).subscribe((res) => {
+    const tmp: Subscription =  await this.service.setLkwNr(this.dataRes.filteredData[index].autoid, this.dataRes.filteredData[index].lkwNummer).subscribe((res) => {
       if (res !== 1) {
         const err = new Error();
         this.toaster.error(err.message, 'Ups...', {timeOut: 900});
+        tmp.unsubscribe();
         return;
       }
       let tmpdone: boolean = false;
@@ -193,11 +193,12 @@ export class PalettenComponent implements OnInit, OnDestroy {
       
       tmpdone = true;
     }
-      this.toaster.success('Lkw nr wurde geandert!', 'LKW', {timeOut: 600});
-    }));
+    tmp.unsubscribe();
+      this.toaster.success('Lkw nr wurde geandert!', 'LKW', {timeOut: 600, positionClass: 'toast-top-center'});
+    });
   }
   matTabChange(index: number) {
-  
    this.dataRes = new MatTableDataSource(this.paletten[index]);
+   this.getPaltenMengeOfTyp();
   }
 }

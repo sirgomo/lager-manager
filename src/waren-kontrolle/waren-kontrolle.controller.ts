@@ -46,6 +46,17 @@ export class WarenKontrolleController {
   setArtikelControlret(@Param('nr') artnr: number) {
     return this.service.setWareControled(artnr);
   }
+  @Patch('artstatus/:id')
+  @ROLES(ROLE.KONTROLLER)
+  setNewArtikelStatus(@Body() body: any, @Param('id') artId: number) {
+    return this.service.setNewArtikelStatus(artId, body);
+  }
+  @Patch('artmenge/:aid/:menge')
+  @ROLES(ROLE.KONTROLLER) 
+  setNewMengeFürArtikel(@Param('aid') inkomId: number, @Param('menge') menge: number) {
+    return this.service.setNewArtikelMenge(inkomId, menge);
+  }
+
   @Patch('lkw/:pid/:lkwnr')
   @ROLES(ROLE.KONTROLLER)
   setLkwNr(@Param('pid') palid: number, @Param('lkwnr') lkwnr: number) {

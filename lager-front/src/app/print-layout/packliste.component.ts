@@ -31,13 +31,14 @@ export class PacklisteComponent implements OnInit{
     
       const mengeOnSite = 18;
       const siteMenge = Math.ceil(this.palets[i].length / mengeOnSite);
+     
        if(siteMenge > 1) {
         palete = [];
         const mnege = this.palets[i].length % mengeOnSite;
         const startMenge = this.palets[i].length;
         let packlistnr  = 0
         for (let y = 0; y < startMenge; y++) {
-          if(this.palets[i].length > mnege) {
+          if(this.palets[i].length > mnege && this.palets[i].length > 0) {
             palete.push(this.palets[i].splice(this.palets[i].length-1,1)[0]);
             if(palete.length === mengeOnSite) {
               this.tmpPalets.push(palete);
@@ -47,7 +48,7 @@ export class PacklisteComponent implements OnInit{
               packlistnr++;
             }
           } else {
-           
+           if(this.palets[i].length > 0)
             palete.push(this.palets[i].splice(this.palets[i].length-1,1)[0]);
           }
         }
@@ -145,6 +146,7 @@ export class PacklisteComponent implements OnInit{
           margin[0],
           innerPageWidth,
           pageHeight,
+          '',
           'FAST' //orginal without but this is needed to small images!
         );
        

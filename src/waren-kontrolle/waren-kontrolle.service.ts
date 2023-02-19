@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ArtikelEntity } from 'src/entity/artikelEntity';
 import { InKomissPalletenEntity } from 'src/entity/inKomissPalletenEntity';
-import { KommisioDetailsEntity } from 'src/entity/kommisioDetailsEntity';
+import { ARTIKELSTATUS, KommisioDetailsEntity } from 'src/entity/kommisioDetailsEntity';
 import { KOMMISIONSTATUS, KommissionirungEntity } from 'src/entity/kommissionirungEntity';
 import { DispositorEntity } from 'src/entity/dispositorEntity'
 import { Not, Repository } from 'typeorm';
@@ -119,11 +119,15 @@ export class WarenKontrolleService {
   }
   async setNewStatus(kommid: number, status: any) {
     try {
+      const tmpArtStatus: KommisioDetailsEntity[] = await this.komDetailsRepo.find({where: {kommissId: kommid, gepackt: Not(ARTIKELSTATUS.GEPACKT)}});
+      if(tmpArtStatus.length > 0) {
+        throw new HttpException('Das kannst du nicht tun,  Nicht alle Artikels sind volstendig gepackt!', HttpStatus.BAD_REQUEST);
+      }
       await this.palRepo.find({where: {kommId: kommid, kontrolliert: false}}).then((data) => {
         if(data.length !== 0 && status.KOMMISIONSTATUS === KOMMISIONSTATUS.FERTIG) {
-         throw new HttpException('Noch nicht alle palleten sind kontrolliret!', HttpStatus.BAD_REQUEST);
+         throw new HttpException('Das kannst du nicht tun, Noch nicht alle palleten sind kontrolliret!', HttpStatus.BAD_REQUEST);
         }
-      })
+      });
       if(status.KOMMISIONSTATUS === KOMMISIONSTATUS.INBEARBEITUNG || status.KOMMISIONSTATUS === KOMMISIONSTATUS.FREIGEGEBEN) {
         throw new HttpException('Das kannst du nicht tun', HttpStatus.FORBIDDEN);
       }
@@ -160,6 +164,8 @@ export class WarenKontrolleService {
           'art.artikelId=pal.artikelId AND art.liferantId=pal.liferantId',
         )
         .addSelect('art.name', 'name')
+        .leftJoin(KommisioDetailsEntity, 'det', 'det.artikelId=pal.artikelId AND det.palettennr='+palnr+'')
+        .addSelect(['det.menge', 'det.currentGepackt'])
         .where('pal.id = :id', { id: palnr })
         .andWhere('pal.artikelId != 0')
         .getRawMany()
@@ -325,6 +331,50 @@ export class WarenKontrolleService {
       });
       
       return await (await this.palRepo.update({'autoid': palnr}, tympPal)).affected;
+    } catch (err) {
+      return err;
+    }
+  }
+  async setNewArtikelStatus(komDetailId: number, newStatus: any) {
+   
+    try {
+      const tmpKom : KommisioDetailsEntity = await this.komDetailsRepo.findOneBy({id: komDetailId});
+      if(tmpKom === null) {
+        throw new HttpException('Artikel nicht gefunden!', HttpStatus.NOT_FOUND);
+      }
+      tmpKom.gepackt = newStatus.ARTIKELSTATUS;
+      return await (await this.komDetailsRepo.update({id: komDetailId}, tmpKom)).affected;
+    } catch (err) {
+      return err;
+    }
+ 
+  }
+  async setNewArtikelMenge(inKomisId: number, menge: number) {
+
+    try {
+      const tmp: InKomissPalletenEntity = await this.palRepo.findOneBy({autoid: inKomisId});
+      const komDet: KommisioDetailsEntity = await this.komDetailsRepo.findOneBy({artikelId: tmp.artikelId, palettennr: tmp.id});
+      if(tmp === null) {
+        throw new HttpException('Artikel nicht gefunden!', HttpStatus.NOT_FOUND);
+      }
+      if(Number(menge) === 0) {
+        komDet.currentGepackt -= tmp.artikelMenge;
+        await this.komDetailsRepo.update({id: komDet.id}, komDet);
+        return await (await this.palRepo.delete({autoid: inKomisId})).affected;
+      }
+      let dif: number = 0;
+      if(menge > tmp.artikelMenge) {
+        dif = menge - tmp.artikelMenge;
+        komDet.currentGepackt += dif;
+      } else {
+        dif = tmp.artikelMenge - menge;
+        komDet.currentGepackt -= dif;
+      }
+     
+    
+      await this.komDetailsRepo.update({id: komDet.id}, komDet);
+      tmp.artikelMenge = menge;
+      return await (await this.palRepo.update({autoid: inKomisId}, tmp)).affected;
     } catch (err) {
       return err;
     }

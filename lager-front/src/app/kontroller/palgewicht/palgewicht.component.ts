@@ -8,9 +8,11 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class PalgewichtComponent implements OnInit{
   gewicht: number = 0;
-  constructor(@Inject(MAT_DIALOG_DATA) private data: number, private dialogRef: MatDialogRef<PalgewichtComponent>) {}
+  //data  = array [menge, 'header']
+  constructor(@Inject(MAT_DIALOG_DATA) public data: Array<any>, private dialogRef: MatDialogRef<PalgewichtComponent>) {}
   ngOnInit(): void {
-   this.gewicht = this.data;
+    if(this.data[0] !== undefined)
+   this.gewicht = this.data[0];
   }
   neueGewicht() {
     this.dialogRef.close(this.gewicht);

@@ -41,14 +41,18 @@
           </ng-container>
           <ng-container matColumnDef="artGepackt">
           <th mat-header-cell *matHeaderCellDef>Artikel Gepackt ?</th>
-          <td mat-cell *matCellDef="let item">{{item.gepackt}}</td>
+          <td mat-cell *matCellDef="let item; let i = index">
+            <mat-select [(ngModel)]="dataSource.filteredData[i].gepackt" (selectionChange)="changePackStatus(i)">
+              <mat-option *ngFor="let one of artikelPackStatus"  [value]="one">{{one}}</mat-option>
+          </mat-select>
+          </td>
           </ng-container>
           <ng-container matColumnDef="kommissionier">
             <th mat-header-cell *matHeaderCellDef>Kommissionier </th>
             <td mat-cell *matCellDef="let item">{{user}}</td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="columnName"></tr>
-          <tr mat-row *matRowDef="let row; columns: columnName"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnName; let i = index" [style]="getClass(i)"></tr>
         </table>
       </mat-tab>
       <mat-tab>

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ControllerKomissDataDto } from '../dto/controllerKomissData.dto';
+import { ARTIKELSTATUS } from '../dto/kommissDetails.dto';
 import { PaleteForControlleDto } from '../dto/paleteForControlle.dto';
 import { PaleteToDruckDto } from '../dto/paleteToDruck.dto';
 
@@ -49,6 +50,12 @@ export class KontrollerService {
   }
   setPaleteGewicht(palid: number, palge: number) {
     return this.http.patch<any>(this.API_URL + '/palg/' + palid + '/' + palge, '');
+  }
+  setNewArtikelStatus(artid : number, status: any) {
+    return this.http.patch<any>(this.API_URL + '/artstatus/' + artid, status);
+  }
+  setNewArtikelMenge(artid: number, menge: number) {
+    return this.http.patch<any>(this.API_URL + '/artmenge/' + artid + '/' + menge, '');
   }
  
 }
