@@ -11,4 +11,6 @@ export class WareausgangService {
     @InjectRepository(KommisioDetailsEntity) private kommDet: Repository<KommisioDetailsEntity>,
     @InjectRepository(KommissionirungEntity) private komm: Repository<KommissionirungEntity>,
     @InjectRepository(InKomissPalletenEntity) private pal: Repository<InKomissPalletenEntity>) {}
+
+    
 }
