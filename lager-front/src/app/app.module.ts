@@ -65,6 +65,7 @@ import { PacklistenComponent } from './kontroller/packlisten/packlisten.componen
 import { PacklisteComponent } from './print-layout/packliste.component';
 import { PalgewichtComponent } from './kontroller/palgewicht/palgewicht.component';
 import { FirmaComponent } from './admin/firma/firma.component';
+import { WausgangComponent } from './wausgang/wausgang.component';
 
 
 @NgModule({
@@ -106,6 +107,7 @@ import { FirmaComponent } from './admin/firma/firma.component';
     PacklisteComponent,
     PalgewichtComponent,
     FirmaComponent,
+    WausgangComponent,
   ],
   imports: [
     BrowserModule,

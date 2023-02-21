@@ -26,4 +26,5 @@ export enum ROLE {
   ADMIN = 'ADMIN',
   KAUF = 'KAUF',
   VERKAUF = 'VERKAUF',
+  WAUSGANG = 'WAUSGANG',
 }

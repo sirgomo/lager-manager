@@ -87,6 +87,9 @@ export class ApiService {
       case 'KONTROLLER':
         this.router.navigateByUrl('kontroller').then();
         break;
+      case 'WAUSGANG':
+        this.router.navigateByUrl('wausgang').then();
+        break;
 
       default:
         this.router.navigateByUrl('auth').then();

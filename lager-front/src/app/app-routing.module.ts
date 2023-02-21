@@ -12,6 +12,7 @@ import { AuthGuard } from './guard/auth.guard';
 import { CreateKommisionierungComponent } from './create-kommisionierung/create-kommisionierung.component';
 import { DatenpflegeComponent } from './datenpflege/datenpflege.component';
 import { AdminComponent } from './admin/admin.component';
+import { WausgangComponent } from './wausgang/wausgang.component';
 
 
 
@@ -69,6 +70,11 @@ const routes: Routes = [
   {
     path: 'auth',
     component: LoginComponent,
+  },
+  {
+    path: 'wausgang',
+    component: WausgangComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: '',
