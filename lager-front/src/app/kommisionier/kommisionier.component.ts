@@ -4,6 +4,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { ArtikelAufPaletteDto } from '../dto/artikelAufPalete.dto';
 import { ArtikelInfoDto } from '../dto/artikelinfo.dto';
 import { DataFurKomisDto } from '../dto/dataFurKomis.dto';
@@ -44,7 +45,7 @@ export class KommisionierComponent implements OnInit {
   }
 
   async getKomm() {
-    await this.kommServi.getKommissionierung(this.kommid).subscribe((data) => {
+  const tmpArti :Subscription =   await this.kommServi.getKommissionierung(this.kommid).subscribe((data) => {
       if (data[0] !== undefined && data[0] !== null) {
         this.kommDetails.splice(0, this.kommDetails.length);
         this.borders.splice(0, this.borders.length);
@@ -63,10 +64,38 @@ export class KommisionierComponent implements OnInit {
           'Palette Nr: ' + this.currentPalatte,
         ]);
         this.dataRes = new MatTableDataSource(this.kommDetails);
+        tmpArti.unsubscribe();
+       
       } else {
+        tmpArti.unsubscribe();
         this.toastr.error(Object(data).message);
       }
     });
+   tmpArti.add(() => {
+    this.noStaticPlatz();
+   });
+   
+  }
+
+  //what we do when we dont have static platz for artikel(why ? each artikel should have static platz....)
+  async noStaticPlatz() {
+    for (let i = 0; i < this.dataRes.filteredData.length; i++) {
+      if(this.dataRes.filteredData[i].platzid === null) {
+        const tmpKom: Subscription = await this.kommServi.getPlatzMitArtikels(this.dataRes.filteredData[i].artikelId, this.dataRes.filteredData[i].kreditorId).subscribe((res) => {
+        if(res === undefined || res === null || res.length < 1) {
+         const err = new Error();
+         Object.assign(err, res);
+         this.toastr.error(err.message, 'Get Lagerplatz', {timeOut: 800, positionClass: 'toast-top-center'});
+         tmpKom.unsubscribe();
+        }
+        this.dataRes.filteredData[i].platzid = res[0].lagerplatzid;
+        this.dataRes.filteredData[i].platz = res[0].lagerplatz;
+        this.braucheIchMehr[i] = false;
+        tmpKom.unsubscribe();
+       });
+      }
+     
+    }
   }
   getCartonMenge(index: number): string {
     const car: string =
@@ -285,20 +314,27 @@ export class KommisionierComponent implements OnInit {
   async getPlatzMitArtikel(index: number) {
     let currentArtikelMenge = 0;
     //let currentArtikelId = 0;
-    await this.kommServi
+   const getMenge: Subscription =  await this.kommServi
       .getArtikelMenge(
         this.kommDetails[index].artikelId,
         this.kommDetails[index].kreditorId,
       )
       .subscribe((data) => {
-        if (data !== undefined && data !== null) {
+        if(data.length < 1) {
+          getMenge.unsubscribe();
+          return;
+        }
+       
+        if (data[0] !== undefined && data[0] !== null) {
           //currentArtikelId = Number(data[0].id);
           currentArtikelMenge = Number(data[0].artikelMenge);
+          getMenge.unsubscribe();
         } else {
+          getMenge.unsubscribe();
           this.toastr.error(data.message);
         }
       });
-    await this.kommServi
+   const getPlatzMitArtiekles: Subscription = await this.kommServi
       .getPlatzMitArtikels(
         this.kommDetails[index].artikelId,
         this.kommDetails[index].kreditorId,
@@ -306,15 +342,16 @@ export class KommisionierComponent implements OnInit {
       .subscribe((data) => {
         const tmpArtikelInfo: ArtikelInfoDto[] = [];
         Object.assign(tmpArtikelInfo, data);
-        console.log(tmpArtikelInfo);
         if (Object(data).message !== undefined && Object(data).message !== '') {
           this.toastr.error(Object(data).message);
+          getPlatzMitArtiekles.unsubscribe();
           return;
         }
         if (tmpArtikelInfo === undefined || tmpArtikelInfo.length === 0) {
           this.toastr.info('Es gibt kein mehr!', 'Kein Artikel Mehr', {
             timeOut: 800,
           });
+          getPlatzMitArtiekles.unsubscribe();
           return;
         }
         const artikelMenge: number =
@@ -326,7 +363,7 @@ export class KommisionierComponent implements OnInit {
         conf.minWidth = '100vw';
         conf.panelClass = 'full-screen-modal';
         conf.data = [tmpArtikelInfo, index, artikelMenge];
-        this.dial
+       const tmpDialog: Subscription = this.dial
           .open(FindWareComponent, conf)
           .afterClosed()
           .subscribe((data) => {
@@ -342,21 +379,27 @@ export class KommisionierComponent implements OnInit {
                   this.toastr.error(
                     'Am Lagerplatz ist mehr als notwendig, Abgebrochen',
                   );
+                  tmpDialog.unsubscribe();
                   return;
                 }
-                this.kommServi
+              const plNachfullen: Subscription =  this.kommServi
                   .lagerPlatzNachfullen(
                     this.kommDetails[index].platzid,
                     data[0].lagerplatzid,
                   )
                   .subscribe((res) => {
+                    
                     if (res !== 1) {
+                      const err = new Error();
+                      Object.assign(err, res);
                       this.toastr.error(
-                        'Etwas ist schieff gelaufen, platz wurde nicht nachgefullt',
+                        err.message,
                         'Platz Nachfullen',
                       );
+                      plNachfullen.unsubscribe();
                       return;
                     }
+                    plNachfullen.unsubscribe()
                     this.toastr.success(
                       'Platz wurde nachgefullt',
                       'Platz Nachfullen',
@@ -368,6 +411,7 @@ export class KommisionierComponent implements OnInit {
                   this.toastr.error(
                     'Du solltest der Lagerplatz nachfüllen nicht neue Palette erfassen',
                   );
+                  tmpDialog.unsubscribe();
                   return;
                 }
                 if (this.currentPalatte !== 0) {
@@ -375,14 +419,18 @@ export class KommisionierComponent implements OnInit {
                     'Das Gewicht solltest du zuerst erfassen',
                     'Gewicht Erfassen',
                   );
+                  tmpDialog.unsubscribe();
                   return;
                 }
                 //neue palete so nr erstellen und die ware gleich an die neue palette bewegen
                 this.currentPalatte = 0;
                 this.neuePalete(data[0], data[1]);
+               
               }
+              tmpDialog.unsubscribe();
             }
           });
+          getPlatzMitArtiekles.unsubscribe();
       });
   }
   isNaN() {

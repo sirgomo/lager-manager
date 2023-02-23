@@ -12,6 +12,7 @@ import {
   KOMMISIONSTATUS,
   KommissionirungEntity,
 } from 'src/entity/kommissionirungEntity';
+import { LagerPlatzEntity } from 'src/entity/lagerPlatzEntity';
 import { Helper } from 'src/helper';
 import { Repository } from 'typeorm';
 
@@ -52,6 +53,7 @@ export class KommissionierService {
         )
         .then(
           (data) => {
+            console.log(data);
             const tmpData: DataFurKomissDTO[] = [];
             Object.assign(tmpData, data);
             for (let y = 0; y < data.length; y++) {
@@ -283,7 +285,16 @@ export class KommissionierService {
     }
   }
   async lagerPlatzNachfullen(staticId: number, lagerId: number) {
+    //TODO refactoring!
     try {
+      if(typeof staticId === 'string' && staticId === 'null' ) {
+        throw new HttpException('Etwas ist schiefgegangen!, Lagerplatz nicht nachgefullt', HttpStatus.NOT_FOUND);
+      }
+      const tmpPlatz: LagerPlatzEntity = await this.kommDet.query(`SELECT * FROM lagerplatz WHERE id=` + staticId);
+      
+      if(tmpPlatz[0].static === 0) {
+        throw new HttpException('Das ist kein static platz, es kann nicht nachgefult werden!', HttpStatus.BAD_REQUEST);
+      }
       return await this.kommDet
         .query(`SELECT artikelMenge, mhd FROM lagerplatz WHERE id=${lagerId}`)
         .then(
@@ -325,6 +336,7 @@ export class KommissionierService {
           },
           (err) => {
             console.log(err);
+            return err;
           },
         );
     } catch (err) {
