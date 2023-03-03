@@ -1,34 +1,56 @@
 <div class="container">
-    <table mat-table [dataSource]="dataTab">
-        <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef>Komm Nr:</th>
-            <td mat-cell *matCellDef="let item;">{{item.id}}</td>
-        </ng-container>
-        <ng-container matColumnDef="verkaufid">
-            <th mat-header-cell *matHeaderCellDef> Verkaufer:</th>
-            <td mat-cell *matCellDef="let item">{{item.verkauferId}}</td>
-        </ng-container>
-        <ng-container matColumnDef="liferdate">
-            <th mat-header-cell *matHeaderCellDef>Gewünschten Liefertermin</th>
-            <td mat-cell *matCellDef="let item">{{item.gewunschtesLieferDatum | date: 'short'}}</td>
-        </ng-container>
-        <ng-container matColumnDef="dispo">
-            <th mat-header-cell *matHeaderCellDef>Dispositor</th>
-            <td mat-cell *matCellDef="let item">{{item.dispositorId}}</td>
-        </ng-container>
-        <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Komm Status</th>
-            <td mat-cell *matCellDef="let item">{{item.kommissStatus}}</td>
-        </ng-container>
-        <ng-container matColumnDef="spedi">
-            <th mat-header-cell *matHeaderCellDef>Spedition</th>
-            <td mat-cell *matCellDef="let item">{{item.spedition}}</td>
-        </ng-container>
-        <ng-container matColumnDef="versoid">
-            <th mat-header-cell *matHeaderCellDef>Verosorung Id:</th>
-            <td mat-cell *matCellDef="let item">{{item.versorgungId}}</td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="columnDef"></tr>
-        <tr mat-row *matRowDef="let row; columns: columnDef"></tr>
-    </table>
+<mat-sidenav-container>
+    <mat-sidenav mode="side" align="start" opened #matSide>
+        <button mat-raised-button (click)="showFront()" color="primary">Kommissionierungen</button>
+    </mat-sidenav>
+    <!-- Body -->
+ 
+        <div *ngIf="show === 1">
+            <mat-tab-group [disableRipple]="false" (selectedTabChange)="tabChange($event.index)" [selectedIndex]="selectedIndex">
+                <mat-tab *ngFor="let tab of tabs" label={{tab}}>
+                    <ng-template matTabContent>
+                        <table mat-table [dataSource]="dataTab">
+                            <ng-container matColumnDef="id">
+                                <th mat-header-cell *matHeaderCellDef>Komm Nr:</th>
+                                <td mat-cell *matCellDef="let item;">{{item.id}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="raus">
+                                <th mat-header-cell *matHeaderCellDef>Raus Datum:</th>
+                                <td mat-cell *matCellDef="let item">{{item.rausDatum | date: 'shortDate'}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="verkaufid">
+                                <th mat-header-cell *matHeaderCellDef> Verkaufer:</th>
+                                <td mat-cell *matCellDef="let item">{{item.verkauferId}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="liferdate">
+                                <th mat-header-cell *matHeaderCellDef>Gewünschten Liefertermin</th>
+                                <td mat-cell *matCellDef="let item">{{item.gewunschtesLieferDatum | date: 'shortDate'}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="dispo">
+                                <th mat-header-cell *matHeaderCellDef>Dispositor</th>
+                                <td mat-cell *matCellDef="let item">{{item.dispositorId}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef>Komm Status</th>
+                                <td mat-cell *matCellDef="let item">{{item.kommissStatus}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="spedi">
+                                <th mat-header-cell *matHeaderCellDef>Spedition</th>
+                                <td mat-cell *matCellDef="let item">{{item.spedition}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="versoid">
+                                <th mat-header-cell *matHeaderCellDef>Verosorung Id:</th>
+                                <td mat-cell *matCellDef="let item">{{item.versorgungId}}</td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="columnDef"></tr>
+                            <tr mat-row *matRowDef="let row; columns: columnDef; let i = index" (click)="openKomm(i)" class="icons"></tr>
+                        </table>
+                      </ng-template>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+      <div *ngIf="show === 2">
+        <app-show-komm [id]="kommid" ></app-show-komm>
+      </div>
+</mat-sidenav-container>
 </div>

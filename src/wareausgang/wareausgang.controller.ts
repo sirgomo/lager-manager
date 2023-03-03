@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ROLES } from 'src/auth/roleDecorator';
 import { RoleGuard } from 'src/auth/roleGuard';
@@ -9,9 +9,14 @@ import { WareausgangService } from './wareausgang.service';
 @UseGuards(AuthGuard(), RoleGuard)
 export class WareausgangController {
     constructor(private service: WareausgangService) {}
-    @Get()
+    @Get(':status')
     @ROLES(ROLE.WAUSGANG)
-    getFertigKommissionierungen() {
-        return this.service.getFertigKommissionierungen();
+    getFertigKommissionierungen(@Param('status') status: string) {
+        return this.service.getFertigKommissionierungen(status);
     }   
+    @Get('komm/:id')
+    @ROLES(ROLE.WAUSGANG)
+    getKommisionierungByNr(@Param('id') id: number) {
+        return this.service.getKommiessionierung(id);
+    }
 }

@@ -31,4 +31,6 @@ export class KomissDTO {
   falligkeitDatum!: Date;
   @IsOptional()
   kommDetails: KommisioDetailsEntity[];
+  @IsNotEmpty()
+  rausDatum: Date;
 }

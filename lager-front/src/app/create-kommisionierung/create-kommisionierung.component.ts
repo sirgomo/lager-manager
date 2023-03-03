@@ -112,6 +112,7 @@ export class CreateKommisionierungComponent implements OnInit {
       kommissStatus: [KOMMISIONSTATUS, Validators.required],
       spedition: [Number, Validators.required],
       versorgungId: ['', Validators.required],
+      rausDatum: [Date, Validators.required],
       kommDetails: KommissDetailsDto,
     });
     this.kommStatus = KOMMISIONSTATUS;

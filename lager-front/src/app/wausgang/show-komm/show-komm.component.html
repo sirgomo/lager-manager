@@ -1,0 +1,90 @@
+<div class="divider"></div>
+<div class="container">
+    <div class="divider"></div>
+    <div class="row" *ngIf="komPosition !== undefined && komPosition !== null && komPosition[0] !== undefined && komPosition[0] !== null">
+        <div>
+            <mat-form-field>
+                <mat-label>Kommissionierung Id:</mat-label>
+                <input type="number" matInput name="" id="" [value]="komPosition[0].id">
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Skonto</mat-label>
+                <input type="number" matInput name="" id="" [value]="komPosition[0].skonto">
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Versorgung Nr:</mat-label>
+                <input type="text" matInput name="" id="" [value]="komPosition[0].versorgungId">
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-select [(ngModel)]="komPosition[0].kommissStatus" placeholder="">
+                    <mat-option *ngFor="let item of kommStatus" [value]="item">{{item}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row"  *ngIf="komPosition !== undefined && komPosition !== null && komPosition[0] !== undefined && komPosition[0] !== null">
+        <div>
+            <mat-form-field>
+              <mat-label>Raus Datum</mat-label>
+                    <input matInput [value]="komPosition[0].rausDatum"
+                           [matDatepicker]="rausPicker"
+                           placeholder="">
+                <mat-datepicker-toggle matIconSuffix [for]="rausPicker"></mat-datepicker-toggle>
+                <mat-datepicker #rausPicker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Buchungs Datum</mat-label>
+                    <input matInput
+                           [(ngModel)]="komPosition[0].buchungsDatum"
+                           [matDatepicker]="dateBuchung"
+                           placeholder="">
+               <mat-datepicker-toggle matIconSuffix [for]="dateBuchung"></mat-datepicker-toggle>
+                <mat-datepicker
+                        #dateBuchung
+                       ></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Skonto Frist</mat-label>
+                    <input matInput
+                           [(ngModel)]="komPosition[0].skontoFrist"
+                           [matDatepicker]="skontoFrist"
+                           placeholder="">
+                    <mat-datepicker-toggle matIconSuffix [for]="skontoFrist"></mat-datepicker-toggle>
+                <mat-datepicker
+                        #skontoFrist
+                        ></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Fälligkeitsdatum</mat-label>
+                    <input matInput
+                           [(ngModel)]="komPosition[0].falligkeitDatum"
+                           [matDatepicker]="fdatum"
+                           placeholder="">
+                   <mat-datepicker-toggle matIconSuffix [for]="fdatum"></mat-datepicker-toggle>
+                <mat-datepicker
+                        #fdatum
+                        ></mat-datepicker>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="rowBrite">
+        <div *ngFor="let item of totalPaleten;" class="item">{{item[0]}} : {{item[1]}}</div>
+    </div>
+    <div class="divider"></div>
+    <div class="rowBrite">
+        <div class="item">Total Gewicht: {{totalBruttoGewicht}}</div>
+        <div class="item">Total Netto Gewicht: {{totalNettoGewicht}}</div>
+    </div>
+</div>

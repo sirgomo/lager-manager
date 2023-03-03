@@ -66,6 +66,8 @@ import { PacklisteComponent } from './print-layout/packliste.component';
 import { PalgewichtComponent } from './kontroller/palgewicht/palgewicht.component';
 import { FirmaComponent } from './admin/firma/firma.component';
 import { WausgangComponent } from './wausgang/wausgang.component';
+import { ShowKommComponent } from './wausgang/show-komm/show-komm.component';
+import { LkwPaletenComponent } from './wausgang/lkw-paleten/lkw-paleten.component';
 
 
 @NgModule({
@@ -108,6 +110,8 @@ import { WausgangComponent } from './wausgang/wausgang.component';
     PalgewichtComponent,
     FirmaComponent,
     WausgangComponent,
+    ShowKommComponent,
+    LkwPaletenComponent,
   ],
   imports: [
     BrowserModule,

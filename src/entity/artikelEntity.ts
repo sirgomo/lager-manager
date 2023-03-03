@@ -41,6 +41,6 @@ export class ArtikelEntity {
 }
 export enum ARTIKELFLAGE {
   FASS = 'FASS',
-  SUSS = 'SUSS',
+  SUSS = 'TROCKEN',
   ALK = 'ALK'
 }

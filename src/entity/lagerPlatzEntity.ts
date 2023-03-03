@@ -33,7 +33,10 @@ export class LagerPlatzEntity{
     prufziffern: number;
     @Column({nullable: false, type: 'tinyint'})
     gesperrt: boolean;
-
+    //@Column() lager id
+    //lagerid: number
+    //@Column() lagername
+    //lagerName: string;
   
 
 }

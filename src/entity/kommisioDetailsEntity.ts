@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { KommissionirungEntity } from './kommissionirungEntity';
-
+//TODO
+//this one with inkommmispal make it one, it so many data dubled
 @Entity('kommdetails')
 export class KommisioDetailsEntity {
   @PrimaryGeneratedColumn()

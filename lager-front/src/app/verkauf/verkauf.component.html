@@ -14,6 +14,10 @@
    <mat-sidenav-content>
     <div *ngIf="!showDownload">
       <mat-table [dataSource]="dataRes">
+        <ng-container matColumnDef="raus">
+          <mat-header-cell *matHeaderCellDef>Raus Datum:</mat-header-cell>
+          <mat-cell *matCellDef="let item">{{item.rausDatum | date: 'shortDate'}}</mat-cell>
+        </ng-container>
         <ng-container matColumnDef="kommid">
           <mat-header-cell *matHeaderCellDef>Kommissionierung Nr.</mat-header-cell>
          <mat-cell *matCellDef="let item; let i =index">

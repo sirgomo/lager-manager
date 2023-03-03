@@ -114,6 +114,19 @@
               </mat-form-field>
             </div>
             <div>
+              <mat-form-field>
+                <mat-label>Raus Datum:</mat-label>
+                    <input matInput
+                          formControlName="rausDatum"
+                           [matDatepicker]="rausdatePickerRef"
+                           placeholder="">
+                           <mat-datepicker-toggle matIconSuffix [for]="rausdatePickerRef"></mat-datepicker-toggle>
+                <mat-datepicker
+                        #rausdatePickerRef
+                        ></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div>
               <div>
                 <label for="submitKom" class="fs-s"></label>
               </div>

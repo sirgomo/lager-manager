@@ -34,6 +34,8 @@ export class KommissionirungEntity {
   buchungsDatum: Date;
   @Column({ type: 'date' })
   falligkeitDatum: Date;
+  @Column({ type: 'date' })
+  rausDatum: Date;
 
   @OneToMany(
     () => KommisioDetailsEntity,

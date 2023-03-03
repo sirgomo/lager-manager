@@ -23,6 +23,7 @@ export class VerkaufComponent implements OnInit {
   komiss: KomissDTO[] = [];
   dataRes: MatTableDataSource<KomissDTO> = new MatTableDataSource();
   columnDef = [
+    'raus',
     'kommid',
     'verkauferid',
     'maxPH',

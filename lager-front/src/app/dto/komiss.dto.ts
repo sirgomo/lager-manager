@@ -14,6 +14,7 @@ export class KomissDTO {
   buchungsDatum!: Date;
   falligkeitDatum!: Date;
   kommDetails!: KommissDetailsDto[];
+  rausDatum!: Date;
 }
 export enum KOMMISIONSTATUS {
   INBEARBEITUNG = 'INBEARBEITUNG',

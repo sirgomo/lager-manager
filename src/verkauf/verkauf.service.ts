@@ -37,7 +37,11 @@ export class VerkaufService {
           spedition: true,
           versorgungId: true,
           kommissStatus: true,
+          rausDatum: true,
         },
+        order: {
+          rausDatum: 'ASC',
+        }
       });
     } catch (err) {
       throw new Error(

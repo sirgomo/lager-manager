@@ -9,7 +9,7 @@ html, body { height: 100%; width: 100%; overflow: hidden;}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;  font-weight: 400;}
 
 
-.icons mat-icon, .icons div {
+.icons mat-icon, .icons div, .icons {
   cursor: pointer;
 }
 .mat-icon {
@@ -55,7 +55,7 @@ max-height: 100px;
 }
 .container{
   width: 100%;
-  min-width: calc( 98vw - 200px);
+  min-width: calc( 100% - 200px);
   height: 100%;
   min-height: 90vh;
   overflow: auto;
@@ -122,7 +122,7 @@ h3 {
   padding-left: 1rem;
   flex-grow: 2 1 auto;
   flex-wrap: wrap;
-  width: 100%;
+  width: 99%;
 
 }
 .row1b {
@@ -202,4 +202,19 @@ mat-tab-label {
 mat-sidenav-content {
   min-height: 95vh;
 }
+.rowBrite { 
+  display: flex;
+  justify-content:space-between;
+  column-gap: .4rem;
+  row-gap: .4rem;
+  padding-left: 3rem;
+  align-items:flex-start;
+  flex-grow: 2 1 auto;
+  flex-wrap: wrap;
+  width: 90%;
+  overflow: hidden;
 
+  .item {
+    border-bottom: 1px solid;
+  }
+}
