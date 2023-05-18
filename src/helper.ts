@@ -1,4 +1,3 @@
-
 import { ArtikelDTO } from './DTO/artikelDTO';
 import { ArtikelMengeDTO } from './DTO/artikelMengeDTO';
 import { PalettenMengeVorausDTO } from './DTO/palettenMengeVorausDTO';
@@ -35,18 +34,7 @@ export class Helper {
     }
     const maxMengeKartonsOnH: number = Math.floor((palMaxHcm - 15) / kartonH);
     const paletteVolumen: number = 120 * 80 * 14.5;
-    /* let maxKartonLangeOnL :number = Math.floor(120 / kartonL);
-        let maxKartonLangeOnB : number = Math.floor(120 / kartonB);
-        let maxKartonBreiteOnL : number = Math.floor(80 / kartonL);
-        let maxKartonBreiteOnB :number = Math.floor(80 / kartonB);
-        let maxKartonProLageLxB: number = maxKartonLangeOnL * maxKartonBreiteOnB;
-        let maxKartonProLageBxL: number = maxKartonLangeOnB * maxKartonBreiteOnL;
-        if((120 - maxKartonLangeOnL * kartonL) > kartonB){
-          maxKartonProLageLxB += Math.floor(80 / kartonB);
-          }
-        if((80 - maxKartonBreiteOnL * kartonL) > kartonB){
-          maxKartonProLageBxL += Math.floor(120 / kartonL);
-         }*/
+
     let mengeOn1 = 0;
     let mengeOn2 = 0;
     const breiteOnBreite: number = Math.floor(80 / kartonB);
@@ -75,33 +63,6 @@ export class Helper {
         Math.floor(platzOnBrite2 / kartonB) * Math.floor(120 / kartonL);
     }
 
-    //  console.log('maxKartonProLageLxB ' + maxKartonProLageLxB +' i maxKartonProLageBxL '+ maxKartonProLageBxL);
-    /*if(maxKartonProLageBxL > maxKartonProLageLxB){
-          
-            while(mengeKarton > 0){
-                let kartons:number = maxKartonProLageBxL * maxMengeKartonsOnH;
-                  mengeKarton > kartons ? kartons : kartons = mengeKarton;
-                let kartonvol : number = this.getTotalKartonValue(kartons, kartonH, kartonB, kartonL);
-                let itemMengeOnPalete: number = kartons * minLosMenge;
-                  kartons === mengeKarton ? itemMengeOnPalete + rest : itemMengeOnPalete;
-                kartonvol += paletteVolumen;
-                volMenge.push([kartonvol, itemMengeOnPalete]);
-                mengeKarton -= kartons;
-            }
-          
-
-        }else {
-            while(mengeKarton > 0){
-                let kartons:number = maxKartonProLageLxB * maxMengeKartonsOnH;
-                  mengeKarton > kartons ? kartons : kartons = mengeKarton;
-                let kartonvol : number = this.getTotalKartonValue(kartons, kartonH, kartonB, kartonL);
-                let itemMengeOnPalete: number = kartons * minLosMenge;
-                  kartons === mengeKarton ? itemMengeOnPalete + rest : itemMengeOnPalete;
-                kartonvol += paletteVolumen;
-                volMenge.push([kartonvol, itemMengeOnPalete]);
-                mengeKarton -= kartons;
-            }
-        }*/
     if (mengeOn1 > mengeOn2) {
       while (mengeKarton > 0) {
         let kartons: number = mengeOn1 * maxMengeKartonsOnH;

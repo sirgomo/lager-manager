@@ -49,7 +49,7 @@ export class KommissionierService {
             LEFT JOIN (SELECT artikelId as arid, GROUP_CONCAT(uid SEPARATOR ',') as uids FROM uiids GROUP BY arid) AS u ON artikelId = u.arid
             LEFT JOIN (SELECT id as platzid, artId,artikelMenge as artikelMengeOnPlatz,lagerplatz as platz,static,liferant FROM lagerplatz ) AS l ON  artikelId = l.artId AND kreditorId = l.liferant AND static = true
             LEFT JOIN (SELECT artikelId as aaid,name as artname,minLosMenge as minLos,liferantId FROM artikel) AS a ON artikelId = a.aaid  AND kreditorId = a.liferantId
-            WHERE kommissId = '${kommId}' AND inBestellung = '0' AND gepackt != 'GEPACKT'  GROUP BY id HAVING SUM(menge - currentGepackt ) > 0 ORDER BY platz ASC`,
+            WHERE kommissId = '${kommId}' AND inBestellung = '0' AND gepackt != 'GEPACKT'  GROUP BY id, platzid, artname, minLos HAVING SUM(menge - currentGepackt ) > 0 ORDER BY platz ASC`,
         )
         .then(
           (data) => {
@@ -65,7 +65,8 @@ export class KommissionierService {
             }
             return data;
           },
-          () => {
+          (err) => {
+            console.log(err);
             throw new HttpException(
               'Kommissionierung nicht gefunden!',
               HttpStatus.NOT_FOUND,
@@ -85,13 +86,18 @@ export class KommissionierService {
       pal.userId = neuPal.kommissionierId;
       pal.erwartetPaletteGewicht = neuPal.gewicht;
       pal.liferantId = neuPal.liferant;
-      return await this.pal.save(pal).then((data) => {
-       return data.id;
-      }, (err) => {
-        console.log(err);
-        throw new HttpException('Palete konnte nicht erstellt werden', HttpStatus.INTERNAL_SERVER_ERROR);
-      });
-    
+      return await this.pal.save(pal).then(
+        (data) => {
+          return data.id;
+        },
+        (err) => {
+          console.log(err);
+          throw new HttpException(
+            'Palete konnte nicht erstellt werden',
+            HttpStatus.INTERNAL_SERVER_ERROR,
+          );
+        },
+      );
     } catch (err) {
       return err;
     }
@@ -287,13 +293,21 @@ export class KommissionierService {
   async lagerPlatzNachfullen(staticId: number, lagerId: number) {
     //TODO refactoring!
     try {
-      if(typeof staticId === 'string' && staticId === 'null' ) {
-        throw new HttpException('Etwas ist schiefgegangen!, Lagerplatz nicht nachgefullt', HttpStatus.NOT_FOUND);
+      if (typeof staticId === 'string' && staticId === 'null') {
+        throw new HttpException(
+          'Etwas ist schiefgegangen!, Lagerplatz nicht nachgefullt',
+          HttpStatus.NOT_FOUND,
+        );
       }
-      const tmpPlatz: LagerPlatzEntity = await this.kommDet.query(`SELECT * FROM lagerplatz WHERE id=` + staticId);
-      
-      if(tmpPlatz[0].static === 0) {
-        throw new HttpException('Das ist kein static platz, es kann nicht nachgefult werden!', HttpStatus.BAD_REQUEST);
+      const tmpPlatz: LagerPlatzEntity = await this.kommDet.query(
+        `SELECT * FROM lagerplatz WHERE id=` + staticId,
+      );
+
+      if (tmpPlatz[0].static === 0) {
+        throw new HttpException(
+          'Das ist kein static platz, es kann nicht nachgefult werden!',
+          HttpStatus.BAD_REQUEST,
+        );
       }
       return await this.kommDet
         .query(`SELECT artikelMenge, mhd FROM lagerplatz WHERE id=${lagerId}`)

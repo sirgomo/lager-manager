@@ -21,9 +21,8 @@ export class LagerPlatztDTO{
     lagerPlatzVolumen : number;
     @IsOptional()
     mengeProPalete : number;
-    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
     @IsNotEmpty()
-    static : boolean = false;
+    static : boolean;
     @IsOptional()
     liferant:number;
     @IsOptional()
@@ -31,5 +30,9 @@ export class LagerPlatztDTO{
     @IsNotEmpty()
     @IsNumber()
     prufziffern:number;
+    @IsNumber()
+    lagerid: number
+    @IsNotEmpty()
+    lagerName: string;
 
 }

@@ -37,15 +37,14 @@ import { FirmSettingsEntity } from './entity/firmSettingsEntity';
 import { FirmsettingsModule } from './firmsettings/firmsettings.module';
 import { WareausgangModule } from './wareausgang/wareausgang.module';
 
-
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '0.0.0.0',
+      host: '192.168.0.11',
       port: 3306,
-      username: 'admin',
-      password: 'beta*1243*',
+      username: 'root',
+      password: 'beta1243',
       database: 'lager',
       entities: [
         DispositorEntity,
@@ -66,7 +65,7 @@ import { WareausgangModule } from './wareausgang/wareausgang.module';
         KreditorsEntity,
         VorschlagEntity,
         FirmSettingsEntity,
-        ],
+      ],
       synchronize: false,
     }),
     WareneingangModule,

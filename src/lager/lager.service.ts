@@ -129,7 +129,6 @@ export class LagerService {
     if (lagerplatz.id === undefined) {
       return;
     }
-    console.log(lagerplatz);
     try {
       if (lagerplatz.mhd !== undefined && lagerplatz.mhd !== null)
         lagerplatz.mhd = this.formatDate(lagerplatz.mhd);
@@ -179,6 +178,7 @@ export class LagerService {
     }
   }
   formatDate(date: Date): Date {
+    if (date === undefined) return null;
     try {
       return new Date(new Date(date).toDateString());
     } catch (err) {}
@@ -410,7 +410,7 @@ export class LagerService {
        LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId
        LEFT JOIN (SELECT artikelid AS fehlArtikelId, menge AS fehlArtikelMenge FROM artfehlend) artfehlend ON lagerplatz.artId = fehlArtikelId
        LEFT JOIN (SELECT artikelId as a_id, SUM(menge) AS resMenge FROM kommdetails group by a_id) artreservation ON lagerplatz.artId = a_id 
-        WHERE lagerplatz.artId IS NOT NULL group by lagerplatz.artId `,
+        WHERE lagerplatz.artId IS NOT NULL group by lagerplatz.artId, fehlArtikelMenge, resMenge, artikel.name, artikel.verPrice, artikel.minLosMenge, artikel.gewicht, artikel.basisEinheit, artikel.ARTIKELFLAGE, artikel.liferantId  `,
       )
       .then(
         (data) => {
@@ -429,7 +429,7 @@ export class LagerService {
         LEFT JOIN artikel ON lagerplatz.artId = artikel.artikelId
         LEFT JOIN (SELECT artikelid AS fehlArtikelId, menge AS fehlArtikelMenge FROM artfehlend) artfehlend ON lagerplatz.artId = fehlArtikelId
         LEFT JOIN (SELECT artikelId as a_id, SUM(menge) AS resMenge FROM kommdetails group by a_id) artreservation ON lagerplatz.artId = a_id 
-        WHERE lagerplatz.artId = '${artid}' group by lagerplatz.artId 
+        WHERE lagerplatz.artId = '${artid}' group by lagerplatz.artId, fehlArtikelMenge, resMenge, artikel.name, artikel.verPrice, artikel.minLosMenge, artikel.gewicht, artikel.basisEinheit, artikel.ARTIKELFLAGE, artikel.liferantId 
         `,
       )
       .then(
