@@ -36,16 +36,17 @@ import { VorschlagModule } from './vorschlag/vorschlag.module';
 import { FirmSettingsEntity } from './entity/firmSettingsEntity';
 import { FirmsettingsModule } from './firmsettings/firmsettings.module';
 import { WareausgangModule } from './wareausgang/wareausgang.module';
+import { env } from './env/env';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '192.168.0.11',
-      port: 3306,
-      username: 'root',
-      password: 'beta1243',
-      database: 'lager',
+      host: env.ip,
+      port: env.port,
+      username: env.user,
+      password: env.pass,
+      database: env.base,
       entities: [
         DispositorEntity,
         ArtikelEntity,
