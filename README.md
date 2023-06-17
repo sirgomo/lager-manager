@@ -1,3 +1,4 @@
+ life -- https://lager.ww-soft.de
  Lagermanager, Lagerverwaltung mit NestJS + TypeORM und MySQL, Angular als Frontend, Projekt pausiert!
 
 Administratorpanel
